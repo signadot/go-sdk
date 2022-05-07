@@ -30,7 +30,7 @@ jobs:
         make
     - name: Commit
       run: |
-        if [[ $(git diff --exitcode client models go.mod go.sum) ]]; then
+        if [[ $(git diff --exit-code client models go.mod go.sum) ]]; then
           git config --global user.name 'Signadot'
           git config --global user.email 'git@signadot.com'
           git add client models go.mod go.sum
