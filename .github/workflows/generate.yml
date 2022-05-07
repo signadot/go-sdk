@@ -35,7 +35,7 @@ jobs:
           git config --global user.email 'git@signadot.com'
           git add client models go.mod go.sum
           git commit -m "swagger generation"
-          branch=$(cat .git/refs/head/main)
+          branch=generate-${{ github.sha }}
           git checkout -b $branch
           git push --set-upstream origin $branch
         else
