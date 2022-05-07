@@ -1,3 +1,5 @@
+# Generate the client and model libraries
+# with sane defaults in a safe fashion
 default:
 	rm -rf backup
 	mkdir backup
