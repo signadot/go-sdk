@@ -69,7 +69,7 @@
           "x-order": "0"
         },
         "port": {
-          "description": "Port is the port on the above host that the preview will point to.\nOnly required when RouteType is 'static'",
+          "description": "Port is the port on the above host that the preview will point to.\nPort is only required when RouteType is 'static'",
           "type": "integer",
           "x-order": "6"
         },
