@@ -6,7 +6,7 @@ default:
 	mkdir backup
 	mv ../client backup
 	mv ../models backup
-	# generate
+	# generate using go-swagger
 	go run github.com/go-swagger/go-swagger/cmd/swagger@latest \
 		generate client \
 		--default-scheme=https \
