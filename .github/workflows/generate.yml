@@ -30,9 +30,12 @@ jobs:
         make
     - name: Commit
       run: |
-        git config --global user.name 'Signadot'
-        git config --global user.email 'git@signadot.com'
-        git add ../client ../models ../go.mod ../go.sum
-        git commit -m "swagger generation"
+        if [[ $(git diff --exitcode client models go.mod go.sum) ]]; then \
+          git config --global user.name 'Signadot'; \
+          git config --global user.email 'git@signadot.com'; \
+          git add client models go.mod go.sum; \
+          git commit -m "swagger generation"; \
+          git push; \
+        fi
 
 
