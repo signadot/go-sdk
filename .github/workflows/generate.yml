@@ -1,0 +1,38 @@
+name: Release Go SDK
+
+on:
+  push:
+    paths:
+    - 'generate/**'
+  pull_reqest:
+    branches:
+    - main
+    paths:
+    - 'generate/**'
+
+env:
+  GO_VERSION: 1.18
+
+jobs:
+  release-go-sdk:
+    name: "Release Go SDK"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ env.GO_VERSION }}
+    - name: Generate
+      run: |
+        cd generate
+        make
+    - name: Commit
+      run: |
+        git config --global user.name 'Signadot'
+        git config --global user.email 'git@signadot.com'
+        git add ../client ../models ../go.mod ../go.sum
+        git commit -m "swagger generation"
+
+
