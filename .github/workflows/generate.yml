@@ -36,6 +36,8 @@ jobs:
           git add client models go.mod go.sum
           git commit -m "swagger generation"
           git push
+        else
+          echo "no changes"
         fi
 
 
