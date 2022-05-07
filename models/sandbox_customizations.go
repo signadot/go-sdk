@@ -24,6 +24,9 @@ type SandboxCustomizations struct {
 
 	// One or more docker images that will be applied to the forked workload
 	Images []*Image `json:"images"`
+
+	// patch
+	Patch *CustomPatch `json:"patch,omitempty"`
 }
 
 // Validate validates this sandbox customizations
@@ -35,6 +38,10 @@ func (m *SandboxCustomizations) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateImages(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePatch(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -96,6 +103,25 @@ func (m *SandboxCustomizations) validateImages(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SandboxCustomizations) validatePatch(formats strfmt.Registry) error {
+	if swag.IsZero(m.Patch) { // not required
+		return nil
+	}
+
+	if m.Patch != nil {
+		if err := m.Patch.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("patch")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("patch")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this sandbox customizations based on the context it is used
 func (m *SandboxCustomizations) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -105,6 +131,10 @@ func (m *SandboxCustomizations) ContextValidate(ctx context.Context, formats str
 	}
 
 	if err := m.contextValidateImages(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePatch(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -149,6 +179,22 @@ func (m *SandboxCustomizations) contextValidateImages(ctx context.Context, forma
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *SandboxCustomizations) contextValidatePatch(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Patch != nil {
+		if err := m.Patch.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("patch")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("patch")
+			}
+			return err
+		}
 	}
 
 	return nil
