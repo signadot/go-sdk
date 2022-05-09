@@ -21,6 +21,27 @@
       },
       "type": "object"
     },
+    "Cluster": {
+      "properties": {
+        "createdAt": {
+          "description": "The time when this cluster was registered with Signadot.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The Public ID of the cluster.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the cluster.",
+          "type": "string"
+        },
+        "operatorVersion": {
+          "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ConnectClusterRequest": {
       "properties": {
         "name": {
@@ -69,7 +90,7 @@
           "x-order": "0"
         },
         "port": {
-          "description": "Port is the port on the above host that the preview will point to.\nPort is only required when RouteType is 'static'",
+          "description": "Port is the port on the above host that the preview will point to.\nOnly required when RouteType is 'static'",
           "type": "integer",
           "x-order": "6"
         },
@@ -259,6 +280,17 @@
         "name",
         "namespace"
       ],
+      "type": "object"
+    },
+    "GetClustersResponse": {
+      "properties": {
+        "clusters": {
+          "items": {
+            "$ref": "#/definitions/Cluster"
+          },
+          "type": "array"
+        }
+      },
       "type": "object"
     },
     "GetSandboxByIdResponse": {
@@ -625,6 +657,43 @@
   },
   "paths": {
     "/orgs/{orgName}/clusters": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List clusters.",
+        "operationId": "get-clusters",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetClustersResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List clusters",
+        "tags": [
+          "Cluster"
+        ]
+      },
       "post": {
         "consumes": [
           "application/json"
