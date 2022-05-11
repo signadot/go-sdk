@@ -2,6 +2,8 @@ name: Generate Go SDK
 
 on:
   push:
+    branches-ignore:
+    - 'generate*'
     paths:
     - 'generate/**'
   pull_request:
