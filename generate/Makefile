@@ -12,6 +12,7 @@ default:
 		--default-scheme=https \
 		-f swagger.json \
 		-t ../
+	(cd .. && go build ./...)
 	# fixup go.mod
 	go get -u ../...
 	go mod tidy
