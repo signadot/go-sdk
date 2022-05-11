@@ -11,7 +11,8 @@ default:
 		generate client \
 		--default-scheme=https \
 		-f swagger.json \
-		-t ../
+		-t ../ \
+		-T ./templates
 	# fixup go.mod
 	go get -u ../...
 	go mod tidy
