@@ -17,7 +17,7 @@ import (
 // swagger:model ConnectClusterResponse
 type ConnectClusterResponse struct {
 
-	// id
+	// The ID of the registered cluster.
 	ID string `json:"id,omitempty"`
 }
 

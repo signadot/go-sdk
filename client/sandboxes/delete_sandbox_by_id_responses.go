@@ -29,6 +29,18 @@ func (o *DeleteSandboxByIDReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewDeleteSandboxByIDUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewDeleteSandboxByIDInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -60,6 +72,48 @@ func (o *DeleteSandboxByIDOK) readResponse(response runtime.ClientResponse, cons
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewDeleteSandboxByIDUnauthorized creates a DeleteSandboxByIDUnauthorized with default headers values
+func NewDeleteSandboxByIDUnauthorized() *DeleteSandboxByIDUnauthorized {
+	return &DeleteSandboxByIDUnauthorized{}
+}
+
+/* DeleteSandboxByIDUnauthorized describes a response with status code 401, with default header values.
+
+Authorization failure
+*/
+type DeleteSandboxByIDUnauthorized struct {
+}
+
+func (o *DeleteSandboxByIDUnauthorized) Error() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxID}][%d] deleteSandboxByIdUnauthorized ", 401)
+}
+
+func (o *DeleteSandboxByIDUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewDeleteSandboxByIDInternalServerError creates a DeleteSandboxByIDInternalServerError with default headers values
+func NewDeleteSandboxByIDInternalServerError() *DeleteSandboxByIDInternalServerError {
+	return &DeleteSandboxByIDInternalServerError{}
+}
+
+/* DeleteSandboxByIDInternalServerError describes a response with status code 500, with default header values.
+
+Internal server failure.
+*/
+type DeleteSandboxByIDInternalServerError struct {
+}
+
+func (o *DeleteSandboxByIDInternalServerError) Error() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxID}][%d] deleteSandboxByIdInternalServerError ", 500)
+}
+
+func (o *DeleteSandboxByIDInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }
