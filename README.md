@@ -3,11 +3,9 @@
 This repository houses the Signadot Go SDK, a Signadot API library
 generated with swagger.
 
+NOTE: This SDK is still in development and may be changed in ways that break consumers.
 
+## Generation
 
-## generation
-
-The directory generation contains all sources for generating the code.
+The directory `generate` contains all sources for generating the code.
 See the Makefile there.
-
-
