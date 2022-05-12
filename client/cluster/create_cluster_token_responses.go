@@ -29,6 +29,18 @@ func (o *CreateClusterTokenReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewCreateClusterTokenUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewCreateClusterTokenInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -62,6 +74,48 @@ func (o *CreateClusterTokenOK) readResponse(response runtime.ClientResponse, con
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewCreateClusterTokenUnauthorized creates a CreateClusterTokenUnauthorized with default headers values
+func NewCreateClusterTokenUnauthorized() *CreateClusterTokenUnauthorized {
+	return &CreateClusterTokenUnauthorized{}
+}
+
+/* CreateClusterTokenUnauthorized describes a response with status code 401, with default header values.
+
+Authorization failure
+*/
+type CreateClusterTokenUnauthorized struct {
+}
+
+func (o *CreateClusterTokenUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenUnauthorized ", 401)
+}
+
+func (o *CreateClusterTokenUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewCreateClusterTokenInternalServerError creates a CreateClusterTokenInternalServerError with default headers values
+func NewCreateClusterTokenInternalServerError() *CreateClusterTokenInternalServerError {
+	return &CreateClusterTokenInternalServerError{}
+}
+
+/* CreateClusterTokenInternalServerError describes a response with status code 500, with default header values.
+
+Internal server failure.
+*/
+type CreateClusterTokenInternalServerError struct {
+}
+
+func (o *CreateClusterTokenInternalServerError) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenInternalServerError ", 500)
+}
+
+func (o *CreateClusterTokenInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

@@ -29,6 +29,18 @@ func (o *GetClustersReader) ReadResponse(response runtime.ClientResponse, consum
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewGetClustersUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewGetClustersInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -62,6 +74,48 @@ func (o *GetClustersOK) readResponse(response runtime.ClientResponse, consumer r
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewGetClustersUnauthorized creates a GetClustersUnauthorized with default headers values
+func NewGetClustersUnauthorized() *GetClustersUnauthorized {
+	return &GetClustersUnauthorized{}
+}
+
+/* GetClustersUnauthorized describes a response with status code 401, with default header values.
+
+Authorization failure
+*/
+type GetClustersUnauthorized struct {
+}
+
+func (o *GetClustersUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] getClustersUnauthorized ", 401)
+}
+
+func (o *GetClustersUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewGetClustersInternalServerError creates a GetClustersInternalServerError with default headers values
+func NewGetClustersInternalServerError() *GetClustersInternalServerError {
+	return &GetClustersInternalServerError{}
+}
+
+/* GetClustersInternalServerError describes a response with status code 500, with default header values.
+
+Internal server failure.
+*/
+type GetClustersInternalServerError struct {
+}
+
+func (o *GetClustersInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] getClustersInternalServerError ", 500)
+}
+
+func (o *GetClustersInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

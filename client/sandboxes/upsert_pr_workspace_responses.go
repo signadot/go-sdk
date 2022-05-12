@@ -29,6 +29,18 @@ func (o *UpsertPrWorkspaceReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewUpsertPrWorkspaceUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewUpsertPrWorkspaceInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -62,6 +74,48 @@ func (o *UpsertPrWorkspaceOK) readResponse(response runtime.ClientResponse, cons
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewUpsertPrWorkspaceUnauthorized creates a UpsertPrWorkspaceUnauthorized with default headers values
+func NewUpsertPrWorkspaceUnauthorized() *UpsertPrWorkspaceUnauthorized {
+	return &UpsertPrWorkspaceUnauthorized{}
+}
+
+/* UpsertPrWorkspaceUnauthorized describes a response with status code 401, with default header values.
+
+Authorization failure
+*/
+type UpsertPrWorkspaceUnauthorized struct {
+}
+
+func (o *UpsertPrWorkspaceUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /repos/{githubOrg}/{githubRepo}/pulls/{prNumber}/workspaces][%d] upsertPrWorkspaceUnauthorized ", 401)
+}
+
+func (o *UpsertPrWorkspaceUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewUpsertPrWorkspaceInternalServerError creates a UpsertPrWorkspaceInternalServerError with default headers values
+func NewUpsertPrWorkspaceInternalServerError() *UpsertPrWorkspaceInternalServerError {
+	return &UpsertPrWorkspaceInternalServerError{}
+}
+
+/* UpsertPrWorkspaceInternalServerError describes a response with status code 500, with default header values.
+
+Internal server failure.
+*/
+type UpsertPrWorkspaceInternalServerError struct {
+}
+
+func (o *UpsertPrWorkspaceInternalServerError) Error() string {
+	return fmt.Sprintf("[POST /repos/{githubOrg}/{githubRepo}/pulls/{prNumber}/workspaces][%d] upsertPrWorkspaceInternalServerError ", 500)
+}
+
+func (o *UpsertPrWorkspaceInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

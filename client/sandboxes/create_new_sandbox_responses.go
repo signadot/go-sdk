@@ -29,6 +29,18 @@ func (o *CreateNewSandboxReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewCreateNewSandboxUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewCreateNewSandboxInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -62,6 +74,48 @@ func (o *CreateNewSandboxOK) readResponse(response runtime.ClientResponse, consu
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewCreateNewSandboxUnauthorized creates a CreateNewSandboxUnauthorized with default headers values
+func NewCreateNewSandboxUnauthorized() *CreateNewSandboxUnauthorized {
+	return &CreateNewSandboxUnauthorized{}
+}
+
+/* CreateNewSandboxUnauthorized describes a response with status code 401, with default header values.
+
+Authorization failure
+*/
+type CreateNewSandboxUnauthorized struct {
+}
+
+func (o *CreateNewSandboxUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/sandboxes][%d] createNewSandboxUnauthorized ", 401)
+}
+
+func (o *CreateNewSandboxUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewCreateNewSandboxInternalServerError creates a CreateNewSandboxInternalServerError with default headers values
+func NewCreateNewSandboxInternalServerError() *CreateNewSandboxInternalServerError {
+	return &CreateNewSandboxInternalServerError{}
+}
+
+/* CreateNewSandboxInternalServerError describes a response with status code 500, with default header values.
+
+Internal server failure.
+*/
+type CreateNewSandboxInternalServerError struct {
+}
+
+func (o *CreateNewSandboxInternalServerError) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/sandboxes][%d] createNewSandboxInternalServerError ", 500)
+}
+
+func (o *CreateNewSandboxInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

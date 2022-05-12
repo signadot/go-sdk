@@ -29,6 +29,18 @@ func (o *ConnectClusterReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewConnectClusterUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewConnectClusterInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -62,6 +74,48 @@ func (o *ConnectClusterOK) readResponse(response runtime.ClientResponse, consume
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewConnectClusterUnauthorized creates a ConnectClusterUnauthorized with default headers values
+func NewConnectClusterUnauthorized() *ConnectClusterUnauthorized {
+	return &ConnectClusterUnauthorized{}
+}
+
+/* ConnectClusterUnauthorized describes a response with status code 401, with default header values.
+
+Authorization failure
+*/
+type ConnectClusterUnauthorized struct {
+}
+
+func (o *ConnectClusterUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters][%d] connectClusterUnauthorized ", 401)
+}
+
+func (o *ConnectClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewConnectClusterInternalServerError creates a ConnectClusterInternalServerError with default headers values
+func NewConnectClusterInternalServerError() *ConnectClusterInternalServerError {
+	return &ConnectClusterInternalServerError{}
+}
+
+/* ConnectClusterInternalServerError describes a response with status code 500, with default header values.
+
+Internal server failure.
+*/
+type ConnectClusterInternalServerError struct {
+}
+
+func (o *ConnectClusterInternalServerError) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters][%d] connectClusterInternalServerError ", 500)
+}
+
+func (o *ConnectClusterInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }
