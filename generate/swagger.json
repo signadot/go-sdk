@@ -1,5 +1,548 @@
 {
+  "swagger": "2.0",
+  "info": {
+    "title": "Signadot API",
+    "description": "API for Signadot Sandboxes",
+    "contact": {},
+    "version": "1.0"
+  },
+  "host": "api.signadot.com",
   "basePath": "/api/v1",
+  "paths": {
+    "/orgs/{orgName}/clusters": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List clusters.",
+        "operationId": "get-clusters",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetClustersResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List clusters",
+        "tags": [
+          "Cluster"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Connect a new Kubernetes cluster with Signadot",
+        "operationId": "connect-cluster",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Request to create cluster",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConnectClusterRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ConnectClusterResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Connect Cluster",
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/clusters/{clusterName}/tokens": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create a new token for connecting a cluster",
+        "operationId": "create-cluster-token",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Cluster Name",
+            "in": "path",
+            "name": "clusterName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-new-cluster"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateClusterTokenResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create Cluster Token",
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete a cluster token associated with a cluster",
+        "operationId": "delete-cluster-token",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Cluster Name",
+            "in": "path",
+            "name": "clusterName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-new-cluster"
+          },
+          {
+            "description": "Token Id",
+            "in": "path",
+            "name": "tokenId",
+            "required": true,
+            "type": "string",
+            "x-example": "kq6mtksk7mn5"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete Cluster Token",
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/sandboxes": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List all sandboxes under the specified Signadot org.",
+        "operationId": "get-sandboxes",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSandboxesResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List Sandboxes",
+        "tags": [
+          "Sandboxes"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates a new sandbox with the provided parameters",
+        "operationId": "create-new-sandbox",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Request to create sandbox",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSandboxRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateSandboxResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create a new sandbox",
+        "tags": [
+          "Sandboxes"
+        ]
+      }
+    },
+    "/orgs/{orgName}/sandboxes/{sandboxID}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete the sandbox when its ID is specified",
+        "operationId": "delete-sandbox-by-id",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Sandbox ID",
+            "in": "path",
+            "name": "sandboxID",
+            "required": true,
+            "type": "string",
+            "x-example": "8r32dkdgdg"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete a Sandbox by ID",
+        "tags": [
+          "Sandboxes"
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch the details about a sandbox when its ID is specified",
+        "operationId": "get-sandbox-by-id",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Sandbox ID",
+            "in": "path",
+            "name": "sandboxID",
+            "required": true,
+            "type": "string",
+            "x-example": "8r32dkdgdg"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSandboxByIdResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a Sandbox by ID",
+        "tags": [
+          "Sandboxes"
+        ]
+      }
+    },
+    "/orgs/{orgName}/sandboxes/{sandboxID}/ready": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Checks readiness of a sandbox with rate limiting enforced by polling",
+        "operationId": "get-sandbox-ready",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Sandbox ID",
+            "in": "path",
+            "name": "sandboxID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SandboxReadyResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Check sandbox readiness",
+        "tags": [
+          "Sandboxes"
+        ]
+      }
+    },
+    "/repos/{githubOrg}/{githubRepo}/pulls/{prNumber}/workspaces": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "deprecated": true,
+        "description": "Create a workspace that is associated with a specified pull request.\nIf no workspaces already exist for the given pull request, this creates a new workspace. Otherwise, the new changes are applied to the existing workspaces.\nThis endpoint uses the old terminology \"workspace\" instead of \"sandbox\" for backward compatability.\n### Example\n\nHere's an example to create/update a workspace from a pull request in the [HotROD](https://github.com/signadot/hotrod) application. To simplify the use case, consider that only the [Route Service](https://github.com/signadot/hotrod/tree/main/services/route) had changes, and that the changes were published to an image file named `signadot/hotrod-route` and tag `4e75b0b822ecbbbb4c917b0fffeb337589d82456`. This could be tagged as anything e.g. `latest`, `e2e-test` etc.\n\nAs a part of workspace creation, Signadot creates forked Kubernetes workloads (such as deployments) from existing workloads using the provided images. In order to access the forked workloads(s), `endpoints` are specified and corresponding to each endpoint, a preview URL is generated. These preview URLs are returned as part of the response. In the example below, we're dealing with a deployment named `route` in the `hotrod` namespace that is running the docker image `signadot/hotrod-route`.\n\nIn the below request to create a workspace, the deployment named `route` is forked and the fork will be created with the new docker image tag as specified by `newTag`. The new deployment that is created will be running the a new docker image tag as specified by `newTag`. There will be a single preview URL associated with this workspace as specified in `endpoints` and it will point to the fork of the `route`\ndeployment that was created.\n\n```json\n{\n  \"cluster\": \"signadot\",\n  \"namespace\": \"hotrod\",\n  \"headCommit\": \"5e35abfa94626c4853eca51ecd435a779ded4123\",\n  \"images\": [\n    {\n      \"name\": \"signadot/hotrod-route\",\n      \"newTag\": \"4e75b0b822ecbbbb4c917b0fffeb337589d82456\"\n    }\n  ],\n  \"endpoints\": [\n    {\n      \"routeType\": \"fork\",\n      \"protocol\": \"http\",\n      \"forkOf\": {\n        \"kind\": \"Deployment\",\n        \"name\": \"route\",\n        \"namespace\": \"hotrod\"\n      }\n    }\n  ]\n}\n```\n\nIn response the API call returns us a confirmation of the workspace created / updated along with the information on preview endpoints.\n\n```json\n{\n  \"workspaceIDs\": [\n    \"xtc54uh8p2rhs\"\n  ],\n  \"previewEndpoints\": [\n    {\n      \"id\": \"fbm4983sxb111\",\n      \"routeType\": \"fork\",\n      \"name\": \"route\",\n      \"protocol\": \"http\",\n      \"clusterID\": \"55rjfjf3rn222\",\n      \"cluster\": \"signadot\",\n      \"forkOf\": {\n        \"kind\": \"Deployment\",\n        \"namespace\": \"hotrod\",\n        \"name\": \"route\"\n      },\n      \"previewURL\": \"https://route--hotrod-131.preview.signadot.com\"\n    }\n  ]\n}\n\n```\n\nYou can parse the `previewEndpoints` section in the response to find the previewURL associated with the endpoint created as part of the workspace.\n",
+        "operationId": "upsert-pr-workspace",
+        "parameters": [
+          {
+            "description": "GitHub Org Name",
+            "in": "path",
+            "name": "githubOrg",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "GitHub Repository Name",
+            "in": "path",
+            "name": "githubRepo",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Pull Request Number",
+            "in": "path",
+            "name": "prNumber",
+            "required": true,
+            "type": "integer",
+            "x-example": "123"
+          },
+          {
+            "description": "Request to upsert workspace",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpsertPRWorkspacesRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpsertWorkspaceResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization failure"
+          },
+          "500": {
+            "description": "Internal server failure."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create or Update workspace from Pull Request",
+        "tags": [
+          "Sandboxes"
+        ]
+      }
+    }
+  },
   "definitions": {
     "Branch": {
       "properties": {
@@ -28,7 +571,7 @@
           "type": "string"
         },
         "id": {
-          "description": "The Public ID of the cluster.",
+          "description": "The ID of the cluster.",
           "type": "string"
         },
         "name": {
@@ -58,6 +601,7 @@
     "ConnectClusterResponse": {
       "properties": {
         "id": {
+          "description": "The ID of the registered cluster.",
           "type": "string"
         }
       },
@@ -648,494 +1192,11 @@
       "type": "object"
     }
   },
-  "host": "api.signadot.com",
-  "info": {
-    "contact": {},
-    "description": "API for Signadot Sandboxes",
-    "title": "Signadot API",
-    "version": "1.0"
-  },
-  "paths": {
-    "/orgs/{orgName}/clusters": {
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "List clusters.",
-        "operationId": "get-clusters",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/GetClustersResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "List clusters",
-        "tags": [
-          "Cluster"
-        ]
-      },
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Connect a new Kubernetes cluster with Signadot",
-        "operationId": "connect-cluster",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Request to create cluster",
-            "in": "body",
-            "name": "data",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ConnectClusterRequest"
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ConnectClusterResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Connect Cluster",
-        "tags": [
-          "Cluster"
-        ]
-      }
-    },
-    "/orgs/{orgName}/clusters/{clusterName}/tokens": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Create a new token for connecting a cluster",
-        "operationId": "create-cluster-token",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Cluster Name",
-            "in": "path",
-            "name": "clusterName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-new-cluster"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CreateClusterTokenResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Create Cluster Token",
-        "tags": [
-          "Cluster"
-        ]
-      }
-    },
-    "/orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}": {
-      "delete": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Delete a cluster token associated with a cluster",
-        "operationId": "delete-cluster-token",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Cluster Name",
-            "in": "path",
-            "name": "clusterName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-new-cluster"
-          },
-          {
-            "description": "Token Id",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "type": "string",
-            "x-example": "kq6mtksk7mn5"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/handler.EmptyResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Delete Cluster Token",
-        "tags": [
-          "Cluster"
-        ]
-      }
-    },
-    "/orgs/{orgName}/sandboxes": {
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "List all sandboxes under the specified Signadot org.",
-        "operationId": "get-sandboxes",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/GetSandboxesResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "List Sandboxes",
-        "tags": [
-          "Sandboxes"
-        ]
-      },
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Creates a new sandbox with the provided parameters",
-        "operationId": "create-new-sandbox",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Request to create sandbox",
-            "in": "body",
-            "name": "data",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CreateSandboxRequest"
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CreateSandboxResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Create a new sandbox",
-        "tags": [
-          "Sandboxes"
-        ]
-      }
-    },
-    "/orgs/{orgName}/sandboxes/{sandboxID}": {
-      "delete": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Delete the sandbox when its ID is specified",
-        "operationId": "delete-sandbox-by-id",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Sandbox ID",
-            "in": "path",
-            "name": "sandboxID",
-            "required": true,
-            "type": "string",
-            "x-example": "8r32dkdgdg"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/handler.EmptyResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Delete a Sandbox by ID",
-        "tags": [
-          "Sandboxes"
-        ]
-      },
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Fetch the details about a sandbox when its ID is specified",
-        "operationId": "get-sandbox-by-id",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Sandbox ID",
-            "in": "path",
-            "name": "sandboxID",
-            "required": true,
-            "type": "string",
-            "x-example": "8r32dkdgdg"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/GetSandboxByIdResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Get a Sandbox by ID",
-        "tags": [
-          "Sandboxes"
-        ]
-      }
-    },
-    "/orgs/{orgName}/sandboxes/{sandboxID}/ready": {
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Checks readiness of a sandbox with rate limiting enforced by polling",
-        "operationId": "get-sandbox-ready",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Sandbox ID",
-            "in": "path",
-            "name": "sandboxID",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/SandboxReadyResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Check sandbox readiness",
-        "tags": [
-          "Sandboxes"
-        ]
-      }
-    },
-    "/repos/{githubOrg}/{githubRepo}/pulls/{prNumber}/workspaces": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "deprecated": true,
-        "description": "Create a workspace that is associated with a specified pull request.\nIf no workspaces already exist for the given pull request, this creates a new workspace. Otherwise, the new changes are applied to the existing workspaces.\nThis endpoint uses the old terminology \"workspace\" instead of \"sandbox\" for backward compatability.\n### Example\n\nHere's an example to create/update a workspace from a pull request in the [HotROD](https://github.com/signadot/hotrod) application. To simplify the use case, consider that only the [Route Service](https://github.com/signadot/hotrod/tree/main/services/route) had changes, and that the changes were published to an image file named `signadot/hotrod-route` and tag `4e75b0b822ecbbbb4c917b0fffeb337589d82456`. This could be tagged as anything e.g. `latest`, `e2e-test` etc.\n\nAs a part of workspace creation, Signadot creates forked Kubernetes workloads (such as deployments) from existing workloads using the provided images. In order to access the forked workloads(s), `endpoints` are specified and corresponding to each endpoint, a preview URL is generated. These preview URLs are returned as part of the response. In the example below, we're dealing with a deployment named `route` in the `hotrod` namespace that is running the docker image `signadot/hotrod-route`.\n\nIn the below request to create a workspace, the deployment named `route` is forked and the fork will be created with the new docker image tag as specified by `newTag`. The new deployment that is created will be running the a new docker image tag as specified by `newTag`. There will be a single preview URL associated with this workspace as specified in `endpoints` and it will point to the fork of the `route`\ndeployment that was created.\n\n```json\n{\n  \"cluster\": \"signadot\",\n  \"namespace\": \"hotrod\",\n  \"headCommit\": \"5e35abfa94626c4853eca51ecd435a779ded4123\",\n  \"images\": [\n    {\n      \"name\": \"signadot/hotrod-route\",\n      \"newTag\": \"4e75b0b822ecbbbb4c917b0fffeb337589d82456\"\n    }\n  ],\n  \"endpoints\": [\n    {\n      \"routeType\": \"fork\",\n      \"protocol\": \"http\",\n      \"forkOf\": {\n        \"kind\": \"Deployment\",\n        \"name\": \"route\",\n        \"namespace\": \"hotrod\"\n      }\n    }\n  ]\n}\n```\n\nIn response the API call returns us a confirmation of the workspace created / updated along with the information on preview endpoints.\n\n```json\n{\n  \"workspaceIDs\": [\n    \"xtc54uh8p2rhs\"\n  ],\n  \"previewEndpoints\": [\n    {\n      \"id\": \"fbm4983sxb111\",\n      \"routeType\": \"fork\",\n      \"name\": \"route\",\n      \"protocol\": \"http\",\n      \"clusterID\": \"55rjfjf3rn222\",\n      \"cluster\": \"signadot\",\n      \"forkOf\": {\n        \"kind\": \"Deployment\",\n        \"namespace\": \"hotrod\",\n        \"name\": \"route\"\n      },\n      \"previewURL\": \"https://route--hotrod-131.preview.signadot.com\"\n    }\n  ]\n}\n\n```\n\nYou can parse the `previewEndpoints` section in the response to find the previewURL associated with the endpoint created as part of the workspace.\n",
-        "operationId": "upsert-pr-workspace",
-        "parameters": [
-          {
-            "description": "GitHub Org Name",
-            "in": "path",
-            "name": "githubOrg",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "GitHub Repository Name",
-            "in": "path",
-            "name": "githubRepo",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Pull Request Number",
-            "in": "path",
-            "name": "prNumber",
-            "required": true,
-            "type": "integer",
-            "x-example": "123"
-          },
-          {
-            "description": "Request to upsert workspace",
-            "in": "body",
-            "name": "data",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UpsertPRWorkspacesRequest"
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/UpsertWorkspaceResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Create or Update workspace from Pull Request",
-        "tags": [
-          "Sandboxes"
-        ]
-      }
-    }
-  },
   "securityDefinitions": {
     "ApiKeyAuth": {
       "in": "header",
       "name": "signadot-api-key",
       "type": "apiKey"
     }
-  },
-  "swagger": "2.0"
+  }
 }
