@@ -28,7 +28,7 @@
           "type": "string"
         },
         "id": {
-          "description": "The Public ID of the cluster.",
+          "description": "The ID of the cluster.",
           "type": "string"
         },
         "name": {
@@ -923,6 +923,49 @@
           }
         ],
         "summary": "Create a new sandbox",
+        "tags": [
+          "Sandboxes"
+        ]
+      }
+    },
+    "/orgs/{orgName}/sandboxes/by-name/{name}": {
+      "delete": {
+        "description": "Delete Sandbox with given name",
+        "operationId": "delete-sandbox-by-name",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Sandbox Name to search for",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete Sandbox By Name",
         "tags": [
           "Sandboxes"
         ]
