@@ -29,6 +29,18 @@ func (o *GetSandboxReadyReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewGetSandboxReadyUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewGetSandboxReadyInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -62,6 +74,48 @@ func (o *GetSandboxReadyOK) readResponse(response runtime.ClientResponse, consum
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewGetSandboxReadyUnauthorized creates a GetSandboxReadyUnauthorized with default headers values
+func NewGetSandboxReadyUnauthorized() *GetSandboxReadyUnauthorized {
+	return &GetSandboxReadyUnauthorized{}
+}
+
+/* GetSandboxReadyUnauthorized describes a response with status code 401, with default header values.
+
+Authorization failure
+*/
+type GetSandboxReadyUnauthorized struct {
+}
+
+func (o *GetSandboxReadyUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxID}/ready][%d] getSandboxReadyUnauthorized ", 401)
+}
+
+func (o *GetSandboxReadyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewGetSandboxReadyInternalServerError creates a GetSandboxReadyInternalServerError with default headers values
+func NewGetSandboxReadyInternalServerError() *GetSandboxReadyInternalServerError {
+	return &GetSandboxReadyInternalServerError{}
+}
+
+/* GetSandboxReadyInternalServerError describes a response with status code 500, with default header values.
+
+Internal server failure.
+*/
+type GetSandboxReadyInternalServerError struct {
+}
+
+func (o *GetSandboxReadyInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxID}/ready][%d] getSandboxReadyInternalServerError ", 500)
+}
+
+func (o *GetSandboxReadyInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

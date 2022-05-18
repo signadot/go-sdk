@@ -20,7 +20,7 @@ type Cluster struct {
 	// The time when this cluster was registered with Signadot.
 	CreatedAt string `json:"createdAt,omitempty"`
 
-	// The Public ID of the cluster.
+	// The ID of the cluster.
 	ID string `json:"id,omitempty"`
 
 	// The name of the cluster.
