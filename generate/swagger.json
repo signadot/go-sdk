@@ -28,7 +28,7 @@
           "type": "string"
         },
         "id": {
-          "description": "The Public ID of the cluster.",
+          "description": "The ID of the cluster.",
           "type": "string"
         },
         "name": {
@@ -537,6 +537,35 @@
       },
       "type": "object"
     },
+    "SandboxStatus": {
+      "properties": {
+        "id": {
+          "description": "The id of the sandbox.",
+          "type": "string"
+        },
+        "message": {
+          "description": "Message is a human readable explanation of why\nthe sandbox is healthy or not.",
+          "type": "string"
+        },
+        "ready": {
+          "description": "Ready indicates whether the sandbox is ready,\nmeaning that it can be used for testing.",
+          "type": "boolean"
+        },
+        "reason": {
+          "description": "Reason is a machine readable explanation of why\nthe sandbox is healthy or not.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SandboxStatusResponse": {
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/SandboxStatus"
+        }
+      },
+      "type": "object"
+    },
     "UpsertPRWorkspacesRequest": {
       "properties": {
         "cluster": {
@@ -619,6 +648,17 @@
             "type": "string"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "apierrs.Response": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "requestID": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -928,6 +968,49 @@
         ]
       }
     },
+    "/orgs/{orgName}/sandboxes/by-name/{name}": {
+      "delete": {
+        "description": "Delete Sandbox with given name",
+        "operationId": "delete-sandbox-by-name",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Sandbox Name to search for",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete Sandbox By Name",
+        "tags": [
+          "Sandboxes"
+        ]
+      }
+    },
     "/orgs/{orgName}/sandboxes/{sandboxID}": {
       "delete": {
         "consumes": [
@@ -1025,7 +1108,8 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Checks readiness of a sandbox with rate limiting enforced by polling",
+        "deprecated": true,
+        "description": "Checks readiness of a sandbox with rate limiting enforced by polling.  Deprecated, please use getSandboxStatusById instead.",
         "operationId": "get-sandbox-ready",
         "parameters": [
           {
@@ -1061,6 +1145,64 @@
           }
         ],
         "summary": "Check sandbox readiness",
+        "tags": [
+          "Sandboxes"
+        ]
+      }
+    },
+    "/orgs/{orgName}/sandboxes/{sandboxID}/status": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Gets",
+        "operationId": "get-sandbox-status-by-id",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Sandbox ID",
+            "in": "path",
+            "name": "sandboxID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SandboxStatusResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get Sandbox Status by Sandbox ID with rate limiting.",
         "tags": [
           "Sandboxes"
         ]
