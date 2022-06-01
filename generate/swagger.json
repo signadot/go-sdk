@@ -987,6 +987,12 @@
             "name": "name",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "force",
+            "in": "query",
+            "name": "force",
+            "type": "boolean"
           }
         ],
         "produces": [
@@ -1034,6 +1040,12 @@
             "required": true,
             "type": "string",
             "x-example": "8r32dkdgdg"
+          },
+          {
+            "description": "force",
+            "in": "query",
+            "name": "force",
+            "type": "boolean"
           }
         ],
         "produces": [
