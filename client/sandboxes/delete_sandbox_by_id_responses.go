@@ -29,6 +29,24 @@ func (o *DeleteSandboxByIDReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewDeleteSandboxByIDBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 401:
+		result := NewDeleteSandboxByIDUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 502:
+		result := NewDeleteSandboxByIDBadGateway()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -58,6 +76,102 @@ func (o *DeleteSandboxByIDOK) readResponse(response runtime.ClientResponse, cons
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteSandboxByIDBadRequest creates a DeleteSandboxByIDBadRequest with default headers values
+func NewDeleteSandboxByIDBadRequest() *DeleteSandboxByIDBadRequest {
+	return &DeleteSandboxByIDBadRequest{}
+}
+
+/* DeleteSandboxByIDBadRequest describes a response with status code 400, with default header values.
+
+Bad Request
+*/
+type DeleteSandboxByIDBadRequest struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *DeleteSandboxByIDBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxID}][%d] deleteSandboxByIdBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteSandboxByIDBadRequest) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *DeleteSandboxByIDBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteSandboxByIDUnauthorized creates a DeleteSandboxByIDUnauthorized with default headers values
+func NewDeleteSandboxByIDUnauthorized() *DeleteSandboxByIDUnauthorized {
+	return &DeleteSandboxByIDUnauthorized{}
+}
+
+/* DeleteSandboxByIDUnauthorized describes a response with status code 401, with default header values.
+
+Unauthorized
+*/
+type DeleteSandboxByIDUnauthorized struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *DeleteSandboxByIDUnauthorized) Error() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxID}][%d] deleteSandboxByIdUnauthorized  %+v", 401, o.Payload)
+}
+func (o *DeleteSandboxByIDUnauthorized) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *DeleteSandboxByIDUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteSandboxByIDBadGateway creates a DeleteSandboxByIDBadGateway with default headers values
+func NewDeleteSandboxByIDBadGateway() *DeleteSandboxByIDBadGateway {
+	return &DeleteSandboxByIDBadGateway{}
+}
+
+/* DeleteSandboxByIDBadGateway describes a response with status code 502, with default header values.
+
+Bad Gateway
+*/
+type DeleteSandboxByIDBadGateway struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *DeleteSandboxByIDBadGateway) Error() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxID}][%d] deleteSandboxByIdBadGateway  %+v", 502, o.Payload)
+}
+func (o *DeleteSandboxByIDBadGateway) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *DeleteSandboxByIDBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
