@@ -722,6 +722,24 @@
             "schema": {
               "$ref": "#/definitions/GetClustersResponse"
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
           }
         },
         "security": [
@@ -767,6 +785,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/ConnectClusterResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -909,6 +945,24 @@
             "schema": {
               "$ref": "#/definitions/GetSandboxesResponse"
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
           }
         },
         "security": [
@@ -955,6 +1009,24 @@
             "schema": {
               "$ref": "#/definitions/CreateSandboxResponse"
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
           }
         },
         "security": [
@@ -987,6 +1059,12 @@
             "name": "name",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "force",
+            "in": "query",
+            "name": "force",
+            "type": "boolean"
           }
         ],
         "produces": [
@@ -997,6 +1075,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1034,6 +1130,12 @@
             "required": true,
             "type": "string",
             "x-example": "8r32dkdgdg"
+          },
+          {
+            "description": "force",
+            "in": "query",
+            "name": "force",
+            "type": "boolean"
           }
         ],
         "produces": [
@@ -1044,6 +1146,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1089,6 +1209,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/GetSandboxByIdResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1136,6 +1274,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/SandboxReadyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1186,6 +1342,12 @@
           },
           "400": {
             "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "schema": {
               "$ref": "#/definitions/apierrs.Response"
             }
