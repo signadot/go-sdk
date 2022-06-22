@@ -29,6 +29,24 @@ func (o *GetClustersReader) ReadResponse(response runtime.ClientResponse, consum
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewGetClustersBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 401:
+		result := NewGetClustersUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 502:
+		result := NewGetClustersBadGateway()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -57,6 +75,102 @@ func (o *GetClustersOK) GetPayload() *models.GetClustersResponse {
 func (o *GetClustersOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GetClustersResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetClustersBadRequest creates a GetClustersBadRequest with default headers values
+func NewGetClustersBadRequest() *GetClustersBadRequest {
+	return &GetClustersBadRequest{}
+}
+
+/* GetClustersBadRequest describes a response with status code 400, with default header values.
+
+Bad Request
+*/
+type GetClustersBadRequest struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *GetClustersBadRequest) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] getClustersBadRequest  %+v", 400, o.Payload)
+}
+func (o *GetClustersBadRequest) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *GetClustersBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetClustersUnauthorized creates a GetClustersUnauthorized with default headers values
+func NewGetClustersUnauthorized() *GetClustersUnauthorized {
+	return &GetClustersUnauthorized{}
+}
+
+/* GetClustersUnauthorized describes a response with status code 401, with default header values.
+
+Unauthorized
+*/
+type GetClustersUnauthorized struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *GetClustersUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] getClustersUnauthorized  %+v", 401, o.Payload)
+}
+func (o *GetClustersUnauthorized) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *GetClustersUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetClustersBadGateway creates a GetClustersBadGateway with default headers values
+func NewGetClustersBadGateway() *GetClustersBadGateway {
+	return &GetClustersBadGateway{}
+}
+
+/* GetClustersBadGateway describes a response with status code 502, with default header values.
+
+Bad Gateway
+*/
+type GetClustersBadGateway struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *GetClustersBadGateway) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] getClustersBadGateway  %+v", 502, o.Payload)
+}
+func (o *GetClustersBadGateway) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *GetClustersBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

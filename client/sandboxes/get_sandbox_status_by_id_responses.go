@@ -35,6 +35,12 @@ func (o *GetSandboxStatusByIDReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return nil, result
+	case 401:
+		result := NewGetSandboxStatusByIDUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 502:
 		result := NewGetSandboxStatusByIDBadGateway()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -99,6 +105,38 @@ func (o *GetSandboxStatusByIDBadRequest) GetPayload() *models.ApierrsResponse {
 }
 
 func (o *GetSandboxStatusByIDBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetSandboxStatusByIDUnauthorized creates a GetSandboxStatusByIDUnauthorized with default headers values
+func NewGetSandboxStatusByIDUnauthorized() *GetSandboxStatusByIDUnauthorized {
+	return &GetSandboxStatusByIDUnauthorized{}
+}
+
+/* GetSandboxStatusByIDUnauthorized describes a response with status code 401, with default header values.
+
+Unauthorized
+*/
+type GetSandboxStatusByIDUnauthorized struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *GetSandboxStatusByIDUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxID}/status][%d] getSandboxStatusByIdUnauthorized  %+v", 401, o.Payload)
+}
+func (o *GetSandboxStatusByIDUnauthorized) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *GetSandboxStatusByIDUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ApierrsResponse)
 

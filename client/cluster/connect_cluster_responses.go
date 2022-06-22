@@ -29,6 +29,24 @@ func (o *ConnectClusterReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewConnectClusterBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 401:
+		result := NewConnectClusterUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 502:
+		result := NewConnectClusterBadGateway()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -57,6 +75,102 @@ func (o *ConnectClusterOK) GetPayload() *models.ConnectClusterResponse {
 func (o *ConnectClusterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ConnectClusterResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewConnectClusterBadRequest creates a ConnectClusterBadRequest with default headers values
+func NewConnectClusterBadRequest() *ConnectClusterBadRequest {
+	return &ConnectClusterBadRequest{}
+}
+
+/* ConnectClusterBadRequest describes a response with status code 400, with default header values.
+
+Bad Request
+*/
+type ConnectClusterBadRequest struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *ConnectClusterBadRequest) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters][%d] connectClusterBadRequest  %+v", 400, o.Payload)
+}
+func (o *ConnectClusterBadRequest) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *ConnectClusterBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewConnectClusterUnauthorized creates a ConnectClusterUnauthorized with default headers values
+func NewConnectClusterUnauthorized() *ConnectClusterUnauthorized {
+	return &ConnectClusterUnauthorized{}
+}
+
+/* ConnectClusterUnauthorized describes a response with status code 401, with default header values.
+
+Unauthorized
+*/
+type ConnectClusterUnauthorized struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *ConnectClusterUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters][%d] connectClusterUnauthorized  %+v", 401, o.Payload)
+}
+func (o *ConnectClusterUnauthorized) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *ConnectClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewConnectClusterBadGateway creates a ConnectClusterBadGateway with default headers values
+func NewConnectClusterBadGateway() *ConnectClusterBadGateway {
+	return &ConnectClusterBadGateway{}
+}
+
+/* ConnectClusterBadGateway describes a response with status code 502, with default header values.
+
+Bad Gateway
+*/
+type ConnectClusterBadGateway struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *ConnectClusterBadGateway) Error() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters][%d] connectClusterBadGateway  %+v", 502, o.Payload)
+}
+func (o *ConnectClusterBadGateway) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *ConnectClusterBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
