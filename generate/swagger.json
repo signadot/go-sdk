@@ -1,6 +1,17 @@
 {
   "basePath": "/api/v1",
   "definitions": {
+    "apierrs.Response": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "requestID": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Branch": {
       "properties": {
         "headCommit": {
@@ -144,6 +155,9 @@
             "$ref": "#/definitions/SandboxResource"
           },
           "type": "array"
+        },
+        "tags": {
+          "$ref": "#/definitions/SandboxTags"
         }
       },
       "required": [
@@ -426,6 +440,9 @@
         "previewURL": {
           "type": "string"
         },
+        "tags": {
+          "$ref": "#/definitions/SandboxTags"
+        },
         "updatedAt": {
           "type": "string"
         }
@@ -506,6 +523,9 @@
         "previewURL": {
           "type": "string"
         },
+        "tags": {
+          "$ref": "#/definitions/SandboxTags"
+        },
         "updatedAt": {
           "type": "string"
         }
@@ -563,6 +583,12 @@
         "status": {
           "$ref": "#/definitions/SandboxStatus"
         }
+      },
+      "type": "object"
+    },
+    "SandboxTags": {
+      "additionalProperties": {
+        "type": "string"
       },
       "type": "object"
     },
@@ -652,20 +678,6 @@
       },
       "type": "object"
     },
-    "apierrs.Response": {
-      "properties": {
-        "error": {
-          "type": "string"
-        },
-        "requestID": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "handler.EmptyResponse": {
-      "type": "object"
-    },
     "v1.ImageReplacement": {
       "properties": {
         "name": {
@@ -722,6 +734,24 @@
             "schema": {
               "$ref": "#/definitions/GetClustersResponse"
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
           }
         },
         "security": [
@@ -767,6 +797,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/ConnectClusterResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -909,6 +957,24 @@
             "schema": {
               "$ref": "#/definitions/GetSandboxesResponse"
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
           }
         },
         "security": [
@@ -955,6 +1021,24 @@
             "schema": {
               "$ref": "#/definitions/CreateSandboxResponse"
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
           }
         },
         "security": [
@@ -987,6 +1071,12 @@
             "name": "name",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "force",
+            "in": "query",
+            "name": "force",
+            "type": "boolean"
           }
         ],
         "produces": [
@@ -997,6 +1087,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1034,6 +1142,12 @@
             "required": true,
             "type": "string",
             "x-example": "8r32dkdgdg"
+          },
+          {
+            "description": "force",
+            "in": "query",
+            "name": "force",
+            "type": "boolean"
           }
         ],
         "produces": [
@@ -1044,6 +1158,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/handler.EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1089,6 +1221,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/GetSandboxByIdResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1136,6 +1286,24 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/SandboxReadyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
             }
           }
         },
@@ -1186,6 +1354,12 @@
           },
           "400": {
             "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/apierrs.Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "schema": {
               "$ref": "#/definitions/apierrs.Response"
             }
