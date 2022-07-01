@@ -52,6 +52,9 @@ type SandboxDetails struct {
 	// preview URL
 	PreviewURL string `json:"previewURL,omitempty"`
 
+	// tags
+	Tags SandboxTags `json:"tags,omitempty"`
+
 	// updated at
 	UpdatedAt string `json:"updatedAt,omitempty"`
 }
@@ -65,6 +68,10 @@ func (m *SandboxDetails) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePreviewEndpoints(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -126,6 +133,25 @@ func (m *SandboxDetails) validatePreviewEndpoints(formats strfmt.Registry) error
 	return nil
 }
 
+func (m *SandboxDetails) validateTags(formats strfmt.Registry) error {
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if m.Tags != nil {
+		if err := m.Tags.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tags")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("tags")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this sandbox details based on the context it is used
 func (m *SandboxDetails) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -135,6 +161,10 @@ func (m *SandboxDetails) ContextValidate(ctx context.Context, formats strfmt.Reg
 	}
 
 	if err := m.contextValidatePreviewEndpoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -179,6 +209,20 @@ func (m *SandboxDetails) contextValidatePreviewEndpoints(ctx context.Context, fo
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *SandboxDetails) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Tags.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("tags")
+		}
+		return err
 	}
 
 	return nil

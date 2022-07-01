@@ -29,6 +29,24 @@ func (o *GetSandboxReadyReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewGetSandboxReadyBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 401:
+		result := NewGetSandboxReadyUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 502:
+		result := NewGetSandboxReadyBadGateway()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -57,6 +75,102 @@ func (o *GetSandboxReadyOK) GetPayload() *models.SandboxReadyResponse {
 func (o *GetSandboxReadyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.SandboxReadyResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetSandboxReadyBadRequest creates a GetSandboxReadyBadRequest with default headers values
+func NewGetSandboxReadyBadRequest() *GetSandboxReadyBadRequest {
+	return &GetSandboxReadyBadRequest{}
+}
+
+/* GetSandboxReadyBadRequest describes a response with status code 400, with default header values.
+
+Bad Request
+*/
+type GetSandboxReadyBadRequest struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *GetSandboxReadyBadRequest) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxID}/ready][%d] getSandboxReadyBadRequest  %+v", 400, o.Payload)
+}
+func (o *GetSandboxReadyBadRequest) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *GetSandboxReadyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetSandboxReadyUnauthorized creates a GetSandboxReadyUnauthorized with default headers values
+func NewGetSandboxReadyUnauthorized() *GetSandboxReadyUnauthorized {
+	return &GetSandboxReadyUnauthorized{}
+}
+
+/* GetSandboxReadyUnauthorized describes a response with status code 401, with default header values.
+
+Unauthorized
+*/
+type GetSandboxReadyUnauthorized struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *GetSandboxReadyUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxID}/ready][%d] getSandboxReadyUnauthorized  %+v", 401, o.Payload)
+}
+func (o *GetSandboxReadyUnauthorized) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *GetSandboxReadyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetSandboxReadyBadGateway creates a GetSandboxReadyBadGateway with default headers values
+func NewGetSandboxReadyBadGateway() *GetSandboxReadyBadGateway {
+	return &GetSandboxReadyBadGateway{}
+}
+
+/* GetSandboxReadyBadGateway describes a response with status code 502, with default header values.
+
+Bad Gateway
+*/
+type GetSandboxReadyBadGateway struct {
+	Payload *models.ApierrsResponse
+}
+
+func (o *GetSandboxReadyBadGateway) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxID}/ready][%d] getSandboxReadyBadGateway  %+v", 502, o.Payload)
+}
+func (o *GetSandboxReadyBadGateway) GetPayload() *models.ApierrsResponse {
+	return o.Payload
+}
+
+func (o *GetSandboxReadyBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ApierrsResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
