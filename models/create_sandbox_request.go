@@ -39,6 +39,9 @@ type CreateSandboxRequest struct {
 
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
+
+	// tags
+	Tags SandboxTags `json:"tags,omitempty"`
 }
 
 // Validate validates this create sandbox request
@@ -58,6 +61,10 @@ func (m *CreateSandboxRequest) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateResources(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -155,6 +162,25 @@ func (m *CreateSandboxRequest) validateResources(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *CreateSandboxRequest) validateTags(formats strfmt.Registry) error {
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if m.Tags != nil {
+		if err := m.Tags.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tags")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("tags")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this create sandbox request based on the context it is used
 func (m *CreateSandboxRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -168,6 +194,10 @@ func (m *CreateSandboxRequest) ContextValidate(ctx context.Context, formats strf
 	}
 
 	if err := m.contextValidateResources(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -232,6 +262,20 @@ func (m *CreateSandboxRequest) contextValidateResources(ctx context.Context, for
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *CreateSandboxRequest) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Tags.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("tags")
+		}
+		return err
 	}
 
 	return nil
