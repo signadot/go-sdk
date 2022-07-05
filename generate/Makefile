@@ -20,4 +20,7 @@ default:
 	rm -rf backup
 
 
-
+openapi:
+	docker run --rm -v ${PWD}/..:/local openapitools/openapi-generator-cli:6.0.0 generate \
+		-i /local/.swagger/swagger.json \
+		-g go
