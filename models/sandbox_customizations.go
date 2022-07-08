@@ -16,7 +16,7 @@ import (
 
 // SandboxCustomizations sandbox customizations
 //
-// swagger:model SandboxCustomizations
+// swagger:model sandbox.Customizations
 type SandboxCustomizations struct {
 
 	// Env var modifications that will be applied to the forked workload

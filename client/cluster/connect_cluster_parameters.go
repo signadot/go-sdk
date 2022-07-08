@@ -14,8 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
-	"github.com/signadot/go-sdk/models"
 )
 
 // NewConnectClusterParams creates a new ConnectClusterParams object,
@@ -61,11 +59,11 @@ func NewConnectClusterParamsWithHTTPClient(client *http.Client) *ConnectClusterP
 */
 type ConnectClusterParams struct {
 
-	/* Data.
+	/* ClusterName.
 
-	   Request to create cluster
+	   Cluster Name
 	*/
-	Data *models.ConnectClusterRequest
+	ClusterName string
 
 	/* OrgName.
 
@@ -126,15 +124,15 @@ func (o *ConnectClusterParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the connect cluster params
-func (o *ConnectClusterParams) WithData(data *models.ConnectClusterRequest) *ConnectClusterParams {
-	o.SetData(data)
+// WithClusterName adds the clusterName to the connect cluster params
+func (o *ConnectClusterParams) WithClusterName(clusterName string) *ConnectClusterParams {
+	o.SetClusterName(clusterName)
 	return o
 }
 
-// SetData adds the data to the connect cluster params
-func (o *ConnectClusterParams) SetData(data *models.ConnectClusterRequest) {
-	o.Data = data
+// SetClusterName adds the clusterName to the connect cluster params
+func (o *ConnectClusterParams) SetClusterName(clusterName string) {
+	o.ClusterName = clusterName
 }
 
 // WithOrgName adds the orgName to the connect cluster params
@@ -155,10 +153,10 @@ func (o *ConnectClusterParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-	if o.Data != nil {
-		if err := r.SetBodyParam(o.Data); err != nil {
-			return err
-		}
+
+	// path param clusterName
+	if err := r.SetPathParam("clusterName", o.ClusterName); err != nil {
+		return err
 	}
 
 	// path param orgName

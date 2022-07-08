@@ -32,11 +32,11 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	ConnectCluster(params *ConnectClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ConnectClusterOK, error)
 
-	CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error)
+	DeleteCluster(params *DeleteClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterOK, error)
 
-	DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error)
+	GetCluster(params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error)
 
-	GetClusters(params *GetClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClustersOK, error)
+	ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -53,8 +53,8 @@ func (a *Client) ConnectCluster(params *ConnectClusterParams, authInfo runtime.C
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "connect-cluster",
-		Method:             "POST",
-		PathPattern:        "/orgs/{orgName}/clusters",
+		Method:             "PUT",
+		PathPattern:        "/orgs/{orgName}/clusters/{clusterName}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -83,65 +83,24 @@ func (a *Client) ConnectCluster(params *ConnectClusterParams, authInfo runtime.C
 }
 
 /*
-  CreateClusterToken creates cluster token
+  DeleteCluster lists clusters
 
-  Create a new token for connecting a cluster
+  Delete Cluster Connection.
 */
-func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error) {
+func (a *Client) DeleteCluster(params *DeleteClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateClusterTokenParams()
+		params = NewDeleteClusterParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "create-cluster-token",
-		Method:             "POST",
-		PathPattern:        "/orgs/{orgName}/clusters/{clusterName}/tokens",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &CreateClusterTokenReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateClusterTokenOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for create-cluster-token: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  DeleteClusterToken deletes cluster token
-
-  Delete a cluster token associated with a cluster
-*/
-func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteClusterTokenParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "delete-cluster-token",
+		ID:                 "delete-cluster",
 		Method:             "DELETE",
-		PathPattern:        "/orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}",
+		PathPattern:        "/orgs/{orgName}/clusters/{clusterName}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &DeleteClusterTokenReader{formats: a.formats},
+		Reader:             &DeleteClusterReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -154,35 +113,76 @@ func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo r
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*DeleteClusterTokenOK)
+	success, ok := result.(*DeleteClusterOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for delete-cluster-token: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for delete-cluster: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-  GetClusters lists clusters
+  GetCluster lists clusters
 
-  List clusters.
+  List cluster.
 */
-func (a *Client) GetClusters(params *GetClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClustersOK, error) {
+func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetClustersParams()
+		params = NewGetClusterParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "get-clusters",
+		ID:                 "get-cluster",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/clusters/{clusterName}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetClusterReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetClusterOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for get-cluster: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListClusters lists clusters
+
+  List cluster.
+*/
+func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListClustersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "list-clusters",
 		Method:             "GET",
 		PathPattern:        "/orgs/{orgName}/clusters",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &GetClustersReader{formats: a.formats},
+		Reader:             &ListClustersReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -195,13 +195,13 @@ func (a *Client) GetClusters(params *GetClustersParams, authInfo runtime.ClientA
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetClustersOK)
+	success, ok := result.(*ListClustersOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for get-clusters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for list-clusters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
