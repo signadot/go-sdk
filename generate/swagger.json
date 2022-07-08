@@ -12,7 +12,7 @@
       },
       "type": "object"
     },
-    "cluster.Cluster": {
+    "cluster.Connection": {
       "properties": {
         "createdAt": {
           "description": "The time when this cluster was registered with Signadot.",
@@ -476,7 +476,7 @@
             "description": "OK",
             "schema": {
               "items": {
-                "$ref": "#/definitions/cluster.Cluster"
+                "$ref": "#/definitions/cluster.Connection"
               },
               "type": "array"
             }
@@ -604,7 +604,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/cluster.Cluster"
+              "$ref": "#/definitions/cluster.Connection"
             }
           },
           "400": {
@@ -666,7 +666,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/cluster.Cluster"
+              "$ref": "#/definitions/cluster.Connection"
             }
           },
           "400": {

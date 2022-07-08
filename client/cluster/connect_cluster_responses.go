@@ -62,19 +62,19 @@ func NewConnectClusterOK() *ConnectClusterOK {
 OK
 */
 type ConnectClusterOK struct {
-	Payload *models.ClusterCluster
+	Payload *models.ClusterConnection
 }
 
 func (o *ConnectClusterOK) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}][%d] connectClusterOK  %+v", 200, o.Payload)
 }
-func (o *ConnectClusterOK) GetPayload() *models.ClusterCluster {
+func (o *ConnectClusterOK) GetPayload() *models.ClusterConnection {
 	return o.Payload
 }
 
 func (o *ConnectClusterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ClusterCluster)
+	o.Payload = new(models.ClusterConnection)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

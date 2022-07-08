@@ -62,13 +62,13 @@ func NewListClustersOK() *ListClustersOK {
 OK
 */
 type ListClustersOK struct {
-	Payload []*models.ClusterCluster
+	Payload []*models.ClusterConnection
 }
 
 func (o *ListClustersOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] listClustersOK  %+v", 200, o.Payload)
 }
-func (o *ListClustersOK) GetPayload() []*models.ClusterCluster {
+func (o *ListClustersOK) GetPayload() []*models.ClusterConnection {
 	return o.Payload
 }
 
