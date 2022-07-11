@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewDeleteSandboxByNameParams creates a new DeleteSandboxByNameParams object,
@@ -58,6 +59,12 @@ func NewDeleteSandboxByNameParamsWithHTTPClient(client *http.Client) *DeleteSand
    Typically these are written to a http.Request.
 */
 type DeleteSandboxByNameParams struct {
+
+	/* Force.
+
+	   force
+	*/
+	Force *bool
 
 	/* Name.
 
@@ -124,6 +131,17 @@ func (o *DeleteSandboxByNameParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithForce adds the force to the delete sandbox by name params
+func (o *DeleteSandboxByNameParams) WithForce(force *bool) *DeleteSandboxByNameParams {
+	o.SetForce(force)
+	return o
+}
+
+// SetForce adds the force to the delete sandbox by name params
+func (o *DeleteSandboxByNameParams) SetForce(force *bool) {
+	o.Force = force
+}
+
 // WithName adds the name to the delete sandbox by name params
 func (o *DeleteSandboxByNameParams) WithName(name string) *DeleteSandboxByNameParams {
 	o.SetName(name)
@@ -153,6 +171,23 @@ func (o *DeleteSandboxByNameParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
+
+	if o.Force != nil {
+
+		// query param force
+		var qrForce bool
+
+		if o.Force != nil {
+			qrForce = *o.Force
+		}
+		qForce := swag.FormatBool(qrForce)
+		if qForce != "" {
+
+			if err := r.SetQueryParam("force", qForce); err != nil {
+				return err
+			}
+		}
+	}
 
 	// path param name
 	if err := r.SetPathParam("name", o.Name); err != nil {

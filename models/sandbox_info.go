@@ -49,6 +49,9 @@ type SandboxInfo struct {
 	// preview URL
 	PreviewURL string `json:"previewURL,omitempty"`
 
+	// tags
+	Tags SandboxTags `json:"tags,omitempty"`
+
 	// updated at
 	UpdatedAt string `json:"updatedAt,omitempty"`
 }
@@ -58,6 +61,10 @@ func (m *SandboxInfo) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePreviewEndpoints(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -93,11 +100,34 @@ func (m *SandboxInfo) validatePreviewEndpoints(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SandboxInfo) validateTags(formats strfmt.Registry) error {
+	if swag.IsZero(m.Tags) { // not required
+		return nil
+	}
+
+	if m.Tags != nil {
+		if err := m.Tags.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tags")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("tags")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this sandbox info based on the context it is used
 func (m *SandboxInfo) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidatePreviewEndpoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -122,6 +152,20 @@ func (m *SandboxInfo) contextValidatePreviewEndpoints(ctx context.Context, forma
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *SandboxInfo) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Tags.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("tags")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("tags")
+		}
+		return err
 	}
 
 	return nil
