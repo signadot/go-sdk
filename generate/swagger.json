@@ -77,60 +77,6 @@
       },
       "type": "object"
     },
-    "sandbox.ByNameGetResult": {
-      "properties": {
-        "createdAt": {
-          "type": "string"
-        },
-        "name": {
-          "description": "Human-readable name of this sandbox",
-          "type": "string"
-        },
-        "previewEndpoints": {
-          "items": {
-            "$ref": "#/definitions/sandbox.PreviewEndpoint"
-          },
-          "type": "array"
-        },
-        "routingKey": {
-          "type": "string"
-        },
-        "spec": {
-          "$ref": "#/definitions/sandbox.Spec"
-        },
-        "status": {
-          "$ref": "#/definitions/sandbox.Readiness"
-        }
-      },
-      "type": "object"
-    },
-    "sandbox.ByNamePutResult": {
-      "properties": {
-        "createdAt": {
-          "type": "string"
-        },
-        "name": {
-          "description": "Human-readable name of this sandbox",
-          "type": "string"
-        },
-        "previewEndpoints": {
-          "items": {
-            "$ref": "#/definitions/sandbox.PreviewEndpoint"
-          },
-          "type": "array"
-        },
-        "routingKey": {
-          "type": "string"
-        },
-        "spec": {
-          "$ref": "#/definitions/sandbox.Spec"
-        },
-        "status": {
-          "$ref": "#/definitions/sandbox.Readiness"
-        }
-      },
-      "type": "object"
-    },
     "sandbox.Customizations": {
       "properties": {
         "env": {
@@ -1071,7 +1017,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/sandbox.ByNameGetResult"
+              "$ref": "#/definitions/Sandbox"
             }
           },
           "400": {
@@ -1143,7 +1089,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/sandbox.ByNamePutResult"
+              "$ref": "#/definitions/Sandbox"
             }
           },
           "400": {

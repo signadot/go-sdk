@@ -62,19 +62,19 @@ func NewUpsertSandboxOK() *UpsertSandboxOK {
 OK
 */
 type UpsertSandboxOK struct {
-	Payload *models.SandboxByNamePutResult
+	Payload *models.Sandbox
 }
 
 func (o *UpsertSandboxOK) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] upsertSandboxOK  %+v", 200, o.Payload)
 }
-func (o *UpsertSandboxOK) GetPayload() *models.SandboxByNamePutResult {
+func (o *UpsertSandboxOK) GetPayload() *models.Sandbox {
 	return o.Payload
 }
 
 func (o *UpsertSandboxOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.SandboxByNamePutResult)
+	o.Payload = new(models.Sandbox)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

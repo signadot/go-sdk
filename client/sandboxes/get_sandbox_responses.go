@@ -62,19 +62,19 @@ func NewGetSandboxOK() *GetSandboxOK {
 OK
 */
 type GetSandboxOK struct {
-	Payload *models.SandboxByNameGetResult
+	Payload *models.Sandbox
 }
 
 func (o *GetSandboxOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}][%d] getSandboxOK  %+v", 200, o.Payload)
 }
-func (o *GetSandboxOK) GetPayload() *models.SandboxByNameGetResult {
+func (o *GetSandboxOK) GetPayload() *models.Sandbox {
 	return o.Payload
 }
 
 func (o *GetSandboxOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.SandboxByNameGetResult)
+	o.Payload = new(models.Sandbox)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
