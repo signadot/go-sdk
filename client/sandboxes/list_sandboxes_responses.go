@@ -62,13 +62,13 @@ func NewListSandboxesOK() *ListSandboxesOK {
 OK
 */
 type ListSandboxesOK struct {
-	Payload []*models.SandboxSandbox
+	Payload []*models.Sandbox
 }
 
 func (o *ListSandboxesOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesOK  %+v", 200, o.Payload)
 }
-func (o *ListSandboxesOK) GetPayload() []*models.SandboxSandbox {
+func (o *ListSandboxesOK) GetPayload() []*models.Sandbox {
 	return o.Payload
 }
 
@@ -92,19 +92,19 @@ func NewListSandboxesBadRequest() *ListSandboxesBadRequest {
 Bad Request
 */
 type ListSandboxesBadRequest struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ListSandboxesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesBadRequest  %+v", 400, o.Payload)
 }
-func (o *ListSandboxesBadRequest) GetPayload() *models.ApierrsResponse {
+func (o *ListSandboxesBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ListSandboxesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -124,19 +124,19 @@ func NewListSandboxesUnauthorized() *ListSandboxesUnauthorized {
 Unauthorized
 */
 type ListSandboxesUnauthorized struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ListSandboxesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesUnauthorized  %+v", 401, o.Payload)
 }
-func (o *ListSandboxesUnauthorized) GetPayload() *models.ApierrsResponse {
+func (o *ListSandboxesUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ListSandboxesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -156,19 +156,19 @@ func NewListSandboxesBadGateway() *ListSandboxesBadGateway {
 Bad Gateway
 */
 type ListSandboxesBadGateway struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ListSandboxesBadGateway) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesBadGateway  %+v", 502, o.Payload)
 }
-func (o *ListSandboxesBadGateway) GetPayload() *models.ApierrsResponse {
+func (o *ListSandboxesBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ListSandboxesBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

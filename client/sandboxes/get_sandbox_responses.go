@@ -94,19 +94,19 @@ func NewGetSandboxBadRequest() *GetSandboxBadRequest {
 Bad Request
 */
 type GetSandboxBadRequest struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *GetSandboxBadRequest) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}][%d] getSandboxBadRequest  %+v", 400, o.Payload)
 }
-func (o *GetSandboxBadRequest) GetPayload() *models.ApierrsResponse {
+func (o *GetSandboxBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *GetSandboxBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -126,19 +126,19 @@ func NewGetSandboxUnauthorized() *GetSandboxUnauthorized {
 Unauthorized
 */
 type GetSandboxUnauthorized struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *GetSandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}][%d] getSandboxUnauthorized  %+v", 401, o.Payload)
 }
-func (o *GetSandboxUnauthorized) GetPayload() *models.ApierrsResponse {
+func (o *GetSandboxUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *GetSandboxUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -158,19 +158,19 @@ func NewGetSandboxBadGateway() *GetSandboxBadGateway {
 Bad Gateway
 */
 type GetSandboxBadGateway struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *GetSandboxBadGateway) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}][%d] getSandboxBadGateway  %+v", 502, o.Payload)
 }
-func (o *GetSandboxBadGateway) GetPayload() *models.ApierrsResponse {
+func (o *GetSandboxBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *GetSandboxBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

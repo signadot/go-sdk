@@ -44,13 +44,13 @@ func NewListClusterTokensOK() *ListClusterTokensOK {
 OK
 */
 type ListClusterTokensOK struct {
-	Payload []*models.ClustertokensToken
+	Payload []*models.ClusterToken
 }
 
 func (o *ListClusterTokensOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/tokens/][%d] listClusterTokensOK  %+v", 200, o.Payload)
 }
-func (o *ListClusterTokensOK) GetPayload() []*models.ClustertokensToken {
+func (o *ListClusterTokensOK) GetPayload() []*models.ClusterToken {
 	return o.Payload
 }
 

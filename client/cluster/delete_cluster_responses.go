@@ -62,13 +62,13 @@ func NewDeleteClusterOK() *DeleteClusterOK {
 OK
 */
 type DeleteClusterOK struct {
-	Payload models.JsonopEmpty
+	Payload models.EmptyResponse
 }
 
 func (o *DeleteClusterOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterOK  %+v", 200, o.Payload)
 }
-func (o *DeleteClusterOK) GetPayload() models.JsonopEmpty {
+func (o *DeleteClusterOK) GetPayload() models.EmptyResponse {
 	return o.Payload
 }
 
@@ -92,19 +92,19 @@ func NewDeleteClusterBadRequest() *DeleteClusterBadRequest {
 Bad Request
 */
 type DeleteClusterBadRequest struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *DeleteClusterBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterBadRequest  %+v", 400, o.Payload)
 }
-func (o *DeleteClusterBadRequest) GetPayload() *models.ApierrsResponse {
+func (o *DeleteClusterBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *DeleteClusterBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -124,19 +124,19 @@ func NewDeleteClusterUnauthorized() *DeleteClusterUnauthorized {
 Unauthorized
 */
 type DeleteClusterUnauthorized struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *DeleteClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterUnauthorized  %+v", 401, o.Payload)
 }
-func (o *DeleteClusterUnauthorized) GetPayload() *models.ApierrsResponse {
+func (o *DeleteClusterUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *DeleteClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -156,19 +156,19 @@ func NewDeleteClusterBadGateway() *DeleteClusterBadGateway {
 Bad Gateway
 */
 type DeleteClusterBadGateway struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *DeleteClusterBadGateway) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterBadGateway  %+v", 502, o.Payload)
 }
-func (o *DeleteClusterBadGateway) GetPayload() *models.ApierrsResponse {
+func (o *DeleteClusterBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *DeleteClusterBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

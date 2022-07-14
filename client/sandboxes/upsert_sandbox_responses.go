@@ -94,19 +94,19 @@ func NewUpsertSandboxBadRequest() *UpsertSandboxBadRequest {
 Bad Request
 */
 type UpsertSandboxBadRequest struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *UpsertSandboxBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] upsertSandboxBadRequest  %+v", 400, o.Payload)
 }
-func (o *UpsertSandboxBadRequest) GetPayload() *models.ApierrsResponse {
+func (o *UpsertSandboxBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *UpsertSandboxBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -126,19 +126,19 @@ func NewUpsertSandboxUnauthorized() *UpsertSandboxUnauthorized {
 Unauthorized
 */
 type UpsertSandboxUnauthorized struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *UpsertSandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] upsertSandboxUnauthorized  %+v", 401, o.Payload)
 }
-func (o *UpsertSandboxUnauthorized) GetPayload() *models.ApierrsResponse {
+func (o *UpsertSandboxUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *UpsertSandboxUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -158,19 +158,19 @@ func NewUpsertSandboxBadGateway() *UpsertSandboxBadGateway {
 Bad Gateway
 */
 type UpsertSandboxBadGateway struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *UpsertSandboxBadGateway) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] upsertSandboxBadGateway  %+v", 502, o.Payload)
 }
-func (o *UpsertSandboxBadGateway) GetPayload() *models.ApierrsResponse {
+func (o *UpsertSandboxBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *UpsertSandboxBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

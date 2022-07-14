@@ -62,13 +62,13 @@ func NewDeleteSandboxOK() *DeleteSandboxOK {
 OK
 */
 type DeleteSandboxOK struct {
-	Payload models.JsonopEmpty
+	Payload models.EmptyResponse
 }
 
 func (o *DeleteSandboxOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK  %+v", 200, o.Payload)
 }
-func (o *DeleteSandboxOK) GetPayload() models.JsonopEmpty {
+func (o *DeleteSandboxOK) GetPayload() models.EmptyResponse {
 	return o.Payload
 }
 
@@ -92,19 +92,19 @@ func NewDeleteSandboxBadRequest() *DeleteSandboxBadRequest {
 Bad Request
 */
 type DeleteSandboxBadRequest struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *DeleteSandboxBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest  %+v", 400, o.Payload)
 }
-func (o *DeleteSandboxBadRequest) GetPayload() *models.ApierrsResponse {
+func (o *DeleteSandboxBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *DeleteSandboxBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -124,19 +124,19 @@ func NewDeleteSandboxUnauthorized() *DeleteSandboxUnauthorized {
 Unauthorized
 */
 type DeleteSandboxUnauthorized struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *DeleteSandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized  %+v", 401, o.Payload)
 }
-func (o *DeleteSandboxUnauthorized) GetPayload() *models.ApierrsResponse {
+func (o *DeleteSandboxUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *DeleteSandboxUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -156,19 +156,19 @@ func NewDeleteSandboxBadGateway() *DeleteSandboxBadGateway {
 Bad Gateway
 */
 type DeleteSandboxBadGateway struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *DeleteSandboxBadGateway) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadGateway  %+v", 502, o.Payload)
 }
-func (o *DeleteSandboxBadGateway) GetPayload() *models.ApierrsResponse {
+func (o *DeleteSandboxBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *DeleteSandboxBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

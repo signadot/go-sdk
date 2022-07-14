@@ -65,7 +65,7 @@ type UpsertSandboxParams struct {
 
 	   Request to create sandbox
 	*/
-	Data *models.SandboxSandbox
+	Data *models.Sandbox
 
 	/* OrgName.
 
@@ -133,13 +133,13 @@ func (o *UpsertSandboxParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithData adds the data to the upsert sandbox params
-func (o *UpsertSandboxParams) WithData(data *models.SandboxSandbox) *UpsertSandboxParams {
+func (o *UpsertSandboxParams) WithData(data *models.Sandbox) *UpsertSandboxParams {
 	o.SetData(data)
 	return o
 }
 
 // SetData adds the data to the upsert sandbox params
-func (o *UpsertSandboxParams) SetData(data *models.SandboxSandbox) {
+func (o *UpsertSandboxParams) SetData(data *models.Sandbox) {
 	o.Data = data
 }
 

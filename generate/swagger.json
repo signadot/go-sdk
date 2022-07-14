@@ -1,7 +1,47 @@
 {
   "basePath": "/api/v2",
   "definitions": {
-    "apierrs.Response": {
+    "ClusterToken": {
+      "properties": {
+        "createdAt": {
+          "description": "The time when this cluster was registered with Signadot.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The ID of this token",
+          "type": "string"
+        },
+        "maskedValue": {
+          "description": "A Masked token value.",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/ClusterTokenStatus"
+        },
+        "token": {
+          "description": "The token value.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ClusterTokenStatus": {
+      "properties": {
+        "lastConnectedAt": {
+          "description": "The last time at which this token was used to connect.",
+          "type": "string"
+        },
+        "lastConnectedIP": {
+          "description": "The last IP address from which this token connected.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "EmptyResponse": {
+      "type": "object"
+    },
+    "ErrorResponse": {
       "properties": {
         "error": {
           "type": "string"
@@ -35,46 +75,6 @@
           "type": "string"
         }
       },
-      "type": "object"
-    },
-    "clustertokens.Token": {
-      "properties": {
-        "createdAt": {
-          "description": "The time when this cluster was registered with Signadot.",
-          "type": "string"
-        },
-        "id": {
-          "description": "The ID of this token",
-          "type": "string"
-        },
-        "maskedValue": {
-          "description": "A Masked token value.",
-          "type": "string"
-        },
-        "status": {
-          "$ref": "#/definitions/clustertokens.TokenStatus"
-        },
-        "token": {
-          "description": "The token value.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "clustertokens.TokenStatus": {
-      "properties": {
-        "lastConnectedAt": {
-          "description": "The last time at which this token was used to connect.",
-          "type": "string"
-        },
-        "lastConnectedIP": {
-          "description": "The last IP address from which this token connected.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "jsonop.Empty": {
       "type": "object"
     },
     "sandbox.ByNameGetResult": {
@@ -239,7 +239,7 @@
       },
       "type": "object"
     },
-    "sandbox.Sandbox": {
+    "Sandbox": {
       "properties": {
         "createdAt": {
           "type": "string"
@@ -488,19 +488,19 @@
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -547,25 +547,25 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/jsonop.Empty"
+              "$ref": "#/definitions/EmptyResponse"
             }
           },
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -615,19 +615,19 @@
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -678,19 +678,19 @@
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -737,7 +737,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/clustertokens.Token"
+              "$ref": "#/definitions/ClusterToken"
             }
           }
         },
@@ -785,7 +785,7 @@
             "description": "OK",
             "schema": {
               "items": {
-                "$ref": "#/definitions/clustertokens.Token"
+                "$ref": "#/definitions/ClusterToken"
               },
               "type": "array"
             }
@@ -842,7 +842,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/jsonop.Empty"
+              "$ref": "#/definitions/EmptyResponse"
             }
           }
         },
@@ -895,7 +895,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/clustertokens.Token"
+              "$ref": "#/definitions/ClusterToken"
             }
           }
         },
@@ -935,7 +935,7 @@
             "description": "OK",
             "schema": {
               "items": {
-                "$ref": "#/definitions/sandbox.Sandbox"
+                "$ref": "#/definitions/Sandbox"
               },
               "type": "array"
             }
@@ -943,19 +943,19 @@
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1008,25 +1008,25 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/jsonop.Empty"
+              "$ref": "#/definitions/EmptyResponse"
             }
           },
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1077,19 +1077,19 @@
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1132,7 +1132,7 @@
             "name": "data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/sandbox.Sandbox"
+              "$ref": "#/definitions/Sandbox"
             }
           }
         ],
@@ -1149,19 +1149,19 @@
           "400": {
             "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "502": {
             "description": "Bad Gateway",
             "schema": {
-              "$ref": "#/definitions/apierrs.Response"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },

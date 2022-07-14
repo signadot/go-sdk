@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ClustertokensTokenStatus clustertokens token status
+// ClusterTokenStatus cluster token status
 //
-// swagger:model clustertokens.TokenStatus
-type ClustertokensTokenStatus struct {
+// swagger:model ClusterTokenStatus
+type ClusterTokenStatus struct {
 
 	// The last time at which this token was used to connect.
 	LastConnectedAt string `json:"lastConnectedAt,omitempty"`
@@ -24,18 +24,18 @@ type ClustertokensTokenStatus struct {
 	LastConnectedIP string `json:"lastConnectedIP,omitempty"`
 }
 
-// Validate validates this clustertokens token status
-func (m *ClustertokensTokenStatus) Validate(formats strfmt.Registry) error {
+// Validate validates this cluster token status
+func (m *ClusterTokenStatus) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this clustertokens token status based on context it is used
-func (m *ClustertokensTokenStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this cluster token status based on context it is used
+func (m *ClusterTokenStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *ClustertokensTokenStatus) MarshalBinary() ([]byte, error) {
+func (m *ClusterTokenStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *ClustertokensTokenStatus) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ClustertokensTokenStatus) UnmarshalBinary(b []byte) error {
-	var res ClustertokensTokenStatus
+func (m *ClusterTokenStatus) UnmarshalBinary(b []byte) error {
+	var res ClusterTokenStatus
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxSandbox sandbox sandbox
+// Sandbox sandbox
 //
-// swagger:model sandbox.Sandbox
-type SandboxSandbox struct {
+// swagger:model Sandbox
+type Sandbox struct {
 
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
@@ -38,8 +38,8 @@ type SandboxSandbox struct {
 	Status *SandboxReadiness `json:"status,omitempty"`
 }
 
-// Validate validates this sandbox sandbox
-func (m *SandboxSandbox) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox
+func (m *Sandbox) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePreviewEndpoints(formats); err != nil {
@@ -60,7 +60,7 @@ func (m *SandboxSandbox) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxSandbox) validatePreviewEndpoints(formats strfmt.Registry) error {
+func (m *Sandbox) validatePreviewEndpoints(formats strfmt.Registry) error {
 	if swag.IsZero(m.PreviewEndpoints) { // not required
 		return nil
 	}
@@ -86,7 +86,7 @@ func (m *SandboxSandbox) validatePreviewEndpoints(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *SandboxSandbox) validateSpec(formats strfmt.Registry) error {
+func (m *Sandbox) validateSpec(formats strfmt.Registry) error {
 	if swag.IsZero(m.Spec) { // not required
 		return nil
 	}
@@ -105,7 +105,7 @@ func (m *SandboxSandbox) validateSpec(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxSandbox) validateStatus(formats strfmt.Registry) error {
+func (m *Sandbox) validateStatus(formats strfmt.Registry) error {
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -124,8 +124,8 @@ func (m *SandboxSandbox) validateStatus(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this sandbox sandbox based on the context it is used
-func (m *SandboxSandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandbox based on the context it is used
+func (m *Sandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidatePreviewEndpoints(ctx, formats); err != nil {
@@ -146,7 +146,7 @@ func (m *SandboxSandbox) ContextValidate(ctx context.Context, formats strfmt.Reg
 	return nil
 }
 
-func (m *SandboxSandbox) contextValidatePreviewEndpoints(ctx context.Context, formats strfmt.Registry) error {
+func (m *Sandbox) contextValidatePreviewEndpoints(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.PreviewEndpoints); i++ {
 
@@ -166,7 +166,7 @@ func (m *SandboxSandbox) contextValidatePreviewEndpoints(ctx context.Context, fo
 	return nil
 }
 
-func (m *SandboxSandbox) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *Sandbox) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
@@ -182,7 +182,7 @@ func (m *SandboxSandbox) contextValidateSpec(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *SandboxSandbox) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+func (m *Sandbox) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
@@ -199,7 +199,7 @@ func (m *SandboxSandbox) contextValidateStatus(ctx context.Context, formats strf
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxSandbox) MarshalBinary() ([]byte, error) {
+func (m *Sandbox) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -207,8 +207,8 @@ func (m *SandboxSandbox) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxSandbox) UnmarshalBinary(b []byte) error {
-	var res SandboxSandbox
+func (m *Sandbox) UnmarshalBinary(b []byte) error {
+	var res Sandbox
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

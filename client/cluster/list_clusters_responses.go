@@ -92,19 +92,19 @@ func NewListClustersBadRequest() *ListClustersBadRequest {
 Bad Request
 */
 type ListClustersBadRequest struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ListClustersBadRequest) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest  %+v", 400, o.Payload)
 }
-func (o *ListClustersBadRequest) GetPayload() *models.ApierrsResponse {
+func (o *ListClustersBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ListClustersBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -124,19 +124,19 @@ func NewListClustersUnauthorized() *ListClustersUnauthorized {
 Unauthorized
 */
 type ListClustersUnauthorized struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ListClustersUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
 }
-func (o *ListClustersUnauthorized) GetPayload() *models.ApierrsResponse {
+func (o *ListClustersUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ListClustersUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -156,19 +156,19 @@ func NewListClustersBadGateway() *ListClustersBadGateway {
 Bad Gateway
 */
 type ListClustersBadGateway struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ListClustersBadGateway) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway  %+v", 502, o.Payload)
 }
-func (o *ListClustersBadGateway) GetPayload() *models.ApierrsResponse {
+func (o *ListClustersBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ListClustersBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

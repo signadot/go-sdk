@@ -44,19 +44,19 @@ func NewGetClusterTokenOK() *GetClusterTokenOK {
 OK
 */
 type GetClusterTokenOK struct {
-	Payload *models.ClustertokensToken
+	Payload *models.ClusterToken
 }
 
 func (o *GetClusterTokenOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] getClusterTokenOK  %+v", 200, o.Payload)
 }
-func (o *GetClusterTokenOK) GetPayload() *models.ClustertokensToken {
+func (o *GetClusterTokenOK) GetPayload() *models.ClusterToken {
 	return o.Payload
 }
 
 func (o *GetClusterTokenOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ClustertokensToken)
+	o.Payload = new(models.ClusterToken)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

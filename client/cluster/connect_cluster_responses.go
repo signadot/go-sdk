@@ -94,19 +94,19 @@ func NewConnectClusterBadRequest() *ConnectClusterBadRequest {
 Bad Request
 */
 type ConnectClusterBadRequest struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ConnectClusterBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] connectClusterBadRequest  %+v", 400, o.Payload)
 }
-func (o *ConnectClusterBadRequest) GetPayload() *models.ApierrsResponse {
+func (o *ConnectClusterBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ConnectClusterBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -126,19 +126,19 @@ func NewConnectClusterUnauthorized() *ConnectClusterUnauthorized {
 Unauthorized
 */
 type ConnectClusterUnauthorized struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ConnectClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] connectClusterUnauthorized  %+v", 401, o.Payload)
 }
-func (o *ConnectClusterUnauthorized) GetPayload() *models.ApierrsResponse {
+func (o *ConnectClusterUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ConnectClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -158,19 +158,19 @@ func NewConnectClusterBadGateway() *ConnectClusterBadGateway {
 Bad Gateway
 */
 type ConnectClusterBadGateway struct {
-	Payload *models.ApierrsResponse
+	Payload *models.ErrorResponse
 }
 
 func (o *ConnectClusterBadGateway) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] connectClusterBadGateway  %+v", 502, o.Payload)
 }
-func (o *ConnectClusterBadGateway) GetPayload() *models.ApierrsResponse {
+func (o *ConnectClusterBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
 
 func (o *ConnectClusterBadGateway) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ApierrsResponse)
+	o.Payload = new(models.ErrorResponse)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
