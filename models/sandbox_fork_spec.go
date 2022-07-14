@@ -23,7 +23,7 @@ type SandboxForkSpec struct {
 	Customizations *SandboxCustomizations `json:"customizations,omitempty"`
 
 	// Endpoints that correspond to this forked workload
-	Endpoints []*ForkEndpoint `json:"endpoints"`
+	Endpoints []*SandboxForkEndpoint `json:"endpoints"`
 
 	// fork of
 	ForkOf *SandboxForkOf `json:"forkOf,omitempty"`

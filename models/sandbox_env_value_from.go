@@ -13,20 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// EnvValueFrom env value from
+// SandboxEnvValueFrom sandbox env value from
 //
-// swagger:model EnvValueFrom
-type EnvValueFrom struct {
+// swagger:model sandbox.EnvValueFrom
+type SandboxEnvValueFrom struct {
 
 	// fork
-	Fork *EnvValueFromFork `json:"fork,omitempty"`
+	Fork *SandboxEnvValueFromFork `json:"fork,omitempty"`
 
 	// resource
-	Resource *EnvValueFromResource `json:"resource,omitempty"`
+	Resource *SandboxEnvValueFromResource `json:"resource,omitempty"`
 }
 
-// Validate validates this env value from
-func (m *EnvValueFrom) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox env value from
+func (m *SandboxEnvValueFrom) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateFork(formats); err != nil {
@@ -43,7 +43,7 @@ func (m *EnvValueFrom) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EnvValueFrom) validateFork(formats strfmt.Registry) error {
+func (m *SandboxEnvValueFrom) validateFork(formats strfmt.Registry) error {
 	if swag.IsZero(m.Fork) { // not required
 		return nil
 	}
@@ -62,7 +62,7 @@ func (m *EnvValueFrom) validateFork(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EnvValueFrom) validateResource(formats strfmt.Registry) error {
+func (m *SandboxEnvValueFrom) validateResource(formats strfmt.Registry) error {
 	if swag.IsZero(m.Resource) { // not required
 		return nil
 	}
@@ -81,8 +81,8 @@ func (m *EnvValueFrom) validateResource(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this env value from based on the context it is used
-func (m *EnvValueFrom) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandbox env value from based on the context it is used
+func (m *SandboxEnvValueFrom) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateFork(ctx, formats); err != nil {
@@ -99,7 +99,7 @@ func (m *EnvValueFrom) ContextValidate(ctx context.Context, formats strfmt.Regis
 	return nil
 }
 
-func (m *EnvValueFrom) contextValidateFork(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxEnvValueFrom) contextValidateFork(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Fork != nil {
 		if err := m.Fork.ContextValidate(ctx, formats); err != nil {
@@ -115,7 +115,7 @@ func (m *EnvValueFrom) contextValidateFork(ctx context.Context, formats strfmt.R
 	return nil
 }
 
-func (m *EnvValueFrom) contextValidateResource(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxEnvValueFrom) contextValidateResource(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Resource != nil {
 		if err := m.Resource.ContextValidate(ctx, formats); err != nil {
@@ -132,7 +132,7 @@ func (m *EnvValueFrom) contextValidateResource(ctx context.Context, formats strf
 }
 
 // MarshalBinary interface implementation
-func (m *EnvValueFrom) MarshalBinary() ([]byte, error) {
+func (m *SandboxEnvValueFrom) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -140,8 +140,8 @@ func (m *EnvValueFrom) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *EnvValueFrom) UnmarshalBinary(b []byte) error {
-	var res EnvValueFrom
+func (m *SandboxEnvValueFrom) UnmarshalBinary(b []byte) error {
+	var res SandboxEnvValueFrom
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -34,9 +34,6 @@ type SandboxSpec struct {
 	// Required: true
 	Forks []*SandboxForkSpec `json:"forks"`
 
-	// Human-readable name of this sandbox
-	Name string `json:"name,omitempty"`
-
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
 

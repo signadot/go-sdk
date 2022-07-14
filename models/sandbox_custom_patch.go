@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CustomPatch custom patch
+// SandboxCustomPatch sandbox custom patch
 //
-// swagger:model CustomPatch
-type CustomPatch struct {
+// swagger:model sandbox.CustomPatch
+type SandboxCustomPatch struct {
 
 	// type
 	Type string `json:"type,omitempty"`
@@ -24,18 +24,18 @@ type CustomPatch struct {
 	Value string `json:"value,omitempty"`
 }
 
-// Validate validates this custom patch
-func (m *CustomPatch) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox custom patch
+func (m *SandboxCustomPatch) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this custom patch based on context it is used
-func (m *CustomPatch) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sandbox custom patch based on context it is used
+func (m *SandboxCustomPatch) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *CustomPatch) MarshalBinary() ([]byte, error) {
+func (m *SandboxCustomPatch) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *CustomPatch) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CustomPatch) UnmarshalBinary(b []byte) error {
-	var res CustomPatch
+func (m *SandboxCustomPatch) UnmarshalBinary(b []byte) error {
+	var res SandboxCustomPatch
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

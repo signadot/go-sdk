@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ForkEndpoint fork endpoint
+// SandboxForkEndpoint sandbox fork endpoint
 //
-// swagger:model ForkEndpoint
-type ForkEndpoint struct {
+// swagger:model sandbox.ForkEndpoint
+type SandboxForkEndpoint struct {
 
 	// Name of the endpoint
 	Name string `json:"name,omitempty"`
@@ -27,18 +27,18 @@ type ForkEndpoint struct {
 	Protocol string `json:"protocol,omitempty"`
 }
 
-// Validate validates this fork endpoint
-func (m *ForkEndpoint) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox fork endpoint
+func (m *SandboxForkEndpoint) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this fork endpoint based on context it is used
-func (m *ForkEndpoint) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sandbox fork endpoint based on context it is used
+func (m *SandboxForkEndpoint) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *ForkEndpoint) MarshalBinary() ([]byte, error) {
+func (m *SandboxForkEndpoint) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -46,8 +46,8 @@ func (m *ForkEndpoint) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ForkEndpoint) UnmarshalBinary(b []byte) error {
-	var res ForkEndpoint
+func (m *SandboxForkEndpoint) UnmarshalBinary(b []byte) error {
+	var res SandboxForkEndpoint
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

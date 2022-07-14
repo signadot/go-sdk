@@ -13,20 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// EnvValueFromFork env value from fork
+// SandboxEnvValueFromFork sandbox env value from fork
 //
-// swagger:model EnvValueFromFork
-type EnvValueFromFork struct {
+// swagger:model sandbox.EnvValueFromFork
+type SandboxEnvValueFromFork struct {
 
 	// expression
 	Expression string `json:"expression,omitempty"`
 
 	// fork of
-	ForkOf *ForkOf `json:"forkOf,omitempty"`
+	ForkOf *SandboxForkOf `json:"forkOf,omitempty"`
 }
 
-// Validate validates this env value from fork
-func (m *EnvValueFromFork) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox env value from fork
+func (m *SandboxEnvValueFromFork) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateForkOf(formats); err != nil {
@@ -39,7 +39,7 @@ func (m *EnvValueFromFork) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EnvValueFromFork) validateForkOf(formats strfmt.Registry) error {
+func (m *SandboxEnvValueFromFork) validateForkOf(formats strfmt.Registry) error {
 	if swag.IsZero(m.ForkOf) { // not required
 		return nil
 	}
@@ -58,8 +58,8 @@ func (m *EnvValueFromFork) validateForkOf(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this env value from fork based on the context it is used
-func (m *EnvValueFromFork) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandbox env value from fork based on the context it is used
+func (m *SandboxEnvValueFromFork) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateForkOf(ctx, formats); err != nil {
@@ -72,7 +72,7 @@ func (m *EnvValueFromFork) ContextValidate(ctx context.Context, formats strfmt.R
 	return nil
 }
 
-func (m *EnvValueFromFork) contextValidateForkOf(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxEnvValueFromFork) contextValidateForkOf(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ForkOf != nil {
 		if err := m.ForkOf.ContextValidate(ctx, formats); err != nil {
@@ -89,7 +89,7 @@ func (m *EnvValueFromFork) contextValidateForkOf(ctx context.Context, formats st
 }
 
 // MarshalBinary interface implementation
-func (m *EnvValueFromFork) MarshalBinary() ([]byte, error) {
+func (m *SandboxEnvValueFromFork) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -97,8 +97,8 @@ func (m *EnvValueFromFork) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *EnvValueFromFork) UnmarshalBinary(b []byte) error {
-	var res EnvValueFromFork
+func (m *SandboxEnvValueFromFork) UnmarshalBinary(b []byte) error {
+	var res SandboxEnvValueFromFork
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

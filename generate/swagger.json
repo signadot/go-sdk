@@ -12,7 +12,7 @@
       },
       "type": "object"
     },
-    "cluster.Connection": {
+    "cluster.Registration": {
       "properties": {
         "createdAt": {
           "description": "The time when this cluster was registered with Signadot.",
@@ -37,7 +37,41 @@
       },
       "type": "object"
     },
-    "handler.EmptyResponse": {
+    "clustertokens.Token": {
+      "properties": {
+        "createdAt": {
+          "description": "The time when this cluster was registered with Signadot.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The ID of this token",
+          "type": "string"
+        },
+        "maskedValue": {
+          "description": "A Masked token value.",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/clustertokens.TokenStatus"
+        },
+        "token": {
+          "description": "The token value.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "clustertokens.TokenStatus": {
+      "properties": {
+        "lastConnectedAt": {
+          "description": "The last time at which this token was used to connect.",
+          "type": "string"
+        },
+        "lastConnectedIP": {
+          "description": "The last IP address from which this token connected.",
+          "type": "string"
+        }
+      },
       "type": "object"
     },
     "jsonop.Empty": {
@@ -45,8 +79,12 @@
     },
     "sandbox.ByNameGetResult": {
       "properties": {
-        "meta": {
-          "$ref": "#/definitions/sandbox.SandboxMeta"
+        "createdAt": {
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable name of this sandbox",
+          "type": "string"
         },
         "previewEndpoints": {
           "items": {
@@ -54,19 +92,26 @@
           },
           "type": "array"
         },
+        "routingKey": {
+          "type": "string"
+        },
         "spec": {
           "$ref": "#/definitions/sandbox.Spec"
         },
         "status": {
-          "$ref": "#/definitions/SandboxReadiness"
+          "$ref": "#/definitions/sandbox.Readiness"
         }
       },
       "type": "object"
     },
     "sandbox.ByNamePutResult": {
       "properties": {
-        "meta": {
-          "$ref": "#/definitions/sandbox.SandboxMeta"
+        "createdAt": {
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable name of this sandbox",
+          "type": "string"
         },
         "previewEndpoints": {
           "items": {
@@ -74,11 +119,14 @@
           },
           "type": "array"
         },
+        "routingKey": {
+          "type": "string"
+        },
         "spec": {
           "$ref": "#/definitions/sandbox.Spec"
         },
         "status": {
-          "$ref": "#/definitions/SandboxReadiness"
+          "$ref": "#/definitions/sandbox.Readiness"
         }
       },
       "type": "object"
@@ -88,19 +136,19 @@
         "env": {
           "description": "Env var modifications that will be applied to the forked workload",
           "items": {
-            "$ref": "#/definitions/EnvOp"
+            "$ref": "#/definitions/sandbox.EnvOp"
           },
           "type": "array"
         },
         "images": {
           "description": "One or more docker images that will be applied to the forked workload",
           "items": {
-            "$ref": "#/definitions/Image"
+            "$ref": "#/definitions/sandbox.Image"
           },
           "type": "array"
         },
         "patch": {
-          "$ref": "#/definitions/CustomPatch"
+          "$ref": "#/definitions/sandbox.CustomPatch"
         }
       },
       "type": "object"
@@ -138,7 +186,7 @@
         "endpoints": {
           "description": "Endpoints that correspond to this forked workload",
           "items": {
-            "$ref": "#/definitions/ForkEndpoint"
+            "$ref": "#/definitions/sandbox.ForkEndpoint"
           },
           "type": "array"
         },
@@ -193,8 +241,12 @@
     },
     "sandbox.Sandbox": {
       "properties": {
-        "meta": {
-          "$ref": "#/definitions/sandbox.SandboxMeta"
+        "createdAt": {
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable name of this sandbox",
+          "type": "string"
         },
         "previewEndpoints": {
           "items": {
@@ -202,22 +254,14 @@
           },
           "type": "array"
         },
+        "routingKey": {
+          "type": "string"
+        },
         "spec": {
           "$ref": "#/definitions/sandbox.Spec"
         },
         "status": {
-          "$ref": "#/definitions/SandboxReadiness"
-        }
-      },
-      "type": "object"
-    },
-    "sandbox.SandboxMeta": {
-      "properties": {
-        "createdAt": {
-          "type": "string"
-        },
-        "routingKey": {
-          "type": "string"
+          "$ref": "#/definitions/sandbox.Readiness"
         }
       },
       "type": "object"
@@ -235,7 +279,7 @@
         "endpoints": {
           "description": "Endpoints that can be used to point to external DNS names or ingress gateways",
           "items": {
-            "$ref": "#/definitions/SandboxEndpoint"
+            "$ref": "#/definitions/sandbox.Endpoint"
           },
           "type": "array"
         },
@@ -245,10 +289,6 @@
             "$ref": "#/definitions/sandbox.ForkSpec"
           },
           "type": "array"
-        },
-        "name": {
-          "description": "Human-readable name of this sandbox",
-          "type": "string"
         },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
@@ -270,18 +310,7 @@
       ],
       "type": "object"
     },
-    "CreateClusterTokenResponse": {
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "CustomPatch": {
+    "sandbox.CustomPatch": {
       "properties": {
         "type": {
           "type": "string"
@@ -292,7 +321,7 @@
       },
       "type": "object"
     },
-    "EnvOp": {
+    "sandbox.EnvOp": {
       "properties": {
         "container": {
           "description": "name of container to which it applies",
@@ -311,34 +340,34 @@
           "type": "string"
         },
         "valueFrom": {
-          "$ref": "#/definitions/EnvValueFrom"
+          "$ref": "#/definitions/sandbox.EnvValueFrom"
         }
       },
       "type": "object"
     },
-    "EnvValueFrom": {
+    "sandbox.EnvValueFrom": {
       "properties": {
         "fork": {
-          "$ref": "#/definitions/EnvValueFromFork"
+          "$ref": "#/definitions/sandbox.EnvValueFromFork"
         },
         "resource": {
-          "$ref": "#/definitions/EnvValueFromResource"
+          "$ref": "#/definitions/sandbox.EnvValueFromResource"
         }
       },
       "type": "object"
     },
-    "EnvValueFromFork": {
+    "sandbox.EnvValueFromFork": {
       "properties": {
         "expression": {
           "type": "string"
         },
         "forkOf": {
-          "$ref": "#/definitions/ForkOf"
+          "$ref": "#/definitions/sandbox.ForkOf"
         }
       },
       "type": "object"
     },
-    "EnvValueFromResource": {
+    "sandbox.EnvValueFromResource": {
       "properties": {
         "name": {
           "type": "string"
@@ -349,7 +378,7 @@
       },
       "type": "object"
     },
-    "ForkEndpoint": {
+    "sandbox.ForkEndpoint": {
       "properties": {
         "name": {
           "description": "Name of the endpoint",
@@ -366,32 +395,7 @@
       },
       "type": "object"
     },
-    "ForkOf": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "Image": {
+    "sandbox.Image": {
       "properties": {
         "container": {
           "description": "Container is the container this image must apply to in the forked workload",
@@ -404,7 +408,7 @@
       },
       "type": "object"
     },
-    "SandboxEndpoint": {
+    "sandbox.Endpoint": {
       "properties": {
         "host": {
           "description": "Hostname that this endpoint points to",
@@ -425,7 +429,7 @@
       },
       "type": "object"
     },
-    "SandboxReadiness": {
+    "sandbox.Readiness": {
       "properties": {
         "message": {
           "description": "Message is a human readable explanation of why\nthe sandbox is healthy or not.",
@@ -451,7 +455,7 @@
     "version": "2.0"
   },
   "paths": {
-    "/orgs/{orgName}/clusters": {
+    "/orgs/{orgName}/clusters/": {
       "get": {
         "consumes": [
           "application/json"
@@ -476,7 +480,7 @@
             "description": "OK",
             "schema": {
               "items": {
-                "$ref": "#/definitions/cluster.Connection"
+                "$ref": "#/definitions/cluster.Registration"
               },
               "type": "array"
             }
@@ -511,12 +515,12 @@
         ]
       }
     },
-    "/orgs/{orgName}/clusters/{clusterName}": {
+    "/orgs/{orgName}/clusters/{clusterName}/": {
       "delete": {
         "consumes": [
           "application/json"
         ],
-        "description": "Delete Cluster Connection.",
+        "description": "Delete a cluster Registration.",
         "operationId": "delete-cluster",
         "parameters": [
           {
@@ -532,7 +536,8 @@
             "in": "path",
             "name": "clusterName",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "x-example": "my-cluster"
           }
         ],
         "produces": [
@@ -569,7 +574,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "List clusters",
+        "summary": "Delete a cluster registration.",
         "tags": [
           "Cluster"
         ]
@@ -578,7 +583,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List cluster.",
+        "description": "Get a cluster.",
         "operationId": "get-cluster",
         "parameters": [
           {
@@ -604,7 +609,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/cluster.Connection"
+              "$ref": "#/definitions/cluster.Registration"
             }
           },
           "400": {
@@ -631,7 +636,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "List clusters",
+        "summary": "Get a cluster.",
         "tags": [
           "Cluster"
         ]
@@ -640,7 +645,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Connect a new Kubernetes cluster with Signadot",
+        "description": "Register a Kubernetes cluster to connect with Signadot",
         "operationId": "connect-cluster",
         "parameters": [
           {
@@ -656,7 +661,8 @@
             "in": "path",
             "name": "clusterName",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "x-example": "my-cluster"
           }
         ],
         "produces": [
@@ -666,7 +672,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/cluster.Connection"
+              "$ref": "#/definitions/cluster.Registration"
             }
           },
           "400": {
@@ -693,7 +699,212 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Connect Cluster",
+        "summary": "Register a cluster",
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/clusters/{clusterName}/tokens": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create a new token for connecting a cluster",
+        "operationId": "create-cluster-token",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Cluster Name",
+            "in": "path",
+            "name": "clusterName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-new-cluster"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/clustertokens.Token"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create Cluster Token",
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/clusters/{clusterName}/tokens/": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List the cluster tokens associated with a cluster",
+        "operationId": "list-cluster-tokens",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Cluster Name",
+            "in": "path",
+            "name": "clusterName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-new-cluster"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/clustertokens.Token"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List cluster tokens",
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete a cluster token associated with a cluster",
+        "operationId": "delete-cluster-token",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Cluster Name",
+            "in": "path",
+            "name": "clusterName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-new-cluster"
+          },
+          {
+            "description": "Token Id",
+            "in": "path",
+            "name": "tokenId",
+            "required": true,
+            "type": "string",
+            "x-example": "kq6mtksk7mn5"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/jsonop.Empty"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete Cluster Token",
+        "tags": [
+          "Cluster"
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get a cluster token associated with a cluster",
+        "operationId": "get-cluster-token",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Cluster Name",
+            "in": "path",
+            "name": "clusterName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-new-cluster"
+          },
+          {
+            "description": "Token Id",
+            "in": "path",
+            "name": "tokenId",
+            "required": true,
+            "type": "string",
+            "x-example": "kq6mtksk7mn5"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/clustertokens.Token"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a cluster token",
         "tags": [
           "Cluster"
         ]
@@ -781,7 +992,7 @@
             "name": "sandboxName",
             "required": true,
             "type": "string",
-            "x-example": "8r32dkdgdg"
+            "x-example": "my-sandbox"
           },
           {
             "description": "force",
@@ -850,7 +1061,7 @@
             "name": "sandboxName",
             "required": true,
             "type": "string",
-            "x-example": "8r32dkdgdg"
+            "x-example": "my-sandbox"
           }
         ],
         "produces": [
@@ -897,7 +1108,7 @@
           "application/json"
         ],
         "description": "Creates a new sandbox with the provided parameters",
-        "operationId": "put-sandbox",
+        "operationId": "upsert-sandbox",
         "parameters": [
           {
             "description": "Signadot Org Name",
@@ -912,7 +1123,8 @@
             "in": "path",
             "name": "sandboxName",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "x-example": "my-sandbox"
           },
           {
             "description": "Request to create sandbox",

@@ -13,23 +13,29 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ClusterConnection cluster connection
+// ClustertokensToken clustertokens token
 //
-// swagger:model cluster.Connection
-type ClusterConnection struct {
+// swagger:model clustertokens.Token
+type ClustertokensToken struct {
 
 	// The time when this cluster was registered with Signadot.
 	CreatedAt string `json:"createdAt,omitempty"`
 
-	// The name of the cluster.
-	Name string `json:"name,omitempty"`
+	// The ID of this token
+	ID string `json:"id,omitempty"`
+
+	// A Masked token value.
+	MaskedValue string `json:"maskedValue,omitempty"`
 
 	// status
-	Status *ClusterStatus `json:"status,omitempty"`
+	Status *ClustertokensTokenStatus `json:"status,omitempty"`
+
+	// The token value.
+	Token string `json:"token,omitempty"`
 }
 
-// Validate validates this cluster connection
-func (m *ClusterConnection) Validate(formats strfmt.Registry) error {
+// Validate validates this clustertokens token
+func (m *ClustertokensToken) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateStatus(formats); err != nil {
@@ -42,7 +48,7 @@ func (m *ClusterConnection) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ClusterConnection) validateStatus(formats strfmt.Registry) error {
+func (m *ClustertokensToken) validateStatus(formats strfmt.Registry) error {
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -61,8 +67,8 @@ func (m *ClusterConnection) validateStatus(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this cluster connection based on the context it is used
-func (m *ClusterConnection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this clustertokens token based on the context it is used
+func (m *ClustertokensToken) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateStatus(ctx, formats); err != nil {
@@ -75,7 +81,7 @@ func (m *ClusterConnection) ContextValidate(ctx context.Context, formats strfmt.
 	return nil
 }
 
-func (m *ClusterConnection) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+func (m *ClustertokensToken) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
@@ -92,7 +98,7 @@ func (m *ClusterConnection) contextValidateStatus(ctx context.Context, formats s
 }
 
 // MarshalBinary interface implementation
-func (m *ClusterConnection) MarshalBinary() ([]byte, error) {
+func (m *ClustertokensToken) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -100,8 +106,8 @@ func (m *ClusterConnection) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ClusterConnection) UnmarshalBinary(b []byte) error {
-	var res ClusterConnection
+func (m *ClustertokensToken) UnmarshalBinary(b []byte) error {
+	var res ClustertokensToken
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

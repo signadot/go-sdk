@@ -66,7 +66,7 @@ type DeleteClusterOK struct {
 }
 
 func (o *DeleteClusterOK) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}][%d] deleteClusterOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterOK  %+v", 200, o.Payload)
 }
 func (o *DeleteClusterOK) GetPayload() models.JsonopEmpty {
 	return o.Payload
@@ -96,7 +96,7 @@ type DeleteClusterBadRequest struct {
 }
 
 func (o *DeleteClusterBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}][%d] deleteClusterBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterBadRequest  %+v", 400, o.Payload)
 }
 func (o *DeleteClusterBadRequest) GetPayload() *models.ApierrsResponse {
 	return o.Payload
@@ -128,7 +128,7 @@ type DeleteClusterUnauthorized struct {
 }
 
 func (o *DeleteClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}][%d] deleteClusterUnauthorized  %+v", 401, o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterUnauthorized  %+v", 401, o.Payload)
 }
 func (o *DeleteClusterUnauthorized) GetPayload() *models.ApierrsResponse {
 	return o.Payload
@@ -160,7 +160,7 @@ type DeleteClusterBadGateway struct {
 }
 
 func (o *DeleteClusterBadGateway) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}][%d] deleteClusterBadGateway  %+v", 502, o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] deleteClusterBadGateway  %+v", 502, o.Payload)
 }
 func (o *DeleteClusterBadGateway) GetPayload() *models.ApierrsResponse {
 	return o.Payload

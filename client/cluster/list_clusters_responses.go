@@ -62,13 +62,13 @@ func NewListClustersOK() *ListClustersOK {
 OK
 */
 type ListClustersOK struct {
-	Payload []*models.ClusterConnection
+	Payload []*models.ClusterRegistration
 }
 
 func (o *ListClustersOK) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] listClustersOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
 }
-func (o *ListClustersOK) GetPayload() []*models.ClusterConnection {
+func (o *ListClustersOK) GetPayload() []*models.ClusterRegistration {
 	return o.Payload
 }
 
@@ -96,7 +96,7 @@ type ListClustersBadRequest struct {
 }
 
 func (o *ListClustersBadRequest) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] listClustersBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest  %+v", 400, o.Payload)
 }
 func (o *ListClustersBadRequest) GetPayload() *models.ApierrsResponse {
 	return o.Payload
@@ -128,7 +128,7 @@ type ListClustersUnauthorized struct {
 }
 
 func (o *ListClustersUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] listClustersUnauthorized  %+v", 401, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
 }
 func (o *ListClustersUnauthorized) GetPayload() *models.ApierrsResponse {
 	return o.Payload
@@ -160,7 +160,7 @@ type ListClustersBadGateway struct {
 }
 
 func (o *ListClustersBadGateway) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters][%d] listClustersBadGateway  %+v", 502, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway  %+v", 502, o.Payload)
 }
 func (o *ListClustersBadGateway) GetPayload() *models.ApierrsResponse {
 	return o.Payload

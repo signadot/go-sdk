@@ -19,11 +19,17 @@ import (
 // swagger:model sandbox.Sandbox
 type SandboxSandbox struct {
 
-	// meta
-	Meta *SandboxSandboxMeta `json:"meta,omitempty"`
+	// created at
+	CreatedAt string `json:"createdAt,omitempty"`
+
+	// Human-readable name of this sandbox
+	Name string `json:"name,omitempty"`
 
 	// preview endpoints
 	PreviewEndpoints []*SandboxPreviewEndpoint `json:"previewEndpoints"`
+
+	// routing key
+	RoutingKey string `json:"routingKey,omitempty"`
 
 	// spec
 	Spec *SandboxSpec `json:"spec,omitempty"`
@@ -35,10 +41,6 @@ type SandboxSandbox struct {
 // Validate validates this sandbox sandbox
 func (m *SandboxSandbox) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateMeta(formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.validatePreviewEndpoints(formats); err != nil {
 		res = append(res, err)
@@ -55,25 +57,6 @@ func (m *SandboxSandbox) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *SandboxSandbox) validateMeta(formats strfmt.Registry) error {
-	if swag.IsZero(m.Meta) { // not required
-		return nil
-	}
-
-	if m.Meta != nil {
-		if err := m.Meta.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("meta")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("meta")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -145,10 +128,6 @@ func (m *SandboxSandbox) validateStatus(formats strfmt.Registry) error {
 func (m *SandboxSandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateMeta(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidatePreviewEndpoints(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -164,22 +143,6 @@ func (m *SandboxSandbox) ContextValidate(ctx context.Context, formats strfmt.Reg
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *SandboxSandbox) contextValidateMeta(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Meta != nil {
-		if err := m.Meta.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("meta")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("meta")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 

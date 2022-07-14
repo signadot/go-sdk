@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Image image
+// SandboxImage sandbox image
 //
-// swagger:model Image
-type Image struct {
+// swagger:model sandbox.Image
+type SandboxImage struct {
 
 	// Container is the container this image must apply to in the forked workload
 	Container string `json:"container,omitempty"`
@@ -24,18 +24,18 @@ type Image struct {
 	Image string `json:"image,omitempty"`
 }
 
-// Validate validates this image
-func (m *Image) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox image
+func (m *SandboxImage) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this image based on context it is used
-func (m *Image) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sandbox image based on context it is used
+func (m *SandboxImage) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *Image) MarshalBinary() ([]byte, error) {
+func (m *SandboxImage) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *Image) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Image) UnmarshalBinary(b []byte) error {
-	var res Image
+func (m *SandboxImage) UnmarshalBinary(b []byte) error {
+	var res SandboxImage
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -62,19 +62,19 @@ func NewGetClusterOK() *GetClusterOK {
 OK
 */
 type GetClusterOK struct {
-	Payload *models.ClusterConnection
+	Payload *models.ClusterRegistration
 }
 
 func (o *GetClusterOK) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}][%d] getClusterOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/][%d] getClusterOK  %+v", 200, o.Payload)
 }
-func (o *GetClusterOK) GetPayload() *models.ClusterConnection {
+func (o *GetClusterOK) GetPayload() *models.ClusterRegistration {
 	return o.Payload
 }
 
 func (o *GetClusterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.ClusterConnection)
+	o.Payload = new(models.ClusterRegistration)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -98,7 +98,7 @@ type GetClusterBadRequest struct {
 }
 
 func (o *GetClusterBadRequest) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}][%d] getClusterBadRequest  %+v", 400, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/][%d] getClusterBadRequest  %+v", 400, o.Payload)
 }
 func (o *GetClusterBadRequest) GetPayload() *models.ApierrsResponse {
 	return o.Payload
@@ -130,7 +130,7 @@ type GetClusterUnauthorized struct {
 }
 
 func (o *GetClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}][%d] getClusterUnauthorized  %+v", 401, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/][%d] getClusterUnauthorized  %+v", 401, o.Payload)
 }
 func (o *GetClusterUnauthorized) GetPayload() *models.ApierrsResponse {
 	return o.Payload
@@ -162,7 +162,7 @@ type GetClusterBadGateway struct {
 }
 
 func (o *GetClusterBadGateway) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}][%d] getClusterBadGateway  %+v", 502, o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/][%d] getClusterBadGateway  %+v", 502, o.Payload)
 }
 func (o *GetClusterBadGateway) GetPayload() *models.ApierrsResponse {
 	return o.Payload

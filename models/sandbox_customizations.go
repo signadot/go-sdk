@@ -20,13 +20,13 @@ import (
 type SandboxCustomizations struct {
 
 	// Env var modifications that will be applied to the forked workload
-	Env []*EnvOp `json:"env"`
+	Env []*SandboxEnvOp `json:"env"`
 
 	// One or more docker images that will be applied to the forked workload
-	Images []*Image `json:"images"`
+	Images []*SandboxImage `json:"images"`
 
 	// patch
-	Patch *CustomPatch `json:"patch,omitempty"`
+	Patch *SandboxCustomPatch `json:"patch,omitempty"`
 }
 
 // Validate validates this sandbox customizations

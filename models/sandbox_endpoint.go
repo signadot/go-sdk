@@ -14,7 +14,7 @@ import (
 
 // SandboxEndpoint sandbox endpoint
 //
-// swagger:model SandboxEndpoint
+// swagger:model sandbox.Endpoint
 type SandboxEndpoint struct {
 
 	// Hostname that this endpoint points to
