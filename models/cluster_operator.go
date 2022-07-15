@@ -12,28 +12,28 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ClusterStatus cluster status
+// ClusterOperator cluster operator
 //
-// swagger:model cluster.Status
-type ClusterStatus struct {
+// swagger:model cluster.Operator
+type ClusterOperator struct {
 
 	// The operator version of the cluster.  This may be
 	// nil if the cluster has not yet connected to Signadot.
-	OperatorVersion string `json:"operatorVersion,omitempty"`
+	Version string `json:"version,omitempty"`
 }
 
-// Validate validates this cluster status
-func (m *ClusterStatus) Validate(formats strfmt.Registry) error {
+// Validate validates this cluster operator
+func (m *ClusterOperator) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this cluster status based on context it is used
-func (m *ClusterStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this cluster operator based on context it is used
+func (m *ClusterOperator) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *ClusterStatus) MarshalBinary() ([]byte, error) {
+func (m *ClusterOperator) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -41,8 +41,8 @@ func (m *ClusterStatus) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ClusterStatus) UnmarshalBinary(b []byte) error {
-	var res ClusterStatus
+func (m *ClusterOperator) UnmarshalBinary(b []byte) error {
+	var res ClusterOperator
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

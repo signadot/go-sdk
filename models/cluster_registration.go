@@ -24,15 +24,15 @@ type ClusterRegistration struct {
 	// The name of the cluster.
 	Name string `json:"name,omitempty"`
 
-	// status
-	Status *ClusterStatus `json:"status,omitempty"`
+	// operator
+	Operator *ClusterOperator `json:"operator,omitempty"`
 }
 
 // Validate validates this cluster registration
 func (m *ClusterRegistration) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateStatus(formats); err != nil {
+	if err := m.validateOperator(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -42,17 +42,17 @@ func (m *ClusterRegistration) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ClusterRegistration) validateStatus(formats strfmt.Registry) error {
-	if swag.IsZero(m.Status) { // not required
+func (m *ClusterRegistration) validateOperator(formats strfmt.Registry) error {
+	if swag.IsZero(m.Operator) { // not required
 		return nil
 	}
 
-	if m.Status != nil {
-		if err := m.Status.Validate(formats); err != nil {
+	if m.Operator != nil {
+		if err := m.Operator.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
+				return ve.ValidateName("operator")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
+				return ce.ValidateName("operator")
 			}
 			return err
 		}
@@ -65,7 +65,7 @@ func (m *ClusterRegistration) validateStatus(formats strfmt.Registry) error {
 func (m *ClusterRegistration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateStatus(ctx, formats); err != nil {
+	if err := m.contextValidateOperator(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -75,14 +75,14 @@ func (m *ClusterRegistration) ContextValidate(ctx context.Context, formats strfm
 	return nil
 }
 
-func (m *ClusterRegistration) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+func (m *ClusterRegistration) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.Status != nil {
-		if err := m.Status.ContextValidate(ctx, formats); err != nil {
+	if m.Operator != nil {
+		if err := m.Operator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
+				return ve.ValidateName("operator")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
+				return ce.ValidateName("operator")
 			}
 			return err
 		}

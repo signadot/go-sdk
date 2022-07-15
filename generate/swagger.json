@@ -52,6 +52,15 @@
       },
       "type": "object"
     },
+    "cluster.Operator": {
+      "properties": {
+        "version": {
+          "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "cluster.Registration": {
       "properties": {
         "createdAt": {
@@ -62,17 +71,8 @@
           "description": "The name of the cluster.",
           "type": "string"
         },
-        "status": {
-          "$ref": "#/definitions/cluster.Status"
-        }
-      },
-      "type": "object"
-    },
-    "cluster.Status": {
-      "properties": {
-        "operatorVersion": {
-          "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
-          "type": "string"
+        "operator": {
+          "$ref": "#/definitions/cluster.Operator"
         }
       },
       "type": "object"
