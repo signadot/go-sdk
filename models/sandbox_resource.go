@@ -14,7 +14,7 @@ import (
 
 // SandboxResource sandbox resource
 //
-// swagger:model SandboxResource
+// swagger:model sandbox.Resource
 type SandboxResource struct {
 
 	// name
