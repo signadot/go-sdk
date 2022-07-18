@@ -20,8 +20,8 @@ type ErrorResponse struct {
 	// error
 	Error string `json:"error,omitempty"`
 
-	// request ID
-	RequestID string `json:"requestID,omitempty"`
+	// request Id
+	RequestID string `json:"requestId,omitempty"`
 }
 
 // Validate validates this error response

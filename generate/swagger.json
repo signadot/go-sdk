@@ -47,7 +47,7 @@
           "description": "The last time at which this token was used to connect.",
           "type": "string"
         },
-        "lastConnectedIP": {
+        "lastConnectedIp": {
           "description": "The last IP address from which this token connected.",
           "type": "string"
         }
@@ -62,7 +62,7 @@
         "error": {
           "type": "string"
         },
-        "requestID": {
+        "requestId": {
           "type": "string"
         }
       },
@@ -77,12 +77,36 @@
       },
       "type": "object"
     },
+    "sandbox.EnvVar": {
+      "properties": {
+        "container": {
+          "description": "name of container to which it applies",
+          "type": "string"
+        },
+        "name": {
+          "description": "environmental variable name",
+          "type": "string"
+        },
+        "operation": {
+          "description": "upsert or delete",
+          "type": "string"
+        },
+        "value": {
+          "description": "environmental variable value",
+          "type": "string"
+        },
+        "valueFrom": {
+          "$ref": "#/definitions/sandbox.EnvValueFrom"
+        }
+      },
+      "type": "object"
+    },
     "sandbox.Customizations": {
       "properties": {
         "env": {
           "description": "Env var modifications that will be applied to the forked workload",
           "items": {
-            "$ref": "#/definitions/sandbox.EnvOp"
+            "$ref": "#/definitions/sandbox.EnvVar"
           },
           "type": "array"
         },
@@ -95,6 +119,50 @@
         },
         "patch": {
           "$ref": "#/definitions/sandbox.CustomPatch"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.Endpoint": {
+      "properties": {
+        "baselineUrl": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "routeType": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.Fork": {
+      "properties": {
+        "customizations": {
+          "$ref": "#/definitions/sandbox.Customizations"
+        },
+        "endpoints": {
+          "description": "Endpoints that correspond to this forked workload",
+          "items": {
+            "$ref": "#/definitions/sandbox.ForkEndpoint"
+          },
+          "type": "array"
+        },
+        "forkOf": {
+          "$ref": "#/definitions/sandbox.ForkOf"
         }
       },
       "type": "object"
@@ -124,50 +192,6 @@
       ],
       "type": "object"
     },
-    "sandbox.ForkSpec": {
-      "properties": {
-        "customizations": {
-          "$ref": "#/definitions/sandbox.Customizations"
-        },
-        "endpoints": {
-          "description": "Endpoints that correspond to this forked workload",
-          "items": {
-            "$ref": "#/definitions/sandbox.ForkEndpoint"
-          },
-          "type": "array"
-        },
-        "forkOf": {
-          "$ref": "#/definitions/sandbox.ForkOf"
-        }
-      },
-      "type": "object"
-    },
-    "sandbox.PreviewEndpoint": {
-      "properties": {
-        "baselinePreviewURL": {
-          "type": "string"
-        },
-        "host": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "port": {
-          "type": "integer"
-        },
-        "previewURL": {
-          "type": "string"
-        },
-        "protocol": {
-          "type": "string"
-        },
-        "routeType": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "sandbox.Resource": {
       "properties": {
         "name": {
@@ -190,15 +214,15 @@
         "createdAt": {
           "type": "string"
         },
+        "endpoints": {
+          "items": {
+            "$ref": "#/definitions/sandbox.Endpoint"
+          },
+          "type": "array"
+        },
         "name": {
           "description": "Human-readable name of this sandbox",
           "type": "string"
-        },
-        "previewEndpoints": {
-          "items": {
-            "$ref": "#/definitions/sandbox.PreviewEndpoint"
-          },
-          "type": "array"
         },
         "routingKey": {
           "type": "string"
@@ -232,7 +256,7 @@
         "forks": {
           "description": "Forks is the specification of each forked entity",
           "items": {
-            "$ref": "#/definitions/sandbox.ForkSpec"
+            "$ref": "#/definitions/sandbox.Fork"
           },
           "type": "array"
         },
@@ -247,6 +271,7 @@
           "additionalProperties": {
             "type": "string"
           },
+          "description": "Tags are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
         }
       },
@@ -263,30 +288,6 @@
         },
         "value": {
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "sandbox.EnvOp": {
-      "properties": {
-        "container": {
-          "description": "name of container to which it applies",
-          "type": "string"
-        },
-        "name": {
-          "description": "environmental variable name",
-          "type": "string"
-        },
-        "operation": {
-          "description": "upsert or delete",
-          "type": "string"
-        },
-        "value": {
-          "description": "environmental variable value",
-          "type": "string"
-        },
-        "valueFrom": {
-          "$ref": "#/definitions/sandbox.EnvValueFrom"
         }
       },
       "type": "object"
@@ -1053,8 +1054,8 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Creates a new sandbox with the provided parameters",
-        "operationId": "upsert-sandbox",
+        "description": "Creates or updates a sandbox with the provided parameters",
+        "operationId": "apply-sandbox",
         "parameters": [
           {
             "description": "Signadot Org Name",
@@ -1116,7 +1117,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Create a new sandbox",
+        "summary": "Create or update a sandbox",
         "tags": [
           "Sandboxes"
         ]

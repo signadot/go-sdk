@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxEnvOp sandbox env op
+// SandboxEnvVar sandbox env var
 //
-// swagger:model sandbox.EnvOp
-type SandboxEnvOp struct {
+// swagger:model sandbox.EnvVar
+type SandboxEnvVar struct {
 
 	// name of container to which it applies
 	Container string `json:"container,omitempty"`
@@ -34,8 +34,8 @@ type SandboxEnvOp struct {
 	ValueFrom *SandboxEnvValueFrom `json:"valueFrom,omitempty"`
 }
 
-// Validate validates this sandbox env op
-func (m *SandboxEnvOp) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox env var
+func (m *SandboxEnvVar) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateValueFrom(formats); err != nil {
@@ -48,7 +48,7 @@ func (m *SandboxEnvOp) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxEnvOp) validateValueFrom(formats strfmt.Registry) error {
+func (m *SandboxEnvVar) validateValueFrom(formats strfmt.Registry) error {
 	if swag.IsZero(m.ValueFrom) { // not required
 		return nil
 	}
@@ -67,8 +67,8 @@ func (m *SandboxEnvOp) validateValueFrom(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this sandbox env op based on the context it is used
-func (m *SandboxEnvOp) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandbox env var based on the context it is used
+func (m *SandboxEnvVar) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateValueFrom(ctx, formats); err != nil {
@@ -81,7 +81,7 @@ func (m *SandboxEnvOp) ContextValidate(ctx context.Context, formats strfmt.Regis
 	return nil
 }
 
-func (m *SandboxEnvOp) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxEnvVar) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ValueFrom != nil {
 		if err := m.ValueFrom.ContextValidate(ctx, formats); err != nil {
@@ -98,7 +98,7 @@ func (m *SandboxEnvOp) contextValidateValueFrom(ctx context.Context, formats str
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxEnvOp) MarshalBinary() ([]byte, error) {
+func (m *SandboxEnvVar) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -106,8 +106,8 @@ func (m *SandboxEnvOp) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxEnvOp) UnmarshalBinary(b []byte) error {
-	var res SandboxEnvOp
+func (m *SandboxEnvVar) UnmarshalBinary(b []byte) error {
+	var res SandboxEnvVar
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

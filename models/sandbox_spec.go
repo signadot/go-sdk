@@ -32,12 +32,12 @@ type SandboxSpec struct {
 
 	// Forks is the specification of each forked entity
 	// Required: true
-	Forks []*SandboxForkSpec `json:"forks"`
+	Forks []*SandboxFork `json:"forks"`
 
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
 
-	// tags
+	// Tags are used to specify metadata associated with the sandbox as key-value pairs.
 	Tags map[string]string `json:"tags,omitempty"`
 }
 

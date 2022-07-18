@@ -30,15 +30,56 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	ApplySandbox(params *ApplySandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplySandboxOK, error)
+
 	DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSandboxOK, error)
 
 	GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxOK, error)
 
 	ListSandboxes(params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error)
 
-	UpsertSandbox(params *UpsertSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpsertSandboxOK, error)
-
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  ApplySandbox creates or update a sandbox
+
+  Creates or updates a sandbox with the provided parameters
+*/
+func (a *Client) ApplySandbox(params *ApplySandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplySandboxOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewApplySandboxParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "apply-sandbox",
+		Method:             "PUT",
+		PathPattern:        "/orgs/{orgName}/sandboxes/{sandboxName}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ApplySandboxReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ApplySandboxOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for apply-sandbox: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
@@ -161,47 +202,6 @@ func (a *Client) ListSandboxes(params *ListSandboxesParams, authInfo runtime.Cli
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-sandboxes: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  UpsertSandbox creates a new sandbox
-
-  Creates a new sandbox with the provided parameters
-*/
-func (a *Client) UpsertSandbox(params *UpsertSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpsertSandboxOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpsertSandboxParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "upsert-sandbox",
-		Method:             "PUT",
-		PathPattern:        "/orgs/{orgName}/sandboxes/{sandboxName}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &UpsertSandboxReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpsertSandboxOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for upsert-sandbox: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

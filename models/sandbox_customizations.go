@@ -20,7 +20,7 @@ import (
 type SandboxCustomizations struct {
 
 	// Env var modifications that will be applied to the forked workload
-	Env []*SandboxEnvOp `json:"env"`
+	Env []*SandboxEnvVar `json:"env"`
 
 	// One or more docker images that will be applied to the forked workload
 	Images []*SandboxImage `json:"images"`

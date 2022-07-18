@@ -21,7 +21,7 @@ type ClusterTokenStatus struct {
 	LastConnectedAt string `json:"lastConnectedAt,omitempty"`
 
 	// The last IP address from which this token connected.
-	LastConnectedIP string `json:"lastConnectedIP,omitempty"`
+	LastConnectedIP string `json:"lastConnectedIp,omitempty"`
 }
 
 // Validate validates this cluster token status

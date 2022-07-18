@@ -22,11 +22,11 @@ type Sandbox struct {
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
 
+	// endpoints
+	Endpoints []*SandboxEndpoint `json:"endpoints"`
+
 	// Human-readable name of this sandbox
 	Name string `json:"name,omitempty"`
-
-	// preview endpoints
-	PreviewEndpoints []*SandboxPreviewEndpoint `json:"previewEndpoints"`
 
 	// routing key
 	RoutingKey string `json:"routingKey,omitempty"`
@@ -42,7 +42,7 @@ type Sandbox struct {
 func (m *Sandbox) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validatePreviewEndpoints(formats); err != nil {
+	if err := m.validateEndpoints(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -60,22 +60,22 @@ func (m *Sandbox) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Sandbox) validatePreviewEndpoints(formats strfmt.Registry) error {
-	if swag.IsZero(m.PreviewEndpoints) { // not required
+func (m *Sandbox) validateEndpoints(formats strfmt.Registry) error {
+	if swag.IsZero(m.Endpoints) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.PreviewEndpoints); i++ {
-		if swag.IsZero(m.PreviewEndpoints[i]) { // not required
+	for i := 0; i < len(m.Endpoints); i++ {
+		if swag.IsZero(m.Endpoints[i]) { // not required
 			continue
 		}
 
-		if m.PreviewEndpoints[i] != nil {
-			if err := m.PreviewEndpoints[i].Validate(formats); err != nil {
+		if m.Endpoints[i] != nil {
+			if err := m.Endpoints[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("previewEndpoints" + "." + strconv.Itoa(i))
+					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("previewEndpoints" + "." + strconv.Itoa(i))
+					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -128,7 +128,7 @@ func (m *Sandbox) validateStatus(formats strfmt.Registry) error {
 func (m *Sandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidatePreviewEndpoints(ctx, formats); err != nil {
+	if err := m.contextValidateEndpoints(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -146,16 +146,16 @@ func (m *Sandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	return nil
 }
 
-func (m *Sandbox) contextValidatePreviewEndpoints(ctx context.Context, formats strfmt.Registry) error {
+func (m *Sandbox) contextValidateEndpoints(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.PreviewEndpoints); i++ {
+	for i := 0; i < len(m.Endpoints); i++ {
 
-		if m.PreviewEndpoints[i] != nil {
-			if err := m.PreviewEndpoints[i].ContextValidate(ctx, formats); err != nil {
+		if m.Endpoints[i] != nil {
+			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("previewEndpoints" + "." + strconv.Itoa(i))
+					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("previewEndpoints" + "." + strconv.Itoa(i))
+					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

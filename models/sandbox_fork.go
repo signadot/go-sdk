@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxForkSpec sandbox fork spec
+// SandboxFork sandbox fork
 //
-// swagger:model sandbox.ForkSpec
-type SandboxForkSpec struct {
+// swagger:model sandbox.Fork
+type SandboxFork struct {
 
 	// customizations
 	Customizations *SandboxCustomizations `json:"customizations,omitempty"`
@@ -29,8 +29,8 @@ type SandboxForkSpec struct {
 	ForkOf *SandboxForkOf `json:"forkOf,omitempty"`
 }
 
-// Validate validates this sandbox fork spec
-func (m *SandboxForkSpec) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox fork
+func (m *SandboxFork) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCustomizations(formats); err != nil {
@@ -51,7 +51,7 @@ func (m *SandboxForkSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxForkSpec) validateCustomizations(formats strfmt.Registry) error {
+func (m *SandboxFork) validateCustomizations(formats strfmt.Registry) error {
 	if swag.IsZero(m.Customizations) { // not required
 		return nil
 	}
@@ -70,7 +70,7 @@ func (m *SandboxForkSpec) validateCustomizations(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *SandboxForkSpec) validateEndpoints(formats strfmt.Registry) error {
+func (m *SandboxFork) validateEndpoints(formats strfmt.Registry) error {
 	if swag.IsZero(m.Endpoints) { // not required
 		return nil
 	}
@@ -96,7 +96,7 @@ func (m *SandboxForkSpec) validateEndpoints(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxForkSpec) validateForkOf(formats strfmt.Registry) error {
+func (m *SandboxFork) validateForkOf(formats strfmt.Registry) error {
 	if swag.IsZero(m.ForkOf) { // not required
 		return nil
 	}
@@ -115,8 +115,8 @@ func (m *SandboxForkSpec) validateForkOf(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this sandbox fork spec based on the context it is used
-func (m *SandboxForkSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandbox fork based on the context it is used
+func (m *SandboxFork) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCustomizations(ctx, formats); err != nil {
@@ -137,7 +137,7 @@ func (m *SandboxForkSpec) ContextValidate(ctx context.Context, formats strfmt.Re
 	return nil
 }
 
-func (m *SandboxForkSpec) contextValidateCustomizations(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxFork) contextValidateCustomizations(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Customizations != nil {
 		if err := m.Customizations.ContextValidate(ctx, formats); err != nil {
@@ -153,7 +153,7 @@ func (m *SandboxForkSpec) contextValidateCustomizations(ctx context.Context, for
 	return nil
 }
 
-func (m *SandboxForkSpec) contextValidateEndpoints(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxFork) contextValidateEndpoints(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Endpoints); i++ {
 
@@ -173,7 +173,7 @@ func (m *SandboxForkSpec) contextValidateEndpoints(ctx context.Context, formats 
 	return nil
 }
 
-func (m *SandboxForkSpec) contextValidateForkOf(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxFork) contextValidateForkOf(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ForkOf != nil {
 		if err := m.ForkOf.ContextValidate(ctx, formats); err != nil {
@@ -190,7 +190,7 @@ func (m *SandboxForkSpec) contextValidateForkOf(ctx context.Context, formats str
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxForkSpec) MarshalBinary() ([]byte, error) {
+func (m *SandboxFork) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -198,8 +198,8 @@ func (m *SandboxForkSpec) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxForkSpec) UnmarshalBinary(b []byte) error {
-	var res SandboxForkSpec
+func (m *SandboxFork) UnmarshalBinary(b []byte) error {
+	var res SandboxFork
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
