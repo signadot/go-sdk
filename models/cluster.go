@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ClusterRegistration cluster registration
+// Cluster cluster
 //
-// swagger:model cluster.Registration
-type ClusterRegistration struct {
+// swagger:model Cluster
+type Cluster struct {
 
 	// The time when this cluster was registered with Signadot.
 	CreatedAt string `json:"createdAt,omitempty"`
@@ -28,8 +28,8 @@ type ClusterRegistration struct {
 	Operator *ClusterOperator `json:"operator,omitempty"`
 }
 
-// Validate validates this cluster registration
-func (m *ClusterRegistration) Validate(formats strfmt.Registry) error {
+// Validate validates this cluster
+func (m *Cluster) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOperator(formats); err != nil {
@@ -42,7 +42,7 @@ func (m *ClusterRegistration) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ClusterRegistration) validateOperator(formats strfmt.Registry) error {
+func (m *Cluster) validateOperator(formats strfmt.Registry) error {
 	if swag.IsZero(m.Operator) { // not required
 		return nil
 	}
@@ -61,8 +61,8 @@ func (m *ClusterRegistration) validateOperator(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this cluster registration based on the context it is used
-func (m *ClusterRegistration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this cluster based on the context it is used
+func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOperator(ctx, formats); err != nil {
@@ -75,7 +75,7 @@ func (m *ClusterRegistration) ContextValidate(ctx context.Context, formats strfm
 	return nil
 }
 
-func (m *ClusterRegistration) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
+func (m *Cluster) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Operator != nil {
 		if err := m.Operator.ContextValidate(ctx, formats); err != nil {
@@ -92,7 +92,7 @@ func (m *ClusterRegistration) contextValidateOperator(ctx context.Context, forma
 }
 
 // MarshalBinary interface implementation
-func (m *ClusterRegistration) MarshalBinary() ([]byte, error) {
+func (m *Cluster) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -100,8 +100,8 @@ func (m *ClusterRegistration) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ClusterRegistration) UnmarshalBinary(b []byte) error {
-	var res ClusterRegistration
+func (m *Cluster) UnmarshalBinary(b []byte) error {
+	var res Cluster
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

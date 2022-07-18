@@ -1,6 +1,22 @@
 {
   "basePath": "/api/v2",
   "definitions": {
+    "Cluster": {
+      "properties": {
+        "createdAt": {
+          "description": "The time when this cluster was registered with Signadot.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the cluster.",
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/cluster.Operator"
+        }
+      },
+      "type": "object"
+    },
     "ClusterToken": {
       "properties": {
         "createdAt": {
@@ -57,22 +73,6 @@
         "version": {
           "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "cluster.Registration": {
-      "properties": {
-        "createdAt": {
-          "description": "The time when this cluster was registered with Signadot.",
-          "type": "string"
-        },
-        "name": {
-          "description": "The name of the cluster.",
-          "type": "string"
-        },
-        "operator": {
-          "$ref": "#/definitions/cluster.Operator"
         }
       },
       "type": "object"
@@ -426,7 +426,7 @@
             "description": "OK",
             "schema": {
               "items": {
-                "$ref": "#/definitions/cluster.Registration"
+                "$ref": "#/definitions/Cluster"
               },
               "type": "array"
             }
@@ -466,8 +466,8 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Delete a cluster Registration.",
-        "operationId": "delete-cluster",
+        "description": "Remove a Kubernetes cluster from Signadot.",
+        "operationId": "remove-cluster",
         "parameters": [
           {
             "description": "Signadot Org Name",
@@ -520,7 +520,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Delete a cluster registration.",
+        "summary": "Remove a cluster.",
         "tags": [
           "Cluster"
         ]
@@ -555,7 +555,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/cluster.Registration"
+              "$ref": "#/definitions/Cluster"
             }
           },
           "400": {
@@ -591,8 +591,8 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Register a Kubernetes cluster to connect with Signadot",
-        "operationId": "connect-cluster",
+        "description": "Add a Kubernetes cluster to Signadot.",
+        "operationId": "add-cluster",
         "parameters": [
           {
             "description": "Signadot Org Name",
@@ -618,7 +618,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/cluster.Registration"
+              "$ref": "#/definitions/Cluster"
             }
           },
           "400": {
@@ -645,7 +645,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Register a cluster",
+        "summary": "Add a cluster.",
         "tags": [
           "Cluster"
         ]
