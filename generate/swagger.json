@@ -249,7 +249,7 @@
         "endpoints": {
           "description": "Endpoints that can be used to point to external DNS names or ingress gateways",
           "items": {
-            "$ref": "#/definitions/sandbox.Endpoint"
+            "$ref": "#/definitions/sandbox.HostEndpoint"
           },
           "type": "array"
         },
@@ -342,20 +342,7 @@
       },
       "type": "object"
     },
-    "sandbox.Image": {
-      "properties": {
-        "container": {
-          "description": "Container is the container this image must apply to in the forked workload",
-          "type": "string"
-        },
-        "image": {
-          "description": "Name of the image (e.g. gcr.io/my-image/repo:my-tag)",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "sandbox.Endpoint": {
+    "sandbox.HostEndpoint": {
       "properties": {
         "host": {
           "description": "Hostname that this endpoint points to",
@@ -371,6 +358,19 @@
         },
         "protocol": {
           "description": "Protocol that this endpoint uses",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.Image": {
+      "properties": {
+        "container": {
+          "description": "Container is the container this image must apply to in the forked workload",
+          "type": "string"
+        },
+        "image": {
+          "description": "Name of the image (e.g. gcr.io/my-image/repo:my-tag)",
           "type": "string"
         }
       },

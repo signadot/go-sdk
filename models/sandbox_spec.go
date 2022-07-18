@@ -28,7 +28,7 @@ type SandboxSpec struct {
 	Description string `json:"description,omitempty"`
 
 	// Endpoints that can be used to point to external DNS names or ingress gateways
-	Endpoints []*SandboxEndpoint `json:"endpoints"`
+	Endpoints []*SandboxHostEndpoint `json:"endpoints"`
 
 	// Forks is the specification of each forked entity
 	// Required: true
