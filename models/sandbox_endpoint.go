@@ -14,20 +14,29 @@ import (
 
 // SandboxEndpoint sandbox endpoint
 //
-// swagger:model SandboxEndpoint
+// swagger:model sandbox.Endpoint
 type SandboxEndpoint struct {
 
-	// Hostname that this endpoint points to
+	// baseline Url
+	BaselineURL string `json:"baselineUrl,omitempty"`
+
+	// host
 	Host string `json:"host,omitempty"`
 
-	// Name of the endpoint
+	// name
 	Name string `json:"name,omitempty"`
 
-	// Port it will map to on the specified host
+	// port
 	Port int64 `json:"port,omitempty"`
 
-	// Protocol that this endpoint uses
+	// protocol
 	Protocol string `json:"protocol,omitempty"`
+
+	// route type
+	RouteType string `json:"routeType,omitempty"`
+
+	// url
+	URL string `json:"url,omitempty"`
 }
 
 // Validate validates this sandbox endpoint
