@@ -15,16 +15,16 @@ import (
 	"github.com/signadot/go-sdk/models"
 )
 
-// CreateClusterTokenReader is a Reader for the CreateClusterToken structure.
-type CreateClusterTokenReader struct {
+// GetClusterTokenReader is a Reader for the GetClusterToken structure.
+type GetClusterTokenReader struct {
 	formats strfmt.Registry
 }
 
 // ReadResponse reads a server response into the received o.
-func (o *CreateClusterTokenReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
+func (o *GetClusterTokenReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
 	case 200:
-		result := NewCreateClusterTokenOK()
+		result := NewGetClusterTokenOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -34,27 +34,27 @@ func (o *CreateClusterTokenReader) ReadResponse(response runtime.ClientResponse,
 	}
 }
 
-// NewCreateClusterTokenOK creates a CreateClusterTokenOK with default headers values
-func NewCreateClusterTokenOK() *CreateClusterTokenOK {
-	return &CreateClusterTokenOK{}
+// NewGetClusterTokenOK creates a GetClusterTokenOK with default headers values
+func NewGetClusterTokenOK() *GetClusterTokenOK {
+	return &GetClusterTokenOK{}
 }
 
-/* CreateClusterTokenOK describes a response with status code 200, with default header values.
+/* GetClusterTokenOK describes a response with status code 200, with default header values.
 
 OK
 */
-type CreateClusterTokenOK struct {
+type GetClusterTokenOK struct {
 	Payload *models.ClusterToken
 }
 
-func (o *CreateClusterTokenOK) Error() string {
-	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenOK  %+v", 200, o.Payload)
+func (o *GetClusterTokenOK) Error() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] getClusterTokenOK  %+v", 200, o.Payload)
 }
-func (o *CreateClusterTokenOK) GetPayload() *models.ClusterToken {
+func (o *GetClusterTokenOK) GetPayload() *models.ClusterToken {
 	return o.Payload
 }
 
-func (o *CreateClusterTokenOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *GetClusterTokenOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ClusterToken)
 
