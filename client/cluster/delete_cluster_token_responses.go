@@ -44,13 +44,13 @@ func NewDeleteClusterTokenOK() *DeleteClusterTokenOK {
 OK
 */
 type DeleteClusterTokenOK struct {
-	Payload models.HandlerEmptyResponse
+	Payload models.EmptyResponse
 }
 
 func (o *DeleteClusterTokenOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK  %+v", 200, o.Payload)
 }
-func (o *DeleteClusterTokenOK) GetPayload() models.HandlerEmptyResponse {
+func (o *DeleteClusterTokenOK) GetPayload() models.EmptyResponse {
 	return o.Payload
 }
 

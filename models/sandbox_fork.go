@@ -16,17 +16,17 @@ import (
 
 // SandboxFork sandbox fork
 //
-// swagger:model SandboxFork
+// swagger:model sandbox.Fork
 type SandboxFork struct {
 
 	// customizations
 	Customizations *SandboxCustomizations `json:"customizations,omitempty"`
 
 	// Endpoints that correspond to this forked workload
-	Endpoints []*ForkEndpoint `json:"endpoints"`
+	Endpoints []*SandboxForkEndpoint `json:"endpoints"`
 
 	// fork of
-	ForkOf *ForkOf `json:"forkOf,omitempty"`
+	ForkOf *SandboxForkOf `json:"forkOf,omitempty"`
 }
 
 // Validate validates this sandbox fork
