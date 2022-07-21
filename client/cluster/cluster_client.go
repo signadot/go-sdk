@@ -298,7 +298,7 @@ func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo run
 /*
   ListClusters lists clusters
 
-  List cluster.
+  List clusters.
 */
 func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error) {
 	// TODO: Validate the params before sending
