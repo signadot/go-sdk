@@ -93,7 +93,7 @@ func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAut
 /*
   CreateClusterToken creates cluster token
 
-  Create a new token for connecting a cluster
+  Create a new token for connecting a cluster.
 */
 func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error) {
 	// TODO: Validate the params before sending
@@ -134,7 +134,7 @@ func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo r
 /*
   DeleteClusterToken deletes cluster token
 
-  Delete a cluster token associated with a cluster
+  Delete a cluster token associated with a cluster.
 */
 func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error) {
 	// TODO: Validate the params before sending
@@ -216,7 +216,7 @@ func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAut
 /*
   GetClusterToken gets a cluster token
 
-  Get a cluster token associated with a cluster
+  Get a cluster token associated with a cluster.
 */
 func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTokenOK, error) {
 	// TODO: Validate the params before sending
@@ -257,7 +257,7 @@ func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime
 /*
   ListClusterTokens lists cluster tokens
 
-  List the cluster tokens associated with a cluster
+  List the cluster tokens associated with a cluster.
 */
 func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterTokensOK, error) {
 	// TODO: Validate the params before sending
@@ -298,7 +298,7 @@ func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo run
 /*
   ListClusters lists clusters
 
-  List cluster.
+  List clusters.
 */
 func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error) {
 	// TODO: Validate the params before sending
