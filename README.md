@@ -9,3 +9,7 @@ NOTE: This SDK is still in development and may be changed in ways that break con
 
 The directory `generate` contains all sources for generating the code.
 See the Makefile there.
+
+## Issues
+
+To file an issue, please use our [community issue tracker](https://github.com/signadot/community/issues).
