@@ -68,6 +68,33 @@
       },
       "type": "object"
     },
+    "Sandbox": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "endpoints": {
+          "items": {
+            "$ref": "#/definitions/sandbox.Endpoint"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Human-readable name of this sandbox",
+          "type": "string"
+        },
+        "routingKey": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/sandbox.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/sandbox.Readiness"
+        }
+      },
+      "type": "object"
+    },
     "cluster.Operator": {
       "properties": {
         "version": {
@@ -77,26 +104,13 @@
       },
       "type": "object"
     },
-    "sandbox.EnvVar": {
+    "sandbox.CustomPatch": {
       "properties": {
-        "container": {
-          "description": "name of container to which it applies",
-          "type": "string"
-        },
-        "name": {
-          "description": "environmental variable name",
-          "type": "string"
-        },
-        "operation": {
-          "description": "upsert or delete",
+        "type": {
           "type": "string"
         },
         "value": {
-          "description": "environmental variable value",
           "type": "string"
-        },
-        "valueFrom": {
-          "$ref": "#/definitions/sandbox.EnvValueFrom"
         }
       },
       "type": "object"
@@ -149,149 +163,6 @@
       },
       "type": "object"
     },
-    "sandbox.Fork": {
-      "properties": {
-        "customizations": {
-          "$ref": "#/definitions/sandbox.Customizations"
-        },
-        "endpoints": {
-          "description": "Endpoints that correspond to this forked workload",
-          "items": {
-            "$ref": "#/definitions/sandbox.ForkEndpoint"
-          },
-          "type": "array"
-        },
-        "forkOf": {
-          "$ref": "#/definitions/sandbox.ForkOf"
-        }
-      },
-      "type": "object"
-    },
-    "sandbox.ForkOf": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "sandbox.Resource": {
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "params": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
-        },
-        "plugin": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Sandbox": {
-      "properties": {
-        "createdAt": {
-          "type": "string"
-        },
-        "endpoints": {
-          "items": {
-            "$ref": "#/definitions/sandbox.Endpoint"
-          },
-          "type": "array"
-        },
-        "name": {
-          "description": "Human-readable name of this sandbox",
-          "type": "string"
-        },
-        "routingKey": {
-          "type": "string"
-        },
-        "spec": {
-          "$ref": "#/definitions/sandbox.Spec"
-        },
-        "status": {
-          "$ref": "#/definitions/sandbox.Readiness"
-        }
-      },
-      "type": "object"
-    },
-    "sandbox.Spec": {
-      "properties": {
-        "cluster": {
-          "description": "Cluster within which this sandbox should be created",
-          "type": "string"
-        },
-        "description": {
-          "description": "Description of the purpose of this sandbox",
-          "type": "string"
-        },
-        "endpoints": {
-          "description": "Endpoints that can be used to point to external DNS names or ingress gateways",
-          "items": {
-            "$ref": "#/definitions/sandbox.HostEndpoint"
-          },
-          "type": "array"
-        },
-        "forks": {
-          "description": "Forks is the specification of each forked entity",
-          "items": {
-            "$ref": "#/definitions/sandbox.Fork"
-          },
-          "type": "array"
-        },
-        "resources": {
-          "description": "Resources specifies each required resource to spin up the sandbox",
-          "items": {
-            "$ref": "#/definitions/sandbox.Resource"
-          },
-          "type": "array"
-        },
-        "tags": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Tags are used to specify metadata associated with the sandbox as key-value pairs.",
-          "type": "object"
-        }
-      },
-      "required": [
-        "cluster",
-        "forks"
-      ],
-      "type": "object"
-    },
-    "sandbox.CustomPatch": {
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "sandbox.EnvValueFrom": {
       "properties": {
         "fork": {
@@ -325,6 +196,48 @@
       },
       "type": "object"
     },
+    "sandbox.EnvVar": {
+      "properties": {
+        "container": {
+          "description": "name of container to which it applies",
+          "type": "string"
+        },
+        "name": {
+          "description": "environmental variable name",
+          "type": "string"
+        },
+        "operation": {
+          "description": "upsert or delete",
+          "type": "string"
+        },
+        "value": {
+          "description": "environmental variable value",
+          "type": "string"
+        },
+        "valueFrom": {
+          "$ref": "#/definitions/sandbox.EnvValueFrom"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.Fork": {
+      "properties": {
+        "customizations": {
+          "$ref": "#/definitions/sandbox.Customizations"
+        },
+        "endpoints": {
+          "description": "Endpoints that correspond to this forked workload",
+          "items": {
+            "$ref": "#/definitions/sandbox.ForkEndpoint"
+          },
+          "type": "array"
+        },
+        "forkOf": {
+          "$ref": "#/definitions/sandbox.ForkOf"
+        }
+      },
+      "type": "object"
+    },
     "sandbox.ForkEndpoint": {
       "properties": {
         "name": {
@@ -340,6 +253,31 @@
           "type": "string"
         }
       },
+      "type": "object"
+    },
+    "sandbox.ForkOf": {
+      "properties": {
+        "kind": {
+          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
+          "example": "Deployment",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the entity within the Kubernetes cluster.",
+          "example": "my-frontend",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
+          "example": "default",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "namespace"
+      ],
       "type": "object"
     },
     "sandbox.HostEndpoint": {
@@ -392,6 +330,72 @@
         }
       },
       "type": "object"
+    },
+    "sandbox.Resource": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "plugin": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.Spec": {
+      "properties": {
+        "cluster": {
+          "description": "Cluster within which this sandbox should be created",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the purpose of this sandbox",
+          "type": "string"
+        },
+        "endpoints": {
+          "description": "Endpoints that can be used to point to external DNS names or ingress gateways",
+          "items": {
+            "$ref": "#/definitions/sandbox.HostEndpoint"
+          },
+          "type": "array"
+        },
+        "forks": {
+          "description": "Forks is the specification of each forked entity",
+          "items": {
+            "$ref": "#/definitions/sandbox.Fork"
+          },
+          "type": "array"
+        },
+        "resources": {
+          "description": "Resources specifies each required resource to spin up the sandbox",
+          "items": {
+            "$ref": "#/definitions/sandbox.Resource"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Tags are used to specify metadata associated with the sandbox as key-value pairs.",
+          "type": "object"
+        },
+        "ttl": {
+          "description": "TTL gives the maximum lifetime of the sandbox.",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cluster",
+        "forks"
+      ],
+      "type": "object"
     }
   },
   "host": "api.signadot.com",
@@ -407,7 +411,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List cluster.",
+        "description": "List clusters.",
         "operationId": "list-clusters",
         "parameters": [
           {
@@ -521,7 +525,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Remove a cluster.",
+        "summary": "Remove a cluster",
         "tags": [
           "Cluster"
         ]
@@ -583,7 +587,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Get a cluster.",
+        "summary": "Get a cluster",
         "tags": [
           "Cluster"
         ]
@@ -646,7 +650,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Add a cluster.",
+        "summary": "Add a cluster",
         "tags": [
           "Cluster"
         ]
@@ -657,7 +661,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Create a new token for connecting a cluster",
+        "description": "Create a new token for connecting a cluster.",
         "operationId": "create-cluster-token",
         "parameters": [
           {
@@ -693,7 +697,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Create Cluster Token",
+        "summary": "Create cluster token",
         "tags": [
           "Cluster"
         ]
@@ -704,7 +708,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List the cluster tokens associated with a cluster",
+        "description": "List the cluster tokens associated with a cluster.",
         "operationId": "list-cluster-tokens",
         "parameters": [
           {
@@ -754,7 +758,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Delete a cluster token associated with a cluster",
+        "description": "Delete a cluster token associated with a cluster.",
         "operationId": "delete-cluster-token",
         "parameters": [
           {
@@ -798,7 +802,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Delete Cluster Token",
+        "summary": "Delete cluster token",
         "tags": [
           "Cluster"
         ]
@@ -807,7 +811,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Get a cluster token associated with a cluster",
+        "description": "Get a cluster token associated with a cluster.",
         "operationId": "get-cluster-token",
         "parameters": [
           {
@@ -911,7 +915,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "List Sandboxes",
+        "summary": "List sandboxes",
         "tags": [
           "Sandboxes"
         ]
@@ -922,7 +926,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Delete a given sandbox",
+        "description": "Delete a given sandbox.",
         "operationId": "delete-sandbox",
         "parameters": [
           {
@@ -982,7 +986,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Delete a Sandbox",
+        "summary": "Delete a sandbox",
         "tags": [
           "Sandboxes"
         ]
@@ -991,7 +995,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Fetch the details about a given sandbox",
+        "description": "Fetch the details about a given sandbox.",
         "operationId": "get-sandbox",
         "parameters": [
           {
@@ -1045,7 +1049,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Get a Sandbox",
+        "summary": "Get a sandbox",
         "tags": [
           "Sandboxes"
         ]
@@ -1054,7 +1058,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Creates or updates a sandbox with the provided parameters",
+        "description": "Creates or updates a sandbox with the provided parameters.",
         "operationId": "apply-sandbox",
         "parameters": [
           {
