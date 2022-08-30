@@ -39,6 +39,9 @@ type SandboxSpec struct {
 
 	// Tags are used to specify metadata associated with the sandbox as key-value pairs.
 	Tags map[string]string `json:"tags,omitempty"`
+
+	// TTL gives the maximum lifetime of the sandbox.
+	TTL int64 `json:"ttl,omitempty"`
 }
 
 // Validate validates this sandbox spec
