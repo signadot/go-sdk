@@ -39,6 +39,10 @@ type SandboxSpec struct {
 
 	// Tags are used to specify metadata associated with the sandbox as key-value pairs.
 	Tags map[string]string `json:"tags,omitempty"`
+
+	// TTL gives the maximum lifetime of the sandbox as a parseable Go time duration.
+	// It may be empty, in which case it defaults to 365 days.
+	TTL string `json:"ttl,omitempty"`
 }
 
 // Validate validates this sandbox spec
