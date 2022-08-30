@@ -65,9 +65,39 @@ type ListClustersOK struct {
 	Payload []*models.Cluster
 }
 
+// IsSuccess returns true when this list clusters o k response has a 2xx status code
+func (o *ListClustersOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this list clusters o k response has a 3xx status code
+func (o *ListClustersOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list clusters o k response has a 4xx status code
+func (o *ListClustersOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list clusters o k response has a 5xx status code
+func (o *ListClustersOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list clusters o k response a status code equal to that given
+func (o *ListClustersOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *ListClustersOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
 }
+
+func (o *ListClustersOK) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
+}
+
 func (o *ListClustersOK) GetPayload() []*models.Cluster {
 	return o.Payload
 }
@@ -95,9 +125,39 @@ type ListClustersBadRequest struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this list clusters bad request response has a 2xx status code
+func (o *ListClustersBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list clusters bad request response has a 3xx status code
+func (o *ListClustersBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list clusters bad request response has a 4xx status code
+func (o *ListClustersBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list clusters bad request response has a 5xx status code
+func (o *ListClustersBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list clusters bad request response a status code equal to that given
+func (o *ListClustersBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *ListClustersBadRequest) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest  %+v", 400, o.Payload)
 }
+
+func (o *ListClustersBadRequest) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest  %+v", 400, o.Payload)
+}
+
 func (o *ListClustersBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -127,9 +187,39 @@ type ListClustersUnauthorized struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this list clusters unauthorized response has a 2xx status code
+func (o *ListClustersUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list clusters unauthorized response has a 3xx status code
+func (o *ListClustersUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list clusters unauthorized response has a 4xx status code
+func (o *ListClustersUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list clusters unauthorized response has a 5xx status code
+func (o *ListClustersUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list clusters unauthorized response a status code equal to that given
+func (o *ListClustersUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *ListClustersUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
 }
+
+func (o *ListClustersUnauthorized) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
+}
+
 func (o *ListClustersUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -159,9 +249,39 @@ type ListClustersBadGateway struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this list clusters bad gateway response has a 2xx status code
+func (o *ListClustersBadGateway) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list clusters bad gateway response has a 3xx status code
+func (o *ListClustersBadGateway) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list clusters bad gateway response has a 4xx status code
+func (o *ListClustersBadGateway) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list clusters bad gateway response has a 5xx status code
+func (o *ListClustersBadGateway) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this list clusters bad gateway response a status code equal to that given
+func (o *ListClustersBadGateway) IsCode(code int) bool {
+	return code == 502
+}
+
 func (o *ListClustersBadGateway) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway  %+v", 502, o.Payload)
 }
+
+func (o *ListClustersBadGateway) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway  %+v", 502, o.Payload)
+}
+
 func (o *ListClustersBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }

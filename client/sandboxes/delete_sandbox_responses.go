@@ -65,9 +65,39 @@ type DeleteSandboxOK struct {
 	Payload models.EmptyResponse
 }
 
+// IsSuccess returns true when this delete sandbox o k response has a 2xx status code
+func (o *DeleteSandboxOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this delete sandbox o k response has a 3xx status code
+func (o *DeleteSandboxOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete sandbox o k response has a 4xx status code
+func (o *DeleteSandboxOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this delete sandbox o k response has a 5xx status code
+func (o *DeleteSandboxOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete sandbox o k response a status code equal to that given
+func (o *DeleteSandboxOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *DeleteSandboxOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK  %+v", 200, o.Payload)
 }
+
+func (o *DeleteSandboxOK) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK  %+v", 200, o.Payload)
+}
+
 func (o *DeleteSandboxOK) GetPayload() models.EmptyResponse {
 	return o.Payload
 }
@@ -95,9 +125,39 @@ type DeleteSandboxBadRequest struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this delete sandbox bad request response has a 2xx status code
+func (o *DeleteSandboxBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete sandbox bad request response has a 3xx status code
+func (o *DeleteSandboxBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete sandbox bad request response has a 4xx status code
+func (o *DeleteSandboxBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete sandbox bad request response has a 5xx status code
+func (o *DeleteSandboxBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete sandbox bad request response a status code equal to that given
+func (o *DeleteSandboxBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *DeleteSandboxBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest  %+v", 400, o.Payload)
 }
+
+func (o *DeleteSandboxBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest  %+v", 400, o.Payload)
+}
+
 func (o *DeleteSandboxBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -127,9 +187,39 @@ type DeleteSandboxUnauthorized struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this delete sandbox unauthorized response has a 2xx status code
+func (o *DeleteSandboxUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete sandbox unauthorized response has a 3xx status code
+func (o *DeleteSandboxUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete sandbox unauthorized response has a 4xx status code
+func (o *DeleteSandboxUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete sandbox unauthorized response has a 5xx status code
+func (o *DeleteSandboxUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete sandbox unauthorized response a status code equal to that given
+func (o *DeleteSandboxUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *DeleteSandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized  %+v", 401, o.Payload)
 }
+
+func (o *DeleteSandboxUnauthorized) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized  %+v", 401, o.Payload)
+}
+
 func (o *DeleteSandboxUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -159,9 +249,39 @@ type DeleteSandboxBadGateway struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this delete sandbox bad gateway response has a 2xx status code
+func (o *DeleteSandboxBadGateway) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete sandbox bad gateway response has a 3xx status code
+func (o *DeleteSandboxBadGateway) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete sandbox bad gateway response has a 4xx status code
+func (o *DeleteSandboxBadGateway) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this delete sandbox bad gateway response has a 5xx status code
+func (o *DeleteSandboxBadGateway) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this delete sandbox bad gateway response a status code equal to that given
+func (o *DeleteSandboxBadGateway) IsCode(code int) bool {
+	return code == 502
+}
+
 func (o *DeleteSandboxBadGateway) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadGateway  %+v", 502, o.Payload)
 }
+
+func (o *DeleteSandboxBadGateway) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadGateway  %+v", 502, o.Payload)
+}
+
 func (o *DeleteSandboxBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
