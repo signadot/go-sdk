@@ -47,9 +47,39 @@ type ListClusterTokensOK struct {
 	Payload []*models.ClusterToken
 }
 
+// IsSuccess returns true when this list cluster tokens o k response has a 2xx status code
+func (o *ListClusterTokensOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this list cluster tokens o k response has a 3xx status code
+func (o *ListClusterTokensOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list cluster tokens o k response has a 4xx status code
+func (o *ListClusterTokensOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list cluster tokens o k response has a 5xx status code
+func (o *ListClusterTokensOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list cluster tokens o k response a status code equal to that given
+func (o *ListClusterTokensOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *ListClusterTokensOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/tokens/][%d] listClusterTokensOK  %+v", 200, o.Payload)
 }
+
+func (o *ListClusterTokensOK) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/tokens/][%d] listClusterTokensOK  %+v", 200, o.Payload)
+}
+
 func (o *ListClusterTokensOK) GetPayload() []*models.ClusterToken {
 	return o.Payload
 }
