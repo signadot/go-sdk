@@ -47,9 +47,39 @@ type CreateClusterTokenOK struct {
 	Payload *models.ClusterToken
 }
 
+// IsSuccess returns true when this create cluster token o k response has a 2xx status code
+func (o *CreateClusterTokenOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this create cluster token o k response has a 3xx status code
+func (o *CreateClusterTokenOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this create cluster token o k response has a 4xx status code
+func (o *CreateClusterTokenOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this create cluster token o k response has a 5xx status code
+func (o *CreateClusterTokenOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this create cluster token o k response a status code equal to that given
+func (o *CreateClusterTokenOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *CreateClusterTokenOK) Error() string {
 	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenOK  %+v", 200, o.Payload)
 }
+
+func (o *CreateClusterTokenOK) String() string {
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenOK  %+v", 200, o.Payload)
+}
+
 func (o *CreateClusterTokenOK) GetPayload() *models.ClusterToken {
 	return o.Payload
 }
