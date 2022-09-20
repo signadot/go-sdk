@@ -65,9 +65,39 @@ type ListSandboxesOK struct {
 	Payload []*models.Sandbox
 }
 
+// IsSuccess returns true when this list sandboxes o k response has a 2xx status code
+func (o *ListSandboxesOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this list sandboxes o k response has a 3xx status code
+func (o *ListSandboxesOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list sandboxes o k response has a 4xx status code
+func (o *ListSandboxesOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list sandboxes o k response has a 5xx status code
+func (o *ListSandboxesOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list sandboxes o k response a status code equal to that given
+func (o *ListSandboxesOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *ListSandboxesOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesOK  %+v", 200, o.Payload)
 }
+
+func (o *ListSandboxesOK) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesOK  %+v", 200, o.Payload)
+}
+
 func (o *ListSandboxesOK) GetPayload() []*models.Sandbox {
 	return o.Payload
 }
@@ -95,9 +125,39 @@ type ListSandboxesBadRequest struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this list sandboxes bad request response has a 2xx status code
+func (o *ListSandboxesBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list sandboxes bad request response has a 3xx status code
+func (o *ListSandboxesBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list sandboxes bad request response has a 4xx status code
+func (o *ListSandboxesBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list sandboxes bad request response has a 5xx status code
+func (o *ListSandboxesBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list sandboxes bad request response a status code equal to that given
+func (o *ListSandboxesBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *ListSandboxesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesBadRequest  %+v", 400, o.Payload)
 }
+
+func (o *ListSandboxesBadRequest) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesBadRequest  %+v", 400, o.Payload)
+}
+
 func (o *ListSandboxesBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -127,9 +187,39 @@ type ListSandboxesUnauthorized struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this list sandboxes unauthorized response has a 2xx status code
+func (o *ListSandboxesUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list sandboxes unauthorized response has a 3xx status code
+func (o *ListSandboxesUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list sandboxes unauthorized response has a 4xx status code
+func (o *ListSandboxesUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list sandboxes unauthorized response has a 5xx status code
+func (o *ListSandboxesUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list sandboxes unauthorized response a status code equal to that given
+func (o *ListSandboxesUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *ListSandboxesUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesUnauthorized  %+v", 401, o.Payload)
 }
+
+func (o *ListSandboxesUnauthorized) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesUnauthorized  %+v", 401, o.Payload)
+}
+
 func (o *ListSandboxesUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -159,9 +249,39 @@ type ListSandboxesBadGateway struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this list sandboxes bad gateway response has a 2xx status code
+func (o *ListSandboxesBadGateway) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list sandboxes bad gateway response has a 3xx status code
+func (o *ListSandboxesBadGateway) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list sandboxes bad gateway response has a 4xx status code
+func (o *ListSandboxesBadGateway) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list sandboxes bad gateway response has a 5xx status code
+func (o *ListSandboxesBadGateway) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this list sandboxes bad gateway response a status code equal to that given
+func (o *ListSandboxesBadGateway) IsCode(code int) bool {
+	return code == 502
+}
+
 func (o *ListSandboxesBadGateway) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesBadGateway  %+v", 502, o.Payload)
 }
+
+func (o *ListSandboxesBadGateway) String() string {
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesBadGateway  %+v", 502, o.Payload)
+}
+
 func (o *ListSandboxesBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }

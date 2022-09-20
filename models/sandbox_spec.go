@@ -27,6 +27,10 @@ type SandboxSpec struct {
 	// Description of the purpose of this sandbox
 	Description string `json:"description,omitempty"`
 
+	// EndOfLife gives the time at which the sandbox should be automatically deleted.
+	// It may be empty, in which case it defaults to never.
+	EndOfLife string `json:"endOfLife,omitempty"`
+
 	// Endpoints that can be used to point to external DNS names or ingress gateways
 	Endpoints []*SandboxHostEndpoint `json:"endpoints"`
 
