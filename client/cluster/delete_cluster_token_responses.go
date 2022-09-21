@@ -47,9 +47,39 @@ type DeleteClusterTokenOK struct {
 	Payload models.EmptyResponse
 }
 
+// IsSuccess returns true when this delete cluster token o k response has a 2xx status code
+func (o *DeleteClusterTokenOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this delete cluster token o k response has a 3xx status code
+func (o *DeleteClusterTokenOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete cluster token o k response has a 4xx status code
+func (o *DeleteClusterTokenOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this delete cluster token o k response has a 5xx status code
+func (o *DeleteClusterTokenOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete cluster token o k response a status code equal to that given
+func (o *DeleteClusterTokenOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *DeleteClusterTokenOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK  %+v", 200, o.Payload)
 }
+
+func (o *DeleteClusterTokenOK) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK  %+v", 200, o.Payload)
+}
+
 func (o *DeleteClusterTokenOK) GetPayload() models.EmptyResponse {
 	return o.Payload
 }
