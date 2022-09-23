@@ -65,9 +65,39 @@ type RemoveClusterOK struct {
 	Payload models.EmptyResponse
 }
 
+// IsSuccess returns true when this remove cluster o k response has a 2xx status code
+func (o *RemoveClusterOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this remove cluster o k response has a 3xx status code
+func (o *RemoveClusterOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this remove cluster o k response has a 4xx status code
+func (o *RemoveClusterOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this remove cluster o k response has a 5xx status code
+func (o *RemoveClusterOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this remove cluster o k response a status code equal to that given
+func (o *RemoveClusterOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *RemoveClusterOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterOK  %+v", 200, o.Payload)
 }
+
+func (o *RemoveClusterOK) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterOK  %+v", 200, o.Payload)
+}
+
 func (o *RemoveClusterOK) GetPayload() models.EmptyResponse {
 	return o.Payload
 }
@@ -95,9 +125,39 @@ type RemoveClusterBadRequest struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this remove cluster bad request response has a 2xx status code
+func (o *RemoveClusterBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this remove cluster bad request response has a 3xx status code
+func (o *RemoveClusterBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this remove cluster bad request response has a 4xx status code
+func (o *RemoveClusterBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this remove cluster bad request response has a 5xx status code
+func (o *RemoveClusterBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this remove cluster bad request response a status code equal to that given
+func (o *RemoveClusterBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *RemoveClusterBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterBadRequest  %+v", 400, o.Payload)
 }
+
+func (o *RemoveClusterBadRequest) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterBadRequest  %+v", 400, o.Payload)
+}
+
 func (o *RemoveClusterBadRequest) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -127,9 +187,39 @@ type RemoveClusterUnauthorized struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this remove cluster unauthorized response has a 2xx status code
+func (o *RemoveClusterUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this remove cluster unauthorized response has a 3xx status code
+func (o *RemoveClusterUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this remove cluster unauthorized response has a 4xx status code
+func (o *RemoveClusterUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this remove cluster unauthorized response has a 5xx status code
+func (o *RemoveClusterUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this remove cluster unauthorized response a status code equal to that given
+func (o *RemoveClusterUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *RemoveClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterUnauthorized  %+v", 401, o.Payload)
 }
+
+func (o *RemoveClusterUnauthorized) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterUnauthorized  %+v", 401, o.Payload)
+}
+
 func (o *RemoveClusterUnauthorized) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
@@ -159,9 +249,39 @@ type RemoveClusterBadGateway struct {
 	Payload *models.ErrorResponse
 }
 
+// IsSuccess returns true when this remove cluster bad gateway response has a 2xx status code
+func (o *RemoveClusterBadGateway) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this remove cluster bad gateway response has a 3xx status code
+func (o *RemoveClusterBadGateway) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this remove cluster bad gateway response has a 4xx status code
+func (o *RemoveClusterBadGateway) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this remove cluster bad gateway response has a 5xx status code
+func (o *RemoveClusterBadGateway) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this remove cluster bad gateway response a status code equal to that given
+func (o *RemoveClusterBadGateway) IsCode(code int) bool {
+	return code == 502
+}
+
 func (o *RemoveClusterBadGateway) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterBadGateway  %+v", 502, o.Payload)
 }
+
+func (o *RemoveClusterBadGateway) String() string {
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterBadGateway  %+v", 502, o.Payload)
+}
+
 func (o *RemoveClusterBadGateway) GetPayload() *models.ErrorResponse {
 	return o.Payload
 }
