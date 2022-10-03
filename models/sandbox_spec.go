@@ -39,6 +39,9 @@ type SandboxSpec struct {
 
 	// Tags are used to specify metadata associated with the sandbox as key-value pairs.
 	Tags map[string]string `json:"tags,omitempty"`
+
+	// ttl
+	TTL *SandboxesTTL `json:"ttl,omitempty"`
 }
 
 // Validate validates this sandbox spec
@@ -58,6 +61,10 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateResources(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTTL(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -155,6 +162,25 @@ func (m *SandboxSpec) validateResources(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SandboxSpec) validateTTL(formats strfmt.Registry) error {
+	if swag.IsZero(m.TTL) { // not required
+		return nil
+	}
+
+	if m.TTL != nil {
+		if err := m.TTL.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ttl")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ttl")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this sandbox spec based on the context it is used
 func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -168,6 +194,10 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 	}
 
 	if err := m.contextValidateResources(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTTL(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -232,6 +262,22 @@ func (m *SandboxSpec) contextValidateResources(ctx context.Context, formats strf
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *SandboxSpec) contextValidateTTL(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TTL != nil {
+		if err := m.TTL.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ttl")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ttl")
+			}
+			return err
+		}
 	}
 
 	return nil
