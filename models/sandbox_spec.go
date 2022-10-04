@@ -41,7 +41,7 @@ type SandboxSpec struct {
 	Tags map[string]string `json:"tags,omitempty"`
 
 	// ttl
-	TTL *SandboxesTTL `json:"ttl,omitempty"`
+	TTL *SandboxTTL `json:"ttl,omitempty"`
 }
 
 // Validate validates this sandbox spec
