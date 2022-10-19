@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxesTTL sandboxes TTL
+// SandboxTTL sandbox TTL
 //
-// swagger:model sandboxes.TTL
-type SandboxesTTL struct {
+// swagger:model sandbox.TTL
+type SandboxTTL struct {
 
 	// Duration represents the duration until sandbox end of life.
 	// It should be an unsigned integer not exceeding 32 bits followed by
@@ -32,18 +32,18 @@ type SandboxesTTL struct {
 	OffsetFrom string `json:"offsetFrom,omitempty"`
 }
 
-// Validate validates this sandboxes TTL
-func (m *SandboxesTTL) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox TTL
+func (m *SandboxTTL) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this sandboxes TTL based on context it is used
-func (m *SandboxesTTL) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sandbox TTL based on context it is used
+func (m *SandboxTTL) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxesTTL) MarshalBinary() ([]byte, error) {
+func (m *SandboxTTL) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -51,8 +51,8 @@ func (m *SandboxesTTL) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxesTTL) UnmarshalBinary(b []byte) error {
-	var res SandboxesTTL
+func (m *SandboxTTL) UnmarshalBinary(b []byte) error {
+	var res SandboxTTL
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
