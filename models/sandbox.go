@@ -36,6 +36,9 @@ type Sandbox struct {
 
 	// status
 	Status *SandboxReadiness `json:"status,omitempty"`
+
+	// updated at
+	UpdatedAt string `json:"updatedAt,omitempty"`
 }
 
 // Validate validates this sandbox
