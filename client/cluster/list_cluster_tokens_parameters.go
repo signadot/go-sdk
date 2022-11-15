@@ -52,10 +52,12 @@ func NewListClusterTokensParamsWithHTTPClient(client *http.Client) *ListClusterT
 	}
 }
 
-/* ListClusterTokensParams contains all the parameters to send to the API endpoint
-   for the list cluster tokens operation.
+/*
+ListClusterTokensParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the list cluster tokens operation.
+
+	Typically these are written to a http.Request.
 */
 type ListClusterTokensParams struct {
 

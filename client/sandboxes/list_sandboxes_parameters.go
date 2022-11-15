@@ -52,10 +52,12 @@ func NewListSandboxesParamsWithHTTPClient(client *http.Client) *ListSandboxesPar
 	}
 }
 
-/* ListSandboxesParams contains all the parameters to send to the API endpoint
-   for the list sandboxes operation.
+/*
+ListSandboxesParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the list sandboxes operation.
+
+	Typically these are written to a http.Request.
 */
 type ListSandboxesParams struct {
 

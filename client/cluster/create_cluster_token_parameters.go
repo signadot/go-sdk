@@ -52,10 +52,12 @@ func NewCreateClusterTokenParamsWithHTTPClient(client *http.Client) *CreateClust
 	}
 }
 
-/* CreateClusterTokenParams contains all the parameters to send to the API endpoint
-   for the create cluster token operation.
+/*
+CreateClusterTokenParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the create cluster token operation.
+
+	Typically these are written to a http.Request.
 */
 type CreateClusterTokenParams struct {
 

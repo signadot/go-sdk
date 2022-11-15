@@ -34,14 +34,14 @@ type SandboxSpec struct {
 	// Required: true
 	Forks []*SandboxFork `json:"forks"`
 
+	// Labels are used to specify metadata associated with the sandbox as key-value pairs.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
 
-	// Tags are used to specify metadata associated with the sandbox as key-value pairs.
-	Tags map[string]string `json:"tags,omitempty"`
-
 	// ttl
-	TTL *SandboxesTTL `json:"ttl,omitempty"`
+	TTL *SandboxTTL `json:"ttl,omitempty"`
 }
 
 // Validate validates this sandbox spec

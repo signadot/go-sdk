@@ -39,7 +39,8 @@ func NewListClusterTokensOK() *ListClusterTokensOK {
 	return &ListClusterTokensOK{}
 }
 
-/* ListClusterTokensOK describes a response with status code 200, with default header values.
+/*
+ListClusterTokensOK describes a response with status code 200, with default header values.
 
 OK
 */
