@@ -372,6 +372,13 @@
           },
           "type": "array"
         },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
+          "type": "object"
+        },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
           "items": {
@@ -379,15 +386,8 @@
           },
           "type": "array"
         },
-        "tags": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Tags are used to specify metadata associated with the sandbox as key-value pairs.",
-          "type": "object"
-        },
         "ttl": {
-          "$ref": "#/definitions/sandboxes.TTL"
+          "$ref": "#/definitions/sandbox.TTL"
         }
       },
       "required": [
@@ -396,7 +396,7 @@
       ],
       "type": "object"
     },
-    "sandboxes.TTL": {
+    "sandbox.TTL": {
       "properties": {
         "duration": {
           "description": "Duration represents the duration until sandbox end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n - 'm' for minutes\n - 'h' for hours\n - 'd' for days\n - 'w' for weeks",
