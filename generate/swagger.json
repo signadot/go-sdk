@@ -104,6 +104,124 @@
       },
       "type": "object"
     },
+    "routegroup.Label": {
+      "properties": {
+        "key": {
+          "description": "Key is an exact match on a label key, glob\ncharacters are just considered normal characters.",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value is a glob match for the value of a\nsandbox label.  See https://pkg.go.dev/path/filepath#Match\nfor the file glob syntax.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "routegroup.Match": {
+      "properties": {
+        "all": {
+          "description": "When All is non-nil, T matches a set of labels if and only if every element of All them.",
+          "items": {
+            "$ref": "#/definitions/routegroup.Match"
+          },
+          "type": "array"
+        },
+        "any": {
+          "description": "Any is non-nil, T matches a set of labels if and only if some element of Any matches them.",
+          "items": {
+            "$ref": "#/definitions/routegroup.Match"
+          },
+          "type": "array"
+        },
+        "label": {
+          "$ref": "#/definitions/routegroup.Label"
+        }
+      },
+      "type": "object"
+    },
+    "routegroup.Spec": {
+      "properties": {
+        "cluster": {
+          "description": "Cluster gives the cluster to which the route group applies.",
+          "type": "string"
+        },
+        "endpoints": {
+          "description": "Endpoints define endpoints which target different in-cluster\nservices.",
+          "items": {
+            "$ref": "#/definitions/sandbox.RouteGroupEndpoint"
+          },
+          "type": "array"
+        },
+        "match": {
+          "$ref": "#/definitions/routegroup.Match"
+        }
+      },
+      "type": "object"
+    },
+    "routegroup.Status": {
+      "properties": {
+        "matchedSandboxes": {
+          "description": "MatchedSandboxes gives the list of sandboxes whose labels\nwhere matched by the 'match' object in the spec.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "message": {
+          "description": "Message is a human readable explanation of why\nthe sandbox is healthy or not.",
+          "type": "string"
+        },
+        "ready": {
+          "description": "Ready indicates whether the sandbox is ready,\nmeaning that it can be used for testing.",
+          "type": "boolean"
+        },
+        "reason": {
+          "description": "Reason is a machine readable explanation of why\nthe sandbox is healthy or not.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "routegroups.EndpointURL": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "routegroups.RouteGroup": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "endpointURLs": {
+          "items": {
+            "$ref": "#/definitions/routegroups.EndpointURL"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "routingKey": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/routegroup.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/routegroup.Status"
+        }
+      },
+      "type": "object"
+    },
     "sandbox.CustomPatch": {
       "properties": {
         "type": {
@@ -133,6 +251,17 @@
         },
         "patch": {
           "$ref": "#/definitions/sandbox.CustomPatch"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.DefaultRouteGroup": {
+      "properties": {
+        "endpoints": {
+          "items": {
+            "$ref": "#/definitions/sandbox.RouteGroupEndpoint"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -348,11 +477,25 @@
       },
       "type": "object"
     },
+    "sandbox.RouteGroupEndpoint": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "sandbox.Spec": {
       "properties": {
         "cluster": {
           "description": "Cluster within which this sandbox should be created",
           "type": "string"
+        },
+        "defaultRouteGroup": {
+          "$ref": "#/definitions/sandbox.DefaultRouteGroup"
         },
         "description": {
           "description": "Description of the purpose of this sandbox",
@@ -870,6 +1013,266 @@
         "summary": "Get a cluster token",
         "tags": [
           "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/routegroups": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List all routegroups under the specified Signadot org.",
+        "operationId": "list-routegroups",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/routegroups.RouteGroup"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List routegroups",
+        "tags": [
+          "RouteGroups"
+        ]
+      }
+    },
+    "/orgs/{orgName}/routegroups/{routegroupName}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete a given routegroup.",
+        "operationId": "delete-routegroup",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "RouteGroup Name",
+            "in": "path",
+            "name": "routegroupName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-routegroup"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete a routegroup",
+        "tags": [
+          "RouteGroups"
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch the details about a given routegroup.",
+        "operationId": "get-routegroup",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "RouteGroup Name",
+            "in": "path",
+            "name": "routegroupName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-routegroup"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/routegroups.RouteGroup"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a routegroup",
+        "tags": [
+          "RouteGroups"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates or updates a routegroup with the provided parameters.",
+        "operationId": "apply-routegroup",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "RouteGroup Name",
+            "in": "path",
+            "name": "routegroupName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-routegroup"
+          },
+          {
+            "description": "Request to create or update routegroup",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/routegroups.RouteGroup"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/routegroups.RouteGroup"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create or update a routegroup",
+        "tags": [
+          "RouteGroups"
         ]
       }
     },
