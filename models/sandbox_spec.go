@@ -24,10 +24,13 @@ type SandboxSpec struct {
 	// Required: true
 	Cluster *string `json:"cluster"`
 
+	// default route group
+	DefaultRouteGroup *SandboxDefaultRouteGroup `json:"defaultRouteGroup,omitempty"`
+
 	// Description of the purpose of this sandbox
 	Description string `json:"description,omitempty"`
 
-	// Endpoints that can be used to point to external DNS names or ingress gateways
+	// Deprecated. Use defaultRouteGroup.Endpoints instead.
 	Endpoints []*SandboxHostEndpoint `json:"endpoints"`
 
 	// Forks is the specification of each forked entity
@@ -49,6 +52,10 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCluster(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDefaultRouteGroup(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -78,6 +85,25 @@ func (m *SandboxSpec) validateCluster(formats strfmt.Registry) error {
 
 	if err := validate.Required("cluster", "body", m.Cluster); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *SandboxSpec) validateDefaultRouteGroup(formats strfmt.Registry) error {
+	if swag.IsZero(m.DefaultRouteGroup) { // not required
+		return nil
+	}
+
+	if m.DefaultRouteGroup != nil {
+		if err := m.DefaultRouteGroup.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultRouteGroup")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultRouteGroup")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -185,6 +211,10 @@ func (m *SandboxSpec) validateTTL(formats strfmt.Registry) error {
 func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateDefaultRouteGroup(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateEndpoints(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -204,6 +234,22 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxSpec) contextValidateDefaultRouteGroup(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DefaultRouteGroup != nil {
+		if err := m.DefaultRouteGroup.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultRouteGroup")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultRouteGroup")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
