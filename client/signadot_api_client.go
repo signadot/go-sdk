@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/strfmt"
 
 	"github.com/signadot/go-sdk/client/cluster"
+	"github.com/signadot/go-sdk/client/route_groups"
 	"github.com/signadot/go-sdk/client/sandboxes"
 )
 
@@ -57,6 +58,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli := new(SignadotAPI)
 	cli.Transport = transport
 	cli.Cluster = cluster.New(transport, formats)
+	cli.RouteGroups = route_groups.New(transport, formats)
 	cli.Sandboxes = sandboxes.New(transport, formats)
 	return cli
 }
@@ -104,6 +106,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 type SignadotAPI struct {
 	Cluster cluster.ClientService
 
+	RouteGroups route_groups.ClientService
+
 	Sandboxes sandboxes.ClientService
 
 	Transport runtime.ClientTransport
@@ -113,5 +117,6 @@ type SignadotAPI struct {
 func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 	c.Cluster.SetTransport(transport)
+	c.RouteGroups.SetTransport(transport)
 	c.Sandboxes.SetTransport(transport)
 }
