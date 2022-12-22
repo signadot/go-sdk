@@ -35,6 +35,9 @@ type SandboxEndpoint struct {
 	// route type
 	RouteType string `json:"routeType,omitempty"`
 
+	// target
+	Target string `json:"target,omitempty"`
+
 	// url
 	URL string `json:"url,omitempty"`
 }

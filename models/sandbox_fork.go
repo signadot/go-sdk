@@ -22,7 +22,7 @@ type SandboxFork struct {
 	// customizations
 	Customizations *SandboxCustomizations `json:"customizations,omitempty"`
 
-	// Endpoints that correspond to this forked workload
+	// Deprecated. Use defaultRouteGroup.Endpoints instead.
 	Endpoints []*SandboxForkEndpoint `json:"endpoints"`
 
 	// fork of
