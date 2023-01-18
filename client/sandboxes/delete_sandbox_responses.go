@@ -90,6 +90,11 @@ func (o *DeleteSandboxOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete sandbox o k response
+func (o *DeleteSandboxOK) Code() int {
+	return 200
+}
+
 func (o *DeleteSandboxOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK  %+v", 200, o.Payload)
 }
@@ -148,6 +153,11 @@ func (o *DeleteSandboxBadRequest) IsServerError() bool {
 // IsCode returns true when this delete sandbox bad request response a status code equal to that given
 func (o *DeleteSandboxBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the delete sandbox bad request response
+func (o *DeleteSandboxBadRequest) Code() int {
+	return 400
 }
 
 func (o *DeleteSandboxBadRequest) Error() string {
@@ -212,6 +222,11 @@ func (o *DeleteSandboxUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete sandbox unauthorized response
+func (o *DeleteSandboxUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteSandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized  %+v", 401, o.Payload)
 }
@@ -272,6 +287,11 @@ func (o *DeleteSandboxBadGateway) IsServerError() bool {
 // IsCode returns true when this delete sandbox bad gateway response a status code equal to that given
 func (o *DeleteSandboxBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the delete sandbox bad gateway response
+func (o *DeleteSandboxBadGateway) Code() int {
+	return 502
 }
 
 func (o *DeleteSandboxBadGateway) Error() string {

@@ -72,6 +72,11 @@ func (o *GetClusterTokenOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster token o k response
+func (o *GetClusterTokenOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterTokenOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] getClusterTokenOK  %+v", 200, o.Payload)
 }
