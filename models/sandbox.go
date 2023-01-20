@@ -35,7 +35,7 @@ type Sandbox struct {
 	Spec *SandboxSpec `json:"spec,omitempty"`
 
 	// status
-	Status *SandboxReadiness `json:"status,omitempty"`
+	Status *SandboxesSandboxStatus `json:"status,omitempty"`
 }
 
 // Validate validates this sandbox
