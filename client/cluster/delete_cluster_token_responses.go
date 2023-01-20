@@ -72,6 +72,11 @@ func (o *DeleteClusterTokenOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete cluster token o k response
+func (o *DeleteClusterTokenOK) Code() int {
+	return 200
+}
+
 func (o *DeleteClusterTokenOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK  %+v", 200, o.Payload)
 }

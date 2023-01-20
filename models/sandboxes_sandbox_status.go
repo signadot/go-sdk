@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxReadiness sandbox readiness
+// SandboxesSandboxStatus sandboxes sandbox status
 //
-// swagger:model sandbox.Readiness
-type SandboxReadiness struct {
+// swagger:model sandboxes.SandboxStatus
+type SandboxesSandboxStatus struct {
 
 	// Message is a human readable explanation of why
 	// the sandbox is healthy or not.
@@ -30,18 +30,18 @@ type SandboxReadiness struct {
 	Reason string `json:"reason,omitempty"`
 }
 
-// Validate validates this sandbox readiness
-func (m *SandboxReadiness) Validate(formats strfmt.Registry) error {
+// Validate validates this sandboxes sandbox status
+func (m *SandboxesSandboxStatus) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this sandbox readiness based on context it is used
-func (m *SandboxReadiness) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sandboxes sandbox status based on context it is used
+func (m *SandboxesSandboxStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxReadiness) MarshalBinary() ([]byte, error) {
+func (m *SandboxesSandboxStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -49,8 +49,8 @@ func (m *SandboxReadiness) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxReadiness) UnmarshalBinary(b []byte) error {
-	var res SandboxReadiness
+func (m *SandboxesSandboxStatus) UnmarshalBinary(b []byte) error {
+	var res SandboxesSandboxStatus
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
