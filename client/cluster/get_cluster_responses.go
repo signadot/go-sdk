@@ -90,6 +90,11 @@ func (o *GetClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster o k response
+func (o *GetClusterOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/][%d] getClusterOK  %+v", 200, o.Payload)
 }
@@ -150,6 +155,11 @@ func (o *GetClusterBadRequest) IsServerError() bool {
 // IsCode returns true when this get cluster bad request response a status code equal to that given
 func (o *GetClusterBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the get cluster bad request response
+func (o *GetClusterBadRequest) Code() int {
+	return 400
 }
 
 func (o *GetClusterBadRequest) Error() string {
@@ -214,6 +224,11 @@ func (o *GetClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster unauthorized response
+func (o *GetClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/{clusterName}/][%d] getClusterUnauthorized  %+v", 401, o.Payload)
 }
@@ -274,6 +289,11 @@ func (o *GetClusterBadGateway) IsServerError() bool {
 // IsCode returns true when this get cluster bad gateway response a status code equal to that given
 func (o *GetClusterBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the get cluster bad gateway response
+func (o *GetClusterBadGateway) Code() int {
+	return 502
 }
 
 func (o *GetClusterBadGateway) Error() string {
