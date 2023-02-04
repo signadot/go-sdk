@@ -90,6 +90,11 @@ func (o *ApplyRoutegroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the apply routegroup o k response
+func (o *ApplyRoutegroupOK) Code() int {
+	return 200
+}
+
 func (o *ApplyRoutegroupOK) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupOK  %+v", 200, o.Payload)
 }
@@ -150,6 +155,11 @@ func (o *ApplyRoutegroupBadRequest) IsServerError() bool {
 // IsCode returns true when this apply routegroup bad request response a status code equal to that given
 func (o *ApplyRoutegroupBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the apply routegroup bad request response
+func (o *ApplyRoutegroupBadRequest) Code() int {
+	return 400
 }
 
 func (o *ApplyRoutegroupBadRequest) Error() string {
@@ -214,6 +224,11 @@ func (o *ApplyRoutegroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the apply routegroup unauthorized response
+func (o *ApplyRoutegroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ApplyRoutegroupUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupUnauthorized  %+v", 401, o.Payload)
 }
@@ -274,6 +289,11 @@ func (o *ApplyRoutegroupBadGateway) IsServerError() bool {
 // IsCode returns true when this apply routegroup bad gateway response a status code equal to that given
 func (o *ApplyRoutegroupBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the apply routegroup bad gateway response
+func (o *ApplyRoutegroupBadGateway) Code() int {
+	return 502
 }
 
 func (o *ApplyRoutegroupBadGateway) Error() string {

@@ -90,6 +90,11 @@ func (o *GetSandboxOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get sandbox o k response
+func (o *GetSandboxOK) Code() int {
+	return 200
+}
+
 func (o *GetSandboxOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}][%d] getSandboxOK  %+v", 200, o.Payload)
 }
@@ -150,6 +155,11 @@ func (o *GetSandboxBadRequest) IsServerError() bool {
 // IsCode returns true when this get sandbox bad request response a status code equal to that given
 func (o *GetSandboxBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the get sandbox bad request response
+func (o *GetSandboxBadRequest) Code() int {
+	return 400
 }
 
 func (o *GetSandboxBadRequest) Error() string {
@@ -214,6 +224,11 @@ func (o *GetSandboxUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get sandbox unauthorized response
+func (o *GetSandboxUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetSandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}][%d] getSandboxUnauthorized  %+v", 401, o.Payload)
 }
@@ -274,6 +289,11 @@ func (o *GetSandboxBadGateway) IsServerError() bool {
 // IsCode returns true when this get sandbox bad gateway response a status code equal to that given
 func (o *GetSandboxBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the get sandbox bad gateway response
+func (o *GetSandboxBadGateway) Code() int {
+	return 502
 }
 
 func (o *GetSandboxBadGateway) Error() string {
