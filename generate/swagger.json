@@ -117,7 +117,7 @@
           "$ref": "#/definitions/sandbox.Spec"
         },
         "status": {
-          "$ref": "#/definitions/sandbox.Readiness"
+          "$ref": "#/definitions/sandboxes.SandboxStatus"
         }
       },
       "type": "object"
@@ -465,23 +465,6 @@
       },
       "type": "object"
     },
-    "sandbox.Readiness": {
-      "properties": {
-        "message": {
-          "description": "Message is a human readable explanation of why\nthe sandbox is healthy or not.",
-          "type": "string"
-        },
-        "ready": {
-          "description": "Ready indicates whether the sandbox is ready,\nmeaning that it can be used for testing.",
-          "type": "boolean"
-        },
-        "reason": {
-          "description": "Reason is a machine readable explanation of why\nthe sandbox is healthy or not.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "sandbox.Resource": {
       "properties": {
         "name": {
@@ -559,6 +542,23 @@
         },
         "offsetFrom": {
           "description": "OffsetFrom indicates what the Duration is relative to.  It\nmay be the empty string or \"createdAt\".  The empty string\ndefaults to meaning \"createdAt\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.SandboxStatus": {
+      "properties": {
+        "message": {
+          "description": "Message is a human readable explanation of why\nthe sandbox is healthy or not.",
+          "type": "string"
+        },
+        "ready": {
+          "description": "Ready indicates whether the sandbox is ready,\nmeaning that it can be used for testing.",
+          "type": "boolean"
+        },
+        "reason": {
+          "description": "Reason is a machine readable explanation of why\nthe sandbox is healthy or not.",
           "type": "string"
         }
       },
