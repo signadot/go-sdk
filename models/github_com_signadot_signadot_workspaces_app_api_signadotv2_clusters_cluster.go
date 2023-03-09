@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Cluster cluster
+// GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster github com signadot signadot workspaces app api signadotv2 clusters cluster
 //
-// swagger:model Cluster
-type Cluster struct {
+// swagger:model github.com_signadot_signadot_workspaces_app_api_signadotv2_clusters.Cluster
+type GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster struct {
 
 	// The time when this cluster was registered with Signadot.
 	CreatedAt string `json:"createdAt,omitempty"`
@@ -28,8 +28,8 @@ type Cluster struct {
 	Operator *ClusterOperator `json:"operator,omitempty"`
 }
 
-// Validate validates this cluster
-func (m *Cluster) Validate(formats strfmt.Registry) error {
+// Validate validates this github com signadot signadot workspaces app api signadotv2 clusters cluster
+func (m *GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOperator(formats); err != nil {
@@ -42,7 +42,7 @@ func (m *Cluster) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Cluster) validateOperator(formats strfmt.Registry) error {
+func (m *GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster) validateOperator(formats strfmt.Registry) error {
 	if swag.IsZero(m.Operator) { // not required
 		return nil
 	}
@@ -61,8 +61,8 @@ func (m *Cluster) validateOperator(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this cluster based on the context it is used
-func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this github com signadot signadot workspaces app api signadotv2 clusters cluster based on the context it is used
+func (m *GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOperator(ctx, formats); err != nil {
@@ -75,7 +75,7 @@ func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	return nil
 }
 
-func (m *Cluster) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
+func (m *GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Operator != nil {
 		if err := m.Operator.ContextValidate(ctx, formats); err != nil {
@@ -92,7 +92,7 @@ func (m *Cluster) contextValidateOperator(ctx context.Context, formats strfmt.Re
 }
 
 // MarshalBinary interface implementation
-func (m *Cluster) MarshalBinary() ([]byte, error) {
+func (m *GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -100,8 +100,8 @@ func (m *Cluster) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Cluster) UnmarshalBinary(b []byte) error {
-	var res Cluster
+func (m *GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster) UnmarshalBinary(b []byte) error {
+	var res GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
