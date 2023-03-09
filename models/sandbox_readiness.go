@@ -14,7 +14,7 @@ import (
 
 // SandboxReadiness sandbox readiness
 //
-// swagger:model sandbox.Readiness
+// swagger:model SandboxReadiness
 type SandboxReadiness struct {
 
 	// Message is a human readable explanation of why

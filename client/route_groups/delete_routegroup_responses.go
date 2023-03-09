@@ -90,6 +90,11 @@ func (o *DeleteRoutegroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete routegroup o k response
+func (o *DeleteRoutegroupOK) Code() int {
+	return 200
+}
+
 func (o *DeleteRoutegroupOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupOK  %+v", 200, o.Payload)
 }
@@ -148,6 +153,11 @@ func (o *DeleteRoutegroupBadRequest) IsServerError() bool {
 // IsCode returns true when this delete routegroup bad request response a status code equal to that given
 func (o *DeleteRoutegroupBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the delete routegroup bad request response
+func (o *DeleteRoutegroupBadRequest) Code() int {
+	return 400
 }
 
 func (o *DeleteRoutegroupBadRequest) Error() string {
@@ -212,6 +222,11 @@ func (o *DeleteRoutegroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete routegroup unauthorized response
+func (o *DeleteRoutegroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteRoutegroupUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupUnauthorized  %+v", 401, o.Payload)
 }
@@ -272,6 +287,11 @@ func (o *DeleteRoutegroupBadGateway) IsServerError() bool {
 // IsCode returns true when this delete routegroup bad gateway response a status code equal to that given
 func (o *DeleteRoutegroupBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the delete routegroup bad gateway response
+func (o *DeleteRoutegroupBadGateway) Code() int {
+	return 502
 }
 
 func (o *DeleteRoutegroupBadGateway) Error() string {
