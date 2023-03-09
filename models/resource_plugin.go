@@ -7,44 +7,36 @@ package models
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
-// Sandbox sandbox
+// ResourcePlugin resource plugin
 //
-// swagger:model Sandbox
-type Sandbox struct {
+// swagger:model ResourcePlugin
+type ResourcePlugin struct {
 
-	// created at
+	// The time at which the resource plugin was created
 	CreatedAt string `json:"createdAt,omitempty"`
 
-	// endpoints
-	Endpoints []*SandboxEndpoint `json:"endpoints"`
-
-	// Human-readable name of this sandbox
+	// Name of the resource plugin
 	Name string `json:"name,omitempty"`
 
-	// routing key
-	RoutingKey string `json:"routingKey,omitempty"`
-
 	// spec
-	Spec *SandboxSpec `json:"spec,omitempty"`
+	Spec *ResourcepluginSpec `json:"spec,omitempty"`
 
 	// status
-	Status *SandboxesSandboxStatus `json:"status,omitempty"`
+	Status *ResourcepluginStatus `json:"status,omitempty"`
+
+	// The time at which the resource plugin was last updated
+	UpdatedAt string `json:"updatedAt,omitempty"`
 }
 
-// Validate validates this sandbox
-func (m *Sandbox) Validate(formats strfmt.Registry) error {
+// Validate validates this resource plugin
+func (m *ResourcePlugin) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateEndpoints(formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.validateSpec(formats); err != nil {
 		res = append(res, err)
@@ -60,33 +52,7 @@ func (m *Sandbox) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Sandbox) validateEndpoints(formats strfmt.Registry) error {
-	if swag.IsZero(m.Endpoints) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Endpoints); i++ {
-		if swag.IsZero(m.Endpoints[i]) { // not required
-			continue
-		}
-
-		if m.Endpoints[i] != nil {
-			if err := m.Endpoints[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *Sandbox) validateSpec(formats strfmt.Registry) error {
+func (m *ResourcePlugin) validateSpec(formats strfmt.Registry) error {
 	if swag.IsZero(m.Spec) { // not required
 		return nil
 	}
@@ -105,7 +71,7 @@ func (m *Sandbox) validateSpec(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Sandbox) validateStatus(formats strfmt.Registry) error {
+func (m *ResourcePlugin) validateStatus(formats strfmt.Registry) error {
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -124,13 +90,9 @@ func (m *Sandbox) validateStatus(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this sandbox based on the context it is used
-func (m *Sandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this resource plugin based on the context it is used
+func (m *ResourcePlugin) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.contextValidateEndpoints(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.contextValidateSpec(ctx, formats); err != nil {
 		res = append(res, err)
@@ -146,27 +108,7 @@ func (m *Sandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	return nil
 }
 
-func (m *Sandbox) contextValidateEndpoints(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.Endpoints); i++ {
-
-		if m.Endpoints[i] != nil {
-			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *Sandbox) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *ResourcePlugin) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
@@ -182,7 +124,7 @@ func (m *Sandbox) contextValidateSpec(ctx context.Context, formats strfmt.Regist
 	return nil
 }
 
-func (m *Sandbox) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+func (m *ResourcePlugin) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
@@ -199,7 +141,7 @@ func (m *Sandbox) contextValidateStatus(ctx context.Context, formats strfmt.Regi
 }
 
 // MarshalBinary interface implementation
-func (m *Sandbox) MarshalBinary() ([]byte, error) {
+func (m *ResourcePlugin) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -207,8 +149,8 @@ func (m *Sandbox) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Sandbox) UnmarshalBinary(b []byte) error {
-	var res Sandbox
+func (m *ResourcePlugin) UnmarshalBinary(b []byte) error {
+	var res ResourcePlugin
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
