@@ -62,7 +62,7 @@ func NewAddClusterOK() *AddClusterOK {
 OK
 */
 type AddClusterOK struct {
-	Payload *models.Cluster
+	Payload *models.GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster
 }
 
 // IsSuccess returns true when this add cluster o k response has a 2xx status code
@@ -90,6 +90,11 @@ func (o *AddClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the add cluster o k response
+func (o *AddClusterOK) Code() int {
+	return 200
+}
+
 func (o *AddClusterOK) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterOK  %+v", 200, o.Payload)
 }
@@ -98,13 +103,13 @@ func (o *AddClusterOK) String() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterOK  %+v", 200, o.Payload)
 }
 
-func (o *AddClusterOK) GetPayload() *models.Cluster {
+func (o *AddClusterOK) GetPayload() *models.GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster {
 	return o.Payload
 }
 
 func (o *AddClusterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.Cluster)
+	o.Payload = new(models.GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -150,6 +155,11 @@ func (o *AddClusterBadRequest) IsServerError() bool {
 // IsCode returns true when this add cluster bad request response a status code equal to that given
 func (o *AddClusterBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the add cluster bad request response
+func (o *AddClusterBadRequest) Code() int {
+	return 400
 }
 
 func (o *AddClusterBadRequest) Error() string {
@@ -214,6 +224,11 @@ func (o *AddClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the add cluster unauthorized response
+func (o *AddClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *AddClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterUnauthorized  %+v", 401, o.Payload)
 }
@@ -274,6 +289,11 @@ func (o *AddClusterBadGateway) IsServerError() bool {
 // IsCode returns true when this add cluster bad gateway response a status code equal to that given
 func (o *AddClusterBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the add cluster bad gateway response
+func (o *AddClusterBadGateway) Code() int {
+	return 502
 }
 
 func (o *AddClusterBadGateway) Error() string {

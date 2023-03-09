@@ -62,7 +62,7 @@ func NewListClustersOK() *ListClustersOK {
 OK
 */
 type ListClustersOK struct {
-	Payload []*models.Cluster
+	Payload []*models.GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster
 }
 
 // IsSuccess returns true when this list clusters o k response has a 2xx status code
@@ -90,6 +90,11 @@ func (o *ListClustersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list clusters o k response
+func (o *ListClustersOK) Code() int {
+	return 200
+}
+
 func (o *ListClustersOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
 }
@@ -98,7 +103,7 @@ func (o *ListClustersOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
 }
 
-func (o *ListClustersOK) GetPayload() []*models.Cluster {
+func (o *ListClustersOK) GetPayload() []*models.GithubComSignadotSignadotWorkspacesAppAPISignadotv2ClustersCluster {
 	return o.Payload
 }
 
@@ -148,6 +153,11 @@ func (o *ListClustersBadRequest) IsServerError() bool {
 // IsCode returns true when this list clusters bad request response a status code equal to that given
 func (o *ListClustersBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the list clusters bad request response
+func (o *ListClustersBadRequest) Code() int {
+	return 400
 }
 
 func (o *ListClustersBadRequest) Error() string {
@@ -212,6 +222,11 @@ func (o *ListClustersUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list clusters unauthorized response
+func (o *ListClustersUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListClustersUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
 }
@@ -272,6 +287,11 @@ func (o *ListClustersBadGateway) IsServerError() bool {
 // IsCode returns true when this list clusters bad gateway response a status code equal to that given
 func (o *ListClustersBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the list clusters bad gateway response
+func (o *ListClustersBadGateway) Code() int {
+	return 502
 }
 
 func (o *ListClustersBadGateway) Error() string {
