@@ -39,7 +39,8 @@ func NewGetClusterTokenOK() *GetClusterTokenOK {
 	return &GetClusterTokenOK{}
 }
 
-/* GetClusterTokenOK describes a response with status code 200, with default header values.
+/*
+GetClusterTokenOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -70,6 +71,11 @@ func (o *GetClusterTokenOK) IsServerError() bool {
 // IsCode returns true when this get cluster token o k response a status code equal to that given
 func (o *GetClusterTokenOK) IsCode(code int) bool {
 	return code == 200
+}
+
+// Code gets the status code for the get cluster token o k response
+func (o *GetClusterTokenOK) Code() int {
+	return 200
 }
 
 func (o *GetClusterTokenOK) Error() string {

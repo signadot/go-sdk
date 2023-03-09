@@ -57,7 +57,8 @@ func NewListRoutegroupsOK() *ListRoutegroupsOK {
 	return &ListRoutegroupsOK{}
 }
 
-/* ListRoutegroupsOK describes a response with status code 200, with default header values.
+/*
+ListRoutegroupsOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -90,6 +91,11 @@ func (o *ListRoutegroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list routegroups o k response
+func (o *ListRoutegroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListRoutegroupsOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups][%d] listRoutegroupsOK  %+v", 200, o.Payload)
 }
@@ -117,7 +123,8 @@ func NewListRoutegroupsBadRequest() *ListRoutegroupsBadRequest {
 	return &ListRoutegroupsBadRequest{}
 }
 
-/* ListRoutegroupsBadRequest describes a response with status code 400, with default header values.
+/*
+ListRoutegroupsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -150,6 +157,11 @@ func (o *ListRoutegroupsBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the list routegroups bad request response
+func (o *ListRoutegroupsBadRequest) Code() int {
+	return 400
+}
+
 func (o *ListRoutegroupsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups][%d] listRoutegroupsBadRequest  %+v", 400, o.Payload)
 }
@@ -179,7 +191,8 @@ func NewListRoutegroupsUnauthorized() *ListRoutegroupsUnauthorized {
 	return &ListRoutegroupsUnauthorized{}
 }
 
-/* ListRoutegroupsUnauthorized describes a response with status code 401, with default header values.
+/*
+ListRoutegroupsUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -212,6 +225,11 @@ func (o *ListRoutegroupsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list routegroups unauthorized response
+func (o *ListRoutegroupsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListRoutegroupsUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups][%d] listRoutegroupsUnauthorized  %+v", 401, o.Payload)
 }
@@ -241,7 +259,8 @@ func NewListRoutegroupsBadGateway() *ListRoutegroupsBadGateway {
 	return &ListRoutegroupsBadGateway{}
 }
 
-/* ListRoutegroupsBadGateway describes a response with status code 502, with default header values.
+/*
+ListRoutegroupsBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
@@ -272,6 +291,11 @@ func (o *ListRoutegroupsBadGateway) IsServerError() bool {
 // IsCode returns true when this list routegroups bad gateway response a status code equal to that given
 func (o *ListRoutegroupsBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the list routegroups bad gateway response
+func (o *ListRoutegroupsBadGateway) Code() int {
+	return 502
 }
 
 func (o *ListRoutegroupsBadGateway) Error() string {

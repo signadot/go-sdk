@@ -39,7 +39,8 @@ func NewDeleteClusterTokenOK() *DeleteClusterTokenOK {
 	return &DeleteClusterTokenOK{}
 }
 
-/* DeleteClusterTokenOK describes a response with status code 200, with default header values.
+/*
+DeleteClusterTokenOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -70,6 +71,11 @@ func (o *DeleteClusterTokenOK) IsServerError() bool {
 // IsCode returns true when this delete cluster token o k response a status code equal to that given
 func (o *DeleteClusterTokenOK) IsCode(code int) bool {
 	return code == 200
+}
+
+// Code gets the status code for the delete cluster token o k response
+func (o *DeleteClusterTokenOK) Code() int {
+	return 200
 }
 
 func (o *DeleteClusterTokenOK) Error() string {

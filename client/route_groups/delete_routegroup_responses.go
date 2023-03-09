@@ -57,7 +57,8 @@ func NewDeleteRoutegroupOK() *DeleteRoutegroupOK {
 	return &DeleteRoutegroupOK{}
 }
 
-/* DeleteRoutegroupOK describes a response with status code 200, with default header values.
+/*
+DeleteRoutegroupOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -90,6 +91,11 @@ func (o *DeleteRoutegroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete routegroup o k response
+func (o *DeleteRoutegroupOK) Code() int {
+	return 200
+}
+
 func (o *DeleteRoutegroupOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupOK  %+v", 200, o.Payload)
 }
@@ -117,7 +123,8 @@ func NewDeleteRoutegroupBadRequest() *DeleteRoutegroupBadRequest {
 	return &DeleteRoutegroupBadRequest{}
 }
 
-/* DeleteRoutegroupBadRequest describes a response with status code 400, with default header values.
+/*
+DeleteRoutegroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -150,6 +157,11 @@ func (o *DeleteRoutegroupBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the delete routegroup bad request response
+func (o *DeleteRoutegroupBadRequest) Code() int {
+	return 400
+}
+
 func (o *DeleteRoutegroupBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadRequest  %+v", 400, o.Payload)
 }
@@ -179,7 +191,8 @@ func NewDeleteRoutegroupUnauthorized() *DeleteRoutegroupUnauthorized {
 	return &DeleteRoutegroupUnauthorized{}
 }
 
-/* DeleteRoutegroupUnauthorized describes a response with status code 401, with default header values.
+/*
+DeleteRoutegroupUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -212,6 +225,11 @@ func (o *DeleteRoutegroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete routegroup unauthorized response
+func (o *DeleteRoutegroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteRoutegroupUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupUnauthorized  %+v", 401, o.Payload)
 }
@@ -241,7 +259,8 @@ func NewDeleteRoutegroupBadGateway() *DeleteRoutegroupBadGateway {
 	return &DeleteRoutegroupBadGateway{}
 }
 
-/* DeleteRoutegroupBadGateway describes a response with status code 502, with default header values.
+/*
+DeleteRoutegroupBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
@@ -272,6 +291,11 @@ func (o *DeleteRoutegroupBadGateway) IsServerError() bool {
 // IsCode returns true when this delete routegroup bad gateway response a status code equal to that given
 func (o *DeleteRoutegroupBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the delete routegroup bad gateway response
+func (o *DeleteRoutegroupBadGateway) Code() int {
+	return 502
 }
 
 func (o *DeleteRoutegroupBadGateway) Error() string {

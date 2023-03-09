@@ -57,7 +57,8 @@ func NewRemoveClusterOK() *RemoveClusterOK {
 	return &RemoveClusterOK{}
 }
 
-/* RemoveClusterOK describes a response with status code 200, with default header values.
+/*
+RemoveClusterOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -90,6 +91,11 @@ func (o *RemoveClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the remove cluster o k response
+func (o *RemoveClusterOK) Code() int {
+	return 200
+}
+
 func (o *RemoveClusterOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterOK  %+v", 200, o.Payload)
 }
@@ -117,7 +123,8 @@ func NewRemoveClusterBadRequest() *RemoveClusterBadRequest {
 	return &RemoveClusterBadRequest{}
 }
 
-/* RemoveClusterBadRequest describes a response with status code 400, with default header values.
+/*
+RemoveClusterBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -150,6 +157,11 @@ func (o *RemoveClusterBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the remove cluster bad request response
+func (o *RemoveClusterBadRequest) Code() int {
+	return 400
+}
+
 func (o *RemoveClusterBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterBadRequest  %+v", 400, o.Payload)
 }
@@ -179,7 +191,8 @@ func NewRemoveClusterUnauthorized() *RemoveClusterUnauthorized {
 	return &RemoveClusterUnauthorized{}
 }
 
-/* RemoveClusterUnauthorized describes a response with status code 401, with default header values.
+/*
+RemoveClusterUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -212,6 +225,11 @@ func (o *RemoveClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the remove cluster unauthorized response
+func (o *RemoveClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *RemoveClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/][%d] removeClusterUnauthorized  %+v", 401, o.Payload)
 }
@@ -241,7 +259,8 @@ func NewRemoveClusterBadGateway() *RemoveClusterBadGateway {
 	return &RemoveClusterBadGateway{}
 }
 
-/* RemoveClusterBadGateway describes a response with status code 502, with default header values.
+/*
+RemoveClusterBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
@@ -272,6 +291,11 @@ func (o *RemoveClusterBadGateway) IsServerError() bool {
 // IsCode returns true when this remove cluster bad gateway response a status code equal to that given
 func (o *RemoveClusterBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the remove cluster bad gateway response
+func (o *RemoveClusterBadGateway) Code() int {
+	return 502
 }
 
 func (o *RemoveClusterBadGateway) Error() string {

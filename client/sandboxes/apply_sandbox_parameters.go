@@ -54,10 +54,12 @@ func NewApplySandboxParamsWithHTTPClient(client *http.Client) *ApplySandboxParam
 	}
 }
 
-/* ApplySandboxParams contains all the parameters to send to the API endpoint
-   for the apply sandbox operation.
+/*
+ApplySandboxParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the apply sandbox operation.
+
+	Typically these are written to a http.Request.
 */
 type ApplySandboxParams struct {
 

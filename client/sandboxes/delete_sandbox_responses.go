@@ -57,7 +57,8 @@ func NewDeleteSandboxOK() *DeleteSandboxOK {
 	return &DeleteSandboxOK{}
 }
 
-/* DeleteSandboxOK describes a response with status code 200, with default header values.
+/*
+DeleteSandboxOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -90,6 +91,11 @@ func (o *DeleteSandboxOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete sandbox o k response
+func (o *DeleteSandboxOK) Code() int {
+	return 200
+}
+
 func (o *DeleteSandboxOK) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK  %+v", 200, o.Payload)
 }
@@ -117,7 +123,8 @@ func NewDeleteSandboxBadRequest() *DeleteSandboxBadRequest {
 	return &DeleteSandboxBadRequest{}
 }
 
-/* DeleteSandboxBadRequest describes a response with status code 400, with default header values.
+/*
+DeleteSandboxBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -150,6 +157,11 @@ func (o *DeleteSandboxBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the delete sandbox bad request response
+func (o *DeleteSandboxBadRequest) Code() int {
+	return 400
+}
+
 func (o *DeleteSandboxBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest  %+v", 400, o.Payload)
 }
@@ -179,7 +191,8 @@ func NewDeleteSandboxUnauthorized() *DeleteSandboxUnauthorized {
 	return &DeleteSandboxUnauthorized{}
 }
 
-/* DeleteSandboxUnauthorized describes a response with status code 401, with default header values.
+/*
+DeleteSandboxUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -212,6 +225,11 @@ func (o *DeleteSandboxUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete sandbox unauthorized response
+func (o *DeleteSandboxUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteSandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized  %+v", 401, o.Payload)
 }
@@ -241,7 +259,8 @@ func NewDeleteSandboxBadGateway() *DeleteSandboxBadGateway {
 	return &DeleteSandboxBadGateway{}
 }
 
-/* DeleteSandboxBadGateway describes a response with status code 502, with default header values.
+/*
+DeleteSandboxBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
@@ -272,6 +291,11 @@ func (o *DeleteSandboxBadGateway) IsServerError() bool {
 // IsCode returns true when this delete sandbox bad gateway response a status code equal to that given
 func (o *DeleteSandboxBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the delete sandbox bad gateway response
+func (o *DeleteSandboxBadGateway) Code() int {
+	return 502
 }
 
 func (o *DeleteSandboxBadGateway) Error() string {

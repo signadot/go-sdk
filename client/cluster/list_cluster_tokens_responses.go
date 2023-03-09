@@ -39,7 +39,8 @@ func NewListClusterTokensOK() *ListClusterTokensOK {
 	return &ListClusterTokensOK{}
 }
 
-/* ListClusterTokensOK describes a response with status code 200, with default header values.
+/*
+ListClusterTokensOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -70,6 +71,11 @@ func (o *ListClusterTokensOK) IsServerError() bool {
 // IsCode returns true when this list cluster tokens o k response a status code equal to that given
 func (o *ListClusterTokensOK) IsCode(code int) bool {
 	return code == 200
+}
+
+// Code gets the status code for the list cluster tokens o k response
+func (o *ListClusterTokensOK) Code() int {
+	return 200
 }
 
 func (o *ListClusterTokensOK) Error() string {

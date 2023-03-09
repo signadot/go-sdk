@@ -57,7 +57,8 @@ func NewAddClusterOK() *AddClusterOK {
 	return &AddClusterOK{}
 }
 
-/* AddClusterOK describes a response with status code 200, with default header values.
+/*
+AddClusterOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -90,6 +91,11 @@ func (o *AddClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the add cluster o k response
+func (o *AddClusterOK) Code() int {
+	return 200
+}
+
 func (o *AddClusterOK) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterOK  %+v", 200, o.Payload)
 }
@@ -119,7 +125,8 @@ func NewAddClusterBadRequest() *AddClusterBadRequest {
 	return &AddClusterBadRequest{}
 }
 
-/* AddClusterBadRequest describes a response with status code 400, with default header values.
+/*
+AddClusterBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -152,6 +159,11 @@ func (o *AddClusterBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the add cluster bad request response
+func (o *AddClusterBadRequest) Code() int {
+	return 400
+}
+
 func (o *AddClusterBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadRequest  %+v", 400, o.Payload)
 }
@@ -181,7 +193,8 @@ func NewAddClusterUnauthorized() *AddClusterUnauthorized {
 	return &AddClusterUnauthorized{}
 }
 
-/* AddClusterUnauthorized describes a response with status code 401, with default header values.
+/*
+AddClusterUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -214,6 +227,11 @@ func (o *AddClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the add cluster unauthorized response
+func (o *AddClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *AddClusterUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterUnauthorized  %+v", 401, o.Payload)
 }
@@ -243,7 +261,8 @@ func NewAddClusterBadGateway() *AddClusterBadGateway {
 	return &AddClusterBadGateway{}
 }
 
-/* AddClusterBadGateway describes a response with status code 502, with default header values.
+/*
+AddClusterBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
@@ -274,6 +293,11 @@ func (o *AddClusterBadGateway) IsServerError() bool {
 // IsCode returns true when this add cluster bad gateway response a status code equal to that given
 func (o *AddClusterBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the add cluster bad gateway response
+func (o *AddClusterBadGateway) Code() int {
+	return 502
 }
 
 func (o *AddClusterBadGateway) Error() string {
