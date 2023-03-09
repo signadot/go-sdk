@@ -90,6 +90,11 @@ func (o *ApplySandboxOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the apply sandbox o k response
+func (o *ApplySandboxOK) Code() int {
+	return 200
+}
+
 func (o *ApplySandboxOK) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxOK  %+v", 200, o.Payload)
 }
@@ -150,6 +155,11 @@ func (o *ApplySandboxBadRequest) IsServerError() bool {
 // IsCode returns true when this apply sandbox bad request response a status code equal to that given
 func (o *ApplySandboxBadRequest) IsCode(code int) bool {
 	return code == 400
+}
+
+// Code gets the status code for the apply sandbox bad request response
+func (o *ApplySandboxBadRequest) Code() int {
+	return 400
 }
 
 func (o *ApplySandboxBadRequest) Error() string {
@@ -214,6 +224,11 @@ func (o *ApplySandboxUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the apply sandbox unauthorized response
+func (o *ApplySandboxUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ApplySandboxUnauthorized) Error() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxUnauthorized  %+v", 401, o.Payload)
 }
@@ -274,6 +289,11 @@ func (o *ApplySandboxBadGateway) IsServerError() bool {
 // IsCode returns true when this apply sandbox bad gateway response a status code equal to that given
 func (o *ApplySandboxBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the apply sandbox bad gateway response
+func (o *ApplySandboxBadGateway) Code() int {
+	return 502
 }
 
 func (o *ApplySandboxBadGateway) Error() string {
