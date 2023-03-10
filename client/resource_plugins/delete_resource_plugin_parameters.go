@@ -52,10 +52,12 @@ func NewDeleteResourcePluginParamsWithHTTPClient(client *http.Client) *DeleteRes
 	}
 }
 
-/* DeleteResourcePluginParams contains all the parameters to send to the API endpoint
-   for the delete resource plugin operation.
+/*
+DeleteResourcePluginParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the delete resource plugin operation.
+
+	Typically these are written to a http.Request.
 */
 type DeleteResourcePluginParams struct {
 

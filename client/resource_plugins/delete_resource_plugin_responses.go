@@ -57,7 +57,8 @@ func NewDeleteResourcePluginOK() *DeleteResourcePluginOK {
 	return &DeleteResourcePluginOK{}
 }
 
-/* DeleteResourcePluginOK describes a response with status code 200, with default header values.
+/*
+DeleteResourcePluginOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -122,7 +123,8 @@ func NewDeleteResourcePluginBadRequest() *DeleteResourcePluginBadRequest {
 	return &DeleteResourcePluginBadRequest{}
 }
 
-/* DeleteResourcePluginBadRequest describes a response with status code 400, with default header values.
+/*
+DeleteResourcePluginBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -189,7 +191,8 @@ func NewDeleteResourcePluginUnauthorized() *DeleteResourcePluginUnauthorized {
 	return &DeleteResourcePluginUnauthorized{}
 }
 
-/* DeleteResourcePluginUnauthorized describes a response with status code 401, with default header values.
+/*
+DeleteResourcePluginUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -256,7 +259,8 @@ func NewDeleteResourcePluginBadGateway() *DeleteResourcePluginBadGateway {
 	return &DeleteResourcePluginBadGateway{}
 }
 
-/* DeleteResourcePluginBadGateway describes a response with status code 502, with default header values.
+/*
+DeleteResourcePluginBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

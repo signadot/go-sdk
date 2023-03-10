@@ -50,9 +50,9 @@ type ClientService interface {
 }
 
 /*
-  AddCluster adds a cluster
+AddCluster adds a cluster
 
-  Add a Kubernetes cluster to Signadot.
+Add a Kubernetes cluster to Signadot.
 */
 func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterOK, error) {
 	// TODO: Validate the params before sending
@@ -91,9 +91,9 @@ func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAut
 }
 
 /*
-  CreateClusterToken creates cluster token
+CreateClusterToken creates cluster token
 
-  Create a new token for connecting a cluster.
+Create a new token for connecting a cluster.
 */
 func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error) {
 	// TODO: Validate the params before sending
@@ -132,9 +132,9 @@ func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo r
 }
 
 /*
-  DeleteClusterToken deletes cluster token
+DeleteClusterToken deletes cluster token
 
-  Delete a cluster token associated with a cluster.
+Delete a cluster token associated with a cluster.
 */
 func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error) {
 	// TODO: Validate the params before sending
@@ -173,9 +173,9 @@ func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo r
 }
 
 /*
-  GetCluster gets a cluster
+GetCluster gets a cluster
 
-  Get a cluster.
+Get a cluster.
 */
 func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error) {
 	// TODO: Validate the params before sending
@@ -214,9 +214,9 @@ func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAut
 }
 
 /*
-  GetClusterToken gets a cluster token
+GetClusterToken gets a cluster token
 
-  Get a cluster token associated with a cluster.
+Get a cluster token associated with a cluster.
 */
 func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTokenOK, error) {
 	// TODO: Validate the params before sending
@@ -255,9 +255,9 @@ func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime
 }
 
 /*
-  ListClusterTokens lists cluster tokens
+ListClusterTokens lists cluster tokens
 
-  List the cluster tokens associated with a cluster.
+List the cluster tokens associated with a cluster.
 */
 func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterTokensOK, error) {
 	// TODO: Validate the params before sending
@@ -296,9 +296,9 @@ func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo run
 }
 
 /*
-  ListClusters lists clusters
+ListClusters lists clusters
 
-  List clusters.
+List clusters.
 */
 func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error) {
 	// TODO: Validate the params before sending
@@ -337,9 +337,9 @@ func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.Clien
 }
 
 /*
-  RemoveCluster removes a cluster
+RemoveCluster removes a cluster
 
-  Remove a Kubernetes cluster from Signadot.
+Remove a Kubernetes cluster from Signadot.
 */
 func (a *Client) RemoveCluster(params *RemoveClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveClusterOK, error) {
 	// TODO: Validate the params before sending

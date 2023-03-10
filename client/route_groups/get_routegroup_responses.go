@@ -57,7 +57,8 @@ func NewGetRoutegroupOK() *GetRoutegroupOK {
 	return &GetRoutegroupOK{}
 }
 
-/* GetRoutegroupOK describes a response with status code 200, with default header values.
+/*
+GetRoutegroupOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -124,7 +125,8 @@ func NewGetRoutegroupBadRequest() *GetRoutegroupBadRequest {
 	return &GetRoutegroupBadRequest{}
 }
 
-/* GetRoutegroupBadRequest describes a response with status code 400, with default header values.
+/*
+GetRoutegroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -191,7 +193,8 @@ func NewGetRoutegroupUnauthorized() *GetRoutegroupUnauthorized {
 	return &GetRoutegroupUnauthorized{}
 }
 
-/* GetRoutegroupUnauthorized describes a response with status code 401, with default header values.
+/*
+GetRoutegroupUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -258,7 +261,8 @@ func NewGetRoutegroupBadGateway() *GetRoutegroupBadGateway {
 	return &GetRoutegroupBadGateway{}
 }
 
-/* GetRoutegroupBadGateway describes a response with status code 502, with default header values.
+/*
+GetRoutegroupBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

@@ -57,7 +57,8 @@ func NewRemoveClusterOK() *RemoveClusterOK {
 	return &RemoveClusterOK{}
 }
 
-/* RemoveClusterOK describes a response with status code 200, with default header values.
+/*
+RemoveClusterOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -122,7 +123,8 @@ func NewRemoveClusterBadRequest() *RemoveClusterBadRequest {
 	return &RemoveClusterBadRequest{}
 }
 
-/* RemoveClusterBadRequest describes a response with status code 400, with default header values.
+/*
+RemoveClusterBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -189,7 +191,8 @@ func NewRemoveClusterUnauthorized() *RemoveClusterUnauthorized {
 	return &RemoveClusterUnauthorized{}
 }
 
-/* RemoveClusterUnauthorized describes a response with status code 401, with default header values.
+/*
+RemoveClusterUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -256,7 +259,8 @@ func NewRemoveClusterBadGateway() *RemoveClusterBadGateway {
 	return &RemoveClusterBadGateway{}
 }
 
-/* RemoveClusterBadGateway describes a response with status code 502, with default header values.
+/*
+RemoveClusterBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

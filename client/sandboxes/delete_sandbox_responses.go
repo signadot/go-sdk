@@ -57,7 +57,8 @@ func NewDeleteSandboxOK() *DeleteSandboxOK {
 	return &DeleteSandboxOK{}
 }
 
-/* DeleteSandboxOK describes a response with status code 200, with default header values.
+/*
+DeleteSandboxOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -122,7 +123,8 @@ func NewDeleteSandboxBadRequest() *DeleteSandboxBadRequest {
 	return &DeleteSandboxBadRequest{}
 }
 
-/* DeleteSandboxBadRequest describes a response with status code 400, with default header values.
+/*
+DeleteSandboxBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -189,7 +191,8 @@ func NewDeleteSandboxUnauthorized() *DeleteSandboxUnauthorized {
 	return &DeleteSandboxUnauthorized{}
 }
 
-/* DeleteSandboxUnauthorized describes a response with status code 401, with default header values.
+/*
+DeleteSandboxUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -256,7 +259,8 @@ func NewDeleteSandboxBadGateway() *DeleteSandboxBadGateway {
 	return &DeleteSandboxBadGateway{}
 }
 
-/* DeleteSandboxBadGateway describes a response with status code 502, with default header values.
+/*
+DeleteSandboxBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

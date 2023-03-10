@@ -42,9 +42,9 @@ type ClientService interface {
 }
 
 /*
-  ApplyResourcePlugin applies a resource plugin
+ApplyResourcePlugin applies a resource plugin
 
-  Apply a resource plugin. Updates are not supported at this time.
+Apply a resource plugin. Updates are not supported at this time.
 */
 func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyResourcePluginOK, error) {
 	// TODO: Validate the params before sending
@@ -83,9 +83,9 @@ func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo
 }
 
 /*
-  DeleteResourcePlugin deletes a resource plugin
+DeleteResourcePlugin deletes a resource plugin
 
-  Delete the resource plugin by name
+Delete the resource plugin by name
 */
 func (a *Client) DeleteResourcePlugin(params *DeleteResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteResourcePluginOK, error) {
 	// TODO: Validate the params before sending
@@ -124,9 +124,9 @@ func (a *Client) DeleteResourcePlugin(params *DeleteResourcePluginParams, authIn
 }
 
 /*
-  GetResourcePlugin gets the requested resource plugin
+GetResourcePlugin gets the requested resource plugin
 
-  Get the specified resource plugin by name
+Get the specified resource plugin by name
 */
 func (a *Client) GetResourcePlugin(params *GetResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourcePluginOK, error) {
 	// TODO: Validate the params before sending
@@ -165,9 +165,9 @@ func (a *Client) GetResourcePlugin(params *GetResourcePluginParams, authInfo run
 }
 
 /*
-  ListResourcePlugins lists resource plugins
+ListResourcePlugins lists resource plugins
 
-  List all resource plugins under the specified Signadot org.
+List all resource plugins under the specified Signadot org.
 */
 func (a *Client) ListResourcePlugins(params *ListResourcePluginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginsOK, error) {
 	// TODO: Validate the params before sending

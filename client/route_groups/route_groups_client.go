@@ -42,9 +42,9 @@ type ClientService interface {
 }
 
 /*
-  ApplyRoutegroup creates or update a routegroup
+ApplyRoutegroup creates or update a routegroup
 
-  Creates or updates a routegroup with the provided parameters.
+Creates or updates a routegroup with the provided parameters.
 */
 func (a *Client) ApplyRoutegroup(params *ApplyRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRoutegroupOK, error) {
 	// TODO: Validate the params before sending
@@ -83,9 +83,9 @@ func (a *Client) ApplyRoutegroup(params *ApplyRoutegroupParams, authInfo runtime
 }
 
 /*
-  DeleteRoutegroup deletes a routegroup
+DeleteRoutegroup deletes a routegroup
 
-  Delete a given routegroup.
+Delete a given routegroup.
 */
 func (a *Client) DeleteRoutegroup(params *DeleteRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRoutegroupOK, error) {
 	// TODO: Validate the params before sending
@@ -124,9 +124,9 @@ func (a *Client) DeleteRoutegroup(params *DeleteRoutegroupParams, authInfo runti
 }
 
 /*
-  GetRoutegroup gets a routegroup
+GetRoutegroup gets a routegroup
 
-  Fetch the details about a given routegroup.
+Fetch the details about a given routegroup.
 */
 func (a *Client) GetRoutegroup(params *GetRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRoutegroupOK, error) {
 	// TODO: Validate the params before sending
@@ -165,9 +165,9 @@ func (a *Client) GetRoutegroup(params *GetRoutegroupParams, authInfo runtime.Cli
 }
 
 /*
-  ListRoutegroups lists routegroups
+ListRoutegroups lists routegroups
 
-  List all routegroups under the specified Signadot org.
+List all routegroups under the specified Signadot org.
 */
 func (a *Client) ListRoutegroups(params *ListRoutegroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRoutegroupsOK, error) {
 	// TODO: Validate the params before sending

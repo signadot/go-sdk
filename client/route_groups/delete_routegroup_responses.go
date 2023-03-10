@@ -57,7 +57,8 @@ func NewDeleteRoutegroupOK() *DeleteRoutegroupOK {
 	return &DeleteRoutegroupOK{}
 }
 
-/* DeleteRoutegroupOK describes a response with status code 200, with default header values.
+/*
+DeleteRoutegroupOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -122,7 +123,8 @@ func NewDeleteRoutegroupBadRequest() *DeleteRoutegroupBadRequest {
 	return &DeleteRoutegroupBadRequest{}
 }
 
-/* DeleteRoutegroupBadRequest describes a response with status code 400, with default header values.
+/*
+DeleteRoutegroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -189,7 +191,8 @@ func NewDeleteRoutegroupUnauthorized() *DeleteRoutegroupUnauthorized {
 	return &DeleteRoutegroupUnauthorized{}
 }
 
-/* DeleteRoutegroupUnauthorized describes a response with status code 401, with default header values.
+/*
+DeleteRoutegroupUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -256,7 +259,8 @@ func NewDeleteRoutegroupBadGateway() *DeleteRoutegroupBadGateway {
 	return &DeleteRoutegroupBadGateway{}
 }
 
-/* DeleteRoutegroupBadGateway describes a response with status code 502, with default header values.
+/*
+DeleteRoutegroupBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

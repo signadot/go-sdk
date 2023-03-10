@@ -57,7 +57,8 @@ func NewListSandboxesOK() *ListSandboxesOK {
 	return &ListSandboxesOK{}
 }
 
-/* ListSandboxesOK describes a response with status code 200, with default header values.
+/*
+ListSandboxesOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -122,7 +123,8 @@ func NewListSandboxesBadRequest() *ListSandboxesBadRequest {
 	return &ListSandboxesBadRequest{}
 }
 
-/* ListSandboxesBadRequest describes a response with status code 400, with default header values.
+/*
+ListSandboxesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -189,7 +191,8 @@ func NewListSandboxesUnauthorized() *ListSandboxesUnauthorized {
 	return &ListSandboxesUnauthorized{}
 }
 
-/* ListSandboxesUnauthorized describes a response with status code 401, with default header values.
+/*
+ListSandboxesUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -256,7 +259,8 @@ func NewListSandboxesBadGateway() *ListSandboxesBadGateway {
 	return &ListSandboxesBadGateway{}
 }
 
-/* ListSandboxesBadGateway describes a response with status code 502, with default header values.
+/*
+ListSandboxesBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
