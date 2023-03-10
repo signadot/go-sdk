@@ -52,12 +52,10 @@ func NewListRoutegroupsParamsWithHTTPClient(client *http.Client) *ListRoutegroup
 	}
 }
 
-/*
-ListRoutegroupsParams contains all the parameters to send to the API endpoint
+/* ListRoutegroupsParams contains all the parameters to send to the API endpoint
+   for the list routegroups operation.
 
-	for the list routegroups operation.
-
-	Typically these are written to a http.Request.
+   Typically these are written to a http.Request.
 */
 type ListRoutegroupsParams struct {
 

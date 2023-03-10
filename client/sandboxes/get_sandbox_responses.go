@@ -57,8 +57,7 @@ func NewGetSandboxOK() *GetSandboxOK {
 	return &GetSandboxOK{}
 }
 
-/*
-GetSandboxOK describes a response with status code 200, with default header values.
+/* GetSandboxOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -125,8 +124,7 @@ func NewGetSandboxBadRequest() *GetSandboxBadRequest {
 	return &GetSandboxBadRequest{}
 }
 
-/*
-GetSandboxBadRequest describes a response with status code 400, with default header values.
+/* GetSandboxBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -193,8 +191,7 @@ func NewGetSandboxUnauthorized() *GetSandboxUnauthorized {
 	return &GetSandboxUnauthorized{}
 }
 
-/*
-GetSandboxUnauthorized describes a response with status code 401, with default header values.
+/* GetSandboxUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -261,8 +258,7 @@ func NewGetSandboxBadGateway() *GetSandboxBadGateway {
 	return &GetSandboxBadGateway{}
 }
 
-/*
-GetSandboxBadGateway describes a response with status code 502, with default header values.
+/* GetSandboxBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
