@@ -54,12 +54,10 @@ func NewApplyRoutegroupParamsWithHTTPClient(client *http.Client) *ApplyRoutegrou
 	}
 }
 
-/*
-ApplyRoutegroupParams contains all the parameters to send to the API endpoint
+/* ApplyRoutegroupParams contains all the parameters to send to the API endpoint
+   for the apply routegroup operation.
 
-	for the apply routegroup operation.
-
-	Typically these are written to a http.Request.
+   Typically these are written to a http.Request.
 */
 type ApplyRoutegroupParams struct {
 
