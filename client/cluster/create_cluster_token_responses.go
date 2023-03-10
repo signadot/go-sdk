@@ -39,7 +39,8 @@ func NewCreateClusterTokenOK() *CreateClusterTokenOK {
 	return &CreateClusterTokenOK{}
 }
 
-/* CreateClusterTokenOK describes a response with status code 200, with default header values.
+/*
+CreateClusterTokenOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -70,6 +71,11 @@ func (o *CreateClusterTokenOK) IsServerError() bool {
 // IsCode returns true when this create cluster token o k response a status code equal to that given
 func (o *CreateClusterTokenOK) IsCode(code int) bool {
 	return code == 200
+}
+
+// Code gets the status code for the create cluster token o k response
+func (o *CreateClusterTokenOK) Code() int {
+	return 200
 }
 
 func (o *CreateClusterTokenOK) Error() string {

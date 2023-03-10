@@ -52,10 +52,12 @@ func NewRemoveClusterParamsWithHTTPClient(client *http.Client) *RemoveClusterPar
 	}
 }
 
-/* RemoveClusterParams contains all the parameters to send to the API endpoint
-   for the remove cluster operation.
+/*
+RemoveClusterParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the remove cluster operation.
+
+	Typically these are written to a http.Request.
 */
 type RemoveClusterParams struct {
 

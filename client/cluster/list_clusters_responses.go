@@ -57,7 +57,8 @@ func NewListClustersOK() *ListClustersOK {
 	return &ListClustersOK{}
 }
 
-/* ListClustersOK describes a response with status code 200, with default header values.
+/*
+ListClustersOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -90,6 +91,11 @@ func (o *ListClustersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list clusters o k response
+func (o *ListClustersOK) Code() int {
+	return 200
+}
+
 func (o *ListClustersOK) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
 }
@@ -117,7 +123,8 @@ func NewListClustersBadRequest() *ListClustersBadRequest {
 	return &ListClustersBadRequest{}
 }
 
-/* ListClustersBadRequest describes a response with status code 400, with default header values.
+/*
+ListClustersBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -150,6 +157,11 @@ func (o *ListClustersBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the list clusters bad request response
+func (o *ListClustersBadRequest) Code() int {
+	return 400
+}
+
 func (o *ListClustersBadRequest) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest  %+v", 400, o.Payload)
 }
@@ -179,7 +191,8 @@ func NewListClustersUnauthorized() *ListClustersUnauthorized {
 	return &ListClustersUnauthorized{}
 }
 
-/* ListClustersUnauthorized describes a response with status code 401, with default header values.
+/*
+ListClustersUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -212,6 +225,11 @@ func (o *ListClustersUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list clusters unauthorized response
+func (o *ListClustersUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListClustersUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
 }
@@ -241,7 +259,8 @@ func NewListClustersBadGateway() *ListClustersBadGateway {
 	return &ListClustersBadGateway{}
 }
 
-/* ListClustersBadGateway describes a response with status code 502, with default header values.
+/*
+ListClustersBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
@@ -272,6 +291,11 @@ func (o *ListClustersBadGateway) IsServerError() bool {
 // IsCode returns true when this list clusters bad gateway response a status code equal to that given
 func (o *ListClustersBadGateway) IsCode(code int) bool {
 	return code == 502
+}
+
+// Code gets the status code for the list clusters bad gateway response
+func (o *ListClustersBadGateway) Code() int {
+	return 502
 }
 
 func (o *ListClustersBadGateway) Error() string {
