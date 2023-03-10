@@ -68,6 +68,46 @@
       },
       "type": "object"
     },
+    "ResourceInfo": {
+      "properties": {
+        "cluster": {
+          "description": "Cluster that the resource is created in",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the created resource",
+          "type": "string"
+        },
+        "sandbox": {
+          "description": "Name of the sandbox containing the resource",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ResourcePlugin": {
+      "properties": {
+        "createdAt": {
+          "description": "The time at which the resource plugin was created",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the resource plugin",
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/resourceplugin.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/resourceplugin.Status"
+        },
+        "updatedAt": {
+          "description": "The time at which the resource plugin was last updated",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "RouteGroup": {
       "properties": {
         "createdAt": {
@@ -126,6 +166,197 @@
       "properties": {
         "version": {
           "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.Runner": {
+      "properties": {
+        "image": {
+          "description": "Image for the runner instance",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace to create this runner instance in",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.Spec": {
+      "properties": {
+        "create": {
+          "description": "Create refers to the `create` lifecycle method for spinning up the resource",
+          "items": {
+            "$ref": "#/definitions/resourceplugin.Step"
+          },
+          "type": "array"
+        },
+        "delete": {
+          "description": "Delete refers to the `delete` lifecycle method for spinning up the resource",
+          "items": {
+            "$ref": "#/definitions/resourceplugin.Step"
+          },
+          "type": "array"
+        },
+        "description": {
+          "description": "Description for the resource",
+          "type": "string"
+        },
+        "runner": {
+          "$ref": "#/definitions/resourceplugin.Runner"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.Status": {
+      "properties": {
+        "resources": {
+          "description": "Resources created using the resource plugin",
+          "items": {
+            "$ref": "#/definitions/ResourceInfo"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.Step": {
+      "properties": {
+        "env": {
+          "description": "Env vars for the step",
+          "items": {
+            "$ref": "#/definitions/resourceplugin.StepEnv"
+          },
+          "type": "array"
+        },
+        "inputs": {
+          "description": "Inputs for the step",
+          "items": {
+            "$ref": "#/definitions/resourceplugin.StepInput"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Name for the step",
+          "type": "string"
+        },
+        "outputs": {
+          "description": "Outputs for the step",
+          "items": {
+            "$ref": "#/definitions/resourceplugin.StepOut"
+          },
+          "type": "array"
+        },
+        "script": {
+          "description": "Script to execute in the step",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.StepEnv": {
+      "properties": {
+        "name": {
+          "description": "Name for the environment variable",
+          "type": "string"
+        },
+        "valueFromInput": {
+          "description": "The input variable from which to source the value for the environment variable",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.StepInput": {
+      "properties": {
+        "name": {
+          "description": "Name for the input",
+          "type": "string"
+        },
+        "to": {
+          "$ref": "#/definitions/resourceplugin.StepInputTo"
+        },
+        "type": {
+          "description": "Type of input",
+          "type": "string"
+        },
+        "valueFromSandbox": {
+          "description": "ValueFromSandbox defines whether or not to source value from the sandbox spec",
+          "type": "boolean"
+        },
+        "valueFromStep": {
+          "$ref": "#/definitions/resourceplugin.ValueFromStep"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.StepInputTo": {
+      "properties": {
+        "env": {
+          "description": "Inject the input as an env variable with name Env inside the\nmain container",
+          "type": "string"
+        },
+        "localPath": {
+          "description": "Expose the input as a file at LocalPath inside the main container",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.StepOut": {
+      "properties": {
+        "description": {
+          "description": "Description for the output",
+          "type": "string"
+        },
+        "from": {
+          "description": "TBD",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the output variable",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of output",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugin.ValueFromStep": {
+      "properties": {
+        "name": {
+          "description": "Name of the step",
+          "type": "string"
+        },
+        "output": {
+          "description": "Name of the variable from the step",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "resourceplugins.ResourcePlugin": {
+      "properties": {
+        "createdAt": {
+          "description": "The time at which the resource plugin was created",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the resource plugin",
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/resourceplugin.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/resourceplugin.Status"
+        },
+        "updatedAt": {
+          "description": "The time at which the resource plugin was last updated",
           "type": "string"
         }
       },
@@ -1025,6 +1256,257 @@
         "summary": "Get a cluster token",
         "tags": [
           "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/resource-plugins": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List all resource plugins under the specified Signadot org.",
+        "operationId": "list-resource-plugins",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/ResourcePlugin"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List resource plugins",
+        "tags": [
+          "ResourcePlugins"
+        ]
+      }
+    },
+    "/orgs/{orgName}/resource-plugins/{pluginName}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete the specified resource plugin",
+        "operationId": "delete-resource-plugin",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Resource plugin name",
+            "in": "path",
+            "name": "pluginName",
+            "required": true,
+            "type": "string",
+            "x-example": "mariadb-plugin"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete a resource plugin",
+        "tags": [
+          "ResourcePlugins"
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get the specified resource plugin",
+        "operationId": "get-resource-plugin",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Resource plugin name",
+            "in": "path",
+            "name": "pluginName",
+            "required": true,
+            "type": "string",
+            "x-example": "mariadb-plugin"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/resourceplugins.ResourcePlugin"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get the requested resource plugin",
+        "tags": [
+          "ResourcePlugins"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create a new resource plugin. Updates are not supported at this time.",
+        "operationId": "apply-resource-plugin",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Resource plugin name",
+            "in": "path",
+            "name": "pluginName",
+            "required": true,
+            "type": "string",
+            "x-example": "mariadb-plugin"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Apply a resource plugin",
+        "tags": [
+          "ResourcePlugins"
         ]
       }
     },
