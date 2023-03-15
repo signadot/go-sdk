@@ -17,6 +17,9 @@ import (
 // swagger:model resourceplugin.Runner
 type ResourcepluginRunner struct {
 
+	// Base pod template
+	BasePodTemplate string `json:"basePodTemplate,omitempty"`
+
 	// Image for the runner instance
 	Image string `json:"image,omitempty"`
 
