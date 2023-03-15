@@ -173,6 +173,10 @@
     },
     "resourceplugin.Runner": {
       "properties": {
+        "basePodTemplate": {
+          "description": "Base pod template",
+          "type": "string"
+        },
         "image": {
           "description": "Image for the runner instance",
           "type": "string"
