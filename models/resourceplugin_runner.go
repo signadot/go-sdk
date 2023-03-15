@@ -17,14 +17,14 @@ import (
 // swagger:model resourceplugin.Runner
 type ResourcepluginRunner struct {
 
+	// Base pod template
+	BasePodTemplate string `json:"basePodTemplate,omitempty"`
+
 	// Image for the runner instance
 	Image string `json:"image,omitempty"`
 
 	// Namespace to create this runner instance in
 	Namespace string `json:"namespace,omitempty"`
-
-	// Pod template overlay
-	PodTemplateOverlay string `json:"podTemplateOverlay,omitempty"`
 }
 
 // Validate validates this resourceplugin runner
