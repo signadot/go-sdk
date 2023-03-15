@@ -180,6 +180,10 @@
         "namespace": {
           "description": "Namespace to create this runner instance in",
           "type": "string"
+        },
+        "podTemplateOverlay": {
+          "description": "Pod template overlay",
+          "type": "string"
         }
       },
       "type": "object"
