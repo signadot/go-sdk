@@ -52,12 +52,10 @@ func NewListResourcePluginsParamsWithHTTPClient(client *http.Client) *ListResour
 	}
 }
 
-/*
-ListResourcePluginsParams contains all the parameters to send to the API endpoint
+/* ListResourcePluginsParams contains all the parameters to send to the API endpoint
+   for the list resource plugins operation.
 
-	for the list resource plugins operation.
-
-	Typically these are written to a http.Request.
+   Typically these are written to a http.Request.
 */
 type ListResourcePluginsParams struct {
 

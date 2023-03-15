@@ -53,12 +53,10 @@ func NewDeleteSandboxParamsWithHTTPClient(client *http.Client) *DeleteSandboxPar
 	}
 }
 
-/*
-DeleteSandboxParams contains all the parameters to send to the API endpoint
+/* DeleteSandboxParams contains all the parameters to send to the API endpoint
+   for the delete sandbox operation.
 
-	for the delete sandbox operation.
-
-	Typically these are written to a http.Request.
+   Typically these are written to a http.Request.
 */
 type DeleteSandboxParams struct {
 
