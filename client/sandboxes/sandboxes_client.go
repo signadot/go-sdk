@@ -42,9 +42,9 @@ type ClientService interface {
 }
 
 /*
-ApplySandbox creates or update a sandbox
+  ApplySandbox creates or update a sandbox
 
-Creates or updates a sandbox with the provided parameters.
+  Creates or updates a sandbox with the provided parameters.
 */
 func (a *Client) ApplySandbox(params *ApplySandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplySandboxOK, error) {
 	// TODO: Validate the params before sending
@@ -83,9 +83,9 @@ func (a *Client) ApplySandbox(params *ApplySandboxParams, authInfo runtime.Clien
 }
 
 /*
-DeleteSandbox deletes a sandbox
+  DeleteSandbox deletes a sandbox
 
-Delete a given sandbox.
+  Delete a given sandbox.
 */
 func (a *Client) DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSandboxOK, error) {
 	// TODO: Validate the params before sending
@@ -124,9 +124,9 @@ func (a *Client) DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.Cli
 }
 
 /*
-GetSandbox gets a sandbox
+  GetSandbox gets a sandbox
 
-Fetch the details about a given sandbox.
+  Fetch the details about a given sandbox.
 */
 func (a *Client) GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxOK, error) {
 	// TODO: Validate the params before sending
@@ -165,9 +165,9 @@ func (a *Client) GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAut
 }
 
 /*
-ListSandboxes lists sandboxes
+  ListSandboxes lists sandboxes
 
-List all sandboxes under the specified Signadot org.
+  List all sandboxes under the specified Signadot org.
 */
 func (a *Client) ListSandboxes(params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error) {
 	// TODO: Validate the params before sending

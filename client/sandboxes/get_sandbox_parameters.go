@@ -52,12 +52,10 @@ func NewGetSandboxParamsWithHTTPClient(client *http.Client) *GetSandboxParams {
 	}
 }
 
-/*
-GetSandboxParams contains all the parameters to send to the API endpoint
+/* GetSandboxParams contains all the parameters to send to the API endpoint
+   for the get sandbox operation.
 
-	for the get sandbox operation.
-
-	Typically these are written to a http.Request.
+   Typically these are written to a http.Request.
 */
 type GetSandboxParams struct {
 
