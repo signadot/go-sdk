@@ -22,6 +22,9 @@ type ResourcepluginRunner struct {
 
 	// Namespace to create this runner instance in
 	Namespace string `json:"namespace,omitempty"`
+
+	// Pod template overlay
+	PodTemplateOverlay string `json:"podTemplateOverlay,omitempty"`
 }
 
 // Validate validates this resourceplugin runner
