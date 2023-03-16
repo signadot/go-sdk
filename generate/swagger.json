@@ -173,16 +173,16 @@
     },
     "resourceplugin.Runner": {
       "properties": {
+        "basePodTemplate": {
+          "description": "Base pod template",
+          "type": "string"
+        },
         "image": {
           "description": "Image for the runner instance",
           "type": "string"
         },
         "namespace": {
           "description": "Namespace to create this runner instance in",
-          "type": "string"
-        },
-        "podTemplateOverlay": {
-          "description": "Pod template overlay",
           "type": "string"
         }
       },
