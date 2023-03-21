@@ -255,12 +255,12 @@
     },
     "resourceplugin.StepInput": {
       "properties": {
+        "as": {
+          "$ref": "#/definitions/resourceplugin.StepInputTo"
+        },
         "name": {
           "description": "Name for the input",
           "type": "string"
-        },
-        "to": {
-          "$ref": "#/definitions/resourceplugin.StepInputTo"
         },
         "type": {
           "description": "Type of input",
@@ -282,8 +282,8 @@
           "description": "Inject the input as an env variable with name Env inside the\nmain container",
           "type": "string"
         },
-        "localPath": {
-          "description": "Expose the input as a file at LocalPath inside the main container",
+        "path": {
+          "description": "Expose the input as a file at Path inside the main container",
           "type": "string"
         }
       },
@@ -295,16 +295,16 @@
           "description": "Description for the output",
           "type": "string"
         },
-        "from": {
-          "description": "Path within the main container from where the output will be read",
-          "type": "string"
-        },
         "name": {
           "description": "Name of the output variable",
           "type": "string"
         },
         "type": {
           "description": "Type of output",
+          "type": "string"
+        },
+        "valueFromPath": {
+          "description": "Path within the main container from where the output will be read",
           "type": "string"
         }
       },
