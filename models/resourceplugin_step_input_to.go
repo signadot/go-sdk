@@ -21,8 +21,8 @@ type ResourcepluginStepInputTo struct {
 	// main container
 	Env string `json:"env,omitempty"`
 
-	// Expose the input as a file at LocalPath inside the main container
-	LocalPath string `json:"localPath,omitempty"`
+	// Expose the input as a file at Path inside the main container
+	Path string `json:"path,omitempty"`
 }
 
 // Validate validates this resourceplugin step input to

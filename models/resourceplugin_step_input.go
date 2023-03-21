@@ -18,11 +18,11 @@ import (
 // swagger:model resourceplugin.StepInput
 type ResourcepluginStepInput struct {
 
+	// as
+	As *ResourcepluginStepInputTo `json:"as,omitempty"`
+
 	// Name for the input
 	Name string `json:"name,omitempty"`
-
-	// to
-	To *ResourcepluginStepInputTo `json:"to,omitempty"`
 
 	// Type of input
 	Type string `json:"type,omitempty"`
@@ -38,7 +38,7 @@ type ResourcepluginStepInput struct {
 func (m *ResourcepluginStepInput) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateTo(formats); err != nil {
+	if err := m.validateAs(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -52,17 +52,17 @@ func (m *ResourcepluginStepInput) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ResourcepluginStepInput) validateTo(formats strfmt.Registry) error {
-	if swag.IsZero(m.To) { // not required
+func (m *ResourcepluginStepInput) validateAs(formats strfmt.Registry) error {
+	if swag.IsZero(m.As) { // not required
 		return nil
 	}
 
-	if m.To != nil {
-		if err := m.To.Validate(formats); err != nil {
+	if m.As != nil {
+		if err := m.As.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("to")
+				return ve.ValidateName("as")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("to")
+				return ce.ValidateName("as")
 			}
 			return err
 		}
@@ -94,7 +94,7 @@ func (m *ResourcepluginStepInput) validateValueFromStep(formats strfmt.Registry)
 func (m *ResourcepluginStepInput) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateTo(ctx, formats); err != nil {
+	if err := m.contextValidateAs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -108,14 +108,14 @@ func (m *ResourcepluginStepInput) ContextValidate(ctx context.Context, formats s
 	return nil
 }
 
-func (m *ResourcepluginStepInput) contextValidateTo(ctx context.Context, formats strfmt.Registry) error {
+func (m *ResourcepluginStepInput) contextValidateAs(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.To != nil {
-		if err := m.To.ContextValidate(ctx, formats); err != nil {
+	if m.As != nil {
+		if err := m.As.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("to")
+				return ve.ValidateName("as")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("to")
+				return ce.ValidateName("as")
 			}
 			return err
 		}
