@@ -20,14 +20,14 @@ type ResourcepluginStepOut struct {
 	// Description for the output
 	Description string `json:"description,omitempty"`
 
-	// Path within the main container from where the output will be read
-	From string `json:"from,omitempty"`
-
 	// Name of the output variable
 	Name string `json:"name,omitempty"`
 
 	// Type of output
 	Type string `json:"type,omitempty"`
+
+	// Path within the main container from where the output will be read
+	ValueFromPath string `json:"valueFromPath,omitempty"`
 }
 
 // Validate validates this resourceplugin step out

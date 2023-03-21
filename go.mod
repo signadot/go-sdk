@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/go-openapi/errors v0.20.3
 	github.com/go-openapi/runtime v0.25.0
-	github.com/go-openapi/strfmt v0.21.3
+	github.com/go-openapi/strfmt v0.21.5
 	github.com/go-openapi/swag v0.22.3
 	github.com/go-openapi/validate v0.22.1
 )
@@ -24,7 +24,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
-	go.mongodb.org/mongo-driver v1.11.2 // indirect
+	go.mongodb.org/mongo-driver v1.11.3 // indirect
 	go.opentelemetry.io/otel v1.14.0 // indirect
 	go.opentelemetry.io/otel/trace v1.14.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

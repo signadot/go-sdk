@@ -54,12 +54,10 @@ func NewApplyResourcePluginParamsWithHTTPClient(client *http.Client) *ApplyResou
 	}
 }
 
-/*
-ApplyResourcePluginParams contains all the parameters to send to the API endpoint
+/* ApplyResourcePluginParams contains all the parameters to send to the API endpoint
+   for the apply resource plugin operation.
 
-	for the apply resource plugin operation.
-
-	Typically these are written to a http.Request.
+   Typically these are written to a http.Request.
 */
 type ApplyResourcePluginParams struct {
 
