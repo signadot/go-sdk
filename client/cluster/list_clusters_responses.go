@@ -57,8 +57,7 @@ func NewListClustersOK() *ListClustersOK {
 	return &ListClustersOK{}
 }
 
-/*
-ListClustersOK describes a response with status code 200, with default header values.
+/* ListClustersOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -123,8 +122,7 @@ func NewListClustersBadRequest() *ListClustersBadRequest {
 	return &ListClustersBadRequest{}
 }
 
-/*
-ListClustersBadRequest describes a response with status code 400, with default header values.
+/* ListClustersBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -191,8 +189,7 @@ func NewListClustersUnauthorized() *ListClustersUnauthorized {
 	return &ListClustersUnauthorized{}
 }
 
-/*
-ListClustersUnauthorized describes a response with status code 401, with default header values.
+/* ListClustersUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -259,8 +256,7 @@ func NewListClustersBadGateway() *ListClustersBadGateway {
 	return &ListClustersBadGateway{}
 }
 
-/*
-ListClustersBadGateway describes a response with status code 502, with default header values.
+/* ListClustersBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

@@ -39,8 +39,7 @@ func NewCreateClusterTokenOK() *CreateClusterTokenOK {
 	return &CreateClusterTokenOK{}
 }
 
-/*
-CreateClusterTokenOK describes a response with status code 200, with default header values.
+/* CreateClusterTokenOK describes a response with status code 200, with default header values.
 
 OK
 */

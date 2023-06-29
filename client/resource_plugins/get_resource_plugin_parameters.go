@@ -52,12 +52,10 @@ func NewGetResourcePluginParamsWithHTTPClient(client *http.Client) *GetResourceP
 	}
 }
 
-/*
-GetResourcePluginParams contains all the parameters to send to the API endpoint
+/* GetResourcePluginParams contains all the parameters to send to the API endpoint
+   for the get resource plugin operation.
 
-	for the get resource plugin operation.
-
-	Typically these are written to a http.Request.
+   Typically these are written to a http.Request.
 */
 type GetResourcePluginParams struct {
 
