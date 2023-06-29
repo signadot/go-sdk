@@ -152,6 +152,11 @@ func (m *ResourcepluginSpec) contextValidateCreate(ctx context.Context, formats 
 	for i := 0; i < len(m.Create); i++ {
 
 		if m.Create[i] != nil {
+
+			if swag.IsZero(m.Create[i]) { // not required
+				return nil
+			}
+
 			if err := m.Create[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("create" + "." + strconv.Itoa(i))
@@ -172,6 +177,11 @@ func (m *ResourcepluginSpec) contextValidateDelete(ctx context.Context, formats 
 	for i := 0; i < len(m.Delete); i++ {
 
 		if m.Delete[i] != nil {
+
+			if swag.IsZero(m.Delete[i]) { // not required
+				return nil
+			}
+
 			if err := m.Delete[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("delete" + "." + strconv.Itoa(i))
@@ -190,6 +200,11 @@ func (m *ResourcepluginSpec) contextValidateDelete(ctx context.Context, formats 
 func (m *ResourcepluginSpec) contextValidateRunner(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Runner != nil {
+
+		if swag.IsZero(m.Runner) { // not required
+			return nil
+		}
+
 		if err := m.Runner.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("runner")

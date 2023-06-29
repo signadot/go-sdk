@@ -78,6 +78,11 @@ func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 func (m *Cluster) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Operator != nil {
+
+		if swag.IsZero(m.Operator) { // not required
+			return nil
+		}
+
 		if err := m.Operator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("operator")
