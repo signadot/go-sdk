@@ -48,7 +48,7 @@ func (o *ListRoutegroupsReader) ReadResponse(response runtime.ClientResponse, co
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/routegroups] list-routegroups", response, response.Code())
 	}
 }
 
@@ -57,8 +57,7 @@ func NewListRoutegroupsOK() *ListRoutegroupsOK {
 	return &ListRoutegroupsOK{}
 }
 
-/*
-ListRoutegroupsOK describes a response with status code 200, with default header values.
+/* ListRoutegroupsOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -123,8 +122,7 @@ func NewListRoutegroupsBadRequest() *ListRoutegroupsBadRequest {
 	return &ListRoutegroupsBadRequest{}
 }
 
-/*
-ListRoutegroupsBadRequest describes a response with status code 400, with default header values.
+/* ListRoutegroupsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -191,8 +189,7 @@ func NewListRoutegroupsUnauthorized() *ListRoutegroupsUnauthorized {
 	return &ListRoutegroupsUnauthorized{}
 }
 
-/*
-ListRoutegroupsUnauthorized describes a response with status code 401, with default header values.
+/* ListRoutegroupsUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -259,8 +256,7 @@ func NewListRoutegroupsBadGateway() *ListRoutegroupsBadGateway {
 	return &ListRoutegroupsBadGateway{}
 }
 
-/*
-ListRoutegroupsBadGateway describes a response with status code 502, with default header values.
+/* ListRoutegroupsBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

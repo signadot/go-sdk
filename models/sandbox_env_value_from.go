@@ -102,6 +102,11 @@ func (m *SandboxEnvValueFrom) ContextValidate(ctx context.Context, formats strfm
 func (m *SandboxEnvValueFrom) contextValidateFork(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Fork != nil {
+
+		if swag.IsZero(m.Fork) { // not required
+			return nil
+		}
+
 		if err := m.Fork.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("fork")
@@ -118,6 +123,11 @@ func (m *SandboxEnvValueFrom) contextValidateFork(ctx context.Context, formats s
 func (m *SandboxEnvValueFrom) contextValidateResource(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Resource != nil {
+
+		if swag.IsZero(m.Resource) { // not required
+			return nil
+		}
+
 		if err := m.Resource.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("resource")

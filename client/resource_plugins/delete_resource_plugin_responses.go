@@ -48,7 +48,7 @@ func (o *DeleteResourcePluginReader) ReadResponse(response runtime.ClientRespons
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
+		return nil, runtime.NewAPIError("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}] delete-resource-plugin", response, response.Code())
 	}
 }
 
@@ -57,8 +57,7 @@ func NewDeleteResourcePluginOK() *DeleteResourcePluginOK {
 	return &DeleteResourcePluginOK{}
 }
 
-/*
-DeleteResourcePluginOK describes a response with status code 200, with default header values.
+/* DeleteResourcePluginOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -123,8 +122,7 @@ func NewDeleteResourcePluginBadRequest() *DeleteResourcePluginBadRequest {
 	return &DeleteResourcePluginBadRequest{}
 }
 
-/*
-DeleteResourcePluginBadRequest describes a response with status code 400, with default header values.
+/* DeleteResourcePluginBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -191,8 +189,7 @@ func NewDeleteResourcePluginUnauthorized() *DeleteResourcePluginUnauthorized {
 	return &DeleteResourcePluginUnauthorized{}
 }
 
-/*
-DeleteResourcePluginUnauthorized describes a response with status code 401, with default header values.
+/* DeleteResourcePluginUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -259,8 +256,7 @@ func NewDeleteResourcePluginBadGateway() *DeleteResourcePluginBadGateway {
 	return &DeleteResourcePluginBadGateway{}
 }
 
-/*
-DeleteResourcePluginBadGateway describes a response with status code 502, with default header values.
+/* DeleteResourcePluginBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

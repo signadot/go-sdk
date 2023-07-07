@@ -48,7 +48,7 @@ func (o *AddClusterReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
+		return nil, runtime.NewAPIError("[PUT /orgs/{orgName}/clusters/{clusterName}/] add-cluster", response, response.Code())
 	}
 }
 
@@ -57,8 +57,7 @@ func NewAddClusterOK() *AddClusterOK {
 	return &AddClusterOK{}
 }
 
-/*
-AddClusterOK describes a response with status code 200, with default header values.
+/* AddClusterOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -125,8 +124,7 @@ func NewAddClusterBadRequest() *AddClusterBadRequest {
 	return &AddClusterBadRequest{}
 }
 
-/*
-AddClusterBadRequest describes a response with status code 400, with default header values.
+/* AddClusterBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -193,8 +191,7 @@ func NewAddClusterUnauthorized() *AddClusterUnauthorized {
 	return &AddClusterUnauthorized{}
 }
 
-/*
-AddClusterUnauthorized describes a response with status code 401, with default header values.
+/* AddClusterUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -261,8 +258,7 @@ func NewAddClusterBadGateway() *AddClusterBadGateway {
 	return &AddClusterBadGateway{}
 }
 
-/*
-AddClusterBadGateway describes a response with status code 502, with default header values.
+/* AddClusterBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

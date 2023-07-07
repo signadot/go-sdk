@@ -149,6 +149,11 @@ func (m *SandboxCustomizations) contextValidateEnv(ctx context.Context, formats 
 	for i := 0; i < len(m.Env); i++ {
 
 		if m.Env[i] != nil {
+
+			if swag.IsZero(m.Env[i]) { // not required
+				return nil
+			}
+
 			if err := m.Env[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("env" + "." + strconv.Itoa(i))
@@ -169,6 +174,11 @@ func (m *SandboxCustomizations) contextValidateImages(ctx context.Context, forma
 	for i := 0; i < len(m.Images); i++ {
 
 		if m.Images[i] != nil {
+
+			if swag.IsZero(m.Images[i]) { // not required
+				return nil
+			}
+
 			if err := m.Images[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("images" + "." + strconv.Itoa(i))
@@ -187,6 +197,11 @@ func (m *SandboxCustomizations) contextValidateImages(ctx context.Context, forma
 func (m *SandboxCustomizations) contextValidatePatch(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Patch != nil {
+
+		if swag.IsZero(m.Patch) { // not required
+			return nil
+		}
+
 		if err := m.Patch.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("patch")
