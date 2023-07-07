@@ -657,8 +657,41 @@
       },
       "type": "object"
     },
+    "sandbox.LocalWorkloadStatus": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tunnel": {
+          "properties": {
+            "health": {
+              "properties": {
+                "connected": {
+                  "type": "boolean"
+                },
+                "lastCheckTime": {
+                  "type": "string"
+                },
+                "lastConnectedTime": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "sandbox.Readiness": {
       "properties": {
+        "local": {
+          "items": {
+            "$ref": "#/definitions/sandbox.LocalWorkloadStatus"
+          },
+          "type": "array"
+        },
         "message": {
           "description": "Message is a human readable explanation of why\nthe sandbox is healthy or not.",
           "type": "string"
