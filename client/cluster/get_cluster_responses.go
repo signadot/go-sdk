@@ -57,8 +57,7 @@ func NewGetClusterOK() *GetClusterOK {
 	return &GetClusterOK{}
 }
 
-/*
-GetClusterOK describes a response with status code 200, with default header values.
+/* GetClusterOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -125,8 +124,7 @@ func NewGetClusterBadRequest() *GetClusterBadRequest {
 	return &GetClusterBadRequest{}
 }
 
-/*
-GetClusterBadRequest describes a response with status code 400, with default header values.
+/* GetClusterBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -193,8 +191,7 @@ func NewGetClusterUnauthorized() *GetClusterUnauthorized {
 	return &GetClusterUnauthorized{}
 }
 
-/*
-GetClusterUnauthorized describes a response with status code 401, with default header values.
+/* GetClusterUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -261,8 +258,7 @@ func NewGetClusterBadGateway() *GetClusterBadGateway {
 	return &GetClusterBadGateway{}
 }
 
-/*
-GetClusterBadGateway describes a response with status code 502, with default header values.
+/* GetClusterBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

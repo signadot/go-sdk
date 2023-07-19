@@ -57,8 +57,7 @@ func NewListResourcePluginsOK() *ListResourcePluginsOK {
 	return &ListResourcePluginsOK{}
 }
 
-/*
-ListResourcePluginsOK describes a response with status code 200, with default header values.
+/* ListResourcePluginsOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -123,8 +122,7 @@ func NewListResourcePluginsBadRequest() *ListResourcePluginsBadRequest {
 	return &ListResourcePluginsBadRequest{}
 }
 
-/*
-ListResourcePluginsBadRequest describes a response with status code 400, with default header values.
+/* ListResourcePluginsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -191,8 +189,7 @@ func NewListResourcePluginsUnauthorized() *ListResourcePluginsUnauthorized {
 	return &ListResourcePluginsUnauthorized{}
 }
 
-/*
-ListResourcePluginsUnauthorized describes a response with status code 401, with default header values.
+/* ListResourcePluginsUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -259,8 +256,7 @@ func NewListResourcePluginsBadGateway() *ListResourcePluginsBadGateway {
 	return &ListResourcePluginsBadGateway{}
 }
 
-/*
-ListResourcePluginsBadGateway describes a response with status code 502, with default header values.
+/* ListResourcePluginsBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
