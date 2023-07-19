@@ -7,7 +7,9 @@ package models
 
 import (
 	"context"
+	"strconv"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -16,6 +18,9 @@ import (
 //
 // swagger:model sandbox.Readiness
 type SandboxReadiness struct {
+
+	// local
+	Local []*SandboxLocalWorkloadStatus `json:"local"`
 
 	// Message is a human readable explanation of why
 	// the sandbox is healthy or not.
@@ -32,11 +37,80 @@ type SandboxReadiness struct {
 
 // Validate validates this sandbox readiness
 func (m *SandboxReadiness) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateLocal(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this sandbox readiness based on context it is used
+func (m *SandboxReadiness) validateLocal(formats strfmt.Registry) error {
+	if swag.IsZero(m.Local) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Local); i++ {
+		if swag.IsZero(m.Local[i]) { // not required
+			continue
+		}
+
+		if m.Local[i] != nil {
+			if err := m.Local[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("local" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("local" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this sandbox readiness based on the context it is used
 func (m *SandboxReadiness) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateLocal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SandboxReadiness) contextValidateLocal(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Local); i++ {
+
+		if m.Local[i] != nil {
+
+			if swag.IsZero(m.Local[i]) { // not required
+				return nil
+			}
+
+			if err := m.Local[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("local" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("local" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

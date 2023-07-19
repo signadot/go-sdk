@@ -151,6 +151,11 @@ func (m *RouteGroupMatch) contextValidateAll(ctx context.Context, formats strfmt
 	for i := 0; i < len(m.All); i++ {
 
 		if m.All[i] != nil {
+
+			if swag.IsZero(m.All[i]) { // not required
+				return nil
+			}
+
 			if err := m.All[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("all" + "." + strconv.Itoa(i))
@@ -171,6 +176,11 @@ func (m *RouteGroupMatch) contextValidateAny(ctx context.Context, formats strfmt
 	for i := 0; i < len(m.Any); i++ {
 
 		if m.Any[i] != nil {
+
+			if swag.IsZero(m.Any[i]) { // not required
+				return nil
+			}
+
 			if err := m.Any[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("any" + "." + strconv.Itoa(i))
@@ -189,6 +199,11 @@ func (m *RouteGroupMatch) contextValidateAny(ctx context.Context, formats strfmt
 func (m *RouteGroupMatch) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Label != nil {
+
+		if swag.IsZero(m.Label) { // not required
+			return nil
+		}
+
 		if err := m.Label.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("label")
