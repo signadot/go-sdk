@@ -240,6 +240,11 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 func (m *SandboxSpec) contextValidateDefaultRouteGroup(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DefaultRouteGroup != nil {
+
+		if swag.IsZero(m.DefaultRouteGroup) { // not required
+			return nil
+		}
+
 		if err := m.DefaultRouteGroup.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("defaultRouteGroup")
@@ -258,6 +263,11 @@ func (m *SandboxSpec) contextValidateEndpoints(ctx context.Context, formats strf
 	for i := 0; i < len(m.Endpoints); i++ {
 
 		if m.Endpoints[i] != nil {
+
+			if swag.IsZero(m.Endpoints[i]) { // not required
+				return nil
+			}
+
 			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
@@ -278,6 +288,11 @@ func (m *SandboxSpec) contextValidateForks(ctx context.Context, formats strfmt.R
 	for i := 0; i < len(m.Forks); i++ {
 
 		if m.Forks[i] != nil {
+
+			if swag.IsZero(m.Forks[i]) { // not required
+				return nil
+			}
+
 			if err := m.Forks[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("forks" + "." + strconv.Itoa(i))
@@ -298,6 +313,11 @@ func (m *SandboxSpec) contextValidateResources(ctx context.Context, formats strf
 	for i := 0; i < len(m.Resources); i++ {
 
 		if m.Resources[i] != nil {
+
+			if swag.IsZero(m.Resources[i]) { // not required
+				return nil
+			}
+
 			if err := m.Resources[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("resources" + "." + strconv.Itoa(i))
@@ -316,6 +336,11 @@ func (m *SandboxSpec) contextValidateResources(ctx context.Context, formats strf
 func (m *SandboxSpec) contextValidateTTL(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.TTL != nil {
+
+		if swag.IsZero(m.TTL) { // not required
+			return nil
+		}
+
 		if err := m.TTL.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ttl")

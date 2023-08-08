@@ -48,7 +48,7 @@ func (o *GetSandboxReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/sandboxes/{sandboxName}] get-sandbox", response, response.Code())
 	}
 }
 
@@ -57,8 +57,7 @@ func NewGetSandboxOK() *GetSandboxOK {
 	return &GetSandboxOK{}
 }
 
-/*
-GetSandboxOK describes a response with status code 200, with default header values.
+/* GetSandboxOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -125,8 +124,7 @@ func NewGetSandboxBadRequest() *GetSandboxBadRequest {
 	return &GetSandboxBadRequest{}
 }
 
-/*
-GetSandboxBadRequest describes a response with status code 400, with default header values.
+/* GetSandboxBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -193,8 +191,7 @@ func NewGetSandboxUnauthorized() *GetSandboxUnauthorized {
 	return &GetSandboxUnauthorized{}
 }
 
-/*
-GetSandboxUnauthorized describes a response with status code 401, with default header values.
+/* GetSandboxUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -261,8 +258,7 @@ func NewGetSandboxBadGateway() *GetSandboxBadGateway {
 	return &GetSandboxBadGateway{}
 }
 
-/*
-GetSandboxBadGateway describes a response with status code 502, with default header values.
+/* GetSandboxBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */

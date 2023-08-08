@@ -48,7 +48,7 @@ func (o *GetResourcePluginReader) ReadResponse(response runtime.ClientResponse, 
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/resource-plugins/{pluginName}] get-resource-plugin", response, response.Code())
 	}
 }
 
@@ -57,8 +57,7 @@ func NewGetResourcePluginOK() *GetResourcePluginOK {
 	return &GetResourcePluginOK{}
 }
 
-/*
-GetResourcePluginOK describes a response with status code 200, with default header values.
+/* GetResourcePluginOK describes a response with status code 200, with default header values.
 
 OK
 */
@@ -125,8 +124,7 @@ func NewGetResourcePluginBadRequest() *GetResourcePluginBadRequest {
 	return &GetResourcePluginBadRequest{}
 }
 
-/*
-GetResourcePluginBadRequest describes a response with status code 400, with default header values.
+/* GetResourcePluginBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -193,8 +191,7 @@ func NewGetResourcePluginUnauthorized() *GetResourcePluginUnauthorized {
 	return &GetResourcePluginUnauthorized{}
 }
 
-/*
-GetResourcePluginUnauthorized describes a response with status code 401, with default header values.
+/* GetResourcePluginUnauthorized describes a response with status code 401, with default header values.
 
 Unauthorized
 */
@@ -261,8 +258,7 @@ func NewGetResourcePluginBadGateway() *GetResourcePluginBadGateway {
 	return &GetResourcePluginBadGateway{}
 }
 
-/*
-GetResourcePluginBadGateway describes a response with status code 502, with default header values.
+/* GetResourcePluginBadGateway describes a response with status code 502, with default header values.
 
 Bad Gateway
 */
