@@ -75,6 +75,11 @@ func (m *SandboxEnvValueFromFork) ContextValidate(ctx context.Context, formats s
 func (m *SandboxEnvValueFromFork) contextValidateForkOf(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ForkOf != nil {
+
+		if swag.IsZero(m.ForkOf) { // not required
+			return nil
+		}
+
 		if err := m.ForkOf.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("forkOf")

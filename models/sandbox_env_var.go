@@ -84,6 +84,11 @@ func (m *SandboxEnvVar) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *SandboxEnvVar) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ValueFrom != nil {
+
+		if swag.IsZero(m.ValueFrom) { // not required
+			return nil
+		}
+
 		if err := m.ValueFrom.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("valueFrom")

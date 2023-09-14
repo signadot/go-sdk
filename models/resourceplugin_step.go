@@ -125,6 +125,11 @@ func (m *ResourcepluginStep) contextValidateInputs(ctx context.Context, formats 
 	for i := 0; i < len(m.Inputs); i++ {
 
 		if m.Inputs[i] != nil {
+
+			if swag.IsZero(m.Inputs[i]) { // not required
+				return nil
+			}
+
 			if err := m.Inputs[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("inputs" + "." + strconv.Itoa(i))
@@ -145,6 +150,11 @@ func (m *ResourcepluginStep) contextValidateOutputs(ctx context.Context, formats
 	for i := 0; i < len(m.Outputs); i++ {
 
 		if m.Outputs[i] != nil {
+
+			if swag.IsZero(m.Outputs[i]) { // not required
+				return nil
+			}
+
 			if err := m.Outputs[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("outputs" + "." + strconv.Itoa(i))

@@ -140,6 +140,11 @@ func (m *SandboxFork) ContextValidate(ctx context.Context, formats strfmt.Regist
 func (m *SandboxFork) contextValidateCustomizations(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Customizations != nil {
+
+		if swag.IsZero(m.Customizations) { // not required
+			return nil
+		}
+
 		if err := m.Customizations.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("customizations")
@@ -158,6 +163,11 @@ func (m *SandboxFork) contextValidateEndpoints(ctx context.Context, formats strf
 	for i := 0; i < len(m.Endpoints); i++ {
 
 		if m.Endpoints[i] != nil {
+
+			if swag.IsZero(m.Endpoints[i]) { // not required
+				return nil
+			}
+
 			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
@@ -176,6 +186,11 @@ func (m *SandboxFork) contextValidateEndpoints(ctx context.Context, formats strf
 func (m *SandboxFork) contextValidateForkOf(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ForkOf != nil {
+
+		if swag.IsZero(m.ForkOf) { // not required
+			return nil
+		}
+
 		if err := m.ForkOf.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("forkOf")
