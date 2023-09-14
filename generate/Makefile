@@ -19,5 +19,3 @@ default:
 	# cleanup
 	rm -rf backup
 
-
-
