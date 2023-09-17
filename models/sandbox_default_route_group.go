@@ -82,6 +82,11 @@ func (m *SandboxDefaultRouteGroup) contextValidateEndpoints(ctx context.Context,
 	for i := 0; i < len(m.Endpoints); i++ {
 
 		if m.Endpoints[i] != nil {
+
+			if swag.IsZero(m.Endpoints[i]) { // not required
+				return nil
+			}
+
 			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
