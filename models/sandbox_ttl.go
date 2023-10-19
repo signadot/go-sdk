@@ -27,7 +27,7 @@ type SandboxTTL struct {
 	Duration string `json:"duration,omitempty"`
 
 	// OffsetFrom indicates what the Duration is relative to.  It
-	// may be the empty string or "createdAt".  The empty string
+	// may be the empty string, "createdAt" or "updatedAt".  The empty string
 	// defaults to meaning "createdAt".
 	OffsetFrom string `json:"offsetFrom,omitempty"`
 }

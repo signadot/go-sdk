@@ -111,6 +111,11 @@ func (m *ResourcepluginStepInput) ContextValidate(ctx context.Context, formats s
 func (m *ResourcepluginStepInput) contextValidateAs(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.As != nil {
+
+		if swag.IsZero(m.As) { // not required
+			return nil
+		}
+
 		if err := m.As.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("as")
@@ -127,6 +132,11 @@ func (m *ResourcepluginStepInput) contextValidateAs(ctx context.Context, formats
 func (m *ResourcepluginStepInput) contextValidateValueFromStep(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ValueFromStep != nil {
+
+		if swag.IsZero(m.ValueFromStep) { // not required
+			return nil
+		}
+
 		if err := m.ValueFromStep.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("valueFromStep")
