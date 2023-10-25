@@ -26,6 +26,9 @@ type Cluster struct {
 
 	// operator
 	Operator *ClusterOperator `json:"operator,omitempty"`
+
+	// sync status
+	SyncStatus *ClustersSyncStatus `json:"syncStatus,omitempty"`
 }
 
 // Validate validates this cluster
@@ -33,6 +36,10 @@ func (m *Cluster) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOperator(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSyncStatus(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -61,11 +68,34 @@ func (m *Cluster) validateOperator(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Cluster) validateSyncStatus(formats strfmt.Registry) error {
+	if swag.IsZero(m.SyncStatus) { // not required
+		return nil
+	}
+
+	if m.SyncStatus != nil {
+		if err := m.SyncStatus.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("syncStatus")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("syncStatus")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this cluster based on the context it is used
 func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOperator(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSyncStatus(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -88,6 +118,27 @@ func (m *Cluster) contextValidateOperator(ctx context.Context, formats strfmt.Re
 				return ve.ValidateName("operator")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("operator")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Cluster) contextValidateSyncStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SyncStatus != nil {
+
+		if swag.IsZero(m.SyncStatus) { // not required
+			return nil
+		}
+
+		if err := m.SyncStatus.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("syncStatus")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("syncStatus")
 			}
 			return err
 		}
