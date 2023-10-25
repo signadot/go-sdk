@@ -188,6 +188,21 @@
       },
       "type": "object"
     },
+    "clusters.LastSync": {
+      "properties": {
+        "routegroups": {
+          "$ref": "#/definitions/clusters.SyncCollectionStatus"
+        },
+        "sandboxes": {
+          "$ref": "#/definitions/clusters.SyncCollectionStatus"
+        },
+        "time": {
+          "description": "The time at which the last sync occured.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "clusters.ReadinessStats": {
       "properties": {
         "count": {
@@ -240,18 +255,11 @@
           "type": "string"
         },
         "lastErrorTime": {
-          "description": "The time of the last global error of a sync",
+          "description": "The time of the last global error of a sync.",
           "type": "string"
         },
-        "lastSyncTime": {
-          "description": "The time of the last successful sync.",
-          "type": "string"
-        },
-        "routegroups": {
-          "$ref": "#/definitions/clusters.SyncCollectionStatus"
-        },
-        "sandboxes": {
-          "$ref": "#/definitions/clusters.SyncCollectionStatus"
+        "lastSync": {
+          "$ref": "#/definitions/clusters.LastSync"
         }
       },
       "type": "object"

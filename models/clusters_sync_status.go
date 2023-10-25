@@ -22,28 +22,18 @@ type ClustersSyncStatus struct {
 	// from occuring.
 	LastError string `json:"lastError,omitempty"`
 
-	// The time of the last global error of a sync
+	// The time of the last global error of a sync.
 	LastErrorTime string `json:"lastErrorTime,omitempty"`
 
-	// The time of the last successful sync.
-	LastSyncTime string `json:"lastSyncTime,omitempty"`
-
-	// routegroups
-	Routegroups *ClustersSyncCollectionStatus `json:"routegroups,omitempty"`
-
-	// sandboxes
-	Sandboxes *ClustersSyncCollectionStatus `json:"sandboxes,omitempty"`
+	// last sync
+	LastSync *ClustersLastSync `json:"lastSync,omitempty"`
 }
 
 // Validate validates this clusters sync status
 func (m *ClustersSyncStatus) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateRoutegroups(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateSandboxes(formats); err != nil {
+	if err := m.validateLastSync(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -53,36 +43,17 @@ func (m *ClustersSyncStatus) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ClustersSyncStatus) validateRoutegroups(formats strfmt.Registry) error {
-	if swag.IsZero(m.Routegroups) { // not required
+func (m *ClustersSyncStatus) validateLastSync(formats strfmt.Registry) error {
+	if swag.IsZero(m.LastSync) { // not required
 		return nil
 	}
 
-	if m.Routegroups != nil {
-		if err := m.Routegroups.Validate(formats); err != nil {
+	if m.LastSync != nil {
+		if err := m.LastSync.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("routegroups")
+				return ve.ValidateName("lastSync")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("routegroups")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ClustersSyncStatus) validateSandboxes(formats strfmt.Registry) error {
-	if swag.IsZero(m.Sandboxes) { // not required
-		return nil
-	}
-
-	if m.Sandboxes != nil {
-		if err := m.Sandboxes.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sandboxes")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sandboxes")
+				return ce.ValidateName("lastSync")
 			}
 			return err
 		}
@@ -95,11 +66,7 @@ func (m *ClustersSyncStatus) validateSandboxes(formats strfmt.Registry) error {
 func (m *ClustersSyncStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateRoutegroups(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateSandboxes(ctx, formats); err != nil {
+	if err := m.contextValidateLastSync(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -109,40 +76,19 @@ func (m *ClustersSyncStatus) ContextValidate(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *ClustersSyncStatus) contextValidateRoutegroups(ctx context.Context, formats strfmt.Registry) error {
+func (m *ClustersSyncStatus) contextValidateLastSync(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.Routegroups != nil {
+	if m.LastSync != nil {
 
-		if swag.IsZero(m.Routegroups) { // not required
+		if swag.IsZero(m.LastSync) { // not required
 			return nil
 		}
 
-		if err := m.Routegroups.ContextValidate(ctx, formats); err != nil {
+		if err := m.LastSync.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("routegroups")
+				return ve.ValidateName("lastSync")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("routegroups")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ClustersSyncStatus) contextValidateSandboxes(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Sandboxes != nil {
-
-		if swag.IsZero(m.Sandboxes) { // not required
-			return nil
-		}
-
-		if err := m.Sandboxes.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sandboxes")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sandboxes")
+				return ce.ValidateName("lastSync")
 			}
 			return err
 		}
