@@ -43,6 +43,9 @@ type SandboxSpec struct {
 	// Local Workloads
 	Local []*Local `json:"local"`
 
+	// Identifier of the machine from where a sandbox containing local workloads was created or is intended to be ran
+	LocalMachineID string `json:"localMachineID,omitempty"`
+
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
 
