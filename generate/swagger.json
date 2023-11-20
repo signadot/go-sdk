@@ -822,6 +822,10 @@
           },
           "type": "array"
         },
+        "localMachineID": {
+          "description": "Identifier of the machine from where a sandbox containing local workloads was created or is intended to be ran",
+          "type": "string"
+        },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
           "items": {
