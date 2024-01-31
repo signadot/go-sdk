@@ -13,6 +13,9 @@
         },
         "operator": {
           "$ref": "#/definitions/cluster.Operator"
+        },
+        "syncStatus": {
+          "$ref": "#/definitions/clusters.SyncStatus"
         }
       },
       "type": "object"
@@ -170,6 +173,93 @@
         "version": {
           "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "clusters.ErrorItem": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "clusters.LastSync": {
+      "properties": {
+        "routegroups": {
+          "$ref": "#/definitions/clusters.SyncCollectionStatus"
+        },
+        "sandboxes": {
+          "$ref": "#/definitions/clusters.SyncCollectionStatus"
+        },
+        "time": {
+          "description": "The time at which the last sync occured.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "clusters.ReadinessStats": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "readyCondition": {
+          "type": "string"
+        },
+        "readyReason": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "clusters.SyncCollectionStatus": {
+      "properties": {
+        "clusterState": {
+          "description": "A snapshot of the cluster prior to sync.",
+          "items": {
+            "$ref": "#/definitions/clusters.ReadinessStats"
+          },
+          "type": "array"
+        },
+        "creations": {
+          "description": "The number of creations applied to ClusterState.",
+          "type": "integer"
+        },
+        "deletions": {
+          "description": "The number of deletions applied to ClusterState.",
+          "type": "integer"
+        },
+        "errors": {
+          "description": "Names and errorsassociated items which did not successfully sync,\npossibly truncated.",
+          "items": {
+            "$ref": "#/definitions/clusters.ErrorItem"
+          },
+          "type": "array"
+        },
+        "updates": {
+          "description": "The number of updates applied to ClusterState.",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "clusters.SyncStatus": {
+      "properties": {
+        "lastError": {
+          "description": "The last global error of a sync, preventing any synchronisation\nfrom occuring.",
+          "type": "string"
+        },
+        "lastErrorTime": {
+          "description": "The time of the last global error of a sync.",
+          "type": "string"
+        },
+        "lastSync": {
+          "$ref": "#/definitions/clusters.LastSync"
         }
       },
       "type": "object"
