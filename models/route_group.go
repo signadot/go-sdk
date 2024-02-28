@@ -36,6 +36,9 @@ type RouteGroup struct {
 
 	// status
 	Status *RouteGroupStatus `json:"status,omitempty"`
+
+	// updated at
+	UpdatedAt string `json:"updatedAt,omitempty"`
 }
 
 // Validate validates this route group
