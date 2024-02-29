@@ -131,6 +131,9 @@
         },
         "status": {
           "$ref": "#/definitions/routeGroup.Status"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -169,59 +172,6 @@
       "properties": {
         "version": {
           "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local": {
-      "properties": {
-        "from": {
-          "$ref": "#/definitions/local.From"
-        },
-        "mappings": {
-          "items": {
-            "$ref": "#/definitions/local.PortMapping"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local.From": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "local.PortMapping": {
-      "properties": {
-        "port": {
-          "type": "integer"
-        },
-        "toLocal": {
           "type": "string"
         }
       },
@@ -449,6 +399,9 @@
         },
         "match": {
           "$ref": "#/definitions/routeGroup.Match"
+        },
+        "ttl": {
+          "$ref": "#/definitions/routeGroup.TTL"
         }
       },
       "type": "object"
@@ -483,6 +436,23 @@
         },
         "reason": {
           "description": "Reason is a machine readable explanation of why\nthe sandbox is healthy or not.",
+          "type": "string"
+        },
+        "scheduledDeleteTime": {
+          "description": "ScheduledDeleteTime returns the formatted and computed ttl based on the Duration\nand OffsetFrom",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "routeGroup.TTL": {
+      "properties": {
+        "duration": {
+          "description": "Duration represents the duration until routegroup's end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
+        },
+        "offsetFrom": {
+          "description": "OffsetFrom indicates what the Duration is relative to.  It\nmay be the empty string, \"noMatchedSandboxes\", \"createdAt\" or \"updatedAt\". The empty string\ndefaults to meaning \"noMatchedSandboxes\".",
           "type": "string"
         }
       },
@@ -815,17 +785,6 @@
           "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
         },
-        "local": {
-          "description": "Local Workloads",
-          "items": {
-            "$ref": "#/definitions/local"
-          },
-          "type": "array"
-        },
-        "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads was created or is intended to be ran",
-          "type": "string"
-        },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
           "items": {
@@ -846,7 +805,7 @@
     "sandbox.TTL": {
       "properties": {
         "duration": {
-          "description": "Duration represents the duration until sandbox end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n - 'm' for minutes\n - 'h' for hours\n - 'd' for days\n - 'w' for weeks",
+          "description": "Duration represents the duration until sandbox end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
           "type": "string"
         },
         "offsetFrom": {
