@@ -32,6 +32,10 @@ type RouteGroupStatus struct {
 	// Reason is a machine readable explanation of why
 	// the sandbox is healthy or not.
 	Reason string `json:"reason,omitempty"`
+
+	// ScheduledDeleteTime returns the formatted and computed ttl based on the Duration
+	// and OffsetFrom
+	ScheduledDeleteTime string `json:"scheduledDeleteTime,omitempty"`
 }
 
 // Validate validates this route group status

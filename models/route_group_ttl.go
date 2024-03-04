@@ -12,12 +12,12 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxTTL sandbox TTL
+// RouteGroupTTL route group TTL
 //
-// swagger:model sandbox.TTL
-type SandboxTTL struct {
+// swagger:model routeGroup.TTL
+type RouteGroupTTL struct {
 
-	// Duration represents the duration until sandbox end of life.
+	// Duration represents the duration until routegroup's end of life.
 	// It should be an unsigned integer not exceeding 32 bits followed by
 	// a units character, which can be one of the following.
 	//   - 'm' for minutes
@@ -27,23 +27,23 @@ type SandboxTTL struct {
 	Duration string `json:"duration,omitempty"`
 
 	// OffsetFrom indicates what the Duration is relative to.  It
-	// may be the empty string, "createdAt" or "updatedAt".  The empty string
-	// defaults to meaning "createdAt".
+	// may be the empty string, "noMatchedSandboxes", "createdAt" or "updatedAt". The empty string
+	// defaults to meaning "noMatchedSandboxes".
 	OffsetFrom string `json:"offsetFrom,omitempty"`
 }
 
-// Validate validates this sandbox TTL
-func (m *SandboxTTL) Validate(formats strfmt.Registry) error {
+// Validate validates this route group TTL
+func (m *RouteGroupTTL) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this sandbox TTL based on context it is used
-func (m *SandboxTTL) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this route group TTL based on context it is used
+func (m *RouteGroupTTL) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxTTL) MarshalBinary() ([]byte, error) {
+func (m *RouteGroupTTL) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -51,8 +51,8 @@ func (m *SandboxTTL) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxTTL) UnmarshalBinary(b []byte) error {
-	var res SandboxTTL
+func (m *RouteGroupTTL) UnmarshalBinary(b []byte) error {
+	var res RouteGroupTTL
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
