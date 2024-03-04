@@ -131,6 +131,9 @@
         },
         "status": {
           "$ref": "#/definitions/routeGroup.Status"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -449,6 +452,9 @@
         },
         "match": {
           "$ref": "#/definitions/routeGroup.Match"
+        },
+        "ttl": {
+          "$ref": "#/definitions/routeGroup.TTL"
         }
       },
       "type": "object"
@@ -483,6 +489,23 @@
         },
         "reason": {
           "description": "Reason is a machine readable explanation of why\nthe sandbox is healthy or not.",
+          "type": "string"
+        },
+        "scheduledDeleteTime": {
+          "description": "ScheduledDeleteTime returns the formatted and computed ttl based on the Duration\nand OffsetFrom",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "routeGroup.TTL": {
+      "properties": {
+        "duration": {
+          "description": "Duration represents the duration until routegroup's end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
+        },
+        "offsetFrom": {
+          "description": "OffsetFrom indicates what the Duration is relative to.  It\nmay be the empty string, \"noMatchedSandboxes\", \"createdAt\" or \"updatedAt\". The empty string\ndefaults to meaning \"noMatchedSandboxes\".",
           "type": "string"
         }
       },
@@ -823,7 +846,7 @@
           "type": "array"
         },
         "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads was created or is intended to be ran",
+          "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
           "type": "string"
         },
         "resources": {
@@ -846,7 +869,7 @@
     "sandbox.TTL": {
       "properties": {
         "duration": {
-          "description": "Duration represents the duration until sandbox end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n - 'm' for minutes\n - 'h' for hours\n - 'd' for days\n - 'w' for weeks",
+          "description": "Duration represents the duration until sandbox end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
           "type": "string"
         },
         "offsetFrom": {
