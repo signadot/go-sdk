@@ -31,6 +31,9 @@ type RouteGroupSpec struct {
 
 	// match
 	Match *RouteGroupMatch `json:"match,omitempty"`
+
+	// ttl
+	TTL *RouteGroupTTL `json:"ttl,omitempty"`
 }
 
 // Validate validates this route group spec
@@ -42,6 +45,10 @@ func (m *RouteGroupSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateMatch(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTTL(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -96,6 +103,25 @@ func (m *RouteGroupSpec) validateMatch(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *RouteGroupSpec) validateTTL(formats strfmt.Registry) error {
+	if swag.IsZero(m.TTL) { // not required
+		return nil
+	}
+
+	if m.TTL != nil {
+		if err := m.TTL.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ttl")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ttl")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this route group spec based on the context it is used
 func (m *RouteGroupSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -105,6 +131,10 @@ func (m *RouteGroupSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 	}
 
 	if err := m.contextValidateMatch(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTTL(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -152,6 +182,27 @@ func (m *RouteGroupSpec) contextValidateMatch(ctx context.Context, formats strfm
 				return ve.ValidateName("match")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("match")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RouteGroupSpec) contextValidateTTL(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TTL != nil {
+
+		if swag.IsZero(m.TTL) { // not required
+			return nil
+		}
+
+		if err := m.TTL.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ttl")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ttl")
 			}
 			return err
 		}
