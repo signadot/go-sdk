@@ -113,6 +113,9 @@
         "createdAt": {
           "type": "string"
         },
+        "defaults": {
+          "$ref": "#/definitions/defaults.CompositeDefaults"
+        },
         "endpoints": {
           "items": {
             "$ref": "#/definitions/routeGroup.Endpoint"
@@ -177,56 +180,32 @@
       },
       "type": "object"
     },
-    "local": {
+    "defaults.CompositeDefaults": {
       "properties": {
-        "from": {
-          "$ref": "#/definitions/local.From"
-        },
-        "mappings": {
+        "cluster": {
           "items": {
-            "$ref": "#/definitions/local.PortMapping"
+            "$ref": "#/definitions/defaults.Default"
           },
           "type": "array"
-        },
-        "name": {
-          "type": "string"
         }
       },
       "type": "object"
     },
-    "local.From": {
+    "defaults.Default": {
       "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
+        "class": {
           "type": "string"
         },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
+        "createdAt": {
           "type": "string"
         },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
+        "resourceKind": {
           "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "local.PortMapping": {
-      "properties": {
-        "port": {
-          "type": "integer"
         },
-        "toLocal": {
+        "updatedAt": {
           "type": "string"
-        }
+        },
+        "value": {}
       },
       "type": "object"
     },
@@ -525,7 +504,7 @@
     "sandbox.Customizations": {
       "properties": {
         "env": {
-          "description": "Env var modifications that will be applied to the forked workload",
+          "description": "Environment variable modifications that will be applied to the forked workload",
           "items": {
             "$ref": "#/definitions/sandbox.EnvVar"
           },
@@ -837,17 +816,6 @@
           },
           "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
-        },
-        "local": {
-          "description": "Local Workloads",
-          "items": {
-            "$ref": "#/definitions/local"
-          },
-          "type": "array"
-        },
-        "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-          "type": "string"
         },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
