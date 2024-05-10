@@ -19,7 +19,7 @@ import (
 // swagger:model sandbox.Customizations
 type SandboxCustomizations struct {
 
-	// Env var modifications that will be applied to the forked workload
+	// Environment variable modifications that will be applied to the forked workload
 	Env []*SandboxEnvVar `json:"env"`
 
 	// One or more docker images that will be applied to the forked workload
