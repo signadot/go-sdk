@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewListJobAttemptArtifactsParams creates a new ListJobAttemptArtifactsParams object,
@@ -78,6 +79,12 @@ type ListJobAttemptArtifactsParams struct {
 	   Signadot Org Name
 	*/
 	OrgName string
+
+	/* System.
+
+	   System space
+	*/
+	System bool
 
 	timeout    time.Duration
 	Context    context.Context
@@ -165,6 +172,17 @@ func (o *ListJobAttemptArtifactsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
+// WithSystem adds the system to the list job attempt artifacts params
+func (o *ListJobAttemptArtifactsParams) WithSystem(system bool) *ListJobAttemptArtifactsParams {
+	o.SetSystem(system)
+	return o
+}
+
+// SetSystem adds the system to the list job attempt artifacts params
+func (o *ListJobAttemptArtifactsParams) SetSystem(system bool) {
+	o.System = system
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListJobAttemptArtifactsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -186,6 +204,16 @@ func (o *ListJobAttemptArtifactsParams) WriteToRequest(r runtime.ClientRequest, 
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
 		return err
+	}
+
+	// query param system
+	qrSystem := o.System
+	qSystem := swag.FormatBool(qrSystem)
+	if qSystem != "" {
+
+		if err := r.SetQueryParam("system", qSystem); err != nil {
+			return err
+		}
 	}
 
 	if len(res) > 0 {

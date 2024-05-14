@@ -996,6 +996,13 @@
             "name": "jobAttempt",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "System space",
+            "in": "query",
+            "name": "system",
+            "required": true,
+            "type": "boolean"
           }
         ],
         "produces": [
@@ -1083,6 +1090,13 @@
             "name": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "System space",
+            "in": "query",
+            "name": "system",
+            "required": true,
+            "type": "boolean"
           }
         ],
         "produces": [
@@ -1167,6 +1181,13 @@
             "name": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "System space",
+            "in": "query",
+            "name": "system",
+            "required": true,
+            "type": "boolean"
           },
           {
             "description": "Downloads the specified byte range of the artifact. Retrieving multiple ranges of data per request is not supported",
@@ -1281,6 +1302,13 @@
             "name": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "description": "System space",
+            "in": "query",
+            "name": "system",
+            "required": true,
+            "type": "boolean"
           },
           {
             "description": "Job Execution ID",

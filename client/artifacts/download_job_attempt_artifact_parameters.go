@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewDownloadJobAttemptArtifactParams creates a new DownloadJobAttemptArtifactParams object,
@@ -90,6 +91,12 @@ type DownloadJobAttemptArtifactParams struct {
 	   Artifact Path
 	*/
 	Path string
+
+	/* System.
+
+	   System space
+	*/
+	System bool
 
 	timeout    time.Duration
 	Context    context.Context
@@ -199,6 +206,17 @@ func (o *DownloadJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
+// WithSystem adds the system to the download job attempt artifact params
+func (o *DownloadJobAttemptArtifactParams) WithSystem(system bool) *DownloadJobAttemptArtifactParams {
+	o.SetSystem(system)
+	return o
+}
+
+// SetSystem adds the system to the download job attempt artifact params
+func (o *DownloadJobAttemptArtifactParams) SetSystem(system bool) {
+	o.System = system
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *DownloadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -236,6 +254,16 @@ func (o *DownloadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientReques
 	if qPath != "" {
 
 		if err := r.SetQueryParam("path", qPath); err != nil {
+			return err
+		}
+	}
+
+	// query param system
+	qrSystem := o.System
+	qSystem := swag.FormatBool(qrSystem)
+	if qSystem != "" {
+
+		if err := r.SetQueryParam("system", qSystem); err != nil {
 			return err
 		}
 	}
