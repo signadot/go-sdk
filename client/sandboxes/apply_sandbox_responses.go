@@ -6,6 +6,7 @@ package sandboxes
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *ApplySandboxOK) Code() int {
 }
 
 func (o *ApplySandboxOK) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxOK %s", 200, payload)
 }
 
 func (o *ApplySandboxOK) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxOK %s", 200, payload)
 }
 
 func (o *ApplySandboxOK) GetPayload() *models.Sandbox {
@@ -165,11 +168,13 @@ func (o *ApplySandboxBadRequest) Code() int {
 }
 
 func (o *ApplySandboxBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadRequest %s", 400, payload)
 }
 
 func (o *ApplySandboxBadRequest) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadRequest %s", 400, payload)
 }
 
 func (o *ApplySandboxBadRequest) GetPayload() *models.ErrorResponse {
@@ -233,11 +238,13 @@ func (o *ApplySandboxUnauthorized) Code() int {
 }
 
 func (o *ApplySandboxUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxUnauthorized %s", 401, payload)
 }
 
 func (o *ApplySandboxUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxUnauthorized %s", 401, payload)
 }
 
 func (o *ApplySandboxUnauthorized) GetPayload() *models.ErrorResponse {
@@ -301,11 +308,13 @@ func (o *ApplySandboxBadGateway) Code() int {
 }
 
 func (o *ApplySandboxBadGateway) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadGateway %s", 502, payload)
 }
 
 func (o *ApplySandboxBadGateway) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/sandboxes/{sandboxName}][%d] applySandboxBadGateway %s", 502, payload)
 }
 
 func (o *ApplySandboxBadGateway) GetPayload() *models.ErrorResponse {

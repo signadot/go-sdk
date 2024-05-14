@@ -6,6 +6,7 @@ package route_groups
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *ApplyRoutegroupOK) Code() int {
 }
 
 func (o *ApplyRoutegroupOK) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupOK %s", 200, payload)
 }
 
 func (o *ApplyRoutegroupOK) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupOK %s", 200, payload)
 }
 
 func (o *ApplyRoutegroupOK) GetPayload() *models.RouteGroup {
@@ -165,11 +168,13 @@ func (o *ApplyRoutegroupBadRequest) Code() int {
 }
 
 func (o *ApplyRoutegroupBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadRequest %s", 400, payload)
 }
 
 func (o *ApplyRoutegroupBadRequest) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadRequest %s", 400, payload)
 }
 
 func (o *ApplyRoutegroupBadRequest) GetPayload() *models.ErrorResponse {
@@ -233,11 +238,13 @@ func (o *ApplyRoutegroupUnauthorized) Code() int {
 }
 
 func (o *ApplyRoutegroupUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupUnauthorized %s", 401, payload)
 }
 
 func (o *ApplyRoutegroupUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupUnauthorized %s", 401, payload)
 }
 
 func (o *ApplyRoutegroupUnauthorized) GetPayload() *models.ErrorResponse {
@@ -301,11 +308,13 @@ func (o *ApplyRoutegroupBadGateway) Code() int {
 }
 
 func (o *ApplyRoutegroupBadGateway) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadGateway %s", 502, payload)
 }
 
 func (o *ApplyRoutegroupBadGateway) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/routegroups/{routegroupName}][%d] applyRoutegroupBadGateway %s", 502, payload)
 }
 
 func (o *ApplyRoutegroupBadGateway) GetPayload() *models.ErrorResponse {

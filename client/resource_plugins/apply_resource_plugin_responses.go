@@ -6,6 +6,7 @@ package resource_plugins
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *ApplyResourcePluginOK) Code() int {
 }
 
 func (o *ApplyResourcePluginOK) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginOK %s", 200, payload)
 }
 
 func (o *ApplyResourcePluginOK) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginOK %s", 200, payload)
 }
 
 func (o *ApplyResourcePluginOK) GetPayload() models.EmptyResponse {
@@ -163,11 +166,13 @@ func (o *ApplyResourcePluginBadRequest) Code() int {
 }
 
 func (o *ApplyResourcePluginBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadRequest %s", 400, payload)
 }
 
 func (o *ApplyResourcePluginBadRequest) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadRequest %s", 400, payload)
 }
 
 func (o *ApplyResourcePluginBadRequest) GetPayload() *models.ErrorResponse {
@@ -231,11 +236,13 @@ func (o *ApplyResourcePluginUnauthorized) Code() int {
 }
 
 func (o *ApplyResourcePluginUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginUnauthorized %s", 401, payload)
 }
 
 func (o *ApplyResourcePluginUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginUnauthorized %s", 401, payload)
 }
 
 func (o *ApplyResourcePluginUnauthorized) GetPayload() *models.ErrorResponse {
@@ -299,11 +306,13 @@ func (o *ApplyResourcePluginBadGateway) Code() int {
 }
 
 func (o *ApplyResourcePluginBadGateway) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadGateway %s", 502, payload)
 }
 
 func (o *ApplyResourcePluginBadGateway) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginBadGateway %s", 502, payload)
 }
 
 func (o *ApplyResourcePluginBadGateway) GetPayload() *models.ErrorResponse {

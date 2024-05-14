@@ -6,6 +6,7 @@ package cluster
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *CreateClusterTokenOK) Code() int {
 }
 
 func (o *CreateClusterTokenOK) Error() string {
-	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenOK %s", 200, payload)
 }
 
 func (o *CreateClusterTokenOK) String() string {
-	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/clusters/{clusterName}/tokens][%d] createClusterTokenOK %s", 200, payload)
 }
 
 func (o *CreateClusterTokenOK) GetPayload() *models.ClusterToken {

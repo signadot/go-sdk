@@ -10,6 +10,7 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/signadot/go-sdk/client/artifacts"
 	"github.com/signadot/go-sdk/client/cluster"
 	"github.com/signadot/go-sdk/client/resource_plugins"
 	"github.com/signadot/go-sdk/client/route_groups"
@@ -58,6 +59,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 
 	cli := new(SignadotAPI)
 	cli.Transport = transport
+	cli.Artifacts = artifacts.New(transport, formats)
 	cli.Cluster = cluster.New(transport, formats)
 	cli.ResourcePlugins = resource_plugins.New(transport, formats)
 	cli.RouteGroups = route_groups.New(transport, formats)
@@ -106,6 +108,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // SignadotAPI is a client for signadot API
 type SignadotAPI struct {
+	Artifacts artifacts.ClientService
+
 	Cluster cluster.ClientService
 
 	ResourcePlugins resource_plugins.ClientService
@@ -120,6 +124,7 @@ type SignadotAPI struct {
 // SetTransport changes the transport on the client and all its subresources
 func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
+	c.Artifacts.SetTransport(transport)
 	c.Cluster.SetTransport(transport)
 	c.ResourcePlugins.SetTransport(transport)
 	c.RouteGroups.SetTransport(transport)

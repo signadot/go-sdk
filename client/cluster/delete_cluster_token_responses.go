@@ -6,6 +6,7 @@ package cluster
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *DeleteClusterTokenOK) Code() int {
 }
 
 func (o *DeleteClusterTokenOK) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK %s", 200, payload)
 }
 
 func (o *DeleteClusterTokenOK) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/clusters/{clusterName}/tokens/{tokenId}][%d] deleteClusterTokenOK %s", 200, payload)
 }
 
 func (o *DeleteClusterTokenOK) GetPayload() models.EmptyResponse {

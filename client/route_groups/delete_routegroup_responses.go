@@ -6,6 +6,7 @@ package route_groups
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *DeleteRoutegroupOK) Code() int {
 }
 
 func (o *DeleteRoutegroupOK) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupOK %s", 200, payload)
 }
 
 func (o *DeleteRoutegroupOK) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupOK %s", 200, payload)
 }
 
 func (o *DeleteRoutegroupOK) GetPayload() models.EmptyResponse {
@@ -163,11 +166,13 @@ func (o *DeleteRoutegroupBadRequest) Code() int {
 }
 
 func (o *DeleteRoutegroupBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadRequest %s", 400, payload)
 }
 
 func (o *DeleteRoutegroupBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadRequest %s", 400, payload)
 }
 
 func (o *DeleteRoutegroupBadRequest) GetPayload() *models.ErrorResponse {
@@ -231,11 +236,13 @@ func (o *DeleteRoutegroupUnauthorized) Code() int {
 }
 
 func (o *DeleteRoutegroupUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupUnauthorized %s", 401, payload)
 }
 
 func (o *DeleteRoutegroupUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupUnauthorized %s", 401, payload)
 }
 
 func (o *DeleteRoutegroupUnauthorized) GetPayload() *models.ErrorResponse {
@@ -299,11 +306,13 @@ func (o *DeleteRoutegroupBadGateway) Code() int {
 }
 
 func (o *DeleteRoutegroupBadGateway) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadGateway %s", 502, payload)
 }
 
 func (o *DeleteRoutegroupBadGateway) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/routegroups/{routegroupName}][%d] deleteRoutegroupBadGateway %s", 502, payload)
 }
 
 func (o *DeleteRoutegroupBadGateway) GetPayload() *models.ErrorResponse {

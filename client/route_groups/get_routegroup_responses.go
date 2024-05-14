@@ -6,6 +6,7 @@ package route_groups
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *GetRoutegroupOK) Code() int {
 }
 
 func (o *GetRoutegroupOK) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupOK %s", 200, payload)
 }
 
 func (o *GetRoutegroupOK) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupOK %s", 200, payload)
 }
 
 func (o *GetRoutegroupOK) GetPayload() *models.RouteGroup {
@@ -165,11 +168,13 @@ func (o *GetRoutegroupBadRequest) Code() int {
 }
 
 func (o *GetRoutegroupBadRequest) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadRequest %s", 400, payload)
 }
 
 func (o *GetRoutegroupBadRequest) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadRequest %s", 400, payload)
 }
 
 func (o *GetRoutegroupBadRequest) GetPayload() *models.ErrorResponse {
@@ -233,11 +238,13 @@ func (o *GetRoutegroupUnauthorized) Code() int {
 }
 
 func (o *GetRoutegroupUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupUnauthorized %s", 401, payload)
 }
 
 func (o *GetRoutegroupUnauthorized) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupUnauthorized %s", 401, payload)
 }
 
 func (o *GetRoutegroupUnauthorized) GetPayload() *models.ErrorResponse {
@@ -301,11 +308,13 @@ func (o *GetRoutegroupBadGateway) Code() int {
 }
 
 func (o *GetRoutegroupBadGateway) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadGateway %s", 502, payload)
 }
 
 func (o *GetRoutegroupBadGateway) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/routegroups/{routegroupName}][%d] getRoutegroupBadGateway %s", 502, payload)
 }
 
 func (o *GetRoutegroupBadGateway) GetPayload() *models.ErrorResponse {
