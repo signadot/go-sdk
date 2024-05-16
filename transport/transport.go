@@ -17,10 +17,15 @@ const (
 type APIConfig struct {
 	APIKey          string
 	ClusterToken    string
+	BearerToken     string
 	APIURL          string
 	ArtifactsAPIURL string
 	UserAgent       string
 	Debug           bool
+
+	// Advanced settings
+	Consumers map[string]runtime.Consumer
+	Producers map[string]runtime.Producer
 }
 
 func InitAPITransport(conf *APIConfig) (runtime.ClientTransport, error) {
@@ -61,9 +66,12 @@ func createAPITransport(tc *client.TransportConfig, conf *APIConfig) runtime.Cli
 	rt := oaclient.New(tc.Host, tc.BasePath, tc.Schemes)
 
 	// setup auth
-	if conf.APIKey != "" {
+	switch {
+	case conf.BearerToken != "":
+		rt.DefaultAuthentication = oaclient.BearerToken(conf.BearerToken)
+	case conf.APIKey != "":
 		rt.DefaultAuthentication = oaclient.APIKeyAuth(APIKeyHeader, "header", conf.APIKey)
-	} else if conf.ClusterToken != "" {
+	case conf.ClusterToken != "":
 		rt.DefaultAuthentication = oaclient.APIKeyAuth(ClusterTokenHeader, "header", conf.ClusterToken)
 	}
 
@@ -74,6 +82,14 @@ func createAPITransport(tc *client.TransportConfig, conf *APIConfig) runtime.Cli
 	rt.Transport = &userAgent{
 		inner: rt.Transport,
 		agent: conf.UserAgent,
+	}
+
+	// apply consumer and producer settings
+	for mimeType, consumer := range conf.Consumers {
+		rt.Consumers[mimeType] = consumer
+	}
+	for mimeType, producer := range conf.Producers {
+		rt.Producers[mimeType] = producer
 	}
 
 	return FixAPIErrors(rt)
