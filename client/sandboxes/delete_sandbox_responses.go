@@ -6,6 +6,7 @@ package sandboxes
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *DeleteSandboxOK) Code() int {
 }
 
 func (o *DeleteSandboxOK) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK %s", 200, payload)
 }
 
 func (o *DeleteSandboxOK) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxOK %s", 200, payload)
 }
 
 func (o *DeleteSandboxOK) GetPayload() models.EmptyResponse {
@@ -163,11 +166,13 @@ func (o *DeleteSandboxBadRequest) Code() int {
 }
 
 func (o *DeleteSandboxBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest %s", 400, payload)
 }
 
 func (o *DeleteSandboxBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadRequest %s", 400, payload)
 }
 
 func (o *DeleteSandboxBadRequest) GetPayload() *models.ErrorResponse {
@@ -231,11 +236,13 @@ func (o *DeleteSandboxUnauthorized) Code() int {
 }
 
 func (o *DeleteSandboxUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized %s", 401, payload)
 }
 
 func (o *DeleteSandboxUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxUnauthorized %s", 401, payload)
 }
 
 func (o *DeleteSandboxUnauthorized) GetPayload() *models.ErrorResponse {
@@ -299,11 +306,13 @@ func (o *DeleteSandboxBadGateway) Code() int {
 }
 
 func (o *DeleteSandboxBadGateway) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadGateway %s", 502, payload)
 }
 
 func (o *DeleteSandboxBadGateway) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/sandboxes/{sandboxName}][%d] deleteSandboxBadGateway %s", 502, payload)
 }
 
 func (o *DeleteSandboxBadGateway) GetPayload() *models.ErrorResponse {

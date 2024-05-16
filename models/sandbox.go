@@ -22,6 +22,9 @@ type Sandbox struct {
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
 
+	// defaults
+	Defaults *DefaultsCompositeDefaults `json:"defaults,omitempty"`
+
 	// endpoints
 	Endpoints []*SandboxEndpoint `json:"endpoints"`
 
@@ -45,6 +48,10 @@ type Sandbox struct {
 func (m *Sandbox) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateDefaults(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateEndpoints(formats); err != nil {
 		res = append(res, err)
 	}
@@ -60,6 +67,25 @@ func (m *Sandbox) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Sandbox) validateDefaults(formats strfmt.Registry) error {
+	if swag.IsZero(m.Defaults) { // not required
+		return nil
+	}
+
+	if m.Defaults != nil {
+		if err := m.Defaults.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaults")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaults")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -131,6 +157,10 @@ func (m *Sandbox) validateStatus(formats strfmt.Registry) error {
 func (m *Sandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateDefaults(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateEndpoints(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -146,6 +176,27 @@ func (m *Sandbox) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Sandbox) contextValidateDefaults(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Defaults != nil {
+
+		if swag.IsZero(m.Defaults) { // not required
+			return nil
+		}
+
+		if err := m.Defaults.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaults")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaults")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

@@ -6,6 +6,7 @@ package cluster
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *ListClustersOK) Code() int {
 }
 
 func (o *ListClustersOK) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK %s", 200, payload)
 }
 
 func (o *ListClustersOK) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersOK %s", 200, payload)
 }
 
 func (o *ListClustersOK) GetPayload() []*models.Cluster {
@@ -163,11 +166,13 @@ func (o *ListClustersBadRequest) Code() int {
 }
 
 func (o *ListClustersBadRequest) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest %s", 400, payload)
 }
 
 func (o *ListClustersBadRequest) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadRequest %s", 400, payload)
 }
 
 func (o *ListClustersBadRequest) GetPayload() *models.ErrorResponse {
@@ -231,11 +236,13 @@ func (o *ListClustersUnauthorized) Code() int {
 }
 
 func (o *ListClustersUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized %s", 401, payload)
 }
 
 func (o *ListClustersUnauthorized) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersUnauthorized %s", 401, payload)
 }
 
 func (o *ListClustersUnauthorized) GetPayload() *models.ErrorResponse {
@@ -299,11 +306,13 @@ func (o *ListClustersBadGateway) Code() int {
 }
 
 func (o *ListClustersBadGateway) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway %s", 502, payload)
 }
 
 func (o *ListClustersBadGateway) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/clusters/][%d] listClustersBadGateway %s", 502, payload)
 }
 
 func (o *ListClustersBadGateway) GetPayload() *models.ErrorResponse {

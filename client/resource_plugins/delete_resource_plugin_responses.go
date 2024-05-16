@@ -6,6 +6,7 @@ package resource_plugins
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *DeleteResourcePluginOK) Code() int {
 }
 
 func (o *DeleteResourcePluginOK) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginOK %s", 200, payload)
 }
 
 func (o *DeleteResourcePluginOK) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginOK %s", 200, payload)
 }
 
 func (o *DeleteResourcePluginOK) GetPayload() models.EmptyResponse {
@@ -163,11 +166,13 @@ func (o *DeleteResourcePluginBadRequest) Code() int {
 }
 
 func (o *DeleteResourcePluginBadRequest) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadRequest %s", 400, payload)
 }
 
 func (o *DeleteResourcePluginBadRequest) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadRequest %s", 400, payload)
 }
 
 func (o *DeleteResourcePluginBadRequest) GetPayload() *models.ErrorResponse {
@@ -231,11 +236,13 @@ func (o *DeleteResourcePluginUnauthorized) Code() int {
 }
 
 func (o *DeleteResourcePluginUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginUnauthorized %s", 401, payload)
 }
 
 func (o *DeleteResourcePluginUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginUnauthorized %s", 401, payload)
 }
 
 func (o *DeleteResourcePluginUnauthorized) GetPayload() *models.ErrorResponse {
@@ -299,11 +306,13 @@ func (o *DeleteResourcePluginBadGateway) Code() int {
 }
 
 func (o *DeleteResourcePluginBadGateway) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadGateway %s", 502, payload)
 }
 
 func (o *DeleteResourcePluginBadGateway) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/resource-plugins/{pluginName}][%d] deleteResourcePluginBadGateway %s", 502, payload)
 }
 
 func (o *DeleteResourcePluginBadGateway) GetPayload() *models.ErrorResponse {

@@ -6,6 +6,7 @@ package cluster
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *AddClusterOK) Code() int {
 }
 
 func (o *AddClusterOK) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterOK %s", 200, payload)
 }
 
 func (o *AddClusterOK) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterOK %s", 200, payload)
 }
 
 func (o *AddClusterOK) GetPayload() *models.Cluster {
@@ -165,11 +168,13 @@ func (o *AddClusterBadRequest) Code() int {
 }
 
 func (o *AddClusterBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadRequest %s", 400, payload)
 }
 
 func (o *AddClusterBadRequest) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadRequest %s", 400, payload)
 }
 
 func (o *AddClusterBadRequest) GetPayload() *models.ErrorResponse {
@@ -233,11 +238,13 @@ func (o *AddClusterUnauthorized) Code() int {
 }
 
 func (o *AddClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterUnauthorized %s", 401, payload)
 }
 
 func (o *AddClusterUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterUnauthorized  %+v", 401, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterUnauthorized %s", 401, payload)
 }
 
 func (o *AddClusterUnauthorized) GetPayload() *models.ErrorResponse {
@@ -301,11 +308,13 @@ func (o *AddClusterBadGateway) Code() int {
 }
 
 func (o *AddClusterBadGateway) Error() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadGateway %s", 502, payload)
 }
 
 func (o *AddClusterBadGateway) String() string {
-	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadGateway  %+v", 502, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/clusters/{clusterName}/][%d] addClusterBadGateway %s", 502, payload)
 }
 
 func (o *AddClusterBadGateway) GetPayload() *models.ErrorResponse {
