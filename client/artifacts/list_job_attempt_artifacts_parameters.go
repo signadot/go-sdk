@@ -66,7 +66,7 @@ type ListJobAttemptArtifactsParams struct {
 
 	   Job Attempt ID
 	*/
-	JobAttempt string
+	JobAttempt int64
 
 	/* JobName.
 
@@ -140,13 +140,13 @@ func (o *ListJobAttemptArtifactsParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithJobAttempt adds the jobAttempt to the list job attempt artifacts params
-func (o *ListJobAttemptArtifactsParams) WithJobAttempt(jobAttempt string) *ListJobAttemptArtifactsParams {
+func (o *ListJobAttemptArtifactsParams) WithJobAttempt(jobAttempt int64) *ListJobAttemptArtifactsParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
 // SetJobAttempt adds the jobAttempt to the list job attempt artifacts params
-func (o *ListJobAttemptArtifactsParams) SetJobAttempt(jobAttempt string) {
+func (o *ListJobAttemptArtifactsParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
@@ -192,7 +192,7 @@ func (o *ListJobAttemptArtifactsParams) WriteToRequest(r runtime.ClientRequest, 
 	var res []error
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", o.JobAttempt); err != nil {
+	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
 		return err
 	}
 
