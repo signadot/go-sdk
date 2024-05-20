@@ -995,7 +995,7 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "System space",
@@ -1082,7 +1082,7 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Artifact Path",
@@ -1173,7 +1173,7 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Artifact Path",
@@ -1294,7 +1294,7 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Artifact Path",
@@ -1314,7 +1314,7 @@
             "description": "Job Execution ID",
             "in": "formData",
             "name": "jobExecution",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "A base64-encoded, 256-bit SHA-256 digest of the artifact",

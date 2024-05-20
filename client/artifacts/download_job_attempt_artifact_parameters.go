@@ -72,7 +72,7 @@ type DownloadJobAttemptArtifactParams struct {
 
 	   Job Attempt ID
 	*/
-	JobAttempt string
+	JobAttempt int64
 
 	/* JobName.
 
@@ -163,13 +163,13 @@ func (o *DownloadJobAttemptArtifactParams) SetRange(rangeVar *string) {
 }
 
 // WithJobAttempt adds the jobAttempt to the download job attempt artifact params
-func (o *DownloadJobAttemptArtifactParams) WithJobAttempt(jobAttempt string) *DownloadJobAttemptArtifactParams {
+func (o *DownloadJobAttemptArtifactParams) WithJobAttempt(jobAttempt int64) *DownloadJobAttemptArtifactParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
 // SetJobAttempt adds the jobAttempt to the download job attempt artifact params
-func (o *DownloadJobAttemptArtifactParams) SetJobAttempt(jobAttempt string) {
+func (o *DownloadJobAttemptArtifactParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
@@ -234,7 +234,7 @@ func (o *DownloadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientReques
 	}
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", o.JobAttempt); err != nil {
+	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
 		return err
 	}
 
