@@ -2275,8 +2275,8 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Cancel a given job.",
-        "operationId": "cancel-job",
+        "description": "Delete a given job.",
+        "operationId": "delete-job",
         "parameters": [
           {
             "description": "Signadot Org Name",
@@ -2302,7 +2302,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/jobs.Job"
+              "$ref": "#/definitions/EmptyResponse"
             }
           },
           "400": {
@@ -2329,7 +2329,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Cancel a job",
+        "summary": "Delete a job",
         "tags": [
           "Jobs"
         ]
@@ -2393,6 +2393,71 @@
           }
         ],
         "summary": "Get a job",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
+    "/orgs/{orgName}/jobs/{jobName}/cancel": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Cancel a given job.",
+        "operationId": "cancel-job",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Job  Name",
+            "in": "path",
+            "name": "jobName",
+            "required": true,
+            "type": "string",
+            "x-example": "job-xyz"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/jobs.Job"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Cancel a job",
         "tags": [
           "Jobs"
         ]

@@ -49,7 +49,7 @@ func (o *CancelJobReader) ReadResponse(response runtime.ClientResponse, consumer
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[DELETE /orgs/{orgName}/jobs/{jobName}] cancel-job", response, response.Code())
+		return nil, runtime.NewAPIError("[PUT /orgs/{orgName}/jobs/{jobName}/cancel] cancel-job", response, response.Code())
 	}
 }
 
@@ -99,12 +99,12 @@ func (o *CancelJobOK) Code() int {
 
 func (o *CancelJobOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobOK %s", 200, payload)
 }
 
 func (o *CancelJobOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobOK %s", 200, payload)
 }
 
 func (o *CancelJobOK) GetPayload() *models.JobsJob {
@@ -169,12 +169,12 @@ func (o *CancelJobBadRequest) Code() int {
 
 func (o *CancelJobBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobBadRequest %s", 400, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobBadRequest %s", 400, payload)
 }
 
 func (o *CancelJobBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobBadRequest %s", 400, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobBadRequest %s", 400, payload)
 }
 
 func (o *CancelJobBadRequest) GetPayload() *models.ErrorResponse {
@@ -239,12 +239,12 @@ func (o *CancelJobUnauthorized) Code() int {
 
 func (o *CancelJobUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobUnauthorized %s", 401, payload)
 }
 
 func (o *CancelJobUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobUnauthorized %s", 401, payload)
 }
 
 func (o *CancelJobUnauthorized) GetPayload() *models.ErrorResponse {
@@ -309,12 +309,12 @@ func (o *CancelJobBadGateway) Code() int {
 
 func (o *CancelJobBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobBadGateway %s", 502, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobBadGateway %s", 502, payload)
 }
 
 func (o *CancelJobBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/jobs/{jobName}][%d] cancelJobBadGateway %s", 502, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobBadGateway %s", 502, payload)
 }
 
 func (o *CancelJobBadGateway) GetPayload() *models.ErrorResponse {

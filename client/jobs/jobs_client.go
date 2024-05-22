@@ -60,6 +60,8 @@ type ClientService interface {
 
 	CreateJob(params *CreateJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateJobOK, error)
 
+	DeleteJob(params *DeleteJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteJobOK, error)
+
 	GetJob(params *GetJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetJobOK, error)
 
 	ListJobs(params *ListJobsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobsOK, error)
@@ -79,8 +81,8 @@ func (a *Client) CancelJob(params *CancelJobParams, authInfo runtime.ClientAuthI
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-job",
-		Method:             "DELETE",
-		PathPattern:        "/orgs/{orgName}/jobs/{jobName}",
+		Method:             "PUT",
+		PathPattern:        "/orgs/{orgName}/jobs/{jobName}/cancel",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -146,6 +148,47 @@ func (a *Client) CreateJob(params *CreateJobParams, authInfo runtime.ClientAuthI
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for create-job: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeleteJob deletes a job
+
+Delete a given job.
+*/
+func (a *Client) DeleteJob(params *DeleteJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteJobOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteJobParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete-job",
+		Method:             "DELETE",
+		PathPattern:        "/orgs/{orgName}/jobs/{jobName}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteJobReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteJobOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete-job: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
