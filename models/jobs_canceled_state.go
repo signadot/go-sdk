@@ -23,6 +23,9 @@ type JobsCanceledState struct {
 	// canceled by
 	CanceledBy string `json:"canceledBy,omitempty"`
 
+	// in cluster
+	InCluster bool `json:"inCluster,omitempty"`
+
 	// message
 	Message string `json:"message,omitempty"`
 }
