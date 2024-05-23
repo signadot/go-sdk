@@ -24,6 +24,9 @@ type JobsState struct {
 	// completed
 	Completed *JobsCompletedState `json:"completed,omitempty"`
 
+	// queued
+	Queued *JobsQueuedState `json:"queued,omitempty"`
+
 	// running
 	Running *JobsRunningState `json:"running,omitempty"`
 }
@@ -37,6 +40,10 @@ func (m *JobsState) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCompleted(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateQueued(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -88,6 +95,25 @@ func (m *JobsState) validateCompleted(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *JobsState) validateQueued(formats strfmt.Registry) error {
+	if swag.IsZero(m.Queued) { // not required
+		return nil
+	}
+
+	if m.Queued != nil {
+		if err := m.Queued.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("queued")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("queued")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *JobsState) validateRunning(formats strfmt.Registry) error {
 	if swag.IsZero(m.Running) { // not required
 		return nil
@@ -116,6 +142,10 @@ func (m *JobsState) ContextValidate(ctx context.Context, formats strfmt.Registry
 	}
 
 	if err := m.contextValidateCompleted(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQueued(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -163,6 +193,27 @@ func (m *JobsState) contextValidateCompleted(ctx context.Context, formats strfmt
 				return ve.ValidateName("completed")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("completed")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *JobsState) contextValidateQueued(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Queued != nil {
+
+		if swag.IsZero(m.Queued) { // not required
+			return nil
+		}
+
+		if err := m.Queued.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("queued")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("queued")
 			}
 			return err
 		}
