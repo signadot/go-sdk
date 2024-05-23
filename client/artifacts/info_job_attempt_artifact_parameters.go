@@ -66,7 +66,7 @@ type InfoJobAttemptArtifactParams struct {
 
 	   Job Attempt ID
 	*/
-	JobAttempt string
+	JobAttempt int64
 
 	/* JobName.
 
@@ -86,11 +86,11 @@ type InfoJobAttemptArtifactParams struct {
 	*/
 	Path string
 
-	/* System.
+	/* Space.
 
-	   System space
+	   Artifact space, one of 'user' or 'system' (by default 'user')
 	*/
-	System bool
+	Space *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -146,13 +146,13 @@ func (o *InfoJobAttemptArtifactParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithJobAttempt adds the jobAttempt to the info job attempt artifact params
-func (o *InfoJobAttemptArtifactParams) WithJobAttempt(jobAttempt string) *InfoJobAttemptArtifactParams {
+func (o *InfoJobAttemptArtifactParams) WithJobAttempt(jobAttempt int64) *InfoJobAttemptArtifactParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
 // SetJobAttempt adds the jobAttempt to the info job attempt artifact params
-func (o *InfoJobAttemptArtifactParams) SetJobAttempt(jobAttempt string) {
+func (o *InfoJobAttemptArtifactParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
@@ -189,15 +189,15 @@ func (o *InfoJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
-// WithSystem adds the system to the info job attempt artifact params
-func (o *InfoJobAttemptArtifactParams) WithSystem(system bool) *InfoJobAttemptArtifactParams {
-	o.SetSystem(system)
+// WithSpace adds the space to the info job attempt artifact params
+func (o *InfoJobAttemptArtifactParams) WithSpace(space *string) *InfoJobAttemptArtifactParams {
+	o.SetSpace(space)
 	return o
 }
 
-// SetSystem adds the system to the info job attempt artifact params
-func (o *InfoJobAttemptArtifactParams) SetSystem(system bool) {
-	o.System = system
+// SetSpace adds the space to the info job attempt artifact params
+func (o *InfoJobAttemptArtifactParams) SetSpace(space *string) {
+	o.Space = space
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -209,7 +209,7 @@ func (o *InfoJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest, r
 	var res []error
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", o.JobAttempt); err != nil {
+	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
 		return err
 	}
 
@@ -233,13 +233,20 @@ func (o *InfoJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest, r
 		}
 	}
 
-	// query param system
-	qrSystem := o.System
-	qSystem := swag.FormatBool(qrSystem)
-	if qSystem != "" {
+	if o.Space != nil {
 
-		if err := r.SetQueryParam("system", qSystem); err != nil {
-			return err
+		// query param space
+		var qrSpace string
+
+		if o.Space != nil {
+			qrSpace = *o.Space
+		}
+		qSpace := qrSpace
+		if qSpace != "" {
+
+			if err := r.SetQueryParam("space", qSpace); err != nil {
+				return err
+			}
 		}
 	}
 

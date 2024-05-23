@@ -78,13 +78,13 @@ type UploadJobAttemptArtifactParams struct {
 
 	   Job Attempt ID
 	*/
-	JobAttempt string
+	JobAttempt int64
 
 	/* JobExecution.
 
 	   Job Execution ID
 	*/
-	JobExecution *string
+	JobExecution *int64
 
 	/* JobName.
 
@@ -110,11 +110,11 @@ type UploadJobAttemptArtifactParams struct {
 	*/
 	Path string
 
-	/* System.
+	/* Space.
 
-	   System space
+	   Artifact space, one of 'user' or 'system' (by default 'user')
 	*/
-	System bool
+	Space *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -192,24 +192,24 @@ func (o *UploadJobAttemptArtifactParams) SetChecksumSHA256(checksumSHA256 *strin
 }
 
 // WithJobAttempt adds the jobAttempt to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) WithJobAttempt(jobAttempt string) *UploadJobAttemptArtifactParams {
+func (o *UploadJobAttemptArtifactParams) WithJobAttempt(jobAttempt int64) *UploadJobAttemptArtifactParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
 // SetJobAttempt adds the jobAttempt to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) SetJobAttempt(jobAttempt string) {
+func (o *UploadJobAttemptArtifactParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
 // WithJobExecution adds the jobExecution to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) WithJobExecution(jobExecution *string) *UploadJobAttemptArtifactParams {
+func (o *UploadJobAttemptArtifactParams) WithJobExecution(jobExecution *int64) *UploadJobAttemptArtifactParams {
 	o.SetJobExecution(jobExecution)
 	return o
 }
 
 // SetJobExecution adds the jobExecution to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) SetJobExecution(jobExecution *string) {
+func (o *UploadJobAttemptArtifactParams) SetJobExecution(jobExecution *int64) {
 	o.JobExecution = jobExecution
 }
 
@@ -257,15 +257,15 @@ func (o *UploadJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
-// WithSystem adds the system to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) WithSystem(system bool) *UploadJobAttemptArtifactParams {
-	o.SetSystem(system)
+// WithSpace adds the space to the upload job attempt artifact params
+func (o *UploadJobAttemptArtifactParams) WithSpace(space *string) *UploadJobAttemptArtifactParams {
+	o.SetSpace(space)
 	return o
 }
 
-// SetSystem adds the system to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) SetSystem(system bool) {
-	o.System = system
+// SetSpace adds the space to the upload job attempt artifact params
+func (o *UploadJobAttemptArtifactParams) SetSpace(space *string) {
+	o.Space = space
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -296,18 +296,18 @@ func (o *UploadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest,
 	}
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", o.JobAttempt); err != nil {
+	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
 		return err
 	}
 
 	if o.JobExecution != nil {
 
 		// form param jobExecution
-		var frJobExecution string
+		var frJobExecution int64
 		if o.JobExecution != nil {
 			frJobExecution = *o.JobExecution
 		}
-		fJobExecution := frJobExecution
+		fJobExecution := swag.FormatInt64(frJobExecution)
 		if fJobExecution != "" {
 			if err := r.SetFormParam("jobExecution", fJobExecution); err != nil {
 				return err
@@ -350,13 +350,20 @@ func (o *UploadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest,
 		}
 	}
 
-	// query param system
-	qrSystem := o.System
-	qSystem := swag.FormatBool(qrSystem)
-	if qSystem != "" {
+	if o.Space != nil {
 
-		if err := r.SetQueryParam("system", qSystem); err != nil {
-			return err
+		// query param space
+		var qrSpace string
+
+		if o.Space != nil {
+			qrSpace = *o.Space
+		}
+		qSpace := qrSpace
+		if qSpace != "" {
+
+			if err := r.SetQueryParam("space", qSpace); err != nil {
+				return err
+			}
 		}
 	}
 

@@ -72,7 +72,7 @@ type DownloadJobAttemptArtifactParams struct {
 
 	   Job Attempt ID
 	*/
-	JobAttempt string
+	JobAttempt int64
 
 	/* JobName.
 
@@ -92,11 +92,11 @@ type DownloadJobAttemptArtifactParams struct {
 	*/
 	Path string
 
-	/* System.
+	/* Space.
 
-	   System space
+	   Artifact space, one of 'user' or 'system' (by default 'user')
 	*/
-	System bool
+	Space *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -163,13 +163,13 @@ func (o *DownloadJobAttemptArtifactParams) SetRange(rangeVar *string) {
 }
 
 // WithJobAttempt adds the jobAttempt to the download job attempt artifact params
-func (o *DownloadJobAttemptArtifactParams) WithJobAttempt(jobAttempt string) *DownloadJobAttemptArtifactParams {
+func (o *DownloadJobAttemptArtifactParams) WithJobAttempt(jobAttempt int64) *DownloadJobAttemptArtifactParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
 // SetJobAttempt adds the jobAttempt to the download job attempt artifact params
-func (o *DownloadJobAttemptArtifactParams) SetJobAttempt(jobAttempt string) {
+func (o *DownloadJobAttemptArtifactParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
@@ -206,15 +206,15 @@ func (o *DownloadJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
-// WithSystem adds the system to the download job attempt artifact params
-func (o *DownloadJobAttemptArtifactParams) WithSystem(system bool) *DownloadJobAttemptArtifactParams {
-	o.SetSystem(system)
+// WithSpace adds the space to the download job attempt artifact params
+func (o *DownloadJobAttemptArtifactParams) WithSpace(space *string) *DownloadJobAttemptArtifactParams {
+	o.SetSpace(space)
 	return o
 }
 
-// SetSystem adds the system to the download job attempt artifact params
-func (o *DownloadJobAttemptArtifactParams) SetSystem(system bool) {
-	o.System = system
+// SetSpace adds the space to the download job attempt artifact params
+func (o *DownloadJobAttemptArtifactParams) SetSpace(space *string) {
+	o.Space = space
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -234,7 +234,7 @@ func (o *DownloadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientReques
 	}
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", o.JobAttempt); err != nil {
+	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
 		return err
 	}
 
@@ -258,13 +258,20 @@ func (o *DownloadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientReques
 		}
 	}
 
-	// query param system
-	qrSystem := o.System
-	qSystem := swag.FormatBool(qrSystem)
-	if qSystem != "" {
+	if o.Space != nil {
 
-		if err := r.SetQueryParam("system", qSystem); err != nil {
-			return err
+		// query param space
+		var qrSpace string
+
+		if o.Space != nil {
+			qrSpace = *o.Space
+		}
+		qSpace := qrSpace
+		if qSpace != "" {
+
+			if err := r.SetQueryParam("space", qSpace); err != nil {
+				return err
+			}
 		}
 	}
 

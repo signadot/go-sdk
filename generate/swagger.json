@@ -78,6 +78,9 @@
         },
         "size": {
           "type": "integer"
+        },
+        "space": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -995,14 +998,17 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
-            "description": "System space",
+            "description": "Filter by artifact space, one of 'user' or 'system' (by default there is no filter)",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           }
         ],
         "produces": [
@@ -1082,7 +1088,7 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Artifact Path",
@@ -1092,11 +1098,14 @@
             "type": "string"
           },
           {
-            "description": "System space",
+            "description": "Artifact space, one of 'user' or 'system' (by default 'user')",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           }
         ],
         "produces": [
@@ -1173,7 +1182,7 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Artifact Path",
@@ -1183,11 +1192,14 @@
             "type": "string"
           },
           {
-            "description": "System space",
+            "description": "Artifact space, one of 'user' or 'system' (by default 'user')",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           },
           {
             "description": "Downloads the specified byte range of the artifact. Retrieving multiple ranges of data per request is not supported",
@@ -1294,7 +1306,7 @@
             "in": "path",
             "name": "jobAttempt",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Artifact Path",
@@ -1304,17 +1316,20 @@
             "type": "string"
           },
           {
-            "description": "System space",
+            "description": "Artifact space, one of 'user' or 'system' (by default 'user')",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           },
           {
             "description": "Job Execution ID",
             "in": "formData",
             "name": "jobExecution",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "A base64-encoded, 256-bit SHA-256 digest of the artifact",

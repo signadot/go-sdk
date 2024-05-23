@@ -25,6 +25,9 @@ type JobArtifact struct {
 
 	// size
 	Size int64 `json:"size,omitempty"`
+
+	// space
+	Space string `json:"space,omitempty"`
 }
 
 // Validate validates this job artifact
