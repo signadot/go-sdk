@@ -80,11 +80,11 @@ type ListJobAttemptArtifactsParams struct {
 	*/
 	OrgName string
 
-	/* System.
+	/* Space.
 
-	   System space
+	   Filter by artifact space, one of 'user' or 'system' (by default there is no filter)
 	*/
-	System bool
+	Space *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -172,15 +172,15 @@ func (o *ListJobAttemptArtifactsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSystem adds the system to the list job attempt artifacts params
-func (o *ListJobAttemptArtifactsParams) WithSystem(system bool) *ListJobAttemptArtifactsParams {
-	o.SetSystem(system)
+// WithSpace adds the space to the list job attempt artifacts params
+func (o *ListJobAttemptArtifactsParams) WithSpace(space *string) *ListJobAttemptArtifactsParams {
+	o.SetSpace(space)
 	return o
 }
 
-// SetSystem adds the system to the list job attempt artifacts params
-func (o *ListJobAttemptArtifactsParams) SetSystem(system bool) {
-	o.System = system
+// SetSpace adds the space to the list job attempt artifacts params
+func (o *ListJobAttemptArtifactsParams) SetSpace(space *string) {
+	o.Space = space
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -206,13 +206,20 @@ func (o *ListJobAttemptArtifactsParams) WriteToRequest(r runtime.ClientRequest, 
 		return err
 	}
 
-	// query param system
-	qrSystem := o.System
-	qSystem := swag.FormatBool(qrSystem)
-	if qSystem != "" {
+	if o.Space != nil {
 
-		if err := r.SetQueryParam("system", qSystem); err != nil {
-			return err
+		// query param space
+		var qrSpace string
+
+		if o.Space != nil {
+			qrSpace = *o.Space
+		}
+		qSpace := qrSpace
+		if qSpace != "" {
+
+			if err := r.SetQueryParam("space", qSpace); err != nil {
+				return err
+			}
 		}
 	}
 

@@ -2,6 +2,7 @@ package transport
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	"github.com/go-openapi/runtime"
@@ -23,9 +24,10 @@ type APIConfig struct {
 	UserAgent       string
 	Debug           bool
 
-	// Advanced settings
-	Consumers map[string]runtime.Consumer
-	Producers map[string]runtime.Producer
+	// Advanced (optional) settings
+	Consumers  map[string]runtime.Consumer
+	Producers  map[string]runtime.Producer
+	HTTPClient *http.Client
 }
 
 func InitAPITransport(conf *APIConfig) (runtime.ClientTransport, error) {
@@ -63,7 +65,7 @@ func InitAPITransport(conf *APIConfig) (runtime.ClientTransport, error) {
 }
 
 func createAPITransport(tc *client.TransportConfig, conf *APIConfig) runtime.ClientTransport {
-	rt := oaclient.New(tc.Host, tc.BasePath, tc.Schemes)
+	rt := oaclient.NewWithClient(tc.Host, tc.BasePath, tc.Schemes, conf.HTTPClient)
 
 	// setup auth
 	switch {

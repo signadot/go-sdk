@@ -78,6 +78,9 @@
         },
         "size": {
           "type": "integer"
+        },
+        "space": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -283,6 +286,9 @@
         "canceledBy": {
           "type": "string"
         },
+        "inCluster": {
+          "type": "boolean"
+        },
         "message": {
           "type": "string"
         }
@@ -327,6 +333,17 @@
         },
         "status": {
           "$ref": "#/definitions/jobs.Status"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.QueuedState": {
+      "properties": {
+        "inCluster": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -404,6 +421,9 @@
         },
         "completed": {
           "$ref": "#/definitions/jobs.CompletedState"
+        },
+        "queued": {
+          "$ref": "#/definitions/jobs.QueuedState"
         },
         "running": {
           "$ref": "#/definitions/jobs.RunningState"
@@ -1311,11 +1331,14 @@
             "type": "integer"
           },
           {
-            "description": "System space",
+            "description": "Filter by artifact space, one of 'user' or 'system' (by default there is no filter)",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           }
         ],
         "produces": [
@@ -1405,11 +1428,14 @@
             "type": "string"
           },
           {
-            "description": "System space",
+            "description": "Artifact space, one of 'user' or 'system' (by default 'user')",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           }
         ],
         "produces": [
@@ -1496,11 +1522,14 @@
             "type": "string"
           },
           {
-            "description": "System space",
+            "description": "Artifact space, one of 'user' or 'system' (by default 'user')",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           },
           {
             "description": "Downloads the specified byte range of the artifact. Retrieving multiple ranges of data per request is not supported",
@@ -1617,11 +1646,14 @@
             "type": "string"
           },
           {
-            "description": "System space",
+            "description": "Artifact space, one of 'user' or 'system' (by default 'user')",
+            "enum": [
+              "user",
+              "system"
+            ],
             "in": "query",
-            "name": "system",
-            "required": true,
-            "type": "boolean"
+            "name": "space",
+            "type": "string"
           },
           {
             "description": "Job Execution ID",
@@ -2399,6 +2431,93 @@
         "summary": "Get a job",
         "tags": [
           "Jobs"
+        ]
+      }
+    },
+    "/orgs/{orgName}/jobs/{jobName}/attempts/{jobAttempt}/logs/stream": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Stream logs for a given job attempt.",
+        "operationId": "stream-job-attempt-logs",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Job Name",
+            "in": "path",
+            "name": "jobName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Job Attempt ID",
+            "in": "path",
+            "name": "jobAttempt",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Stream type (stdout or stderr)",
+            "enum": [
+              "stdout",
+              "stderr"
+            ],
+            "in": "query",
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "description": "If set, the number of lines from the end of the logs to show",
+            "in": "query",
+            "name": "tailLines",
+            "type": "integer"
+          },
+          {
+            "description": "If set, resume logs stream from the given cursor",
+            "in": "query",
+            "name": "cursor",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/event-stream"
+        ],
+        "responses": {
+          "200": {
+            "description": "Log lines stream",
+            "schema": {
+              "type": "file"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Stream job attempt logs",
+        "tags": [
+          "JobLogs"
         ]
       }
     },

@@ -110,11 +110,11 @@ type UploadJobAttemptArtifactParams struct {
 	*/
 	Path string
 
-	/* System.
+	/* Space.
 
-	   System space
+	   Artifact space, one of 'user' or 'system' (by default 'user')
 	*/
-	System bool
+	Space *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -257,15 +257,15 @@ func (o *UploadJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
-// WithSystem adds the system to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) WithSystem(system bool) *UploadJobAttemptArtifactParams {
-	o.SetSystem(system)
+// WithSpace adds the space to the upload job attempt artifact params
+func (o *UploadJobAttemptArtifactParams) WithSpace(space *string) *UploadJobAttemptArtifactParams {
+	o.SetSpace(space)
 	return o
 }
 
-// SetSystem adds the system to the upload job attempt artifact params
-func (o *UploadJobAttemptArtifactParams) SetSystem(system bool) {
-	o.System = system
+// SetSpace adds the space to the upload job attempt artifact params
+func (o *UploadJobAttemptArtifactParams) SetSpace(space *string) {
+	o.Space = space
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -350,13 +350,20 @@ func (o *UploadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest,
 		}
 	}
 
-	// query param system
-	qrSystem := o.System
-	qSystem := swag.FormatBool(qrSystem)
-	if qSystem != "" {
+	if o.Space != nil {
 
-		if err := r.SetQueryParam("system", qSystem); err != nil {
-			return err
+		// query param space
+		var qrSpace string
+
+		if o.Space != nil {
+			qrSpace = *o.Space
+		}
+		qSpace := qrSpace
+		if qSpace != "" {
+
+			if err := r.SetQueryParam("space", qSpace); err != nil {
+				return err
+			}
 		}
 	}
 
