@@ -255,6 +255,199 @@
       },
       "type": "object"
     },
+    "jobs.Attempt": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "finishedAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "phase": {
+          "type": "string"
+        },
+        "startedAt": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/jobs.State"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.CanceledState": {
+      "properties": {
+        "canceledAt": {
+          "type": "string"
+        },
+        "canceledBy": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.CompletedState": {
+      "properties": {
+        "exitCode": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.EnvItem": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.Job": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "deletedAt": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/jobs.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/jobs.Status"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.RoutingContext": {
+      "properties": {
+        "routegroup": {
+          "type": "string"
+        },
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.RunningState": {
+      "properties": {
+        "podName": {
+          "type": "string"
+        },
+        "podNamespace": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.Spec": {
+      "properties": {
+        "cluster": {
+          "type": "string"
+        },
+        "command": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "env": {
+          "items": {
+            "$ref": "#/definitions/jobs.EnvItem"
+          },
+          "type": "array"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "namePrefix": {
+          "type": "string"
+        },
+        "routingContext": {
+          "$ref": "#/definitions/jobs.RoutingContext"
+        },
+        "runnerGroup": {
+          "type": "string"
+        },
+        "script": {
+          "type": "string"
+        },
+        "uploadArtifact": {
+          "items": {
+            "$ref": "#/definitions/jobs.UploadArtifact"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.State": {
+      "properties": {
+        "canceled": {
+          "$ref": "#/definitions/jobs.CanceledState"
+        },
+        "completed": {
+          "$ref": "#/definitions/jobs.CompletedState"
+        },
+        "running": {
+          "$ref": "#/definitions/jobs.RunningState"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.Status": {
+      "properties": {
+        "attempts": {
+          "items": {
+            "$ref": "#/definitions/jobs.Attempt"
+          },
+          "type": "array"
+        },
+        "finishedAt": {
+          "type": "string"
+        },
+        "phase": {
+          "type": "string"
+        },
+        "startedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.UploadArtifact": {
+      "properties": {
+        "meta": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "local": {
       "properties": {
         "from": {
@@ -585,6 +778,126 @@
         "offsetFrom": {
           "description": "OffsetFrom indicates what the Duration is relative to.  It\nmay be the empty string, \"noMatchedSandboxes\", \"createdAt\" or \"updatedAt\". The empty string\ndefaults to meaning \"noMatchedSandboxes\".",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.AutoScaling": {
+      "properties": {
+        "maxPods": {
+          "type": "integer"
+        },
+        "minPods": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.ExecutionsStatus": {
+      "properties": {
+        "completed": {
+          "type": "integer"
+        },
+        "queued": {
+          "type": "integer"
+        },
+        "running": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.ManualScaling": {
+      "properties": {
+        "desiredPods": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.PodsStatus": {
+      "properties": {
+        "idle": {
+          "type": "integer"
+        },
+        "notReady": {
+          "type": "integer"
+        },
+        "ready": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.RunnerGroup": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "deletedAt": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/runnergroups.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/runnergroups.Status"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.Scaling": {
+      "properties": {
+        "auto": {
+          "$ref": "#/definitions/runnergroups.AutoScaling"
+        },
+        "manual": {
+          "$ref": "#/definitions/runnergroups.ManualScaling"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.Spec": {
+      "properties": {
+        "cluster": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "jobTimeout": {
+          "description": "Duration represents the duration until routegroup's end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "podTemplate": {},
+        "scaling": {
+          "$ref": "#/definitions/runnergroups.Scaling"
+        }
+      },
+      "type": "object"
+    },
+    "runnergroups.Status": {
+      "properties": {
+        "executions": {
+          "$ref": "#/definitions/runnergroups.ExecutionsStatus"
+        },
+        "pods": {
+          "$ref": "#/definitions/runnergroups.PodsStatus"
         }
       },
       "type": "object"
@@ -1852,6 +2165,323 @@
         ]
       }
     },
+    "/orgs/{orgName}/jobs": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List Jobs",
+        "operationId": "list-jobs",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/jobs.Job"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List Jobs",
+        "tags": [
+          "Jobs"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates a job with the provided parameters.",
+        "operationId": "create-job",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Request to create a job",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/jobs.Job"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/jobs.Job"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create a job",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
+    "/orgs/{orgName}/jobs/{jobName}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete a given job.",
+        "operationId": "delete-job",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Job  Name",
+            "in": "path",
+            "name": "jobName",
+            "required": true,
+            "type": "string",
+            "x-example": "job-xyz"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete a job",
+        "tags": [
+          "Jobs"
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch the details about a given job.",
+        "operationId": "get-job",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Job  Name",
+            "in": "path",
+            "name": "jobName",
+            "required": true,
+            "type": "string",
+            "x-example": "job-xyz"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/jobs.Job"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a job",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
+    "/orgs/{orgName}/jobs/{jobName}/cancel": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Cancel a given job.",
+        "operationId": "cancel-job",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Job  Name",
+            "in": "path",
+            "name": "jobName",
+            "required": true,
+            "type": "string",
+            "x-example": "job-xyz"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/jobs.Job"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Cancel a job",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
     "/orgs/{orgName}/resource-plugins": {
       "get": {
         "consumes": [
@@ -2369,6 +2999,266 @@
         "summary": "Create or update a routegroup",
         "tags": [
           "RouteGroups"
+        ]
+      }
+    },
+    "/orgs/{orgName}/runnergroups": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List RunnerGroups",
+        "operationId": "list-runnergroup",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/runnergroups.RunnerGroup"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List RunnerGroups",
+        "tags": [
+          "RunnerGroups"
+        ]
+      }
+    },
+    "/orgs/{orgName}/runnergroups/{runnergroupName}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete a given runnergroup.",
+        "operationId": "delete-runnergroup",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "RunnerGroup Name",
+            "in": "path",
+            "name": "runnergroupName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-runnergroup"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete a runnergroup",
+        "tags": [
+          "RunnerGroups"
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch the details about a given runnergroup.",
+        "operationId": "get-runnergroup",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "RunnerGroup Name",
+            "in": "path",
+            "name": "runnergroupName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-runnergroup"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/runnergroups.RunnerGroup"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a runnergroup",
+        "tags": [
+          "RunnerGroups"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates or updates a runnergroup with the provided parameters.",
+        "operationId": "apply-runnergroup",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "RunnerGroup Name",
+            "in": "path",
+            "name": "runnergroupName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-runnergroup"
+          },
+          {
+            "description": "Request to create or update runnergroup",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/runnergroups.RunnerGroup"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/runnergroups.RunnerGroup"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create or update a runnergroup",
+        "tags": [
+          "RunnerGroups"
         ]
       }
     },
