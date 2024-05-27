@@ -372,9 +372,6 @@
     },
     "jobs.Spec": {
       "properties": {
-        "cluster": {
-          "type": "string"
-        },
         "command": {
           "items": {
             "type": "string"
@@ -460,59 +457,6 @@
           "type": "object"
         },
         "path": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local": {
-      "properties": {
-        "from": {
-          "$ref": "#/definitions/local.From"
-        },
-        "mappings": {
-          "items": {
-            "$ref": "#/definitions/local.PortMapping"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local.From": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "local.PortMapping": {
-      "properties": {
-        "port": {
-          "type": "integer"
-        },
-        "toLocal": {
           "type": "string"
         }
       },
@@ -889,7 +833,7 @@
           "type": "string"
         },
         "jobTimeout": {
-          "description": "Duration represents the duration until routegroup's end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "description": "JobTimeout specifies the max job execution time\nof jobs running with this RunnerGroup.  If not\nspecified, it defaults to 30 minutes (\"30m\")",
           "type": "string"
         },
         "labels": {
@@ -1249,17 +1193,6 @@
           },
           "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
-        },
-        "local": {
-          "description": "Local Workloads",
-          "items": {
-            "$ref": "#/definitions/local"
-          },
-          "type": "array"
-        },
-        "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-          "type": "string"
         },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
