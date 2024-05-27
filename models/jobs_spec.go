@@ -19,9 +19,6 @@ import (
 // swagger:model jobs.Spec
 type JobsSpec struct {
 
-	// cluster
-	Cluster string `json:"cluster,omitempty"`
-
 	// command
 	Command []string `json:"command"`
 

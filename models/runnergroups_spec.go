@@ -24,13 +24,9 @@ type RunnergroupsSpec struct {
 	// image
 	Image string `json:"image,omitempty"`
 
-	// Duration represents the duration until routegroup's end of life.
-	// It should be an unsigned integer not exceeding 32 bits followed by
-	// a units character, which can be one of the following.
-	//   - 'm' for minutes
-	//   - 'h' for hours
-	//   - 'd' for days
-	//   - 'w' for weeks
+	// JobTimeout specifies the max job execution time
+	// of jobs running with this RunnerGroup.  If not
+	// specified, it defaults to 30 minutes ("30m")
 	JobTimeout string `json:"jobTimeout,omitempty"`
 
 	// labels
