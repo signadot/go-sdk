@@ -64,7 +64,7 @@ ListRunnergroupOK describes a response with status code 200, with default header
 OK
 */
 type ListRunnergroupOK struct {
-	Payload []*models.RunnergroupsRunnerGroup
+	Payload []*models.JobRunnerGroup
 }
 
 // IsSuccess returns true when this list runnergroup o k response has a 2xx status code
@@ -107,7 +107,7 @@ func (o *ListRunnergroupOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/runnergroups][%d] listRunnergroupOK %s", 200, payload)
 }
 
-func (o *ListRunnergroupOK) GetPayload() []*models.RunnergroupsRunnerGroup {
+func (o *ListRunnergroupOK) GetPayload() []*models.JobRunnerGroup {
 	return o.Payload
 }
 

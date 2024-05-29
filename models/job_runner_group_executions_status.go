@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RunnergroupsExecutionsStatus runnergroups executions status
+// JobRunnerGroupExecutionsStatus job runner group executions status
 //
-// swagger:model runnergroups.ExecutionsStatus
-type RunnergroupsExecutionsStatus struct {
+// swagger:model jobRunnerGroup.ExecutionsStatus
+type JobRunnerGroupExecutionsStatus struct {
 
 	// completed
 	Completed int64 `json:"completed,omitempty"`
@@ -27,18 +27,18 @@ type RunnergroupsExecutionsStatus struct {
 	Running int64 `json:"running,omitempty"`
 }
 
-// Validate validates this runnergroups executions status
-func (m *RunnergroupsExecutionsStatus) Validate(formats strfmt.Registry) error {
+// Validate validates this job runner group executions status
+func (m *JobRunnerGroupExecutionsStatus) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this runnergroups executions status based on context it is used
-func (m *RunnergroupsExecutionsStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this job runner group executions status based on context it is used
+func (m *JobRunnerGroupExecutionsStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *RunnergroupsExecutionsStatus) MarshalBinary() ([]byte, error) {
+func (m *JobRunnerGroupExecutionsStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -46,8 +46,8 @@ func (m *RunnergroupsExecutionsStatus) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RunnergroupsExecutionsStatus) UnmarshalBinary(b []byte) error {
-	var res RunnergroupsExecutionsStatus
+func (m *JobRunnerGroupExecutionsStatus) UnmarshalBinary(b []byte) error {
+	var res JobRunnerGroupExecutionsStatus
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

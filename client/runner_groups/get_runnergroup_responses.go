@@ -64,7 +64,7 @@ GetRunnergroupOK describes a response with status code 200, with default header 
 OK
 */
 type GetRunnergroupOK struct {
-	Payload *models.RunnergroupsRunnerGroup
+	Payload *models.JobRunnerGroup
 }
 
 // IsSuccess returns true when this get runnergroup o k response has a 2xx status code
@@ -107,13 +107,13 @@ func (o *GetRunnergroupOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/runnergroups/{runnergroupName}][%d] getRunnergroupOK %s", 200, payload)
 }
 
-func (o *GetRunnergroupOK) GetPayload() *models.RunnergroupsRunnerGroup {
+func (o *GetRunnergroupOK) GetPayload() *models.JobRunnerGroup {
 	return o.Payload
 }
 
 func (o *GetRunnergroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.RunnergroupsRunnerGroup)
+	o.Payload = new(models.JobRunnerGroup)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

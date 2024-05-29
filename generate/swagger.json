@@ -68,6 +68,26 @@
       },
       "type": "object"
     },
+    "Job": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "deletedAt": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/job.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/jobs.Status"
+        }
+      },
+      "type": "object"
+    },
     "JobArtifact": {
       "properties": {
         "lastModified": {
@@ -107,6 +127,29 @@
             "type": "string"
           },
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "JobRunnerGroup": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "deletedAt": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/jobRunnerGroup.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/jobRunnerGroup.Status"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -255,6 +298,180 @@
       },
       "type": "object"
     },
+    "job.EnvItem": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "job.RoutingContext": {
+      "properties": {
+        "routegroup": {
+          "type": "string"
+        },
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "job.Spec": {
+      "properties": {
+        "command": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "env": {
+          "items": {
+            "$ref": "#/definitions/job.EnvItem"
+          },
+          "type": "array"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "namePrefix": {
+          "type": "string"
+        },
+        "routingContext": {
+          "$ref": "#/definitions/job.RoutingContext"
+        },
+        "runnerGroup": {
+          "type": "string"
+        },
+        "script": {
+          "type": "string"
+        },
+        "uploadArtifact": {
+          "items": {
+            "$ref": "#/definitions/job.UploadArtifact"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "job.UploadArtifact": {
+      "properties": {
+        "meta": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobRunnerGroup.AutoScaling": {
+      "properties": {
+        "maxPods": {
+          "type": "integer"
+        },
+        "minPods": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "jobRunnerGroup.ExecutionsStatus": {
+      "properties": {
+        "completed": {
+          "type": "integer"
+        },
+        "queued": {
+          "type": "integer"
+        },
+        "running": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "jobRunnerGroup.ManualScaling": {
+      "properties": {
+        "desiredPods": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "jobRunnerGroup.PodsStatus": {
+      "properties": {
+        "idle": {
+          "type": "integer"
+        },
+        "notReady": {
+          "type": "integer"
+        },
+        "ready": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "jobRunnerGroup.Scaling": {
+      "properties": {
+        "auto": {
+          "$ref": "#/definitions/jobRunnerGroup.AutoScaling"
+        },
+        "manual": {
+          "$ref": "#/definitions/jobRunnerGroup.ManualScaling"
+        }
+      },
+      "type": "object"
+    },
+    "jobRunnerGroup.Spec": {
+      "properties": {
+        "cluster": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "jobTimeout": {
+          "description": "JobTimeout specifies the max job execution time\nof jobs running with this RunnerGroup.  If not\nspecified, it defaults to 30 minutes (\"30m\")",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "podTemplate": {},
+        "scaling": {
+          "$ref": "#/definitions/jobRunnerGroup.Scaling"
+        }
+      },
+      "type": "object"
+    },
+    "jobRunnerGroup.Status": {
+      "properties": {
+        "executions": {
+          "$ref": "#/definitions/jobRunnerGroup.ExecutionsStatus"
+        },
+        "pods": {
+          "$ref": "#/definitions/jobRunnerGroup.PodsStatus"
+        }
+      },
+      "type": "object"
+    },
     "jobs.Attempt": {
       "properties": {
         "createdAt": {
@@ -306,54 +523,12 @@
       },
       "type": "object"
     },
-    "jobs.EnvItem": {
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "jobs.Job": {
-      "properties": {
-        "createdAt": {
-          "type": "string"
-        },
-        "deletedAt": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "spec": {
-          "$ref": "#/definitions/jobs.Spec"
-        },
-        "status": {
-          "$ref": "#/definitions/jobs.Status"
-        }
-      },
-      "type": "object"
-    },
     "jobs.QueuedState": {
       "properties": {
         "inCluster": {
           "type": "boolean"
         },
         "message": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "jobs.RoutingContext": {
-      "properties": {
-        "routegroup": {
-          "type": "string"
-        },
-        "sandbox": {
           "type": "string"
         }
       },
@@ -366,50 +541,6 @@
         },
         "podNamespace": {
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "jobs.Spec": {
-      "properties": {
-        "cluster": {
-          "type": "string"
-        },
-        "command": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "env": {
-          "items": {
-            "$ref": "#/definitions/jobs.EnvItem"
-          },
-          "type": "array"
-        },
-        "labels": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
-        },
-        "namePrefix": {
-          "type": "string"
-        },
-        "routingContext": {
-          "$ref": "#/definitions/jobs.RoutingContext"
-        },
-        "runnerGroup": {
-          "type": "string"
-        },
-        "script": {
-          "type": "string"
-        },
-        "uploadArtifact": {
-          "items": {
-            "$ref": "#/definitions/jobs.UploadArtifact"
-          },
-          "type": "array"
         }
       },
       "type": "object"
@@ -446,20 +577,6 @@
           "type": "string"
         },
         "startedAt": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "jobs.UploadArtifact": {
-      "properties": {
-        "meta": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
-        },
-        "path": {
           "type": "string"
         }
       },
@@ -795,126 +912,6 @@
         "offsetFrom": {
           "description": "OffsetFrom indicates what the Duration is relative to.  It\nmay be the empty string, \"noMatchedSandboxes\", \"createdAt\" or \"updatedAt\". The empty string\ndefaults to meaning \"noMatchedSandboxes\".",
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.AutoScaling": {
-      "properties": {
-        "maxPods": {
-          "type": "integer"
-        },
-        "minPods": {
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.ExecutionsStatus": {
-      "properties": {
-        "completed": {
-          "type": "integer"
-        },
-        "queued": {
-          "type": "integer"
-        },
-        "running": {
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.ManualScaling": {
-      "properties": {
-        "desiredPods": {
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.PodsStatus": {
-      "properties": {
-        "idle": {
-          "type": "integer"
-        },
-        "notReady": {
-          "type": "integer"
-        },
-        "ready": {
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.RunnerGroup": {
-      "properties": {
-        "createdAt": {
-          "type": "string"
-        },
-        "deletedAt": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "spec": {
-          "$ref": "#/definitions/runnergroups.Spec"
-        },
-        "status": {
-          "$ref": "#/definitions/runnergroups.Status"
-        },
-        "updatedAt": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.Scaling": {
-      "properties": {
-        "auto": {
-          "$ref": "#/definitions/runnergroups.AutoScaling"
-        },
-        "manual": {
-          "$ref": "#/definitions/runnergroups.ManualScaling"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.Spec": {
-      "properties": {
-        "cluster": {
-          "type": "string"
-        },
-        "image": {
-          "type": "string"
-        },
-        "jobTimeout": {
-          "description": "Duration represents the duration until routegroup's end of life.\nIt should be an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
-          "type": "string"
-        },
-        "labels": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
-        },
-        "namespace": {
-          "type": "string"
-        },
-        "podTemplate": {},
-        "scaling": {
-          "$ref": "#/definitions/runnergroups.Scaling"
-        }
-      },
-      "type": "object"
-    },
-    "runnergroups.Status": {
-      "properties": {
-        "executions": {
-          "$ref": "#/definitions/runnergroups.ExecutionsStatus"
-        },
-        "pods": {
-          "$ref": "#/definitions/runnergroups.PodsStatus"
         }
       },
       "type": "object"
@@ -2207,7 +2204,7 @@
             "description": "OK",
             "schema": {
               "items": {
-                "$ref": "#/definitions/jobs.Job"
+                "$ref": "#/definitions/Job"
               },
               "type": "array"
             }
@@ -2262,7 +2259,7 @@
             "name": "data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/jobs.Job"
+              "$ref": "#/definitions/Job"
             }
           }
         ],
@@ -2273,7 +2270,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/jobs.Job"
+              "$ref": "#/definitions/Job"
             }
           },
           "400": {
@@ -2401,7 +2398,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/jobs.Job"
+              "$ref": "#/definitions/Job"
             }
           },
           "400": {
@@ -2553,7 +2550,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/jobs.Job"
+              "$ref": "#/definitions/Job"
             }
           },
           "400": {
@@ -3131,7 +3128,7 @@
             "description": "OK",
             "schema": {
               "items": {
-                "$ref": "#/definitions/runnergroups.RunnerGroup"
+                "$ref": "#/definitions/JobRunnerGroup"
               },
               "type": "array"
             }
@@ -3261,7 +3258,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/runnergroups.RunnerGroup"
+              "$ref": "#/definitions/JobRunnerGroup"
             }
           },
           "400": {
@@ -3322,7 +3319,7 @@
             "name": "data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/runnergroups.RunnerGroup"
+              "$ref": "#/definitions/JobRunnerGroup"
             }
           }
         ],
@@ -3333,7 +3330,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/runnergroups.RunnerGroup"
+              "$ref": "#/definitions/JobRunnerGroup"
             }
           },
           "400": {

@@ -13,20 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RunnergroupsStatus runnergroups status
+// JobRunnerGroupStatus job runner group status
 //
-// swagger:model runnergroups.Status
-type RunnergroupsStatus struct {
+// swagger:model jobRunnerGroup.Status
+type JobRunnerGroupStatus struct {
 
 	// executions
-	Executions *RunnergroupsExecutionsStatus `json:"executions,omitempty"`
+	Executions *JobRunnerGroupExecutionsStatus `json:"executions,omitempty"`
 
 	// pods
-	Pods *RunnergroupsPodsStatus `json:"pods,omitempty"`
+	Pods *JobRunnerGroupPodsStatus `json:"pods,omitempty"`
 }
 
-// Validate validates this runnergroups status
-func (m *RunnergroupsStatus) Validate(formats strfmt.Registry) error {
+// Validate validates this job runner group status
+func (m *JobRunnerGroupStatus) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateExecutions(formats); err != nil {
@@ -43,7 +43,7 @@ func (m *RunnergroupsStatus) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RunnergroupsStatus) validateExecutions(formats strfmt.Registry) error {
+func (m *JobRunnerGroupStatus) validateExecutions(formats strfmt.Registry) error {
 	if swag.IsZero(m.Executions) { // not required
 		return nil
 	}
@@ -62,7 +62,7 @@ func (m *RunnergroupsStatus) validateExecutions(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RunnergroupsStatus) validatePods(formats strfmt.Registry) error {
+func (m *JobRunnerGroupStatus) validatePods(formats strfmt.Registry) error {
 	if swag.IsZero(m.Pods) { // not required
 		return nil
 	}
@@ -81,8 +81,8 @@ func (m *RunnergroupsStatus) validatePods(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this runnergroups status based on the context it is used
-func (m *RunnergroupsStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this job runner group status based on the context it is used
+func (m *JobRunnerGroupStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateExecutions(ctx, formats); err != nil {
@@ -99,7 +99,7 @@ func (m *RunnergroupsStatus) ContextValidate(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *RunnergroupsStatus) contextValidateExecutions(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobRunnerGroupStatus) contextValidateExecutions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Executions != nil {
 
@@ -120,7 +120,7 @@ func (m *RunnergroupsStatus) contextValidateExecutions(ctx context.Context, form
 	return nil
 }
 
-func (m *RunnergroupsStatus) contextValidatePods(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobRunnerGroupStatus) contextValidatePods(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Pods != nil {
 
@@ -142,7 +142,7 @@ func (m *RunnergroupsStatus) contextValidatePods(ctx context.Context, formats st
 }
 
 // MarshalBinary interface implementation
-func (m *RunnergroupsStatus) MarshalBinary() ([]byte, error) {
+func (m *JobRunnerGroupStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -150,8 +150,8 @@ func (m *RunnergroupsStatus) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RunnergroupsStatus) UnmarshalBinary(b []byte) error {
-	var res RunnergroupsStatus
+func (m *JobRunnerGroupStatus) UnmarshalBinary(b []byte) error {
+	var res JobRunnerGroupStatus
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

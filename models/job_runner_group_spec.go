@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RunnergroupsSpec runnergroups spec
+// JobRunnerGroupSpec job runner group spec
 //
-// swagger:model runnergroups.Spec
-type RunnergroupsSpec struct {
+// swagger:model jobRunnerGroup.Spec
+type JobRunnerGroupSpec struct {
 
 	// cluster
 	Cluster string `json:"cluster,omitempty"`
@@ -24,13 +24,9 @@ type RunnergroupsSpec struct {
 	// image
 	Image string `json:"image,omitempty"`
 
-	// Duration represents the duration until routegroup's end of life.
-	// It should be an unsigned integer not exceeding 32 bits followed by
-	// a units character, which can be one of the following.
-	//   - 'm' for minutes
-	//   - 'h' for hours
-	//   - 'd' for days
-	//   - 'w' for weeks
+	// JobTimeout specifies the max job execution time
+	// of jobs running with this RunnerGroup.  If not
+	// specified, it defaults to 30 minutes ("30m")
 	JobTimeout string `json:"jobTimeout,omitempty"`
 
 	// labels
@@ -43,11 +39,11 @@ type RunnergroupsSpec struct {
 	PodTemplate interface{} `json:"podTemplate,omitempty"`
 
 	// scaling
-	Scaling *RunnergroupsScaling `json:"scaling,omitempty"`
+	Scaling *JobRunnerGroupScaling `json:"scaling,omitempty"`
 }
 
-// Validate validates this runnergroups spec
-func (m *RunnergroupsSpec) Validate(formats strfmt.Registry) error {
+// Validate validates this job runner group spec
+func (m *JobRunnerGroupSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateScaling(formats); err != nil {
@@ -60,7 +56,7 @@ func (m *RunnergroupsSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RunnergroupsSpec) validateScaling(formats strfmt.Registry) error {
+func (m *JobRunnerGroupSpec) validateScaling(formats strfmt.Registry) error {
 	if swag.IsZero(m.Scaling) { // not required
 		return nil
 	}
@@ -79,8 +75,8 @@ func (m *RunnergroupsSpec) validateScaling(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this runnergroups spec based on the context it is used
-func (m *RunnergroupsSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this job runner group spec based on the context it is used
+func (m *JobRunnerGroupSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateScaling(ctx, formats); err != nil {
@@ -93,7 +89,7 @@ func (m *RunnergroupsSpec) ContextValidate(ctx context.Context, formats strfmt.R
 	return nil
 }
 
-func (m *RunnergroupsSpec) contextValidateScaling(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobRunnerGroupSpec) contextValidateScaling(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Scaling != nil {
 
@@ -115,7 +111,7 @@ func (m *RunnergroupsSpec) contextValidateScaling(ctx context.Context, formats s
 }
 
 // MarshalBinary interface implementation
-func (m *RunnergroupsSpec) MarshalBinary() ([]byte, error) {
+func (m *JobRunnerGroupSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -123,8 +119,8 @@ func (m *RunnergroupsSpec) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RunnergroupsSpec) UnmarshalBinary(b []byte) error {
-	var res RunnergroupsSpec
+func (m *JobRunnerGroupSpec) UnmarshalBinary(b []byte) error {
+	var res JobRunnerGroupSpec
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -67,7 +67,7 @@ type CreateJobParams struct {
 
 	   Request to create a job
 	*/
-	Data *models.JobsJob
+	Data *models.Job
 
 	/* OrgName.
 
@@ -129,13 +129,13 @@ func (o *CreateJobParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithData adds the data to the create job params
-func (o *CreateJobParams) WithData(data *models.JobsJob) *CreateJobParams {
+func (o *CreateJobParams) WithData(data *models.Job) *CreateJobParams {
 	o.SetData(data)
 	return o
 }
 
 // SetData adds the data to the create job params
-func (o *CreateJobParams) SetData(data *models.JobsJob) {
+func (o *CreateJobParams) SetData(data *models.Job) {
 	o.Data = data
 }
 
