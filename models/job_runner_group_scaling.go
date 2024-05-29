@@ -13,20 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RunnergroupsScaling runnergroups scaling
+// JobRunnerGroupScaling job runner group scaling
 //
-// swagger:model runnergroups.Scaling
-type RunnergroupsScaling struct {
+// swagger:model jobRunnerGroup.Scaling
+type JobRunnerGroupScaling struct {
 
 	// auto
-	Auto *RunnergroupsAutoScaling `json:"auto,omitempty"`
+	Auto *JobRunnerGroupAutoScaling `json:"auto,omitempty"`
 
 	// manual
-	Manual *RunnergroupsManualScaling `json:"manual,omitempty"`
+	Manual *JobRunnerGroupManualScaling `json:"manual,omitempty"`
 }
 
-// Validate validates this runnergroups scaling
-func (m *RunnergroupsScaling) Validate(formats strfmt.Registry) error {
+// Validate validates this job runner group scaling
+func (m *JobRunnerGroupScaling) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAuto(formats); err != nil {
@@ -43,7 +43,7 @@ func (m *RunnergroupsScaling) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RunnergroupsScaling) validateAuto(formats strfmt.Registry) error {
+func (m *JobRunnerGroupScaling) validateAuto(formats strfmt.Registry) error {
 	if swag.IsZero(m.Auto) { // not required
 		return nil
 	}
@@ -62,7 +62,7 @@ func (m *RunnergroupsScaling) validateAuto(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RunnergroupsScaling) validateManual(formats strfmt.Registry) error {
+func (m *JobRunnerGroupScaling) validateManual(formats strfmt.Registry) error {
 	if swag.IsZero(m.Manual) { // not required
 		return nil
 	}
@@ -81,8 +81,8 @@ func (m *RunnergroupsScaling) validateManual(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this runnergroups scaling based on the context it is used
-func (m *RunnergroupsScaling) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this job runner group scaling based on the context it is used
+func (m *JobRunnerGroupScaling) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAuto(ctx, formats); err != nil {
@@ -99,7 +99,7 @@ func (m *RunnergroupsScaling) ContextValidate(ctx context.Context, formats strfm
 	return nil
 }
 
-func (m *RunnergroupsScaling) contextValidateAuto(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobRunnerGroupScaling) contextValidateAuto(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Auto != nil {
 
@@ -120,7 +120,7 @@ func (m *RunnergroupsScaling) contextValidateAuto(ctx context.Context, formats s
 	return nil
 }
 
-func (m *RunnergroupsScaling) contextValidateManual(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobRunnerGroupScaling) contextValidateManual(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Manual != nil {
 
@@ -142,7 +142,7 @@ func (m *RunnergroupsScaling) contextValidateManual(ctx context.Context, formats
 }
 
 // MarshalBinary interface implementation
-func (m *RunnergroupsScaling) MarshalBinary() ([]byte, error) {
+func (m *JobRunnerGroupScaling) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -150,8 +150,8 @@ func (m *RunnergroupsScaling) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RunnergroupsScaling) UnmarshalBinary(b []byte) error {
-	var res RunnergroupsScaling
+func (m *JobRunnerGroupScaling) UnmarshalBinary(b []byte) error {
+	var res JobRunnerGroupScaling
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

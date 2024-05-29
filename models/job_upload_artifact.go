@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// JobsUploadArtifact jobs upload artifact
+// JobUploadArtifact job upload artifact
 //
-// swagger:model jobs.UploadArtifact
-type JobsUploadArtifact struct {
+// swagger:model job.UploadArtifact
+type JobUploadArtifact struct {
 
 	// meta
 	Meta map[string]string `json:"meta,omitempty"`
@@ -24,18 +24,18 @@ type JobsUploadArtifact struct {
 	Path string `json:"path,omitempty"`
 }
 
-// Validate validates this jobs upload artifact
-func (m *JobsUploadArtifact) Validate(formats strfmt.Registry) error {
+// Validate validates this job upload artifact
+func (m *JobUploadArtifact) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this jobs upload artifact based on context it is used
-func (m *JobsUploadArtifact) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this job upload artifact based on context it is used
+func (m *JobUploadArtifact) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *JobsUploadArtifact) MarshalBinary() ([]byte, error) {
+func (m *JobUploadArtifact) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *JobsUploadArtifact) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *JobsUploadArtifact) UnmarshalBinary(b []byte) error {
-	var res JobsUploadArtifact
+func (m *JobUploadArtifact) UnmarshalBinary(b []byte) error {
+	var res JobUploadArtifact
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

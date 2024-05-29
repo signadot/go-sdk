@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// JobsJob jobs job
+// Job job
 //
-// swagger:model jobs.Job
-type JobsJob struct {
+// swagger:model Job
+type Job struct {
 
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
@@ -28,14 +28,14 @@ type JobsJob struct {
 	Name string `json:"name,omitempty"`
 
 	// spec
-	Spec *JobsSpec `json:"spec,omitempty"`
+	Spec *JobSpec `json:"spec,omitempty"`
 
 	// status
 	Status *JobsStatus `json:"status,omitempty"`
 }
 
-// Validate validates this jobs job
-func (m *JobsJob) Validate(formats strfmt.Registry) error {
+// Validate validates this job
+func (m *Job) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateSpec(formats); err != nil {
@@ -52,7 +52,7 @@ func (m *JobsJob) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsJob) validateSpec(formats strfmt.Registry) error {
+func (m *Job) validateSpec(formats strfmt.Registry) error {
 	if swag.IsZero(m.Spec) { // not required
 		return nil
 	}
@@ -71,7 +71,7 @@ func (m *JobsJob) validateSpec(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsJob) validateStatus(formats strfmt.Registry) error {
+func (m *Job) validateStatus(formats strfmt.Registry) error {
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -90,8 +90,8 @@ func (m *JobsJob) validateStatus(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this jobs job based on the context it is used
-func (m *JobsJob) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this job based on the context it is used
+func (m *Job) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateSpec(ctx, formats); err != nil {
@@ -108,7 +108,7 @@ func (m *JobsJob) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	return nil
 }
 
-func (m *JobsJob) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *Job) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
 
@@ -129,7 +129,7 @@ func (m *JobsJob) contextValidateSpec(ctx context.Context, formats strfmt.Regist
 	return nil
 }
 
-func (m *JobsJob) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+func (m *Job) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
 
@@ -151,7 +151,7 @@ func (m *JobsJob) contextValidateStatus(ctx context.Context, formats strfmt.Regi
 }
 
 // MarshalBinary interface implementation
-func (m *JobsJob) MarshalBinary() ([]byte, error) {
+func (m *Job) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -159,8 +159,8 @@ func (m *JobsJob) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *JobsJob) UnmarshalBinary(b []byte) error {
-	var res JobsJob
+func (m *Job) UnmarshalBinary(b []byte) error {
+	var res Job
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

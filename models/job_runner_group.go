@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RunnergroupsRunnerGroup runnergroups runner group
+// JobRunnerGroup job runner group
 //
-// swagger:model runnergroups.RunnerGroup
-type RunnergroupsRunnerGroup struct {
+// swagger:model JobRunnerGroup
+type JobRunnerGroup struct {
 
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
@@ -28,17 +28,17 @@ type RunnergroupsRunnerGroup struct {
 	Name string `json:"name,omitempty"`
 
 	// spec
-	Spec *RunnergroupsSpec `json:"spec,omitempty"`
+	Spec *JobRunnerGroupSpec `json:"spec,omitempty"`
 
 	// status
-	Status *RunnergroupsStatus `json:"status,omitempty"`
+	Status *JobRunnerGroupStatus `json:"status,omitempty"`
 
 	// updated at
 	UpdatedAt string `json:"updatedAt,omitempty"`
 }
 
-// Validate validates this runnergroups runner group
-func (m *RunnergroupsRunnerGroup) Validate(formats strfmt.Registry) error {
+// Validate validates this job runner group
+func (m *JobRunnerGroup) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateSpec(formats); err != nil {
@@ -55,7 +55,7 @@ func (m *RunnergroupsRunnerGroup) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RunnergroupsRunnerGroup) validateSpec(formats strfmt.Registry) error {
+func (m *JobRunnerGroup) validateSpec(formats strfmt.Registry) error {
 	if swag.IsZero(m.Spec) { // not required
 		return nil
 	}
@@ -74,7 +74,7 @@ func (m *RunnergroupsRunnerGroup) validateSpec(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RunnergroupsRunnerGroup) validateStatus(formats strfmt.Registry) error {
+func (m *JobRunnerGroup) validateStatus(formats strfmt.Registry) error {
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -93,8 +93,8 @@ func (m *RunnergroupsRunnerGroup) validateStatus(formats strfmt.Registry) error 
 	return nil
 }
 
-// ContextValidate validate this runnergroups runner group based on the context it is used
-func (m *RunnergroupsRunnerGroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this job runner group based on the context it is used
+func (m *JobRunnerGroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateSpec(ctx, formats); err != nil {
@@ -111,7 +111,7 @@ func (m *RunnergroupsRunnerGroup) ContextValidate(ctx context.Context, formats s
 	return nil
 }
 
-func (m *RunnergroupsRunnerGroup) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobRunnerGroup) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
 
@@ -132,7 +132,7 @@ func (m *RunnergroupsRunnerGroup) contextValidateSpec(ctx context.Context, forma
 	return nil
 }
 
-func (m *RunnergroupsRunnerGroup) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobRunnerGroup) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
 
@@ -154,7 +154,7 @@ func (m *RunnergroupsRunnerGroup) contextValidateStatus(ctx context.Context, for
 }
 
 // MarshalBinary interface implementation
-func (m *RunnergroupsRunnerGroup) MarshalBinary() ([]byte, error) {
+func (m *JobRunnerGroup) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -162,8 +162,8 @@ func (m *RunnergroupsRunnerGroup) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RunnergroupsRunnerGroup) UnmarshalBinary(b []byte) error {
-	var res RunnergroupsRunnerGroup
+func (m *JobRunnerGroup) UnmarshalBinary(b []byte) error {
+	var res JobRunnerGroup
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

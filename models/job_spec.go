@@ -14,19 +14,16 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// JobsSpec jobs spec
+// JobSpec job spec
 //
-// swagger:model jobs.Spec
-type JobsSpec struct {
-
-	// cluster
-	Cluster string `json:"cluster,omitempty"`
+// swagger:model job.Spec
+type JobSpec struct {
 
 	// command
 	Command []string `json:"command"`
 
 	// env
-	Env []*JobsEnvItem `json:"env"`
+	Env []*JobEnvItem `json:"env"`
 
 	// labels
 	Labels map[string]string `json:"labels,omitempty"`
@@ -35,7 +32,7 @@ type JobsSpec struct {
 	NamePrefix string `json:"namePrefix,omitempty"`
 
 	// routing context
-	RoutingContext *JobsRoutingContext `json:"routingContext,omitempty"`
+	RoutingContext *JobRoutingContext `json:"routingContext,omitempty"`
 
 	// runner group
 	RunnerGroup string `json:"runnerGroup,omitempty"`
@@ -44,11 +41,11 @@ type JobsSpec struct {
 	Script string `json:"script,omitempty"`
 
 	// upload artifact
-	UploadArtifact []*JobsUploadArtifact `json:"uploadArtifact"`
+	UploadArtifact []*JobUploadArtifact `json:"uploadArtifact"`
 }
 
-// Validate validates this jobs spec
-func (m *JobsSpec) Validate(formats strfmt.Registry) error {
+// Validate validates this job spec
+func (m *JobSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEnv(formats); err != nil {
@@ -69,7 +66,7 @@ func (m *JobsSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsSpec) validateEnv(formats strfmt.Registry) error {
+func (m *JobSpec) validateEnv(formats strfmt.Registry) error {
 	if swag.IsZero(m.Env) { // not required
 		return nil
 	}
@@ -95,7 +92,7 @@ func (m *JobsSpec) validateEnv(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsSpec) validateRoutingContext(formats strfmt.Registry) error {
+func (m *JobSpec) validateRoutingContext(formats strfmt.Registry) error {
 	if swag.IsZero(m.RoutingContext) { // not required
 		return nil
 	}
@@ -114,7 +111,7 @@ func (m *JobsSpec) validateRoutingContext(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsSpec) validateUploadArtifact(formats strfmt.Registry) error {
+func (m *JobSpec) validateUploadArtifact(formats strfmt.Registry) error {
 	if swag.IsZero(m.UploadArtifact) { // not required
 		return nil
 	}
@@ -140,8 +137,8 @@ func (m *JobsSpec) validateUploadArtifact(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this jobs spec based on the context it is used
-func (m *JobsSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this job spec based on the context it is used
+func (m *JobSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateEnv(ctx, formats); err != nil {
@@ -162,7 +159,7 @@ func (m *JobsSpec) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	return nil
 }
 
-func (m *JobsSpec) contextValidateEnv(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobSpec) contextValidateEnv(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Env); i++ {
 
@@ -187,7 +184,7 @@ func (m *JobsSpec) contextValidateEnv(ctx context.Context, formats strfmt.Regist
 	return nil
 }
 
-func (m *JobsSpec) contextValidateRoutingContext(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobSpec) contextValidateRoutingContext(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RoutingContext != nil {
 
@@ -208,7 +205,7 @@ func (m *JobsSpec) contextValidateRoutingContext(ctx context.Context, formats st
 	return nil
 }
 
-func (m *JobsSpec) contextValidateUploadArtifact(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobSpec) contextValidateUploadArtifact(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.UploadArtifact); i++ {
 
@@ -234,7 +231,7 @@ func (m *JobsSpec) contextValidateUploadArtifact(ctx context.Context, formats st
 }
 
 // MarshalBinary interface implementation
-func (m *JobsSpec) MarshalBinary() ([]byte, error) {
+func (m *JobSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -242,8 +239,8 @@ func (m *JobsSpec) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *JobsSpec) UnmarshalBinary(b []byte) error {
-	var res JobsSpec
+func (m *JobSpec) UnmarshalBinary(b []byte) error {
+	var res JobSpec
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

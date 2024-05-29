@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// JobsRoutingContext jobs routing context
+// JobRoutingContext job routing context
 //
-// swagger:model jobs.RoutingContext
-type JobsRoutingContext struct {
+// swagger:model job.RoutingContext
+type JobRoutingContext struct {
 
 	// routegroup
 	Routegroup string `json:"routegroup,omitempty"`
@@ -24,18 +24,18 @@ type JobsRoutingContext struct {
 	Sandbox string `json:"sandbox,omitempty"`
 }
 
-// Validate validates this jobs routing context
-func (m *JobsRoutingContext) Validate(formats strfmt.Registry) error {
+// Validate validates this job routing context
+func (m *JobRoutingContext) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this jobs routing context based on context it is used
-func (m *JobsRoutingContext) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this job routing context based on context it is used
+func (m *JobRoutingContext) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *JobsRoutingContext) MarshalBinary() ([]byte, error) {
+func (m *JobRoutingContext) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *JobsRoutingContext) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *JobsRoutingContext) UnmarshalBinary(b []byte) error {
-	var res JobsRoutingContext
+func (m *JobRoutingContext) UnmarshalBinary(b []byte) error {
+	var res JobRoutingContext
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

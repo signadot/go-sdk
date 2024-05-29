@@ -64,7 +64,7 @@ CancelJobOK describes a response with status code 200, with default header value
 OK
 */
 type CancelJobOK struct {
-	Payload *models.JobsJob
+	Payload *models.Job
 }
 
 // IsSuccess returns true when this cancel job o k response has a 2xx status code
@@ -107,13 +107,13 @@ func (o *CancelJobOK) String() string {
 	return fmt.Sprintf("[PUT /orgs/{orgName}/jobs/{jobName}/cancel][%d] cancelJobOK %s", 200, payload)
 }
 
-func (o *CancelJobOK) GetPayload() *models.JobsJob {
+func (o *CancelJobOK) GetPayload() *models.Job {
 	return o.Payload
 }
 
 func (o *CancelJobOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.JobsJob)
+	o.Payload = new(models.Job)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

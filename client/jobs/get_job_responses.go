@@ -64,7 +64,7 @@ GetJobOK describes a response with status code 200, with default header values.
 OK
 */
 type GetJobOK struct {
-	Payload *models.JobsJob
+	Payload *models.Job
 }
 
 // IsSuccess returns true when this get job o k response has a 2xx status code
@@ -107,13 +107,13 @@ func (o *GetJobOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/jobs/{jobName}][%d] getJobOK %s", 200, payload)
 }
 
-func (o *GetJobOK) GetPayload() *models.JobsJob {
+func (o *GetJobOK) GetPayload() *models.Job {
 	return o.Payload
 }
 
 func (o *GetJobOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.JobsJob)
+	o.Payload = new(models.Job)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

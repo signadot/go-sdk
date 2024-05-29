@@ -67,7 +67,7 @@ type ApplyRunnergroupParams struct {
 
 	   Request to create or update runnergroup
 	*/
-	Data *models.RunnergroupsRunnerGroup
+	Data *models.JobRunnerGroup
 
 	/* OrgName.
 
@@ -135,13 +135,13 @@ func (o *ApplyRunnergroupParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithData adds the data to the apply runnergroup params
-func (o *ApplyRunnergroupParams) WithData(data *models.RunnergroupsRunnerGroup) *ApplyRunnergroupParams {
+func (o *ApplyRunnergroupParams) WithData(data *models.JobRunnerGroup) *ApplyRunnergroupParams {
 	o.SetData(data)
 	return o
 }
 
 // SetData adds the data to the apply runnergroup params
-func (o *ApplyRunnergroupParams) SetData(data *models.RunnergroupsRunnerGroup) {
+func (o *ApplyRunnergroupParams) SetData(data *models.JobRunnerGroup) {
 	o.Data = data
 }
 
