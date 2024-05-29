@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RunnergroupsAutoScaling runnergroups auto scaling
+// JobRunnerGroupAutoScaling job runner group auto scaling
 //
-// swagger:model runnergroups.AutoScaling
-type RunnergroupsAutoScaling struct {
+// swagger:model jobRunnerGroup.AutoScaling
+type JobRunnerGroupAutoScaling struct {
 
 	// max pods
 	MaxPods int64 `json:"maxPods,omitempty"`
@@ -24,18 +24,18 @@ type RunnergroupsAutoScaling struct {
 	MinPods int64 `json:"minPods,omitempty"`
 }
 
-// Validate validates this runnergroups auto scaling
-func (m *RunnergroupsAutoScaling) Validate(formats strfmt.Registry) error {
+// Validate validates this job runner group auto scaling
+func (m *JobRunnerGroupAutoScaling) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this runnergroups auto scaling based on context it is used
-func (m *RunnergroupsAutoScaling) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this job runner group auto scaling based on context it is used
+func (m *JobRunnerGroupAutoScaling) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *RunnergroupsAutoScaling) MarshalBinary() ([]byte, error) {
+func (m *JobRunnerGroupAutoScaling) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *RunnergroupsAutoScaling) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RunnergroupsAutoScaling) UnmarshalBinary(b []byte) error {
-	var res RunnergroupsAutoScaling
+func (m *JobRunnerGroupAutoScaling) UnmarshalBinary(b []byte) error {
+	var res JobRunnerGroupAutoScaling
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// JobsEnvItem jobs env item
+// JobEnvItem job env item
 //
-// swagger:model jobs.EnvItem
-type JobsEnvItem struct {
+// swagger:model job.EnvItem
+type JobEnvItem struct {
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -24,18 +24,18 @@ type JobsEnvItem struct {
 	Value string `json:"value,omitempty"`
 }
 
-// Validate validates this jobs env item
-func (m *JobsEnvItem) Validate(formats strfmt.Registry) error {
+// Validate validates this job env item
+func (m *JobEnvItem) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this jobs env item based on context it is used
-func (m *JobsEnvItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this job env item based on context it is used
+func (m *JobEnvItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *JobsEnvItem) MarshalBinary() ([]byte, error) {
+func (m *JobEnvItem) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *JobsEnvItem) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *JobsEnvItem) UnmarshalBinary(b []byte) error {
-	var res JobsEnvItem
+func (m *JobEnvItem) UnmarshalBinary(b []byte) error {
+	var res JobEnvItem
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
