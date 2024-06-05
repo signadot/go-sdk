@@ -22,6 +22,9 @@ type JobsCompletedState struct {
 
 	// message
 	Message string `json:"message,omitempty"`
+
+	// retry attempt
+	RetryAttempt bool `json:"retryAttempt,omitempty"`
 }
 
 // Validate validates this jobs completed state
