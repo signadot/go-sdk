@@ -17,8 +17,8 @@ import (
 // swagger:model jobs.QueuedState
 type JobsQueuedState struct {
 
-	// in cluster
-	InCluster bool `json:"inCluster,omitempty"`
+	// last message
+	LastMessage string `json:"lastMessage,omitempty"`
 
 	// message
 	Message string `json:"message,omitempty"`
