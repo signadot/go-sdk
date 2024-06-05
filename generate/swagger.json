@@ -491,6 +491,12 @@
         },
         "state": {
           "$ref": "#/definitions/jobs.State"
+        },
+        "tries": {
+          "items": {
+            "$ref": "#/definitions/jobs.Try"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -519,14 +525,17 @@
         },
         "message": {
           "type": "string"
+        },
+        "retryAttempt": {
+          "type": "boolean"
         }
       },
       "type": "object"
     },
     "jobs.QueuedState": {
       "properties": {
-        "inCluster": {
-          "type": "boolean"
+        "lastMessage": {
+          "type": "string"
         },
         "message": {
           "type": "string"
@@ -578,6 +587,14 @@
         },
         "startedAt": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "jobs.Try": {
+      "properties": {
+        "lastCompleted": {
+          "$ref": "#/definitions/jobs.CompletedState"
         }
       },
       "type": "object"
