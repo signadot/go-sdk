@@ -17,6 +17,9 @@ import (
 // swagger:model ErrorResponse
 type ErrorResponse struct {
 
+	// code
+	Code int64 `json:"code,omitempty"`
+
 	// error
 	Error string `json:"error,omitempty"`
 
