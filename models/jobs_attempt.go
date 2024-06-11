@@ -7,7 +7,6 @@ package models
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -36,9 +35,6 @@ type JobsAttempt struct {
 
 	// state
 	State *JobsState `json:"state,omitempty"`
-
-	// tries
-	Tries []*JobsTry `json:"tries"`
 }
 
 // Validate validates this jobs attempt
@@ -46,10 +42,6 @@ func (m *JobsAttempt) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateState(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateTries(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -78,41 +70,11 @@ func (m *JobsAttempt) validateState(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsAttempt) validateTries(formats strfmt.Registry) error {
-	if swag.IsZero(m.Tries) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Tries); i++ {
-		if swag.IsZero(m.Tries[i]) { // not required
-			continue
-		}
-
-		if m.Tries[i] != nil {
-			if err := m.Tries[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("tries" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("tries" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
 // ContextValidate validate this jobs attempt based on the context it is used
 func (m *JobsAttempt) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateState(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateTries(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -138,31 +100,6 @@ func (m *JobsAttempt) contextValidateState(ctx context.Context, formats strfmt.R
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *JobsAttempt) contextValidateTries(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.Tries); i++ {
-
-		if m.Tries[i] != nil {
-
-			if swag.IsZero(m.Tries[i]) { // not required
-				return nil
-			}
-
-			if err := m.Tries[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("tries" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("tries" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
 	}
 
 	return nil
