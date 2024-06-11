@@ -496,7 +496,6 @@
           "$ref": "#/definitions/jobs.State"
         },
         "tries": {
-          "description": "swaggerignore:\"true\"`",
           "items": {
             "$ref": "#/definitions/jobs.Try"
           },
