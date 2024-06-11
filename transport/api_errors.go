@@ -6,6 +6,7 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/signadot/go-sdk/models"
 )
 
 // FixAPIErrors is middleware that extracts the remote, server-provided API
@@ -31,23 +32,27 @@ func (r apiErrorReader) ReadResponse(response runtime.ClientResponse, consumer r
 	code := response.Code()
 	switch {
 	case code >= 400 && code <= 599:
+
 		body, err := io.ReadAll(response.Body())
 		if err != nil {
 			return nil, fmt.Errorf("can't read response body: %w", err)
 		}
-
-		var apiErr apiError
-		if err := json.Unmarshal(body, &apiErr); err != nil {
+		apiErr := &APIError{}
+		if err := json.Unmarshal(body, apiErr); err != nil {
 			// If the response is not valid JSON, just return the raw body.
 			return nil, fmt.Errorf("%v: %v", response.Message(), string(body))
 		}
-		return nil, fmt.Errorf("%v: %v", response.Message(), apiErr.Error)
+		apiErr.Code = int64(code)
+		return nil, fmt.Errorf("%v: %w", response.Message(), apiErr)
 	default:
 		return r.base.ReadResponse(response, consumer)
 	}
 }
 
-type apiError struct {
-	Error     string `json:"error"`
-	RequestID string `json:"requestID"`
+type APIError struct {
+	models.ErrorResponse
+}
+
+func (e *APIError) Error() string {
+	return e.ErrorResponse.Error
 }

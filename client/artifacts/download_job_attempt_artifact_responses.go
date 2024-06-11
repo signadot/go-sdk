@@ -49,6 +49,12 @@ func (o *DownloadJobAttemptArtifactReader) ReadResponse(response runtime.ClientR
 			return nil, err
 		}
 		return nil, result
+	case 404:
+		result := NewDownloadJobAttemptArtifactNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 500:
 		result := NewDownloadJobAttemptArtifactInternalServerError()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -384,6 +390,76 @@ func (o *DownloadJobAttemptArtifactUnauthorized) GetPayload() *models.ErrorRespo
 }
 
 func (o *DownloadJobAttemptArtifactUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDownloadJobAttemptArtifactNotFound creates a DownloadJobAttemptArtifactNotFound with default headers values
+func NewDownloadJobAttemptArtifactNotFound() *DownloadJobAttemptArtifactNotFound {
+	return &DownloadJobAttemptArtifactNotFound{}
+}
+
+/*
+DownloadJobAttemptArtifactNotFound describes a response with status code 404, with default header values.
+
+Not Found
+*/
+type DownloadJobAttemptArtifactNotFound struct {
+	Payload *models.ErrorResponse
+}
+
+// IsSuccess returns true when this download job attempt artifact not found response has a 2xx status code
+func (o *DownloadJobAttemptArtifactNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this download job attempt artifact not found response has a 3xx status code
+func (o *DownloadJobAttemptArtifactNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this download job attempt artifact not found response has a 4xx status code
+func (o *DownloadJobAttemptArtifactNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this download job attempt artifact not found response has a 5xx status code
+func (o *DownloadJobAttemptArtifactNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this download job attempt artifact not found response a status code equal to that given
+func (o *DownloadJobAttemptArtifactNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
+// Code gets the status code for the download job attempt artifact not found response
+func (o *DownloadJobAttemptArtifactNotFound) Code() int {
+	return 404
+}
+
+func (o *DownloadJobAttemptArtifactNotFound) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/artifacts/jobs/{jobName}/attempts/{jobAttempt}/objects/download][%d] downloadJobAttemptArtifactNotFound %s", 404, payload)
+}
+
+func (o *DownloadJobAttemptArtifactNotFound) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/artifacts/jobs/{jobName}/attempts/{jobAttempt}/objects/download][%d] downloadJobAttemptArtifactNotFound %s", 404, payload)
+}
+
+func (o *DownloadJobAttemptArtifactNotFound) GetPayload() *models.ErrorResponse {
+	return o.Payload
+}
+
+func (o *DownloadJobAttemptArtifactNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 
