@@ -521,7 +521,7 @@
       },
       "type": "object"
     },
-    "jobs.CompletedState": {
+    "jobs.FailedState": {
       "properties": {
         "exitCode": {
           "type": "integer"
@@ -562,14 +562,17 @@
         "canceled": {
           "$ref": "#/definitions/jobs.CanceledState"
         },
-        "completed": {
-          "$ref": "#/definitions/jobs.CompletedState"
+        "failed": {
+          "$ref": "#/definitions/jobs.FailedState"
         },
         "queued": {
           "$ref": "#/definitions/jobs.QueuedState"
         },
         "running": {
           "$ref": "#/definitions/jobs.RunningState"
+        },
+        "succeeded": {
+          "$ref": "#/definitions/jobs.SucceededState"
         }
       },
       "type": "object"
@@ -594,10 +597,18 @@
       },
       "type": "object"
     },
+    "jobs.SucceededState": {
+      "properties": {
+        "exitCode": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "jobs.Try": {
       "properties": {
-        "lastCompleted": {
-          "$ref": "#/definitions/jobs.CompletedState"
+        "failed": {
+          "$ref": "#/definitions/jobs.FailedState"
         }
       },
       "type": "object"

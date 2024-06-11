@@ -21,14 +21,17 @@ type JobsState struct {
 	// canceled
 	Canceled *JobsCanceledState `json:"canceled,omitempty"`
 
-	// completed
-	Completed *JobsCompletedState `json:"completed,omitempty"`
+	// failed
+	Failed *JobsFailedState `json:"failed,omitempty"`
 
 	// queued
 	Queued *JobsQueuedState `json:"queued,omitempty"`
 
 	// running
 	Running *JobsRunningState `json:"running,omitempty"`
+
+	// succeeded
+	Succeeded *JobsSucceededState `json:"succeeded,omitempty"`
 }
 
 // Validate validates this jobs state
@@ -39,7 +42,7 @@ func (m *JobsState) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateCompleted(formats); err != nil {
+	if err := m.validateFailed(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -48,6 +51,10 @@ func (m *JobsState) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateRunning(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSucceeded(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -76,17 +83,17 @@ func (m *JobsState) validateCanceled(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsState) validateCompleted(formats strfmt.Registry) error {
-	if swag.IsZero(m.Completed) { // not required
+func (m *JobsState) validateFailed(formats strfmt.Registry) error {
+	if swag.IsZero(m.Failed) { // not required
 		return nil
 	}
 
-	if m.Completed != nil {
-		if err := m.Completed.Validate(formats); err != nil {
+	if m.Failed != nil {
+		if err := m.Failed.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("completed")
+				return ve.ValidateName("failed")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("completed")
+				return ce.ValidateName("failed")
 			}
 			return err
 		}
@@ -133,6 +140,25 @@ func (m *JobsState) validateRunning(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *JobsState) validateSucceeded(formats strfmt.Registry) error {
+	if swag.IsZero(m.Succeeded) { // not required
+		return nil
+	}
+
+	if m.Succeeded != nil {
+		if err := m.Succeeded.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("succeeded")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("succeeded")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this jobs state based on the context it is used
 func (m *JobsState) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -141,7 +167,7 @@ func (m *JobsState) ContextValidate(ctx context.Context, formats strfmt.Registry
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateCompleted(ctx, formats); err != nil {
+	if err := m.contextValidateFailed(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -150,6 +176,10 @@ func (m *JobsState) ContextValidate(ctx context.Context, formats strfmt.Registry
 	}
 
 	if err := m.contextValidateRunning(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSucceeded(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -180,19 +210,19 @@ func (m *JobsState) contextValidateCanceled(ctx context.Context, formats strfmt.
 	return nil
 }
 
-func (m *JobsState) contextValidateCompleted(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobsState) contextValidateFailed(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.Completed != nil {
+	if m.Failed != nil {
 
-		if swag.IsZero(m.Completed) { // not required
+		if swag.IsZero(m.Failed) { // not required
 			return nil
 		}
 
-		if err := m.Completed.ContextValidate(ctx, formats); err != nil {
+		if err := m.Failed.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("completed")
+				return ve.ValidateName("failed")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("completed")
+				return ce.ValidateName("failed")
 			}
 			return err
 		}
@@ -235,6 +265,27 @@ func (m *JobsState) contextValidateRunning(ctx context.Context, formats strfmt.R
 				return ve.ValidateName("running")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("running")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *JobsState) contextValidateSucceeded(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Succeeded != nil {
+
+		if swag.IsZero(m.Succeeded) { // not required
+			return nil
+		}
+
+		if err := m.Succeeded.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("succeeded")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("succeeded")
 			}
 			return err
 		}

@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// JobsCompletedState jobs completed state
+// JobsFailedState jobs failed state
 //
-// swagger:model jobs.CompletedState
-type JobsCompletedState struct {
+// swagger:model jobs.FailedState
+type JobsFailedState struct {
 
 	// exit code
 	ExitCode int64 `json:"exitCode,omitempty"`
@@ -27,18 +27,18 @@ type JobsCompletedState struct {
 	RetryAttempt bool `json:"retryAttempt,omitempty"`
 }
 
-// Validate validates this jobs completed state
-func (m *JobsCompletedState) Validate(formats strfmt.Registry) error {
+// Validate validates this jobs failed state
+func (m *JobsFailedState) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this jobs completed state based on context it is used
-func (m *JobsCompletedState) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this jobs failed state based on context it is used
+func (m *JobsFailedState) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *JobsCompletedState) MarshalBinary() ([]byte, error) {
+func (m *JobsFailedState) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -46,8 +46,8 @@ func (m *JobsCompletedState) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *JobsCompletedState) UnmarshalBinary(b []byte) error {
-	var res JobsCompletedState
+func (m *JobsFailedState) UnmarshalBinary(b []byte) error {
+	var res JobsFailedState
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
