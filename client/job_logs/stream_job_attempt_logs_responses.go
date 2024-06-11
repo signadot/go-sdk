@@ -43,12 +43,6 @@ func (o *StreamJobAttemptLogsReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return nil, result
-	case 404:
-		result := NewStreamJobAttemptLogsNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/jobs/{jobName}/attempts/{jobAttempt}/logs/stream] stream-job-attempt-logs", response, response.Code())
 	}
@@ -252,76 +246,6 @@ func (o *StreamJobAttemptLogsUnauthorized) GetPayload() *models.ErrorResponse {
 }
 
 func (o *StreamJobAttemptLogsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ErrorResponse)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewStreamJobAttemptLogsNotFound creates a StreamJobAttemptLogsNotFound with default headers values
-func NewStreamJobAttemptLogsNotFound() *StreamJobAttemptLogsNotFound {
-	return &StreamJobAttemptLogsNotFound{}
-}
-
-/*
-StreamJobAttemptLogsNotFound describes a response with status code 404, with default header values.
-
-Not Found
-*/
-type StreamJobAttemptLogsNotFound struct {
-	Payload *models.ErrorResponse
-}
-
-// IsSuccess returns true when this stream job attempt logs not found response has a 2xx status code
-func (o *StreamJobAttemptLogsNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this stream job attempt logs not found response has a 3xx status code
-func (o *StreamJobAttemptLogsNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this stream job attempt logs not found response has a 4xx status code
-func (o *StreamJobAttemptLogsNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this stream job attempt logs not found response has a 5xx status code
-func (o *StreamJobAttemptLogsNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this stream job attempt logs not found response a status code equal to that given
-func (o *StreamJobAttemptLogsNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-// Code gets the status code for the stream job attempt logs not found response
-func (o *StreamJobAttemptLogsNotFound) Code() int {
-	return 404
-}
-
-func (o *StreamJobAttemptLogsNotFound) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/jobs/{jobName}/attempts/{jobAttempt}/logs/stream][%d] streamJobAttemptLogsNotFound %s", 404, payload)
-}
-
-func (o *StreamJobAttemptLogsNotFound) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/jobs/{jobName}/attempts/{jobAttempt}/logs/stream][%d] streamJobAttemptLogsNotFound %s", 404, payload)
-}
-
-func (o *StreamJobAttemptLogsNotFound) GetPayload() *models.ErrorResponse {
-	return o.Payload
-}
-
-func (o *StreamJobAttemptLogsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 

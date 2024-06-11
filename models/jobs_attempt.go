@@ -37,7 +37,7 @@ type JobsAttempt struct {
 	// state
 	State *JobsState `json:"state,omitempty"`
 
-	// tries
+	// swaggerignore:"true"`
 	Tries []*JobsTry `json:"tries"`
 }
 

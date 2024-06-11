@@ -18,15 +18,15 @@ import (
 // swagger:model jobs.Try
 type JobsTry struct {
 
-	// last completed
-	LastCompleted *JobsCompletedState `json:"lastCompleted,omitempty"`
+	// failed
+	Failed *JobsFailedState `json:"failed,omitempty"`
 }
 
 // Validate validates this jobs try
 func (m *JobsTry) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLastCompleted(formats); err != nil {
+	if err := m.validateFailed(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -36,17 +36,17 @@ func (m *JobsTry) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *JobsTry) validateLastCompleted(formats strfmt.Registry) error {
-	if swag.IsZero(m.LastCompleted) { // not required
+func (m *JobsTry) validateFailed(formats strfmt.Registry) error {
+	if swag.IsZero(m.Failed) { // not required
 		return nil
 	}
 
-	if m.LastCompleted != nil {
-		if err := m.LastCompleted.Validate(formats); err != nil {
+	if m.Failed != nil {
+		if err := m.Failed.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("lastCompleted")
+				return ve.ValidateName("failed")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("lastCompleted")
+				return ce.ValidateName("failed")
 			}
 			return err
 		}
@@ -59,7 +59,7 @@ func (m *JobsTry) validateLastCompleted(formats strfmt.Registry) error {
 func (m *JobsTry) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateLastCompleted(ctx, formats); err != nil {
+	if err := m.contextValidateFailed(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -69,19 +69,19 @@ func (m *JobsTry) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	return nil
 }
 
-func (m *JobsTry) contextValidateLastCompleted(ctx context.Context, formats strfmt.Registry) error {
+func (m *JobsTry) contextValidateFailed(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.LastCompleted != nil {
+	if m.Failed != nil {
 
-		if swag.IsZero(m.LastCompleted) { // not required
+		if swag.IsZero(m.Failed) { // not required
 			return nil
 		}
 
-		if err := m.LastCompleted.ContextValidate(ctx, formats); err != nil {
+		if err := m.Failed.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("lastCompleted")
+				return ve.ValidateName("failed")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("lastCompleted")
+				return ce.ValidateName("failed")
 			}
 			return err
 		}
