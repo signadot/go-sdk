@@ -25,9 +25,11 @@ type APIConfig struct {
 	Debug           bool
 
 	// Advanced (optional) settings
-	Consumers  map[string]runtime.Consumer
-	Producers  map[string]runtime.Producer
-	HTTPClient *http.Client
+	Consumers         map[string]runtime.Consumer
+	OverrideConsumers bool
+	Producers         map[string]runtime.Producer
+	OverrideProducers bool
+	HTTPClient        *http.Client
 }
 
 func InitAPITransport(conf *APIConfig) (runtime.ClientTransport, error) {
@@ -87,11 +89,19 @@ func createAPITransport(tc *client.TransportConfig, conf *APIConfig) runtime.Cli
 	}
 
 	// apply consumer and producer settings
-	for mimeType, consumer := range conf.Consumers {
-		rt.Consumers[mimeType] = consumer
+	if conf.OverrideConsumers {
+		rt.Consumers = conf.Consumers
+	} else {
+		for mimeType, consumer := range conf.Consumers {
+			rt.Consumers[mimeType] = consumer
+		}
 	}
-	for mimeType, producer := range conf.Producers {
-		rt.Producers[mimeType] = producer
+	if conf.OverrideProducers {
+		rt.Producers = conf.Producers
+	} else {
+		for mimeType, producer := range conf.Producers {
+			rt.Producers[mimeType] = producer
+		}
 	}
 
 	return FixAPIErrors(rt)
