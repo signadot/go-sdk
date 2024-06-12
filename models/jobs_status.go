@@ -21,15 +21,6 @@ type JobsStatus struct {
 
 	// attempts
 	Attempts []*JobsAttempt `json:"attempts"`
-
-	// finished at
-	FinishedAt string `json:"finishedAt,omitempty"`
-
-	// phase
-	Phase string `json:"phase,omitempty"`
-
-	// started at
-	StartedAt string `json:"startedAt,omitempty"`
 }
 
 // Validate validates this jobs status

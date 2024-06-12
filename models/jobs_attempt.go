@@ -22,6 +22,9 @@ type JobsAttempt struct {
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
 
+	// execution count
+	ExecutionCount int64 `json:"executionCount,omitempty"`
+
 	// finished at
 	FinishedAt string `json:"finishedAt,omitempty"`
 
