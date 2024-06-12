@@ -497,12 +497,6 @@
         },
         "state": {
           "$ref": "#/definitions/jobs.State"
-        },
-        "tries": {
-          "items": {
-            "$ref": "#/definitions/jobs.Try"
-          },
-          "type": "array"
         }
       },
       "type": "object"
@@ -595,22 +589,6 @@
       "properties": {
         "exitCode": {
           "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "jobs.SucceededState": {
-      "properties": {
-        "exitCode": {
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "jobs.Try": {
-      "properties": {
-        "failed": {
-          "$ref": "#/definitions/jobs.FailedState"
         }
       },
       "type": "object"
