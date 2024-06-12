@@ -599,6 +599,14 @@
       },
       "type": "object"
     },
+    "jobs.SucceededState": {
+      "properties": {
+        "exitCode": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "jobs.Try": {
       "properties": {
         "failed": {
