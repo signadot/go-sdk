@@ -18,7 +18,7 @@ import (
 type JobsFailedState struct {
 
 	// exit code
-	ExitCode int64 `json:"exitCode,omitempty"`
+	ExitCode *int64 `json:"exitCode,omitempty"`
 
 	// message
 	Message string `json:"message,omitempty"`
