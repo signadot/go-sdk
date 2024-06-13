@@ -527,7 +527,8 @@
     "jobs.FailedState": {
       "properties": {
         "exitCode": {
-          "type": "integer"
+          "type": "integer",
+	  "x-nullable": true
         },
         "message": {
           "type": "string"
@@ -587,14 +588,6 @@
             "$ref": "#/definitions/jobs.Attempt"
           },
           "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "jobs.SucceededState": {
-      "properties": {
-        "exitCode": {
-          "type": "integer"
         }
       },
       "type": "object"
