@@ -17,9 +17,6 @@ import (
 // swagger:model jobRunnerGroup.ExecutionsStatus
 type JobRunnerGroupExecutionsStatus struct {
 
-	// completed
-	Completed int64 `json:"completed,omitempty"`
-
 	// queued
 	Queued int64 `json:"queued,omitempty"`
 
