@@ -21,6 +21,9 @@ type JobsStatus struct {
 
 	// attempts
 	Attempts []*JobsAttempt `json:"attempts"`
+
+	// runner group deletion completed at
+	RunnerGroupDeletionCompletedAt string `json:"runnerGroupDeletionCompletedAt,omitempty"`
 }
 
 // Validate validates this jobs status
