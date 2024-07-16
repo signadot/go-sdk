@@ -355,11 +355,27 @@
         "script": {
           "type": "string"
         },
+        "trafficManager": {
+          "$ref": "#/definitions/job.TrafficManager"
+        },
         "uploadArtifact": {
           "items": {
             "$ref": "#/definitions/job.UploadArtifact"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "job.TrafficManager": {
+      "properties": {
+        "injectRoutingKey": {
+          "description": "InjectRoutingKey indicates if the system should perform automatic\ninjection of routing key headers or not.  It may be the empty string,\n\"auto\" or \"disabled\".  The empty string defaults to meaning \"disabled\".",
+          "enum": [
+            "disabled",
+            "auto"
+          ],
+          "type": "string"
         }
       },
       "type": "object"
