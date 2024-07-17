@@ -40,6 +40,9 @@ type JobSpec struct {
 	// script
 	Script string `json:"script,omitempty"`
 
+	// traffic manager
+	TrafficManager *JobTrafficManager `json:"trafficManager,omitempty"`
+
 	// upload artifact
 	UploadArtifact []*JobUploadArtifact `json:"uploadArtifact"`
 }
@@ -53,6 +56,10 @@ func (m *JobSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateRoutingContext(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTrafficManager(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -111,6 +118,25 @@ func (m *JobSpec) validateRoutingContext(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *JobSpec) validateTrafficManager(formats strfmt.Registry) error {
+	if swag.IsZero(m.TrafficManager) { // not required
+		return nil
+	}
+
+	if m.TrafficManager != nil {
+		if err := m.TrafficManager.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("trafficManager")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("trafficManager")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *JobSpec) validateUploadArtifact(formats strfmt.Registry) error {
 	if swag.IsZero(m.UploadArtifact) { // not required
 		return nil
@@ -146,6 +172,10 @@ func (m *JobSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	}
 
 	if err := m.contextValidateRoutingContext(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTrafficManager(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -197,6 +227,27 @@ func (m *JobSpec) contextValidateRoutingContext(ctx context.Context, formats str
 				return ve.ValidateName("routingContext")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("routingContext")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *JobSpec) contextValidateTrafficManager(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TrafficManager != nil {
+
+		if swag.IsZero(m.TrafficManager) { // not required
+			return nil
+		}
+
+		if err := m.TrafficManager.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("trafficManager")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("trafficManager")
 			}
 			return err
 		}
