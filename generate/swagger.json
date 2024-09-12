@@ -263,6 +263,107 @@
       },
       "type": "object"
     },
+    "Test": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/definitions/tests.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/tests.Status"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TestExecution": {
+      "properties": {
+        "canceledAt": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "results": {
+          "$ref": "#/definitions/testexecutions.Results"
+        },
+        "spec": {
+          "$ref": "#/definitions/testexecutions.Spec"
+        },
+        "status": {
+          "$ref": "#/definitions/testexecutions.Status"
+        }
+      },
+      "type": "object"
+    },
+    "capture.Message": {
+      "properties": {
+        "body": {},
+        "finishedAt": {
+          "type": "string"
+        },
+        "headers": {
+          "$ref": "#/definitions/capture.Values"
+        },
+        "startedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "capture.Request": {
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "message": {
+          "$ref": "#/definitions/capture.Message"
+        },
+        "method": {
+          "type": "string"
+        },
+        "proto": {
+          "type": "string"
+        },
+        "query": {
+          "$ref": "#/definitions/capture.Values"
+        },
+        "uri": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "capture.Response": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "$ref": "#/definitions/capture.Message"
+        },
+        "proto": {
+          "type": "string"
+        },
+        "statusCode": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "capture.Values": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
     "cluster.Operator": {
       "properties": {
         "version": {
@@ -606,59 +707,6 @@
       "properties": {
         "exitCode": {
           "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "local": {
-      "properties": {
-        "from": {
-          "$ref": "#/definitions/local.From"
-        },
-        "mappings": {
-          "items": {
-            "$ref": "#/definitions/local.PortMapping"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local.From": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "local.PortMapping": {
-      "properties": {
-        "port": {
-          "type": "integer"
-        },
-        "toLocal": {
-          "type": "string"
         }
       },
       "type": "object"
@@ -1275,17 +1323,6 @@
           "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
         },
-        "local": {
-          "description": "Local Workloads",
-          "items": {
-            "$ref": "#/definitions/local"
-          },
-          "type": "array"
-        },
-        "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-          "type": "string"
-        },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
           "items": {
@@ -1312,6 +1349,343 @@
         "offsetFrom": {
           "description": "OffsetFrom indicates what the Duration is relative to.  It\nmay be the empty string, \"createdAt\" or \"updatedAt\".  The empty string\ndefaults to meaning \"createdAt\".",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.AutoDiff": {
+      "properties": {
+        "enabled": {
+          "description": "Enabled = true, requires the definition of a valid routing context",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.CanceledState": {
+      "properties": {
+        "canceledBy": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.CapturePointDiffSummary": {
+      "properties": {
+        "additions": {
+          "type": "integer"
+        },
+        "capturedBy": {
+          "$ref": "#/definitions/trafficmodels.By"
+        },
+        "captures": {
+          "type": "integer"
+        },
+        "maxRelevance": {
+          "description": "MaxRelevance indicates a score in 0..1 of the maximally relevant diff\noperation, or 1.0 if either the baseline or target are missing.",
+          "type": "number"
+        },
+        "removals": {
+          "type": "integer"
+        },
+        "replacements": {
+          "type": "integer"
+        },
+        "top": {
+          "items": {
+            "$ref": "#/definitions/trafficmodels.PairedDiff"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.ExecutionContext": {
+      "properties": {
+        "autoDiff": {
+          "$ref": "#/definitions/testexecutions.AutoDiff"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "routing": {
+          "$ref": "#/definitions/job.RoutingContext"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.ExecutionTemplate": {
+      "properties": {
+        "autoDiff": {
+          "$ref": "#/definitions/testexecutions.AutoDiff"
+        },
+        "clusterName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.FailedState": {
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.Results": {
+      "properties": {
+        "trafficDiff": {
+          "$ref": "#/definitions/testexecutions.TrafficDiff"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.Spec": {
+      "properties": {
+        "executionContext": {
+          "$ref": "#/definitions/testexecutions.ExecutionContext"
+        },
+        "testName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.State": {
+      "properties": {
+        "canceled": {
+          "$ref": "#/definitions/testexecutions.CanceledState"
+        },
+        "failed": {
+          "$ref": "#/definitions/testexecutions.FailedState"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.Status": {
+      "properties": {
+        "baselineJobName": {
+          "type": "string"
+        },
+        "finalState": {
+          "$ref": "#/definitions/testexecutions.State"
+        },
+        "phase": {
+          "type": "string"
+        },
+        "targetJobName": {
+          "type": "string"
+        },
+        "triggeredBy": {
+          "$ref": "#/definitions/testexecutions.TriggeredBy"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.TrafficDiff": {
+      "properties": {
+        "additions": {
+          "type": "integer"
+        },
+        "capturePoints": {
+          "type": "integer"
+        },
+        "captures": {
+          "type": "integer"
+        },
+        "green": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.CapturePointDiffSummary"
+          },
+          "type": "array"
+        },
+        "maxRelevance": {
+          "description": "MaxRelevance indicates a score in 0..1 of the maximally relevant\ndiff of captures.",
+          "type": "number"
+        },
+        "red": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.CapturePointDiffSummary"
+          },
+          "type": "array"
+        },
+        "removals": {
+          "type": "integer"
+        },
+        "replacements": {
+          "type": "integer"
+        },
+        "yellow": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.CapturePointDiffSummary"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.TriggeredBy": {
+      "properties": {
+        "sandboxName": {
+          "type": "string"
+        },
+        "triggerName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "tests.Spec": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "script": {
+          "type": "string"
+        },
+        "triggers": {
+          "items": {
+            "$ref": "#/definitions/tests.Trigger"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "tests.Status": {
+      "type": "object"
+    },
+    "tests.Trigger": {
+      "properties": {
+        "executionTemplate": {
+          "$ref": "#/definitions/testexecutions.ExecutionTemplate"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sandboxOf": {
+          "$ref": "#/definitions/sandbox.ForkOf"
+        }
+      },
+      "type": "object"
+    },
+    "trafficmodels.By": {
+      "properties": {
+        "direction": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "trafficmodels.DiffOp": {
+      "properties": {
+        "classification": {
+          "$ref": "#/definitions/trafficmodels.DiffOpClassification"
+        },
+        "oldValue": {},
+        "op": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "value": {}
+      },
+      "type": "object"
+    },
+    "trafficmodels.DiffOpClassification": {
+      "properties": {
+        "noise": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "trafficmodels.DiffPointResult": {
+      "properties": {
+        "by": {
+          "$ref": "#/definitions/trafficmodels.By"
+        },
+        "diffs": {
+          "items": {
+            "$ref": "#/definitions/trafficmodels.PairedDiff"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "trafficmodels.DiffResult": {
+      "properties": {
+        "baseline": {
+          "type": "string"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/definitions/trafficmodels.DiffPointResult"
+          },
+          "type": "array"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "trafficmodels.PairedDiff": {
+      "properties": {
+        "request": {
+          "$ref": "#/definitions/trafficmodels.RequestDiff"
+        },
+        "response": {
+          "$ref": "#/definitions/trafficmodels.ResponseDiff"
+        }
+      },
+      "type": "object"
+    },
+    "trafficmodels.RequestDiff": {
+      "properties": {
+        "baseline": {
+          "$ref": "#/definitions/capture.Request"
+        },
+        "diffOps": {
+          "items": {
+            "$ref": "#/definitions/trafficmodels.DiffOp"
+          },
+          "type": "array"
+        },
+        "target": {
+          "$ref": "#/definitions/capture.Request"
+        }
+      },
+      "type": "object"
+    },
+    "trafficmodels.ResponseDiff": {
+      "properties": {
+        "baseline": {
+          "$ref": "#/definitions/capture.Response"
+        },
+        "diffOps": {
+          "items": {
+            "$ref": "#/definitions/trafficmodels.DiffOp"
+          },
+          "type": "array"
+        },
+        "target": {
+          "$ref": "#/definitions/capture.Response"
         }
       },
       "type": "object"
@@ -2417,7 +2791,7 @@
             "x-example": "my-company"
           },
           {
-            "description": "Job  Name",
+            "description": "Job Name",
             "in": "path",
             "name": "jobName",
             "required": true,
@@ -2575,7 +2949,7 @@
             "x-example": "my-company"
           },
           {
-            "description": "Job  Name",
+            "description": "Job Name",
             "in": "path",
             "name": "jobName",
             "required": true,
@@ -3666,6 +4040,615 @@
         "summary": "Create or update a sandbox",
         "tags": [
           "Sandboxes"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List Tests",
+        "operationId": "list-tests",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Test"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List Tests",
+        "tags": [
+          "Tests"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/{testName}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete a given test.",
+        "operationId": "delete-test",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string",
+            "x-example": "job-xyz"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Delete a test",
+        "tags": [
+          "Tests"
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch the details about a given test.",
+        "operationId": "get-test",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a test",
+        "tags": [
+          "Tests"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates or updates a test with the provided parameters.",
+        "operationId": "apply-test",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Test Spec",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tests.Spec"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create or update a Test",
+        "tags": [
+          "Tests"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/{testName}/executions/": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List test executions for a given test",
+        "operationId": "list-test-executions",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/TestExecution"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List Test Executions",
+        "tags": [
+          "TestExecutions"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates a test with the provided parameters.",
+        "operationId": "create-test-execution",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Request to create a test execution",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/testexecutions.Spec"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TestExecution"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create a Test Execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/{testName}/executions/{executionName}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch the details about a given test execution.",
+        "operationId": "get-test-execution",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TestExecution"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a test execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Cancel a given test execution.",
+        "operationId": "cancel-test-execution",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Cancel a test execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get the full traffic diff of a test execution",
+        "operationId": "test-execution-traffic-diff",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/trafficmodels.DiffResult"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get the full traffic diff of a test execution",
+        "tags": [
+          "TestExecutions"
         ]
       }
     }
