@@ -63,7 +63,7 @@ type CancelJobParams struct {
 
 	/* JobName.
 
-	   Job  Name
+	   Job Name
 	*/
 	JobName string
 
