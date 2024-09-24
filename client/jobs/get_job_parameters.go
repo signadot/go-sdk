@@ -63,7 +63,7 @@ type GetJobParams struct {
 
 	/* JobName.
 
-	   Job  Name
+	   Job Name
 	*/
 	JobName string
 
