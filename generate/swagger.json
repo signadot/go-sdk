@@ -1,36 +1,6 @@
 {
   "basePath": "/api/v2",
   "definitions": {
-    "CapturePointDiffSummary": {
-      "properties": {
-        "additions": {
-          "type": "integer"
-        },
-        "capturedBy": {
-          "$ref": "#/definitions/trafficmodels.By"
-        },
-        "captures": {
-          "type": "integer"
-        },
-        "maxRelevance": {
-          "description": "MaxRelevance indicates a score in 0..1 of the maximally relevant diff\noperation, or 1.0 if either the baseline or target are missing.",
-          "type": "number"
-        },
-        "removals": {
-          "type": "integer"
-        },
-        "replacements": {
-          "type": "integer"
-        },
-        "top": {
-          "items": {
-            "$ref": "#/definitions/TrafficDiffPairedDiff"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "Cluster": {
       "properties": {
         "createdAt": {
@@ -351,6 +321,20 @@
       },
       "type": "object"
     },
+    "Source": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "requestName": {
+          "type": "string"
+        },
+        "scriptRef": {
+          "$ref": "#/definitions/capturemeta.ScriptRef"
+        }
+      },
+      "type": "object"
+    },
     "Test": {
       "properties": {
         "createdAt": {
@@ -545,26 +529,22 @@
           "type": "integer"
         },
         "capturePoints": {
-          "type": "integer"
+          "items": {
+            "$ref": "#/definitions/trafficmodels.By"
+          },
+          "type": "array"
         },
         "captures": {
           "type": "integer"
         },
         "green": {
-          "items": {
-            "$ref": "#/definitions/CapturePointDiffSummary"
-          },
-          "type": "array"
+          "$ref": "#/definitions/TrafficDiffSummary"
         },
         "maxRelevance": {
-          "description": "MaxRelevance indicates a score in 0..1 of the maximally relevant\ndiff of captures.",
           "type": "number"
         },
         "red": {
-          "items": {
-            "$ref": "#/definitions/CapturePointDiffSummary"
-          },
-          "type": "array"
+          "$ref": "#/definitions/TrafficDiffSummary"
         },
         "removals": {
           "type": "integer"
@@ -573,21 +553,24 @@
           "type": "integer"
         },
         "yellow": {
-          "items": {
-            "$ref": "#/definitions/CapturePointDiffSummary"
-          },
-          "type": "array"
+          "$ref": "#/definitions/TrafficDiffSummary"
         }
       },
       "type": "object"
     },
     "TrafficDiffPairedDiff": {
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "request": {
           "$ref": "#/definitions/RequestDiff"
         },
         "response": {
           "$ref": "#/definitions/ResponseDiff"
+        },
+        "source": {
+          "$ref": "#/definitions/Source"
         }
       },
       "type": "object"
@@ -619,6 +602,26 @@
         },
         "target": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TrafficDiffSummary": {
+      "properties": {
+        "additions": {
+          "type": "integer"
+        },
+        "captures": {
+          "type": "integer"
+        },
+        "maxRelevance": {
+          "type": "number"
+        },
+        "removals": {
+          "type": "integer"
+        },
+        "replacements": {
+          "type": "integer"
         }
       },
       "type": "object"
@@ -681,6 +684,27 @@
     "capture.Values": {
       "additionalProperties": {
         "type": "string"
+      },
+      "type": "object"
+    },
+    "capturemeta.ScriptRef": {
+      "properties": {
+        "callNum": {
+          "description": "call number",
+          "type": "integer"
+        },
+        "col": {
+          "description": "1-based column (rune) number; 0 if column unknown",
+          "type": "integer"
+        },
+        "file": {
+          "description": "filename",
+          "type": "string"
+        },
+        "line": {
+          "description": "1-based line number; 0 if line unknown",
+          "type": "integer"
+        }
       },
       "type": "object"
     },
@@ -1027,59 +1051,6 @@
       "properties": {
         "exitCode": {
           "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "local": {
-      "properties": {
-        "from": {
-          "$ref": "#/definitions/local.From"
-        },
-        "mappings": {
-          "items": {
-            "$ref": "#/definitions/local.PortMapping"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local.From": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "local.PortMapping": {
-      "properties": {
-        "port": {
-          "type": "integer"
-        },
-        "toLocal": {
-          "type": "string"
         }
       },
       "type": "object"
@@ -1695,17 +1666,6 @@
           },
           "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
-        },
-        "local": {
-          "description": "Local Workloads",
-          "items": {
-            "$ref": "#/definitions/local"
-          },
-          "type": "array"
-        },
-        "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-          "type": "string"
         },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
