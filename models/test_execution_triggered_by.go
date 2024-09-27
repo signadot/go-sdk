@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -20,17 +21,75 @@ type TestExecutionTriggeredBy struct {
 	// sandbox
 	Sandbox string `json:"sandbox,omitempty"`
 
-	// trigger ID
-	TriggerID string `json:"triggerID,omitempty"`
+	// trigger
+	Trigger *TestTrigger `json:"trigger,omitempty"`
 }
 
 // Validate validates this test execution triggered by
 func (m *TestExecutionTriggeredBy) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateTrigger(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this test execution triggered by based on context it is used
+func (m *TestExecutionTriggeredBy) validateTrigger(formats strfmt.Registry) error {
+	if swag.IsZero(m.Trigger) { // not required
+		return nil
+	}
+
+	if m.Trigger != nil {
+		if err := m.Trigger.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("trigger")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("trigger")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this test execution triggered by based on the context it is used
 func (m *TestExecutionTriggeredBy) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateTrigger(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *TestExecutionTriggeredBy) contextValidateTrigger(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Trigger != nil {
+
+		if swag.IsZero(m.Trigger) { // not required
+			return nil
+		}
+
+		if err := m.Trigger.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("trigger")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("trigger")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

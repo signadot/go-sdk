@@ -68,6 +68,8 @@ type ClientService interface {
 
 	TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffOK, error)
 
+	TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -314,6 +316,47 @@ func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for test-execution-traffic-diff: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+TestExecutionTrafficDiffFindings gets the findings view of the traffic diff of a test execution
+
+Get the findings view of the traffic diff of a test execution
+*/
+func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTestExecutionTrafficDiffFindingsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "test-execution-traffic-diff-findings",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &TestExecutionTrafficDiffFindingsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TestExecutionTrafficDiffFindingsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for test-execution-traffic-diff-findings: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
