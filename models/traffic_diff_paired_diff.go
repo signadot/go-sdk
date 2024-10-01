@@ -18,11 +18,17 @@ import (
 // swagger:model TrafficDiffPairedDiff
 type TrafficDiffPairedDiff struct {
 
+	// id
+	ID string `json:"id,omitempty"`
+
 	// request
 	Request *RequestDiff `json:"request,omitempty"`
 
 	// response
 	Response *ResponseDiff `json:"response,omitempty"`
+
+	// source
+	Source *Source `json:"source,omitempty"`
 }
 
 // Validate validates this traffic diff paired diff
@@ -34,6 +40,10 @@ func (m *TrafficDiffPairedDiff) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateResponse(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSource(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -81,6 +91,25 @@ func (m *TrafficDiffPairedDiff) validateResponse(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *TrafficDiffPairedDiff) validateSource(formats strfmt.Registry) error {
+	if swag.IsZero(m.Source) { // not required
+		return nil
+	}
+
+	if m.Source != nil {
+		if err := m.Source.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("source")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this traffic diff paired diff based on the context it is used
 func (m *TrafficDiffPairedDiff) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -90,6 +119,10 @@ func (m *TrafficDiffPairedDiff) ContextValidate(ctx context.Context, formats str
 	}
 
 	if err := m.contextValidateResponse(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSource(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -133,6 +166,27 @@ func (m *TrafficDiffPairedDiff) contextValidateResponse(ctx context.Context, for
 				return ve.ValidateName("response")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("response")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrafficDiffPairedDiff) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Source != nil {
+
+		if swag.IsZero(m.Source) { // not required
+			return nil
+		}
+
+		if err := m.Source.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("source")
 			}
 			return err
 		}
