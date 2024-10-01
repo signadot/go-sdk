@@ -1,36 +1,6 @@
 {
   "basePath": "/api/v2",
   "definitions": {
-    "CapturePointDiffSummary": {
-      "properties": {
-        "additions": {
-          "type": "integer"
-        },
-        "capturedBy": {
-          "$ref": "#/definitions/trafficmodels.By"
-        },
-        "captures": {
-          "type": "integer"
-        },
-        "maxRelevance": {
-          "description": "MaxRelevance indicates a score in 0..1 of the maximally relevant diff\noperation, or 1.0 if either the baseline or target are missing.",
-          "type": "number"
-        },
-        "removals": {
-          "type": "integer"
-        },
-        "replacements": {
-          "type": "integer"
-        },
-        "top": {
-          "items": {
-            "$ref": "#/definitions/TrafficDiffPairedDiff"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "Cluster": {
       "properties": {
         "createdAt": {
@@ -351,6 +321,20 @@
       },
       "type": "object"
     },
+    "Source": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "requestName": {
+          "type": "string"
+        },
+        "scriptRef": {
+          "$ref": "#/definitions/capturemeta.ScriptRef"
+        }
+      },
+      "type": "object"
+    },
     "Test": {
       "properties": {
         "createdAt": {
@@ -502,8 +486,8 @@
         "sandbox": {
           "type": "string"
         },
-        "triggerID": {
-          "type": "string"
+        "trigger": {
+          "$ref": "#/definitions/TestTrigger"
         }
       },
       "type": "object"
@@ -545,26 +529,22 @@
           "type": "integer"
         },
         "capturePoints": {
-          "type": "integer"
+          "items": {
+            "$ref": "#/definitions/trafficmodels.By"
+          },
+          "type": "array"
         },
         "captures": {
           "type": "integer"
         },
         "green": {
-          "items": {
-            "$ref": "#/definitions/CapturePointDiffSummary"
-          },
-          "type": "array"
+          "$ref": "#/definitions/TrafficDiffSummary"
         },
         "maxRelevance": {
-          "description": "MaxRelevance indicates a score in 0..1 of the maximally relevant\ndiff of captures.",
           "type": "number"
         },
         "red": {
-          "items": {
-            "$ref": "#/definitions/CapturePointDiffSummary"
-          },
-          "type": "array"
+          "$ref": "#/definitions/TrafficDiffSummary"
         },
         "removals": {
           "type": "integer"
@@ -573,21 +553,24 @@
           "type": "integer"
         },
         "yellow": {
-          "items": {
-            "$ref": "#/definitions/CapturePointDiffSummary"
-          },
-          "type": "array"
+          "$ref": "#/definitions/TrafficDiffSummary"
         }
       },
       "type": "object"
     },
     "TrafficDiffPairedDiff": {
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "request": {
           "$ref": "#/definitions/RequestDiff"
         },
         "response": {
           "$ref": "#/definitions/ResponseDiff"
+        },
+        "source": {
+          "$ref": "#/definitions/Source"
         }
       },
       "type": "object"
@@ -619,6 +602,26 @@
         },
         "target": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TrafficDiffSummary": {
+      "properties": {
+        "additions": {
+          "type": "integer"
+        },
+        "captures": {
+          "type": "integer"
+        },
+        "maxRelevance": {
+          "type": "number"
+        },
+        "removals": {
+          "type": "integer"
+        },
+        "replacements": {
+          "type": "integer"
         }
       },
       "type": "object"
@@ -681,6 +684,27 @@
     "capture.Values": {
       "additionalProperties": {
         "type": "string"
+      },
+      "type": "object"
+    },
+    "capturemeta.ScriptRef": {
+      "properties": {
+        "callNum": {
+          "description": "call number",
+          "type": "integer"
+        },
+        "col": {
+          "description": "1-based column (rune) number; 0 if column unknown",
+          "type": "integer"
+        },
+        "file": {
+          "description": "filename",
+          "type": "string"
+        },
+        "line": {
+          "description": "1-based line number; 0 if line unknown",
+          "type": "integer"
+        }
       },
       "type": "object"
     },
@@ -4873,6 +4897,95 @@
           }
         ],
         "summary": "Get the full traffic diff of a test execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get the findings view of the traffic diff of a test execution",
+        "operationId": "test-execution-traffic-diff-findings",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Name",
+            "in": "path",
+            "name": "testName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Context",
+            "in": "query",
+            "name": "diffContext",
+            "type": "string"
+          },
+          {
+            "description": "Category",
+            "in": "query",
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "description": "Max Findings",
+            "in": "query",
+            "name": "maxFindings",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TrafficDiffResult"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get the findings view of the traffic diff of a test execution",
         "tags": [
           "TestExecutions"
         ]

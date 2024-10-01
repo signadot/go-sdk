@@ -23,20 +23,19 @@ type TrafficDiff struct {
 	Additions int64 `json:"additions,omitempty"`
 
 	// capture points
-	CapturePoints int64 `json:"capturePoints,omitempty"`
+	CapturePoints []*TrafficmodelsBy `json:"capturePoints"`
 
 	// captures
 	Captures int64 `json:"captures,omitempty"`
 
 	// green
-	Green []*CapturePointDiffSummary `json:"green"`
+	Green *TrafficDiffSummary `json:"green,omitempty"`
 
-	// MaxRelevance indicates a score in 0..1 of the maximally relevant
-	// diff of captures.
+	// max relevance
 	MaxRelevance float64 `json:"maxRelevance,omitempty"`
 
 	// red
-	Red []*CapturePointDiffSummary `json:"red"`
+	Red *TrafficDiffSummary `json:"red,omitempty"`
 
 	// removals
 	Removals int64 `json:"removals,omitempty"`
@@ -45,12 +44,16 @@ type TrafficDiff struct {
 	Replacements int64 `json:"replacements,omitempty"`
 
 	// yellow
-	Yellow []*CapturePointDiffSummary `json:"yellow"`
+	Yellow *TrafficDiffSummary `json:"yellow,omitempty"`
 }
 
 // Validate validates this traffic diff
 func (m *TrafficDiff) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateCapturePoints(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateGreen(formats); err != nil {
 		res = append(res, err)
@@ -70,27 +73,46 @@ func (m *TrafficDiff) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *TrafficDiff) validateGreen(formats strfmt.Registry) error {
-	if swag.IsZero(m.Green) { // not required
+func (m *TrafficDiff) validateCapturePoints(formats strfmt.Registry) error {
+	if swag.IsZero(m.CapturePoints) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.Green); i++ {
-		if swag.IsZero(m.Green[i]) { // not required
+	for i := 0; i < len(m.CapturePoints); i++ {
+		if swag.IsZero(m.CapturePoints[i]) { // not required
 			continue
 		}
 
-		if m.Green[i] != nil {
-			if err := m.Green[i].Validate(formats); err != nil {
+		if m.CapturePoints[i] != nil {
+			if err := m.CapturePoints[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("green" + "." + strconv.Itoa(i))
+					return ve.ValidateName("capturePoints" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("green" + "." + strconv.Itoa(i))
+					return ce.ValidateName("capturePoints" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *TrafficDiff) validateGreen(formats strfmt.Registry) error {
+	if swag.IsZero(m.Green) { // not required
+		return nil
+	}
+
+	if m.Green != nil {
+		if err := m.Green.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("green")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("green")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -101,22 +123,15 @@ func (m *TrafficDiff) validateRed(formats strfmt.Registry) error {
 		return nil
 	}
 
-	for i := 0; i < len(m.Red); i++ {
-		if swag.IsZero(m.Red[i]) { // not required
-			continue
-		}
-
-		if m.Red[i] != nil {
-			if err := m.Red[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("red" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("red" + "." + strconv.Itoa(i))
-				}
-				return err
+	if m.Red != nil {
+		if err := m.Red.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("red")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("red")
 			}
+			return err
 		}
-
 	}
 
 	return nil
@@ -127,22 +142,15 @@ func (m *TrafficDiff) validateYellow(formats strfmt.Registry) error {
 		return nil
 	}
 
-	for i := 0; i < len(m.Yellow); i++ {
-		if swag.IsZero(m.Yellow[i]) { // not required
-			continue
-		}
-
-		if m.Yellow[i] != nil {
-			if err := m.Yellow[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("yellow" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("yellow" + "." + strconv.Itoa(i))
-				}
-				return err
+	if m.Yellow != nil {
+		if err := m.Yellow.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("yellow")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("yellow")
 			}
+			return err
 		}
-
 	}
 
 	return nil
@@ -151,6 +159,10 @@ func (m *TrafficDiff) validateYellow(formats strfmt.Registry) error {
 // ContextValidate validate this traffic diff based on the context it is used
 func (m *TrafficDiff) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.contextValidateCapturePoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.contextValidateGreen(ctx, formats); err != nil {
 		res = append(res, err)
@@ -170,26 +182,47 @@ func (m *TrafficDiff) ContextValidate(ctx context.Context, formats strfmt.Regist
 	return nil
 }
 
-func (m *TrafficDiff) contextValidateGreen(ctx context.Context, formats strfmt.Registry) error {
+func (m *TrafficDiff) contextValidateCapturePoints(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Green); i++ {
+	for i := 0; i < len(m.CapturePoints); i++ {
 
-		if m.Green[i] != nil {
+		if m.CapturePoints[i] != nil {
 
-			if swag.IsZero(m.Green[i]) { // not required
+			if swag.IsZero(m.CapturePoints[i]) { // not required
 				return nil
 			}
 
-			if err := m.Green[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.CapturePoints[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("green" + "." + strconv.Itoa(i))
+					return ve.ValidateName("capturePoints" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("green" + "." + strconv.Itoa(i))
+					return ce.ValidateName("capturePoints" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *TrafficDiff) contextValidateGreen(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Green != nil {
+
+		if swag.IsZero(m.Green) { // not required
+			return nil
+		}
+
+		if err := m.Green.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("green")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("green")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -197,24 +230,20 @@ func (m *TrafficDiff) contextValidateGreen(ctx context.Context, formats strfmt.R
 
 func (m *TrafficDiff) contextValidateRed(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Red); i++ {
+	if m.Red != nil {
 
-		if m.Red[i] != nil {
-
-			if swag.IsZero(m.Red[i]) { // not required
-				return nil
-			}
-
-			if err := m.Red[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("red" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("red" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
+		if swag.IsZero(m.Red) { // not required
+			return nil
 		}
 
+		if err := m.Red.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("red")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("red")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -222,24 +251,20 @@ func (m *TrafficDiff) contextValidateRed(ctx context.Context, formats strfmt.Reg
 
 func (m *TrafficDiff) contextValidateYellow(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Yellow); i++ {
+	if m.Yellow != nil {
 
-		if m.Yellow[i] != nil {
-
-			if swag.IsZero(m.Yellow[i]) { // not required
-				return nil
-			}
-
-			if err := m.Yellow[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("yellow" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("yellow" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
+		if swag.IsZero(m.Yellow) { // not required
+			return nil
 		}
 
+		if err := m.Yellow.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("yellow")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("yellow")
+			}
+			return err
+		}
 	}
 
 	return nil
