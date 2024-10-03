@@ -17,6 +17,9 @@ import (
 // swagger:model TestExecutionCanceledState
 type TestExecutionCanceledState struct {
 
+	// canceled at
+	CanceledAt string `json:"canceledAt,omitempty"`
+
 	// canceled by
 	CanceledBy string `json:"canceledBy,omitempty"`
 

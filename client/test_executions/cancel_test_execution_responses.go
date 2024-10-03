@@ -49,7 +49,7 @@ func (o *CancelTestExecutionReader) ReadResponse(response runtime.ClientResponse
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel] cancel-test-execution", response, response.Code())
+		return nil, runtime.NewAPIError("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel] cancel-test-execution", response, response.Code())
 	}
 }
 
@@ -99,12 +99,12 @@ func (o *CancelTestExecutionOK) Code() int {
 
 func (o *CancelTestExecutionOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionOK %s", 200, payload)
 }
 
 func (o *CancelTestExecutionOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionOK %s", 200, payload)
 }
 
 func (o *CancelTestExecutionOK) GetPayload() models.EmptyResponse {
@@ -167,12 +167,12 @@ func (o *CancelTestExecutionBadRequest) Code() int {
 
 func (o *CancelTestExecutionBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadRequest %s", 400, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadRequest %s", 400, payload)
 }
 
 func (o *CancelTestExecutionBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadRequest %s", 400, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadRequest %s", 400, payload)
 }
 
 func (o *CancelTestExecutionBadRequest) GetPayload() *models.ErrorResponse {
@@ -237,12 +237,12 @@ func (o *CancelTestExecutionUnauthorized) Code() int {
 
 func (o *CancelTestExecutionUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *CancelTestExecutionUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *CancelTestExecutionUnauthorized) GetPayload() *models.ErrorResponse {
@@ -307,12 +307,12 @@ func (o *CancelTestExecutionBadGateway) Code() int {
 
 func (o *CancelTestExecutionBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadGateway %s", 502, payload)
 }
 
 func (o *CancelTestExecutionBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel][%d] cancelTestExecutionBadGateway %s", 502, payload)
 }
 
 func (o *CancelTestExecutionBadGateway) GetPayload() *models.ErrorResponse {
