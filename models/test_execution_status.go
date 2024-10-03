@@ -24,8 +24,14 @@ type TestExecutionStatus struct {
 	// final state
 	FinalState *TestExecutionState `json:"finalState,omitempty"`
 
+	// finished at
+	FinishedAt string `json:"finishedAt,omitempty"`
+
 	// phase
 	Phase string `json:"phase,omitempty"`
+
+	// started at
+	StartedAt string `json:"startedAt,omitempty"`
 
 	// target job
 	TargetJob string `json:"targetJob,omitempty"`
