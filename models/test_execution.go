@@ -18,9 +18,6 @@ import (
 // swagger:model TestExecution
 type TestExecution struct {
 
-	// canceled at
-	CanceledAt string `json:"canceledAt,omitempty"`
-
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
 

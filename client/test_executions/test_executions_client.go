@@ -85,7 +85,7 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-test-execution",
-		Method:             "POST",
+		Method:             "PUT",
 		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},

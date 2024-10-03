@@ -357,9 +357,6 @@
     },
     "TestExecution": {
       "properties": {
-        "canceledAt": {
-          "type": "string"
-        },
         "createdAt": {
           "type": "string"
         },
@@ -389,6 +386,9 @@
     },
     "TestExecutionCanceledState": {
       "properties": {
+        "canceledAt": {
+          "type": "string"
+        },
         "canceledBy": {
           "type": "string"
         },
@@ -458,7 +458,13 @@
         "finalState": {
           "$ref": "#/definitions/TestExecutionState"
         },
+        "finishedAt": {
+          "type": "string"
+        },
         "phase": {
+          "type": "string"
+        },
+        "startedAt": {
           "type": "string"
         },
         "targetJob": {
@@ -4761,7 +4767,7 @@
       }
     },
     "/orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel": {
-      "post": {
+      "put": {
         "consumes": [
           "application/json"
         ],
