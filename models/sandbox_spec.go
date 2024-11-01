@@ -40,13 +40,6 @@ type SandboxSpec struct {
 	// Labels are used to specify metadata associated with the sandbox as key-value pairs.
 	Labels map[string]string `json:"labels,omitempty"`
 
-	// Local Workloads
-	Local []*Local `json:"local"`
-
-	// Identifier of the machine from where a sandbox containing local workloads
-	// was created or is intended to be ran
-	LocalMachineID string `json:"localMachineID,omitempty"`
-
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
 
@@ -71,10 +64,6 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateForks(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateLocal(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -173,32 +162,6 @@ func (m *SandboxSpec) validateForks(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxSpec) validateLocal(formats strfmt.Registry) error {
-	if swag.IsZero(m.Local) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Local); i++ {
-		if swag.IsZero(m.Local[i]) { // not required
-			continue
-		}
-
-		if m.Local[i] != nil {
-			if err := m.Local[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("local" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("local" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
 func (m *SandboxSpec) validateResources(formats strfmt.Registry) error {
 	if swag.IsZero(m.Resources) { // not required
 		return nil
@@ -257,10 +220,6 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 	}
 
 	if err := m.contextValidateForks(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateLocal(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -339,31 +298,6 @@ func (m *SandboxSpec) contextValidateForks(ctx context.Context, formats strfmt.R
 					return ve.ValidateName("forks" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("forks" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *SandboxSpec) contextValidateLocal(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.Local); i++ {
-
-		if m.Local[i] != nil {
-
-			if swag.IsZero(m.Local[i]) { // not required
-				return nil
-			}
-
-			if err := m.Local[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("local" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("local" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
