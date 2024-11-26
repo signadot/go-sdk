@@ -3,6 +3,9 @@
   "definitions": {
     "Cluster": {
       "properties": {
+        "clusterConfig": {
+          "$ref": "#/definitions/config.ClusterConfig"
+        },
         "createdAt": {
           "description": "The time when this cluster was registered with Signadot.",
           "type": "string"
@@ -422,6 +425,9 @@
     },
     "TestExecutionResults": {
       "properties": {
+        "testErrors": {
+          "$ref": "#/definitions/testexecutions.TestErrors"
+        },
         "trafficDiff": {
           "$ref": "#/definitions/TrafficDiff"
         }
@@ -468,6 +474,9 @@
           "type": "string"
         },
         "targetJob": {
+          "type": "string"
+        },
+        "testDeletedAt": {
           "type": "string"
         },
         "triggeredBy": {
@@ -534,6 +543,9 @@
         "additions": {
           "type": "integer"
         },
+        "baselineSession": {
+          "type": "string"
+        },
         "capturePoints": {
           "items": {
             "$ref": "#/definitions/trafficmodels.By"
@@ -558,6 +570,15 @@
         "replacements": {
           "type": "integer"
         },
+        "targetSession": {
+          "type": "string"
+        },
+        "unpairedCaptures": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.UnpairedCapture"
+          },
+          "type": "array"
+        },
         "yellow": {
           "$ref": "#/definitions/TrafficDiffSummary"
         }
@@ -566,6 +587,9 @@
     },
     "TrafficDiffPairedDiff": {
       "properties": {
+        "baselineCaptureID": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
@@ -577,6 +601,9 @@
         },
         "source": {
           "$ref": "#/definitions/Source"
+        },
+        "targetCaptureID": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -662,7 +689,10 @@
           "type": "string"
         },
         "query": {
-          "$ref": "#/definitions/capture.Values"
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
         },
         "uri": {
           "type": "string"
@@ -719,6 +749,90 @@
         "version": {
           "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "config.ClusterConfig": {
+      "properties": {
+        "allowedNamespaces": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "routing": {
+          "$ref": "#/definitions/config.RoutingConfig"
+        },
+        "sandboxTrafficManager": {
+          "$ref": "#/definitions/config.SandboxTrafficManagerConfig"
+        },
+        "trafficCapture": {
+          "$ref": "#/definitions/config.TrafficCaptureConfig"
+        }
+      },
+      "type": "object"
+    },
+    "config.IstioConfig": {
+      "properties": {
+        "enableHostRouting": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.LinkerdConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.RoutingConfig": {
+      "properties": {
+        "customHeaders": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "istio": {
+          "$ref": "#/definitions/config.IstioConfig"
+        },
+        "linkerd": {
+          "$ref": "#/definitions/config.LinkerdConfig"
+        }
+      },
+      "type": "object"
+    },
+    "config.SandboxTrafficManagerConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.TrafficCaptureConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "requestHeadersElide": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "responseHeadersElide": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1057,59 +1171,6 @@
       "properties": {
         "exitCode": {
           "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "local": {
-      "properties": {
-        "from": {
-          "$ref": "#/definitions/local.From"
-        },
-        "mappings": {
-          "items": {
-            "$ref": "#/definitions/local.PortMapping"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local.From": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "local.PortMapping": {
-      "properties": {
-        "port": {
-          "type": "integer"
-        },
-        "toLocal": {
-          "type": "string"
         }
       },
       "type": "object"
@@ -1726,17 +1787,6 @@
           "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
         },
-        "local": {
-          "description": "Local Workloads",
-          "items": {
-            "$ref": "#/definitions/local"
-          },
-          "type": "array"
-        },
-        "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-          "type": "string"
-        },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
           "items": {
@@ -1767,6 +1817,19 @@
       },
       "type": "object"
     },
+    "syntax.Position": {
+      "properties": {
+        "col": {
+          "description": "1-based column (rune) number; 0 if column unknown",
+          "type": "integer"
+        },
+        "line": {
+          "description": "1-based line number; 0 if line unknown",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "testexecutions.QueryResult": {
       "properties": {
         "cursor": {
@@ -1774,6 +1837,49 @@
         },
         "execution": {
           "$ref": "#/definitions/TestExecution"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.TestError": {
+      "properties": {
+        "attrs": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        },
+        "sourcePosition": {
+          "$ref": "#/definitions/syntax.Position"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.TestErrors": {
+      "properties": {
+        "baseline": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.TestError"
+          },
+          "type": "array"
+        },
+        "sandbox": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.TestError"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.UnpairedCapture": {
+      "properties": {
+        "baselineCaptureID": {
+          "type": "string"
+        },
+        "targetCaptureID": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -4225,6 +4331,18 @@
             "x-example": "my-company"
           },
           {
+            "description": "Only include auto diff executions",
+            "in": "query",
+            "name": "isAutoDiff",
+            "type": "string"
+          },
+          {
+            "description": "Do not include executions from deleted tests",
+            "in": "query",
+            "name": "skipDeletedTests",
+            "type": "string"
+          },
+          {
             "description": "Target sandbox name",
             "in": "query",
             "name": "targetSandboxName",
@@ -4285,9 +4403,9 @@
             "type": "string"
           },
           {
-            "description": "Group results by entity (so far, only triggers is supported)",
+            "description": "Group results by entity (so far, only tests is supported)",
             "enum": [
-              "trigger"
+              "tests"
             ],
             "in": "query",
             "name": "groupBy",
