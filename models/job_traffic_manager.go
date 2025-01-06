@@ -20,9 +20,14 @@ import (
 // swagger:model job.TrafficManager
 type JobTrafficManager struct {
 
+	// Explicitly enable traffic manager in runner pods for this job.
+	Enabled bool `json:"enabled,omitempty"`
+
 	// InjectRoutingKey indicates if the system should perform automatic
 	// injection of routing key headers or not.  It may be the empty string,
 	// "auto" or "disabled".  The empty string defaults to meaning "disabled".
+	// The "auto" value will overwrite the value of the Enabled field, setting
+	// it to true.
 	// Enum: ["disabled","auto"]
 	InjectRoutingKey string `json:"injectRoutingKey,omitempty"`
 }
