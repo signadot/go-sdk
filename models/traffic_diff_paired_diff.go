@@ -18,6 +18,9 @@ import (
 // swagger:model TrafficDiffPairedDiff
 type TrafficDiffPairedDiff struct {
 
+	// baseline capture ID
+	BaselineCaptureID string `json:"baselineCaptureID,omitempty"`
+
 	// id
 	ID string `json:"id,omitempty"`
 
@@ -29,6 +32,9 @@ type TrafficDiffPairedDiff struct {
 
 	// source
 	Source *Source `json:"source,omitempty"`
+
+	// target capture ID
+	TargetCaptureID string `json:"targetCaptureID,omitempty"`
 }
 
 // Validate validates this traffic diff paired diff
