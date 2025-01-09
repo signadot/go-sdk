@@ -31,7 +31,7 @@ type CaptureRequest struct {
 	Proto string `json:"proto,omitempty"`
 
 	// query
-	Query CaptureValues `json:"query,omitempty"`
+	Query map[string]string `json:"query,omitempty"`
 
 	// uri
 	URI string `json:"uri,omitempty"`
@@ -42,10 +42,6 @@ func (m *CaptureRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateMessage(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateQuery(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -74,34 +70,11 @@ func (m *CaptureRequest) validateMessage(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CaptureRequest) validateQuery(formats strfmt.Registry) error {
-	if swag.IsZero(m.Query) { // not required
-		return nil
-	}
-
-	if m.Query != nil {
-		if err := m.Query.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("query")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("query")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 // ContextValidate validate this capture request based on the context it is used
 func (m *CaptureRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateMessage(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateQuery(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -127,24 +100,6 @@ func (m *CaptureRequest) contextValidateMessage(ctx context.Context, formats str
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *CaptureRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Query) { // not required
-		return nil
-	}
-
-	if err := m.Query.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("query")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("query")
-		}
-		return err
 	}
 
 	return nil

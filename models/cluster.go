@@ -18,6 +18,9 @@ import (
 // swagger:model Cluster
 type Cluster struct {
 
+	// cluster config
+	ClusterConfig *ConfigClusterConfig `json:"clusterConfig,omitempty"`
+
 	// The time when this cluster was registered with Signadot.
 	CreatedAt string `json:"createdAt,omitempty"`
 
@@ -32,6 +35,10 @@ type Cluster struct {
 func (m *Cluster) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateClusterConfig(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateOperator(formats); err != nil {
 		res = append(res, err)
 	}
@@ -39,6 +46,25 @@ func (m *Cluster) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Cluster) validateClusterConfig(formats strfmt.Registry) error {
+	if swag.IsZero(m.ClusterConfig) { // not required
+		return nil
+	}
+
+	if m.ClusterConfig != nil {
+		if err := m.ClusterConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clusterConfig")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clusterConfig")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -65,6 +91,10 @@ func (m *Cluster) validateOperator(formats strfmt.Registry) error {
 func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateClusterConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateOperator(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -72,6 +102,27 @@ func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Cluster) contextValidateClusterConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ClusterConfig != nil {
+
+		if swag.IsZero(m.ClusterConfig) { // not required
+			return nil
+		}
+
+		if err := m.ClusterConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clusterConfig")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clusterConfig")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

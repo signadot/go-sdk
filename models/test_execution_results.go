@@ -18,6 +18,9 @@ import (
 // swagger:model TestExecutionResults
 type TestExecutionResults struct {
 
+	// checks
+	Checks *TestexecutionsChecks `json:"checks,omitempty"`
+
 	// traffic diff
 	TrafficDiff *TrafficDiff `json:"trafficDiff,omitempty"`
 }
@@ -26,6 +29,10 @@ type TestExecutionResults struct {
 func (m *TestExecutionResults) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateChecks(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateTrafficDiff(formats); err != nil {
 		res = append(res, err)
 	}
@@ -33,6 +40,25 @@ func (m *TestExecutionResults) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *TestExecutionResults) validateChecks(formats strfmt.Registry) error {
+	if swag.IsZero(m.Checks) { // not required
+		return nil
+	}
+
+	if m.Checks != nil {
+		if err := m.Checks.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("checks")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("checks")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -59,6 +85,10 @@ func (m *TestExecutionResults) validateTrafficDiff(formats strfmt.Registry) erro
 func (m *TestExecutionResults) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateChecks(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateTrafficDiff(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -66,6 +96,27 @@ func (m *TestExecutionResults) ContextValidate(ctx context.Context, formats strf
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *TestExecutionResults) contextValidateChecks(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Checks != nil {
+
+		if swag.IsZero(m.Checks) { // not required
+			return nil
+		}
+
+		if err := m.Checks.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("checks")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("checks")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

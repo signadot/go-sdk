@@ -36,6 +36,9 @@ type TestExecutionStatus struct {
 	// target job
 	TargetJob string `json:"targetJob,omitempty"`
 
+	// test deleted at
+	TestDeletedAt string `json:"testDeletedAt,omitempty"`
+
 	// triggered by
 	TriggeredBy *TestExecutionTriggeredBy `json:"triggeredBy,omitempty"`
 }
