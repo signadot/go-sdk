@@ -19,7 +19,10 @@ import (
 // swagger:model sandbox.Readiness
 type SandboxReadiness struct {
 
-	// local
+	// status of the jobs running in the context of the given sandbox
+	Jobs []*SandboxJobStatus `json:"jobs"`
+
+	// local workloads status
 	Local []*SandboxLocalWorkloadStatus `json:"local"`
 
 	// Message is a human readable explanation of why
@@ -37,19 +40,56 @@ type SandboxReadiness struct {
 	// ScheduledDeleteTime returns the formatted and computed ttl based on the Duration
 	// and OffsetFrom
 	ScheduledDeleteTime string `json:"scheduledDeleteTime,omitempty"`
+
+	// status of the test executions running in the context of the given sandbox
+	TestExecutions []*SandboxTestExecutionStatus `json:"testExecutions"`
 }
 
 // Validate validates this sandbox readiness
 func (m *SandboxReadiness) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateJobs(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateLocal(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTestExecutions(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxReadiness) validateJobs(formats strfmt.Registry) error {
+	if swag.IsZero(m.Jobs) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Jobs); i++ {
+		if swag.IsZero(m.Jobs[i]) { // not required
+			continue
+		}
+
+		if m.Jobs[i] != nil {
+			if err := m.Jobs[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("jobs" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("jobs" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -79,17 +119,76 @@ func (m *SandboxReadiness) validateLocal(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SandboxReadiness) validateTestExecutions(formats strfmt.Registry) error {
+	if swag.IsZero(m.TestExecutions) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.TestExecutions); i++ {
+		if swag.IsZero(m.TestExecutions[i]) { // not required
+			continue
+		}
+
+		if m.TestExecutions[i] != nil {
+			if err := m.TestExecutions[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("testExecutions" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("testExecutions" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 // ContextValidate validate this sandbox readiness based on the context it is used
 func (m *SandboxReadiness) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateJobs(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateLocal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTestExecutions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxReadiness) contextValidateJobs(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Jobs); i++ {
+
+		if m.Jobs[i] != nil {
+
+			if swag.IsZero(m.Jobs[i]) { // not required
+				return nil
+			}
+
+			if err := m.Jobs[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("jobs" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("jobs" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -108,6 +207,31 @@ func (m *SandboxReadiness) contextValidateLocal(ctx context.Context, formats str
 					return ve.ValidateName("local" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("local" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SandboxReadiness) contextValidateTestExecutions(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.TestExecutions); i++ {
+
+		if m.TestExecutions[i] != nil {
+
+			if swag.IsZero(m.TestExecutions[i]) { // not required
+				return nil
+			}
+
+			if err := m.TestExecutions[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("testExecutions" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("testExecutions" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

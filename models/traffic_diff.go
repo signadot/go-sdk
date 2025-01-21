@@ -22,6 +22,9 @@ type TrafficDiff struct {
 	// additions
 	Additions int64 `json:"additions,omitempty"`
 
+	// baseline session
+	BaselineSession string `json:"baselineSession,omitempty"`
+
 	// capture points
 	CapturePoints []*TrafficmodelsBy `json:"capturePoints"`
 
@@ -43,6 +46,12 @@ type TrafficDiff struct {
 	// replacements
 	Replacements int64 `json:"replacements,omitempty"`
 
+	// target session
+	TargetSession string `json:"targetSession,omitempty"`
+
+	// unpaired captures
+	UnpairedCaptures []*TestexecutionsUnpairedCapture `json:"unpairedCaptures"`
+
 	// yellow
 	Yellow *TrafficDiffSummary `json:"yellow,omitempty"`
 }
@@ -60,6 +69,10 @@ func (m *TrafficDiff) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateRed(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUnpairedCaptures(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -137,6 +150,32 @@ func (m *TrafficDiff) validateRed(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *TrafficDiff) validateUnpairedCaptures(formats strfmt.Registry) error {
+	if swag.IsZero(m.UnpairedCaptures) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.UnpairedCaptures); i++ {
+		if swag.IsZero(m.UnpairedCaptures[i]) { // not required
+			continue
+		}
+
+		if m.UnpairedCaptures[i] != nil {
+			if err := m.UnpairedCaptures[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 func (m *TrafficDiff) validateYellow(formats strfmt.Registry) error {
 	if swag.IsZero(m.Yellow) { // not required
 		return nil
@@ -169,6 +208,10 @@ func (m *TrafficDiff) ContextValidate(ctx context.Context, formats strfmt.Regist
 	}
 
 	if err := m.contextValidateRed(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUnpairedCaptures(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -244,6 +287,31 @@ func (m *TrafficDiff) contextValidateRed(ctx context.Context, formats strfmt.Reg
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *TrafficDiff) contextValidateUnpairedCaptures(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.UnpairedCaptures); i++ {
+
+		if m.UnpairedCaptures[i] != nil {
+
+			if swag.IsZero(m.UnpairedCaptures[i]) { // not required
+				return nil
+			}
+
+			if err := m.UnpairedCaptures[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil
