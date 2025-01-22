@@ -22,6 +22,9 @@ type JobsStatus struct {
 	// attempts
 	Attempts []*JobsAttempt `json:"attempts"`
 
+	// routing key
+	RoutingKey string `json:"routingKey,omitempty"`
+
 	// runner group deletion completed at
 	RunnerGroupDeletionCompletedAt string `json:"runnerGroupDeletionCompletedAt,omitempty"`
 }
