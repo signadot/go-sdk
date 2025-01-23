@@ -87,9 +87,15 @@ type QueryTestExecutionsParams struct {
 
 	/* GroupBy.
 
-	   Group results by entity (so far, only triggers is supported)
+	   Group results by entity (so far, only tests is supported)
 	*/
 	GroupBy *string
+
+	/* IsAutoDiff.
+
+	   Only include auto diff executions
+	*/
+	IsAutoDiff *string
 
 	/* OrderDir.
 
@@ -109,6 +115,12 @@ type QueryTestExecutionsParams struct {
 	*/
 	PageSize *string
 
+	/* SkipDeletedTests.
+
+	   Do not include executions from deleted tests
+	*/
+	SkipDeletedTests *string
+
 	/* TargetRevision.
 
 	   Revision of the target routing context
@@ -120,6 +132,12 @@ type QueryTestExecutionsParams struct {
 	   Target route group name
 	*/
 	TargetRouteGroupName *string
+
+	/* TargetRoutingKey.
+
+	   Target routing key
+	*/
+	TargetRoutingKey *string
 
 	/* TargetSandboxName.
 
@@ -259,6 +277,17 @@ func (o *QueryTestExecutionsParams) SetGroupBy(groupBy *string) {
 	o.GroupBy = groupBy
 }
 
+// WithIsAutoDiff adds the isAutoDiff to the query test executions params
+func (o *QueryTestExecutionsParams) WithIsAutoDiff(isAutoDiff *string) *QueryTestExecutionsParams {
+	o.SetIsAutoDiff(isAutoDiff)
+	return o
+}
+
+// SetIsAutoDiff adds the isAutoDiff to the query test executions params
+func (o *QueryTestExecutionsParams) SetIsAutoDiff(isAutoDiff *string) {
+	o.IsAutoDiff = isAutoDiff
+}
+
 // WithOrderDir adds the orderDir to the query test executions params
 func (o *QueryTestExecutionsParams) WithOrderDir(orderDir *string) *QueryTestExecutionsParams {
 	o.SetOrderDir(orderDir)
@@ -292,6 +321,17 @@ func (o *QueryTestExecutionsParams) SetPageSize(pageSize *string) {
 	o.PageSize = pageSize
 }
 
+// WithSkipDeletedTests adds the skipDeletedTests to the query test executions params
+func (o *QueryTestExecutionsParams) WithSkipDeletedTests(skipDeletedTests *string) *QueryTestExecutionsParams {
+	o.SetSkipDeletedTests(skipDeletedTests)
+	return o
+}
+
+// SetSkipDeletedTests adds the skipDeletedTests to the query test executions params
+func (o *QueryTestExecutionsParams) SetSkipDeletedTests(skipDeletedTests *string) {
+	o.SkipDeletedTests = skipDeletedTests
+}
+
 // WithTargetRevision adds the targetRevision to the query test executions params
 func (o *QueryTestExecutionsParams) WithTargetRevision(targetRevision *string) *QueryTestExecutionsParams {
 	o.SetTargetRevision(targetRevision)
@@ -312,6 +352,17 @@ func (o *QueryTestExecutionsParams) WithTargetRouteGroupName(targetRouteGroupNam
 // SetTargetRouteGroupName adds the targetRouteGroupName to the query test executions params
 func (o *QueryTestExecutionsParams) SetTargetRouteGroupName(targetRouteGroupName *string) {
 	o.TargetRouteGroupName = targetRouteGroupName
+}
+
+// WithTargetRoutingKey adds the targetRoutingKey to the query test executions params
+func (o *QueryTestExecutionsParams) WithTargetRoutingKey(targetRoutingKey *string) *QueryTestExecutionsParams {
+	o.SetTargetRoutingKey(targetRoutingKey)
+	return o
+}
+
+// SetTargetRoutingKey adds the targetRoutingKey to the query test executions params
+func (o *QueryTestExecutionsParams) SetTargetRoutingKey(targetRoutingKey *string) {
+	o.TargetRoutingKey = targetRoutingKey
 }
 
 // WithTargetSandboxName adds the targetSandboxName to the query test executions params
@@ -462,6 +513,23 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
+	if o.IsAutoDiff != nil {
+
+		// query param isAutoDiff
+		var qrIsAutoDiff string
+
+		if o.IsAutoDiff != nil {
+			qrIsAutoDiff = *o.IsAutoDiff
+		}
+		qIsAutoDiff := qrIsAutoDiff
+		if qIsAutoDiff != "" {
+
+			if err := r.SetQueryParam("isAutoDiff", qIsAutoDiff); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.OrderDir != nil {
 
 		// query param orderDir
@@ -501,6 +569,23 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
+	if o.SkipDeletedTests != nil {
+
+		// query param skipDeletedTests
+		var qrSkipDeletedTests string
+
+		if o.SkipDeletedTests != nil {
+			qrSkipDeletedTests = *o.SkipDeletedTests
+		}
+		qSkipDeletedTests := qrSkipDeletedTests
+		if qSkipDeletedTests != "" {
+
+			if err := r.SetQueryParam("skipDeletedTests", qSkipDeletedTests); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.TargetRevision != nil {
 
 		// query param targetRevision
@@ -530,6 +615,23 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if qTargetRouteGroupName != "" {
 
 			if err := r.SetQueryParam("targetRouteGroupName", qTargetRouteGroupName); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.TargetRoutingKey != nil {
+
+		// query param targetRoutingKey
+		var qrTargetRoutingKey string
+
+		if o.TargetRoutingKey != nil {
+			qrTargetRoutingKey = *o.TargetRoutingKey
+		}
+		qTargetRoutingKey := qrTargetRoutingKey
+		if qTargetRoutingKey != "" {
+
+			if err := r.SetQueryParam("targetRoutingKey", qTargetRoutingKey); err != nil {
 				return err
 			}
 		}

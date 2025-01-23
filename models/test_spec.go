@@ -19,6 +19,17 @@ import (
 // swagger:model TestSpec
 type TestSpec struct {
 
+	// DefaultTimeout represents an optional default timeout for the test
+	// executions associated with this test, which can override this value.
+	// If not supplied, it defaults to "5m".  It should be a string
+	// representing an unsigned integer in decimal not exceeding 32 bits
+	// followed by a units character, which can be one of the following.
+	//   - 'm' for minutes
+	//   - 'h' for hours
+	//   - 'd' for days
+	//   - 'w' for weeks
+	DefaultTimeout string `json:"defaultTimeout,omitempty"`
+
 	// script
 	Script string `json:"script,omitempty"`
 
