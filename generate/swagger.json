@@ -3,6 +3,9 @@
   "definitions": {
     "Cluster": {
       "properties": {
+        "clusterConfig": {
+          "$ref": "#/definitions/config.ClusterConfig"
+        },
         "createdAt": {
           "description": "The time when this cluster was registered with Signadot.",
           "type": "string"
@@ -408,6 +411,10 @@
         },
         "routing": {
           "$ref": "#/definitions/job.RoutingContext"
+        },
+        "timeout": {
+          "description": "Timeout represents an optional timeout for the test execution.\nIf not supplied, it defaults to the DefaultTimeout of the associated\ntest, if that is present.  If that is not present, it defaults to \"5m\".\nIt should be a string representing an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
         }
       },
       "type": "object"
@@ -422,6 +429,9 @@
     },
     "TestExecutionResults": {
       "properties": {
+        "checks": {
+          "$ref": "#/definitions/testexecutions.Checks"
+        },
         "trafficDiff": {
           "$ref": "#/definitions/TrafficDiff"
         }
@@ -470,6 +480,9 @@
         "targetJob": {
           "type": "string"
         },
+        "testDeletedAt": {
+          "type": "string"
+        },
         "triggeredBy": {
           "$ref": "#/definitions/TestExecutionTriggeredBy"
         }
@@ -482,6 +495,10 @@
           "$ref": "#/definitions/TestExecutionAutoDiff"
         },
         "cluster": {
+          "type": "string"
+        },
+        "timeout": {
+          "description": "Timeout represents an optional timeout for the test execution.\nIf not supplied, it defaults to the DefaultTimeout of the associated\ntest, if that is present.  If that is not present, it defaults to \"5m\".\nIt should be a string representing an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
           "type": "string"
         }
       },
@@ -500,6 +517,10 @@
     },
     "TestSpec": {
       "properties": {
+        "defaultTimeout": {
+          "description": "DefaultTimeout represents an optional default timeout for the test\nexecutions associated with this test, which can override this value.\nIf not supplied, it defaults to \"5m\".  It should be a string\nrepresenting an unsigned integer in decimal not exceeding 32 bits\nfollowed by a units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
+        },
         "script": {
           "type": "string"
         },
@@ -534,6 +555,9 @@
         "additions": {
           "type": "integer"
         },
+        "baselineSession": {
+          "type": "string"
+        },
         "capturePoints": {
           "items": {
             "$ref": "#/definitions/trafficmodels.By"
@@ -558,6 +582,15 @@
         "replacements": {
           "type": "integer"
         },
+        "targetSession": {
+          "type": "string"
+        },
+        "unpairedCaptures": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.UnpairedCapture"
+          },
+          "type": "array"
+        },
         "yellow": {
           "$ref": "#/definitions/TrafficDiffSummary"
         }
@@ -566,6 +599,9 @@
     },
     "TrafficDiffPairedDiff": {
       "properties": {
+        "baselineCaptureID": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
@@ -577,6 +613,9 @@
         },
         "source": {
           "$ref": "#/definitions/Source"
+        },
+        "targetCaptureID": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -662,7 +701,10 @@
           "type": "string"
         },
         "query": {
-          "$ref": "#/definitions/capture.Values"
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
         },
         "uri": {
           "type": "string"
@@ -719,6 +761,96 @@
         "version": {
           "description": "The operator version of the cluster.  This may be\nnil if the cluster has not yet connected to Signadot.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "config.ClusterConfig": {
+      "properties": {
+        "allowOrphanedResources": {
+          "type": "boolean"
+        },
+        "allowedNamespaces": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "routing": {
+          "$ref": "#/definitions/config.RoutingConfig"
+        },
+        "sandboxTrafficManager": {
+          "$ref": "#/definitions/config.SandboxTrafficManagerConfig"
+        },
+        "trafficCapture": {
+          "$ref": "#/definitions/config.TrafficCaptureConfig"
+        }
+      },
+      "type": "object"
+    },
+    "config.IstioConfig": {
+      "properties": {
+        "enableHostRouting": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.LinkerdConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.RoutingConfig": {
+      "properties": {
+        "customHeaders": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "iptablesMode": {
+          "type": "string"
+        },
+        "istio": {
+          "$ref": "#/definitions/config.IstioConfig"
+        },
+        "linkerd": {
+          "$ref": "#/definitions/config.LinkerdConfig"
+        }
+      },
+      "type": "object"
+    },
+    "config.SandboxTrafficManagerConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.TrafficCaptureConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "requestHeadersElide": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "responseHeadersElide": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -820,8 +952,12 @@
     },
     "job.TrafficManager": {
       "properties": {
+        "enabled": {
+          "description": "Explicitly enable traffic manager in runner pods for this job.",
+          "type": "boolean"
+        },
         "injectRoutingKey": {
-          "description": "InjectRoutingKey indicates if the system should perform automatic\ninjection of routing key headers or not.  It may be the empty string,\n\"auto\" or \"disabled\".  The empty string defaults to meaning \"disabled\".",
+          "description": "InjectRoutingKey indicates if the system should perform automatic\ninjection of routing key headers or not.  It may be the empty string,\n\"auto\" or \"disabled\".  The empty string defaults to meaning \"disabled\".\nThe \"auto\" value will overwrite the value of the Enabled field, setting\nit to true.",
           "enum": [
             "disabled",
             "auto"
@@ -997,6 +1133,17 @@
       },
       "type": "object"
     },
+    "jobs.PhaseCount": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "phase": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "jobs.QueuedState": {
       "properties": {
         "lastMessage": {
@@ -1047,6 +1194,9 @@
           },
           "type": "array"
         },
+        "routingKey": {
+          "type": "string"
+        },
         "runnerGroupDeletionCompletedAt": {
           "type": "string"
         }
@@ -1057,59 +1207,6 @@
       "properties": {
         "exitCode": {
           "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "local": {
-      "properties": {
-        "from": {
-          "$ref": "#/definitions/local.From"
-        },
-        "mappings": {
-          "items": {
-            "$ref": "#/definitions/local.PortMapping"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "local.From": {
-      "properties": {
-        "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
-          "example": "Deployment",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the entity within the Kubernetes cluster.",
-          "example": "my-frontend",
-          "type": "string"
-        },
-        "namespace": {
-          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
-          "example": "default",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kind",
-        "name",
-        "namespace"
-      ],
-      "type": "object"
-    },
-    "local.PortMapping": {
-      "properties": {
-        "port": {
-          "type": "integer"
-        },
-        "toLocal": {
-          "type": "string"
         }
       },
       "type": "object"
@@ -1649,7 +1746,11 @@
     },
     "sandbox.Readiness": {
       "properties": {
+        "jobs": {
+          "$ref": "#/definitions/sandboxes.JobsSummary"
+        },
         "local": {
+          "description": "local workloads status",
           "items": {
             "$ref": "#/definitions/sandbox.LocalWorkloadStatus"
           },
@@ -1670,6 +1771,9 @@
         "scheduledDeleteTime": {
           "description": "ScheduledDeleteTime returns the formatted and computed ttl based on the Duration\nand OffsetFrom",
           "type": "string"
+        },
+        "testExecutions": {
+          "$ref": "#/definitions/sandbox.TestExecutionsSummary"
         }
       },
       "type": "object"
@@ -1704,6 +1808,10 @@
           "description": "Description of the purpose of this sandbox",
           "type": "string"
         },
+        "disableSandboxTrafficManager": {
+          "description": "DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager\nfor forks in this sandbox.",
+          "type": "boolean"
+        },
         "endpoints": {
           "description": "Deprecated. Use defaultRouteGroup.Endpoints instead.",
           "items": {
@@ -1725,17 +1833,6 @@
           },
           "description": "Labels are used to specify metadata associated with the sandbox as key-value pairs.",
           "type": "object"
-        },
-        "local": {
-          "description": "Local Workloads",
-          "items": {
-            "$ref": "#/definitions/local"
-          },
-          "type": "array"
-        },
-        "localMachineID": {
-          "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-          "type": "string"
         },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
@@ -1767,6 +1864,129 @@
       },
       "type": "object"
     },
+    "sandbox.TestExecutionsSummary": {
+      "properties": {
+        "checks": {
+          "$ref": "#/definitions/sandbox.TestExecutionsSummaryChecks"
+        },
+        "phaseCounts": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.PhaseCount"
+          },
+          "type": "array"
+        },
+        "trafficDiffs": {
+          "$ref": "#/definitions/sandbox.TestExecutionsSummaryTrafficDiffs"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.TestExecutionsSummaryChecks": {
+      "properties": {
+        "failed": {
+          "type": "integer"
+        },
+        "passed": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.TestExecutionsSummaryTrafficDiffs": {
+      "properties": {
+        "green": {
+          "type": "integer"
+        },
+        "red": {
+          "type": "integer"
+        },
+        "yellow": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.JobsSummary": {
+      "properties": {
+        "phaseCounts": {
+          "items": {
+            "$ref": "#/definitions/jobs.PhaseCount"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "syntax.Position": {
+      "properties": {
+        "col": {
+          "description": "1-based column (rune) number; 0 if column unknown",
+          "type": "integer"
+        },
+        "line": {
+          "description": "1-based line number; 0 if line unknown",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.Check": {
+      "properties": {
+        "errors": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.CheckError"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.CheckError": {
+      "properties": {
+        "attrs": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        },
+        "sourcePosition": {
+          "$ref": "#/definitions/syntax.Position"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.Checks": {
+      "properties": {
+        "baseline": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.Check"
+          },
+          "type": "array"
+        },
+        "sandbox": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.Check"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.PhaseCount": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "phase": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "testexecutions.QueryResult": {
       "properties": {
         "cursor": {
@@ -1774,6 +1994,17 @@
         },
         "execution": {
           "$ref": "#/definitions/TestExecution"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.UnpairedCapture": {
+      "properties": {
+        "baselineCaptureID": {
+          "type": "string"
+        },
+        "targetCaptureID": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -4225,6 +4456,18 @@
             "x-example": "my-company"
           },
           {
+            "description": "Only include auto diff executions",
+            "in": "query",
+            "name": "isAutoDiff",
+            "type": "string"
+          },
+          {
+            "description": "Do not include executions from deleted tests",
+            "in": "query",
+            "name": "skipDeletedTests",
+            "type": "string"
+          },
+          {
             "description": "Target sandbox name",
             "in": "query",
             "name": "targetSandboxName",
@@ -4234,6 +4477,12 @@
             "description": "Target route group name",
             "in": "query",
             "name": "targetRouteGroupName",
+            "type": "string"
+          },
+          {
+            "description": "Target routing key",
+            "in": "query",
+            "name": "targetRoutingKey",
             "type": "string"
           },
           {
@@ -4285,9 +4534,9 @@
             "type": "string"
           },
           {
-            "description": "Group results by entity (so far, only triggers is supported)",
+            "description": "Group results by entity (so far, only tests is supported)",
             "enum": [
-              "trigger"
+              "tests"
             ],
             "in": "query",
             "name": "groupBy",
