@@ -26,6 +26,17 @@ type TestExecutionContext struct {
 
 	// routing
 	Routing *JobRoutingContext `json:"routing,omitempty"`
+
+	// Timeout represents an optional timeout for the test execution.
+	// If not supplied, it defaults to the DefaultTimeout of the associated
+	// test, if that is present.  If that is not present, it defaults to "5m".
+	// It should be a string representing an unsigned integer not exceeding 32 bits followed by
+	// a units character, which can be one of the following.
+	//   - 'm' for minutes
+	//   - 'h' for hours
+	//   - 'd' for days
+	//   - 'w' for weeks
+	Timeout string `json:"timeout,omitempty"`
 }
 
 // Validate validates this test execution context

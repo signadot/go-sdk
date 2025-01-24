@@ -21,6 +21,9 @@ type ConfigRoutingConfig struct {
 	// custom headers
 	CustomHeaders []string `json:"customHeaders"`
 
+	// iptables mode
+	IptablesMode string `json:"iptablesMode,omitempty"`
+
 	// istio
 	Istio *ConfigIstioConfig `json:"istio,omitempty"`
 

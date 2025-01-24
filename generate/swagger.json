@@ -411,6 +411,10 @@
         },
         "routing": {
           "$ref": "#/definitions/job.RoutingContext"
+        },
+        "timeout": {
+          "description": "Timeout represents an optional timeout for the test execution.\nIf not supplied, it defaults to the DefaultTimeout of the associated\ntest, if that is present.  If that is not present, it defaults to \"5m\".\nIt should be a string representing an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
         }
       },
       "type": "object"
@@ -492,6 +496,10 @@
         },
         "cluster": {
           "type": "string"
+        },
+        "timeout": {
+          "description": "Timeout represents an optional timeout for the test execution.\nIf not supplied, it defaults to the DefaultTimeout of the associated\ntest, if that is present.  If that is not present, it defaults to \"5m\".\nIt should be a string representing an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
         }
       },
       "type": "object"
@@ -509,6 +517,10 @@
     },
     "TestSpec": {
       "properties": {
+        "defaultTimeout": {
+          "description": "DefaultTimeout represents an optional default timeout for the test\nexecutions associated with this test, which can override this value.\nIf not supplied, it defaults to \"5m\".  It should be a string\nrepresenting an unsigned integer in decimal not exceeding 32 bits\nfollowed by a units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
+          "type": "string"
+        },
         "script": {
           "type": "string"
         },
@@ -802,6 +814,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "iptablesMode": {
+          "type": "string"
         },
         "istio": {
           "$ref": "#/definitions/config.IstioConfig"
@@ -1118,6 +1133,17 @@
       },
       "type": "object"
     },
+    "jobs.PhaseCount": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "phase": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "jobs.QueuedState": {
       "properties": {
         "lastMessage": {
@@ -1167,6 +1193,9 @@
             "$ref": "#/definitions/jobs.Attempt"
           },
           "type": "array"
+        },
+        "routingKey": {
+          "type": "string"
         },
         "runnerGroupDeletionCompletedAt": {
           "type": "string"
@@ -1770,7 +1799,11 @@
     },
     "sandbox.Readiness": {
       "properties": {
+        "jobs": {
+          "$ref": "#/definitions/sandboxes.JobsSummary"
+        },
         "local": {
+          "description": "local workloads status",
           "items": {
             "$ref": "#/definitions/sandbox.LocalWorkloadStatus"
           },
@@ -1791,6 +1824,9 @@
         "scheduledDeleteTime": {
           "description": "ScheduledDeleteTime returns the formatted and computed ttl based on the Duration\nand OffsetFrom",
           "type": "string"
+        },
+        "testExecutions": {
+          "$ref": "#/definitions/sandbox.TestExecutionsSummary"
         }
       },
       "type": "object"
@@ -1824,6 +1860,10 @@
         "description": {
           "description": "Description of the purpose of this sandbox",
           "type": "string"
+        },
+        "disableSandboxTrafficManager": {
+          "description": "DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager\nfor forks in this sandbox.",
+          "type": "boolean"
         },
         "endpoints": {
           "description": "Deprecated. Use defaultRouteGroup.Endpoints instead.",
@@ -1888,6 +1928,59 @@
       },
       "type": "object"
     },
+    "sandbox.TestExecutionsSummary": {
+      "properties": {
+        "checks": {
+          "$ref": "#/definitions/sandbox.TestExecutionsSummaryChecks"
+        },
+        "phaseCounts": {
+          "items": {
+            "$ref": "#/definitions/testexecutions.PhaseCount"
+          },
+          "type": "array"
+        },
+        "trafficDiffs": {
+          "$ref": "#/definitions/sandbox.TestExecutionsSummaryTrafficDiffs"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.TestExecutionsSummaryChecks": {
+      "properties": {
+        "failed": {
+          "type": "integer"
+        },
+        "passed": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.TestExecutionsSummaryTrafficDiffs": {
+      "properties": {
+        "green": {
+          "type": "integer"
+        },
+        "red": {
+          "type": "integer"
+        },
+        "yellow": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.JobsSummary": {
+      "properties": {
+        "phaseCounts": {
+          "items": {
+            "$ref": "#/definitions/jobs.PhaseCount"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "syntax.Position": {
       "properties": {
         "col": {
@@ -1943,6 +2036,17 @@
             "$ref": "#/definitions/testexecutions.Check"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "testexecutions.PhaseCount": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "phase": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -4437,6 +4541,12 @@
             "description": "Target route group name",
             "in": "query",
             "name": "targetRouteGroupName",
+            "type": "string"
+          },
+          {
+            "description": "Target routing key",
+            "in": "query",
+            "name": "targetRoutingKey",
             "type": "string"
           },
           {

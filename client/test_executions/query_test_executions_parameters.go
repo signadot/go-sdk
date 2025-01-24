@@ -133,6 +133,12 @@ type QueryTestExecutionsParams struct {
 	*/
 	TargetRouteGroupName *string
 
+	/* TargetRoutingKey.
+
+	   Target routing key
+	*/
+	TargetRoutingKey *string
+
 	/* TargetSandboxName.
 
 	   Target sandbox name
@@ -346,6 +352,17 @@ func (o *QueryTestExecutionsParams) WithTargetRouteGroupName(targetRouteGroupNam
 // SetTargetRouteGroupName adds the targetRouteGroupName to the query test executions params
 func (o *QueryTestExecutionsParams) SetTargetRouteGroupName(targetRouteGroupName *string) {
 	o.TargetRouteGroupName = targetRouteGroupName
+}
+
+// WithTargetRoutingKey adds the targetRoutingKey to the query test executions params
+func (o *QueryTestExecutionsParams) WithTargetRoutingKey(targetRoutingKey *string) *QueryTestExecutionsParams {
+	o.SetTargetRoutingKey(targetRoutingKey)
+	return o
+}
+
+// SetTargetRoutingKey adds the targetRoutingKey to the query test executions params
+func (o *QueryTestExecutionsParams) SetTargetRoutingKey(targetRoutingKey *string) {
+	o.TargetRoutingKey = targetRoutingKey
 }
 
 // WithTargetSandboxName adds the targetSandboxName to the query test executions params
@@ -598,6 +615,23 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if qTargetRouteGroupName != "" {
 
 			if err := r.SetQueryParam("targetRouteGroupName", qTargetRouteGroupName); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.TargetRoutingKey != nil {
+
+		// query param targetRoutingKey
+		var qrTargetRoutingKey string
+
+		if o.TargetRoutingKey != nil {
+			qrTargetRoutingKey = *o.TargetRoutingKey
+		}
+		qTargetRoutingKey := qrTargetRoutingKey
+		if qTargetRoutingKey != "" {
+
+			if err := r.SetQueryParam("targetRoutingKey", qTargetRoutingKey); err != nil {
 				return err
 			}
 		}

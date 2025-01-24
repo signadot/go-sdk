@@ -30,6 +30,10 @@ type SandboxSpec struct {
 	// Description of the purpose of this sandbox
 	Description string `json:"description,omitempty"`
 
+	// DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager
+	// for forks in this sandbox.
+	DisableSandboxTrafficManager bool `json:"disableSandboxTrafficManager,omitempty"`
+
 	// Deprecated. Use defaultRouteGroup.Endpoints instead.
 	Endpoints []*SandboxHostEndpoint `json:"endpoints"`
 
