@@ -1,6 +1,8 @@
 module github.com/signadot/go-sdk
 
-go 1.23
+go 1.23.0
+
+toolchain go1.23.6
 
 require (
 	github.com/go-openapi/errors v0.22.0
@@ -25,11 +27,11 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
-	go.mongodb.org/mongo-driver v1.17.2 // indirect
+	go.mongodb.org/mongo-driver v1.17.3 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
-	go.opentelemetry.io/otel v1.34.0 // indirect
-	go.opentelemetry.io/otel/metric v1.34.0 // indirect
-	go.opentelemetry.io/otel/trace v1.34.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
+	go.opentelemetry.io/otel v1.35.0 // indirect
+	go.opentelemetry.io/otel/metric v1.35.0 // indirect
+	go.opentelemetry.io/otel/trace v1.35.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
