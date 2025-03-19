@@ -21,7 +21,11 @@ type TestExecutionSpec struct {
 	// execution context
 	ExecutionContext *TestExecutionContext `json:"executionContext,omitempty"`
 
-	// test
+	// execution spec
+	ExecutionSpec *ExecutionSpec `json:"executionSpec,omitempty"`
+
+	// Test specifies the name of the hosted test that this execution
+	// refers to.  Exactly 1 of Test/EmbeddedSpec must be provided.
 	Test string `json:"test,omitempty"`
 }
 
@@ -30,6 +34,10 @@ func (m *TestExecutionSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateExecutionContext(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExecutionSpec(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -58,11 +66,34 @@ func (m *TestExecutionSpec) validateExecutionContext(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *TestExecutionSpec) validateExecutionSpec(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExecutionSpec) { // not required
+		return nil
+	}
+
+	if m.ExecutionSpec != nil {
+		if err := m.ExecutionSpec.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("executionSpec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("executionSpec")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this test execution spec based on the context it is used
 func (m *TestExecutionSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateExecutionContext(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExecutionSpec(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -85,6 +116,27 @@ func (m *TestExecutionSpec) contextValidateExecutionContext(ctx context.Context,
 				return ve.ValidateName("executionContext")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("executionContext")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TestExecutionSpec) contextValidateExecutionSpec(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExecutionSpec != nil {
+
+		if swag.IsZero(m.ExecutionSpec) { // not required
+			return nil
+		}
+
+		if err := m.ExecutionSpec.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("executionSpec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("executionSpec")
 			}
 			return err
 		}
