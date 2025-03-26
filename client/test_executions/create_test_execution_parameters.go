@@ -67,19 +67,13 @@ type CreateTestExecutionParams struct {
 
 	   Request to create a test execution
 	*/
-	Data *models.TestExecutionSpec
+	Data *models.TestExecution
 
 	/* OrgName.
 
 	   Signadot Org Name
 	*/
 	OrgName string
-
-	/* TestName.
-
-	   Test name
-	*/
-	TestName string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -135,13 +129,13 @@ func (o *CreateTestExecutionParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithData adds the data to the create test execution params
-func (o *CreateTestExecutionParams) WithData(data *models.TestExecutionSpec) *CreateTestExecutionParams {
+func (o *CreateTestExecutionParams) WithData(data *models.TestExecution) *CreateTestExecutionParams {
 	o.SetData(data)
 	return o
 }
 
 // SetData adds the data to the create test execution params
-func (o *CreateTestExecutionParams) SetData(data *models.TestExecutionSpec) {
+func (o *CreateTestExecutionParams) SetData(data *models.TestExecution) {
 	o.Data = data
 }
 
@@ -154,17 +148,6 @@ func (o *CreateTestExecutionParams) WithOrgName(orgName string) *CreateTestExecu
 // SetOrgName adds the orgName to the create test execution params
 func (o *CreateTestExecutionParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
-}
-
-// WithTestName adds the testName to the create test execution params
-func (o *CreateTestExecutionParams) WithTestName(testName string) *CreateTestExecutionParams {
-	o.SetTestName(testName)
-	return o
-}
-
-// SetTestName adds the testName to the create test execution params
-func (o *CreateTestExecutionParams) SetTestName(testName string) {
-	o.TestName = testName
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -182,11 +165,6 @@ func (o *CreateTestExecutionParams) WriteToRequest(r runtime.ClientRequest, reg 
 
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
-		return err
-	}
-
-	// path param testName
-	if err := r.SetPathParam("testName", o.TestName); err != nil {
 		return err
 	}
 

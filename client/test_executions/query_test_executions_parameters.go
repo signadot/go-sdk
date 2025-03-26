@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewQueryTestExecutionsParams creates a new QueryTestExecutionsParams object,
@@ -61,11 +62,11 @@ QueryTestExecutionsParams contains all the parameters to send to the API endpoin
 */
 type QueryTestExecutionsParams struct {
 
-	/* ClusterName.
+	/* Cluster.
 
 	   Cluster name
 	*/
-	ClusterName *string
+	Cluster *string
 
 	/* Cursor.
 
@@ -85,17 +86,17 @@ type QueryTestExecutionsParams struct {
 	*/
 	From *string
 
-	/* GroupBy.
-
-	   Group results by entity (so far, only tests is supported)
-	*/
-	GroupBy *string
-
 	/* IsAutoDiff.
 
 	   Only include auto diff executions
 	*/
 	IsAutoDiff *string
+
+	/* Label.
+
+	   Label constraint key:value (may be specified multiple times)
+	*/
+	Label []string
 
 	/* OrderDir.
 
@@ -115,6 +116,42 @@ type QueryTestExecutionsParams struct {
 	*/
 	PageSize *string
 
+	/* Published.
+
+	   Whether the test is published to the UI by default
+	*/
+	Published *bool
+
+	/* Repo.
+
+	   Repository name
+	*/
+	Repo *string
+
+	/* RepoBranch.
+
+	   Repository path
+	*/
+	RepoBranch *string
+
+	/* RepoCommitSHA.
+
+	   Repository commit SHA
+	*/
+	RepoCommitSHA *string
+
+	/* RepoPath.
+
+	   Repository path
+	*/
+	RepoPath *string
+
+	/* RunID.
+
+	   CLI run identifier
+	*/
+	RunID *string
+
 	/* SkipDeletedTests.
 
 	   Do not include executions from deleted tests
@@ -127,11 +164,11 @@ type QueryTestExecutionsParams struct {
 	*/
 	TargetRevision *string
 
-	/* TargetRouteGroupName.
+	/* TargetRouteGroup.
 
 	   Target route group name
 	*/
-	TargetRouteGroupName *string
+	TargetRouteGroup *string
 
 	/* TargetRoutingKey.
 
@@ -139,11 +176,11 @@ type QueryTestExecutionsParams struct {
 	*/
 	TargetRoutingKey *string
 
-	/* TargetSandboxName.
+	/* TargetSandbox.
 
 	   Target sandbox name
 	*/
-	TargetSandboxName *string
+	TargetSandbox *string
 
 	/* TestName.
 
@@ -157,11 +194,11 @@ type QueryTestExecutionsParams struct {
 	*/
 	To *string
 
-	/* TriggerName.
+	/* TriggerID.
 
 	   Trigger name
 	*/
-	TriggerName *string
+	TriggerID *string
 
 	/* TriggerWorkload.
 
@@ -222,15 +259,15 @@ func (o *QueryTestExecutionsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithClusterName adds the clusterName to the query test executions params
-func (o *QueryTestExecutionsParams) WithClusterName(clusterName *string) *QueryTestExecutionsParams {
-	o.SetClusterName(clusterName)
+// WithCluster adds the cluster to the query test executions params
+func (o *QueryTestExecutionsParams) WithCluster(cluster *string) *QueryTestExecutionsParams {
+	o.SetCluster(cluster)
 	return o
 }
 
-// SetClusterName adds the clusterName to the query test executions params
-func (o *QueryTestExecutionsParams) SetClusterName(clusterName *string) {
-	o.ClusterName = clusterName
+// SetCluster adds the cluster to the query test executions params
+func (o *QueryTestExecutionsParams) SetCluster(cluster *string) {
+	o.Cluster = cluster
 }
 
 // WithCursor adds the cursor to the query test executions params
@@ -266,17 +303,6 @@ func (o *QueryTestExecutionsParams) SetFrom(from *string) {
 	o.From = from
 }
 
-// WithGroupBy adds the groupBy to the query test executions params
-func (o *QueryTestExecutionsParams) WithGroupBy(groupBy *string) *QueryTestExecutionsParams {
-	o.SetGroupBy(groupBy)
-	return o
-}
-
-// SetGroupBy adds the groupBy to the query test executions params
-func (o *QueryTestExecutionsParams) SetGroupBy(groupBy *string) {
-	o.GroupBy = groupBy
-}
-
 // WithIsAutoDiff adds the isAutoDiff to the query test executions params
 func (o *QueryTestExecutionsParams) WithIsAutoDiff(isAutoDiff *string) *QueryTestExecutionsParams {
 	o.SetIsAutoDiff(isAutoDiff)
@@ -286,6 +312,17 @@ func (o *QueryTestExecutionsParams) WithIsAutoDiff(isAutoDiff *string) *QueryTes
 // SetIsAutoDiff adds the isAutoDiff to the query test executions params
 func (o *QueryTestExecutionsParams) SetIsAutoDiff(isAutoDiff *string) {
 	o.IsAutoDiff = isAutoDiff
+}
+
+// WithLabel adds the label to the query test executions params
+func (o *QueryTestExecutionsParams) WithLabel(label []string) *QueryTestExecutionsParams {
+	o.SetLabel(label)
+	return o
+}
+
+// SetLabel adds the label to the query test executions params
+func (o *QueryTestExecutionsParams) SetLabel(label []string) {
+	o.Label = label
 }
 
 // WithOrderDir adds the orderDir to the query test executions params
@@ -321,6 +358,72 @@ func (o *QueryTestExecutionsParams) SetPageSize(pageSize *string) {
 	o.PageSize = pageSize
 }
 
+// WithPublished adds the published to the query test executions params
+func (o *QueryTestExecutionsParams) WithPublished(published *bool) *QueryTestExecutionsParams {
+	o.SetPublished(published)
+	return o
+}
+
+// SetPublished adds the published to the query test executions params
+func (o *QueryTestExecutionsParams) SetPublished(published *bool) {
+	o.Published = published
+}
+
+// WithRepo adds the repo to the query test executions params
+func (o *QueryTestExecutionsParams) WithRepo(repo *string) *QueryTestExecutionsParams {
+	o.SetRepo(repo)
+	return o
+}
+
+// SetRepo adds the repo to the query test executions params
+func (o *QueryTestExecutionsParams) SetRepo(repo *string) {
+	o.Repo = repo
+}
+
+// WithRepoBranch adds the repoBranch to the query test executions params
+func (o *QueryTestExecutionsParams) WithRepoBranch(repoBranch *string) *QueryTestExecutionsParams {
+	o.SetRepoBranch(repoBranch)
+	return o
+}
+
+// SetRepoBranch adds the repoBranch to the query test executions params
+func (o *QueryTestExecutionsParams) SetRepoBranch(repoBranch *string) {
+	o.RepoBranch = repoBranch
+}
+
+// WithRepoCommitSHA adds the repoCommitSHA to the query test executions params
+func (o *QueryTestExecutionsParams) WithRepoCommitSHA(repoCommitSHA *string) *QueryTestExecutionsParams {
+	o.SetRepoCommitSHA(repoCommitSHA)
+	return o
+}
+
+// SetRepoCommitSHA adds the repoCommitSHA to the query test executions params
+func (o *QueryTestExecutionsParams) SetRepoCommitSHA(repoCommitSHA *string) {
+	o.RepoCommitSHA = repoCommitSHA
+}
+
+// WithRepoPath adds the repoPath to the query test executions params
+func (o *QueryTestExecutionsParams) WithRepoPath(repoPath *string) *QueryTestExecutionsParams {
+	o.SetRepoPath(repoPath)
+	return o
+}
+
+// SetRepoPath adds the repoPath to the query test executions params
+func (o *QueryTestExecutionsParams) SetRepoPath(repoPath *string) {
+	o.RepoPath = repoPath
+}
+
+// WithRunID adds the runID to the query test executions params
+func (o *QueryTestExecutionsParams) WithRunID(runID *string) *QueryTestExecutionsParams {
+	o.SetRunID(runID)
+	return o
+}
+
+// SetRunID adds the runId to the query test executions params
+func (o *QueryTestExecutionsParams) SetRunID(runID *string) {
+	o.RunID = runID
+}
+
 // WithSkipDeletedTests adds the skipDeletedTests to the query test executions params
 func (o *QueryTestExecutionsParams) WithSkipDeletedTests(skipDeletedTests *string) *QueryTestExecutionsParams {
 	o.SetSkipDeletedTests(skipDeletedTests)
@@ -343,15 +446,15 @@ func (o *QueryTestExecutionsParams) SetTargetRevision(targetRevision *string) {
 	o.TargetRevision = targetRevision
 }
 
-// WithTargetRouteGroupName adds the targetRouteGroupName to the query test executions params
-func (o *QueryTestExecutionsParams) WithTargetRouteGroupName(targetRouteGroupName *string) *QueryTestExecutionsParams {
-	o.SetTargetRouteGroupName(targetRouteGroupName)
+// WithTargetRouteGroup adds the targetRouteGroup to the query test executions params
+func (o *QueryTestExecutionsParams) WithTargetRouteGroup(targetRouteGroup *string) *QueryTestExecutionsParams {
+	o.SetTargetRouteGroup(targetRouteGroup)
 	return o
 }
 
-// SetTargetRouteGroupName adds the targetRouteGroupName to the query test executions params
-func (o *QueryTestExecutionsParams) SetTargetRouteGroupName(targetRouteGroupName *string) {
-	o.TargetRouteGroupName = targetRouteGroupName
+// SetTargetRouteGroup adds the targetRouteGroup to the query test executions params
+func (o *QueryTestExecutionsParams) SetTargetRouteGroup(targetRouteGroup *string) {
+	o.TargetRouteGroup = targetRouteGroup
 }
 
 // WithTargetRoutingKey adds the targetRoutingKey to the query test executions params
@@ -365,15 +468,15 @@ func (o *QueryTestExecutionsParams) SetTargetRoutingKey(targetRoutingKey *string
 	o.TargetRoutingKey = targetRoutingKey
 }
 
-// WithTargetSandboxName adds the targetSandboxName to the query test executions params
-func (o *QueryTestExecutionsParams) WithTargetSandboxName(targetSandboxName *string) *QueryTestExecutionsParams {
-	o.SetTargetSandboxName(targetSandboxName)
+// WithTargetSandbox adds the targetSandbox to the query test executions params
+func (o *QueryTestExecutionsParams) WithTargetSandbox(targetSandbox *string) *QueryTestExecutionsParams {
+	o.SetTargetSandbox(targetSandbox)
 	return o
 }
 
-// SetTargetSandboxName adds the targetSandboxName to the query test executions params
-func (o *QueryTestExecutionsParams) SetTargetSandboxName(targetSandboxName *string) {
-	o.TargetSandboxName = targetSandboxName
+// SetTargetSandbox adds the targetSandbox to the query test executions params
+func (o *QueryTestExecutionsParams) SetTargetSandbox(targetSandbox *string) {
+	o.TargetSandbox = targetSandbox
 }
 
 // WithTestName adds the testName to the query test executions params
@@ -398,15 +501,15 @@ func (o *QueryTestExecutionsParams) SetTo(to *string) {
 	o.To = to
 }
 
-// WithTriggerName adds the triggerName to the query test executions params
-func (o *QueryTestExecutionsParams) WithTriggerName(triggerName *string) *QueryTestExecutionsParams {
-	o.SetTriggerName(triggerName)
+// WithTriggerID adds the triggerID to the query test executions params
+func (o *QueryTestExecutionsParams) WithTriggerID(triggerID *string) *QueryTestExecutionsParams {
+	o.SetTriggerID(triggerID)
 	return o
 }
 
-// SetTriggerName adds the triggerName to the query test executions params
-func (o *QueryTestExecutionsParams) SetTriggerName(triggerName *string) {
-	o.TriggerName = triggerName
+// SetTriggerID adds the triggerId to the query test executions params
+func (o *QueryTestExecutionsParams) SetTriggerID(triggerID *string) {
+	o.TriggerID = triggerID
 }
 
 // WithTriggerWorkload adds the triggerWorkload to the query test executions params
@@ -428,18 +531,18 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 	}
 	var res []error
 
-	if o.ClusterName != nil {
+	if o.Cluster != nil {
 
-		// query param clusterName
-		var qrClusterName string
+		// query param cluster
+		var qrCluster string
 
-		if o.ClusterName != nil {
-			qrClusterName = *o.ClusterName
+		if o.Cluster != nil {
+			qrCluster = *o.Cluster
 		}
-		qClusterName := qrClusterName
-		if qClusterName != "" {
+		qCluster := qrCluster
+		if qCluster != "" {
 
-			if err := r.SetQueryParam("clusterName", qClusterName); err != nil {
+			if err := r.SetQueryParam("cluster", qCluster); err != nil {
 				return err
 			}
 		}
@@ -496,23 +599,6 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
-	if o.GroupBy != nil {
-
-		// query param groupBy
-		var qrGroupBy string
-
-		if o.GroupBy != nil {
-			qrGroupBy = *o.GroupBy
-		}
-		qGroupBy := qrGroupBy
-		if qGroupBy != "" {
-
-			if err := r.SetQueryParam("groupBy", qGroupBy); err != nil {
-				return err
-			}
-		}
-	}
-
 	if o.IsAutoDiff != nil {
 
 		// query param isAutoDiff
@@ -527,6 +613,17 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 			if err := r.SetQueryParam("isAutoDiff", qIsAutoDiff); err != nil {
 				return err
 			}
+		}
+	}
+
+	if o.Label != nil {
+
+		// binding items for label
+		joinedLabel := o.bindParamLabel(reg)
+
+		// query array param label
+		if err := r.SetQueryParam("label", joinedLabel...); err != nil {
+			return err
 		}
 	}
 
@@ -569,6 +666,108 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
+	if o.Published != nil {
+
+		// query param published
+		var qrPublished bool
+
+		if o.Published != nil {
+			qrPublished = *o.Published
+		}
+		qPublished := swag.FormatBool(qrPublished)
+		if qPublished != "" {
+
+			if err := r.SetQueryParam("published", qPublished); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Repo != nil {
+
+		// query param repo
+		var qrRepo string
+
+		if o.Repo != nil {
+			qrRepo = *o.Repo
+		}
+		qRepo := qrRepo
+		if qRepo != "" {
+
+			if err := r.SetQueryParam("repo", qRepo); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.RepoBranch != nil {
+
+		// query param repoBranch
+		var qrRepoBranch string
+
+		if o.RepoBranch != nil {
+			qrRepoBranch = *o.RepoBranch
+		}
+		qRepoBranch := qrRepoBranch
+		if qRepoBranch != "" {
+
+			if err := r.SetQueryParam("repoBranch", qRepoBranch); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.RepoCommitSHA != nil {
+
+		// query param repoCommitSHA
+		var qrRepoCommitSHA string
+
+		if o.RepoCommitSHA != nil {
+			qrRepoCommitSHA = *o.RepoCommitSHA
+		}
+		qRepoCommitSHA := qrRepoCommitSHA
+		if qRepoCommitSHA != "" {
+
+			if err := r.SetQueryParam("repoCommitSHA", qRepoCommitSHA); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.RepoPath != nil {
+
+		// query param repoPath
+		var qrRepoPath string
+
+		if o.RepoPath != nil {
+			qrRepoPath = *o.RepoPath
+		}
+		qRepoPath := qrRepoPath
+		if qRepoPath != "" {
+
+			if err := r.SetQueryParam("repoPath", qRepoPath); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.RunID != nil {
+
+		// query param runID
+		var qrRunID string
+
+		if o.RunID != nil {
+			qrRunID = *o.RunID
+		}
+		qRunID := qrRunID
+		if qRunID != "" {
+
+			if err := r.SetQueryParam("runID", qRunID); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.SkipDeletedTests != nil {
 
 		// query param skipDeletedTests
@@ -603,18 +802,18 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
-	if o.TargetRouteGroupName != nil {
+	if o.TargetRouteGroup != nil {
 
-		// query param targetRouteGroupName
-		var qrTargetRouteGroupName string
+		// query param targetRouteGroup
+		var qrTargetRouteGroup string
 
-		if o.TargetRouteGroupName != nil {
-			qrTargetRouteGroupName = *o.TargetRouteGroupName
+		if o.TargetRouteGroup != nil {
+			qrTargetRouteGroup = *o.TargetRouteGroup
 		}
-		qTargetRouteGroupName := qrTargetRouteGroupName
-		if qTargetRouteGroupName != "" {
+		qTargetRouteGroup := qrTargetRouteGroup
+		if qTargetRouteGroup != "" {
 
-			if err := r.SetQueryParam("targetRouteGroupName", qTargetRouteGroupName); err != nil {
+			if err := r.SetQueryParam("targetRouteGroup", qTargetRouteGroup); err != nil {
 				return err
 			}
 		}
@@ -637,18 +836,18 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
-	if o.TargetSandboxName != nil {
+	if o.TargetSandbox != nil {
 
-		// query param targetSandboxName
-		var qrTargetSandboxName string
+		// query param targetSandbox
+		var qrTargetSandbox string
 
-		if o.TargetSandboxName != nil {
-			qrTargetSandboxName = *o.TargetSandboxName
+		if o.TargetSandbox != nil {
+			qrTargetSandbox = *o.TargetSandbox
 		}
-		qTargetSandboxName := qrTargetSandboxName
-		if qTargetSandboxName != "" {
+		qTargetSandbox := qrTargetSandbox
+		if qTargetSandbox != "" {
 
-			if err := r.SetQueryParam("targetSandboxName", qTargetSandboxName); err != nil {
+			if err := r.SetQueryParam("targetSandbox", qTargetSandbox); err != nil {
 				return err
 			}
 		}
@@ -688,18 +887,18 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
-	if o.TriggerName != nil {
+	if o.TriggerID != nil {
 
-		// query param triggerName
-		var qrTriggerName string
+		// query param triggerID
+		var qrTriggerID string
 
-		if o.TriggerName != nil {
-			qrTriggerName = *o.TriggerName
+		if o.TriggerID != nil {
+			qrTriggerID = *o.TriggerID
 		}
-		qTriggerName := qrTriggerName
-		if qTriggerName != "" {
+		qTriggerID := qrTriggerID
+		if qTriggerID != "" {
 
-			if err := r.SetQueryParam("triggerName", qTriggerName); err != nil {
+			if err := r.SetQueryParam("triggerID", qTriggerID); err != nil {
 				return err
 			}
 		}
@@ -726,4 +925,21 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamQueryTestExecutions binds the parameter label
+func (o *QueryTestExecutionsParams) bindParamLabel(formats strfmt.Registry) []string {
+	labelIR := o.Label
+
+	var labelIC []string
+	for _, labelIIR := range labelIR { // explode []string
+
+		labelIIV := labelIIR // string as string
+		labelIC = append(labelIC, labelIIV)
+	}
+
+	// items.CollectionFormat: ""
+	labelIS := swag.JoinByFormat(labelIC, "")
+
+	return labelIS
 }
