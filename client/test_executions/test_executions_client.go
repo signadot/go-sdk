@@ -56,9 +56,13 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	AssistantAddMessage(params *AssistantAddMessageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssistantAddMessageOK, error)
+
 	CancelTestExecution(params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error)
 
 	CreateTestExecution(params *CreateTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionOK, error)
+
+	CreateTestExecutionForTest(params *CreateTestExecutionForTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionForTestOK, error)
 
 	GetTestExecution(params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error)
 
@@ -71,6 +75,47 @@ type ClientService interface {
 	TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+AssistantAddMessage adds an assistant message
+
+Adds a message to an assistant thread
+*/
+func (a *Client) AssistantAddMessage(params *AssistantAddMessageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssistantAddMessageOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAssistantAddMessageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "assistant-add-message",
+		Method:             "POST",
+		PathPattern:        "/orgs/{orgName}/assistants/{assistantName}/threads/{threadID}/messages",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AssistantAddMessageReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AssistantAddMessageOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for assistant-add-message: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
@@ -117,7 +162,7 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 /*
 CreateTestExecution creates a test execution
 
-Creates a test with the provided parameters.
+Create a test execution
 */
 func (a *Client) CreateTestExecution(params *CreateTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionOK, error) {
 	// TODO: Validate the params before sending
@@ -127,7 +172,7 @@ func (a *Client) CreateTestExecution(params *CreateTestExecutionParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "create-test-execution",
 		Method:             "POST",
-		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/",
+		PathPattern:        "/orgs/{orgName}/tests/executions/",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -152,6 +197,47 @@ func (a *Client) CreateTestExecution(params *CreateTestExecutionParams, authInfo
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for create-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+CreateTestExecutionForTest creates a test execution
+
+Creates a test with the provided parameters.
+*/
+func (a *Client) CreateTestExecutionForTest(params *CreateTestExecutionForTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionForTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateTestExecutionForTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create-test-execution-for-test",
+		Method:             "POST",
+		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateTestExecutionForTestReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateTestExecutionForTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create-test-execution-for-test: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

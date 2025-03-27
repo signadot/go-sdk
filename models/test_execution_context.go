@@ -24,6 +24,10 @@ type TestExecutionContext struct {
 	// cluster
 	Cluster string `json:"cluster,omitempty"`
 
+	// Publish represents whether the test execution will show up by default
+	// in the UI, i.e. to filter out ad-hoc and test the test usage.
+	Publish bool `json:"publish,omitempty"`
+
 	// routing
 	Routing *JobRoutingContext `json:"routing,omitempty"`
 
