@@ -98,6 +98,38 @@
       },
       "type": "object"
     },
+    "ExecutionSpec": {
+      "properties": {
+        "branch": {
+          "type": "string"
+        },
+        "commitSHA": {
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "runID": {
+          "type": "string"
+        },
+        "script": {
+          "type": "string"
+        },
+        "testName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Job": {
       "properties": {
         "createdAt": {
@@ -409,6 +441,10 @@
         "cluster": {
           "type": "string"
         },
+        "publish": {
+          "description": "Publish represents whether the test execution will show up by default\nin the UI, i.e. to filter out ad-hoc and test the test usage.",
+          "type": "boolean"
+        },
         "routing": {
           "$ref": "#/definitions/job.RoutingContext"
         },
@@ -440,10 +476,14 @@
     },
     "TestExecutionSpec": {
       "properties": {
+        "embeddedSpec": {
+          "$ref": "#/definitions/ExecutionSpec"
+        },
         "executionContext": {
           "$ref": "#/definitions/TestExecutionContext"
         },
         "test": {
+          "description": "Test specifies the name of the hosted test that this execution\nrefers to.  Exactly 1 of Test/EmbeddedSpec must be provided.",
           "type": "string"
         }
       },
@@ -496,6 +536,10 @@
         },
         "cluster": {
           "type": "string"
+        },
+        "publish": {
+          "description": "Publish represents whether the test execution will show up by default\nin the UI, i.e. to filter out ad-hoc and test the test usage.",
+          "type": "boolean"
         },
         "timeout": {
           "description": "Timeout represents an optional timeout for the test execution.\nIf not supplied, it defaults to the DefaultTimeout of the associated\ntest, if that is present.  If that is not present, it defaults to \"5m\".\nIt should be a string representing an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
@@ -4534,13 +4578,13 @@
           {
             "description": "Target sandbox name",
             "in": "query",
-            "name": "targetSandboxName",
+            "name": "targetSandbox",
             "type": "string"
           },
           {
             "description": "Target route group name",
             "in": "query",
-            "name": "targetRouteGroupName",
+            "name": "targetRouteGroup",
             "type": "string"
           },
           {
@@ -4558,8 +4602,14 @@
           {
             "description": "Cluster name",
             "in": "query",
-            "name": "clusterName",
+            "name": "cluster",
             "type": "string"
+          },
+          {
+            "description": "Whether the test is published to the UI by default",
+            "in": "query",
+            "name": "published",
+            "type": "boolean"
           },
           {
             "description": "Test name",
@@ -4570,7 +4620,7 @@
           {
             "description": "Trigger name",
             "in": "query",
-            "name": "triggerName",
+            "name": "triggerID",
             "type": "string"
           },
           {
@@ -4586,6 +4636,45 @@
             "type": "string"
           },
           {
+            "description": "CLI run identifier",
+            "in": "query",
+            "name": "runID",
+            "type": "string"
+          },
+          {
+            "description": "Repository name",
+            "in": "query",
+            "name": "repo",
+            "type": "string"
+          },
+          {
+            "description": "Repository path",
+            "in": "query",
+            "name": "repoPath",
+            "type": "string"
+          },
+          {
+            "description": "Repository path",
+            "in": "query",
+            "name": "repoBranch",
+            "type": "string"
+          },
+          {
+            "description": "Repository commit SHA",
+            "in": "query",
+            "name": "repoCommitSHA",
+            "type": "string"
+          },
+          {
+            "description": "Label constraint key:value (may be specified multiple times)",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "label",
+            "type": "array"
+          },
+          {
             "description": "Filter results starting from this time",
             "in": "query",
             "name": "from",
@@ -4595,15 +4684,6 @@
             "description": "Filter results until this time",
             "in": "query",
             "name": "to",
-            "type": "string"
-          },
-          {
-            "description": "Group results by entity (so far, only tests is supported)",
-            "enum": [
-              "tests"
-            ],
-            "in": "query",
-            "name": "groupBy",
             "type": "string"
           },
           {
@@ -4667,6 +4747,70 @@
           }
         ],
         "summary": "Query Test Executions",
+        "tags": [
+          "TestExecutions"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create a test execution",
+        "operationId": "create-test-execution",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Request to create a test execution",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TestExecution"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TestExecution"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Create a test execution",
         "tags": [
           "TestExecutions"
         ]
@@ -4941,7 +5085,7 @@
           "application/json"
         ],
         "description": "Creates a test with the provided parameters.",
-        "operationId": "create-test-execution",
+        "operationId": "create-test-execution-for-test",
         "parameters": [
           {
             "description": "Signadot Org Name",
