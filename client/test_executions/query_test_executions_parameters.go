@@ -114,7 +114,7 @@ type QueryTestExecutionsParams struct {
 
 	   Number of rows to be included in the response
 	*/
-	PageSize *string
+	PageSize *int64
 
 	/* Published.
 
@@ -348,13 +348,13 @@ func (o *QueryTestExecutionsParams) SetOrgName(orgName string) {
 }
 
 // WithPageSize adds the pageSize to the query test executions params
-func (o *QueryTestExecutionsParams) WithPageSize(pageSize *string) *QueryTestExecutionsParams {
+func (o *QueryTestExecutionsParams) WithPageSize(pageSize *int64) *QueryTestExecutionsParams {
 	o.SetPageSize(pageSize)
 	return o
 }
 
 // SetPageSize adds the pageSize to the query test executions params
-func (o *QueryTestExecutionsParams) SetPageSize(pageSize *string) {
+func (o *QueryTestExecutionsParams) SetPageSize(pageSize *int64) {
 	o.PageSize = pageSize
 }
 
@@ -652,12 +652,12 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 	if o.PageSize != nil {
 
 		// query param pageSize
-		var qrPageSize string
+		var qrPageSize int64
 
 		if o.PageSize != nil {
 			qrPageSize = *o.PageSize
 		}
-		qPageSize := qrPageSize
+		qPageSize := swag.FormatInt64(qrPageSize)
 		if qPageSize != "" {
 
 			if err := r.SetQueryParam("pageSize", qPageSize); err != nil {

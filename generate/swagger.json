@@ -4700,7 +4700,7 @@
             "description": "Number of rows to be included in the response",
             "in": "query",
             "name": "pageSize",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Start sending results from this cursor",
