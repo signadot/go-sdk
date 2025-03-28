@@ -49,7 +49,7 @@ func (o *CreateTestExecutionReader) ReadResponse(response runtime.ClientResponse
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[POST /orgs/{orgName}/tests/{testName}/executions/] create-test-execution", response, response.Code())
+		return nil, runtime.NewAPIError("[POST /orgs/{orgName}/tests/executions/] create-test-execution", response, response.Code())
 	}
 }
 
@@ -99,12 +99,12 @@ func (o *CreateTestExecutionOK) Code() int {
 
 func (o *CreateTestExecutionOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionOK %s", 200, payload)
 }
 
 func (o *CreateTestExecutionOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionOK %s", 200, payload)
 }
 
 func (o *CreateTestExecutionOK) GetPayload() *models.TestExecution {
@@ -169,12 +169,12 @@ func (o *CreateTestExecutionBadRequest) Code() int {
 
 func (o *CreateTestExecutionBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionBadRequest %s", 400, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionBadRequest %s", 400, payload)
 }
 
 func (o *CreateTestExecutionBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionBadRequest %s", 400, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionBadRequest %s", 400, payload)
 }
 
 func (o *CreateTestExecutionBadRequest) GetPayload() *models.ErrorResponse {
@@ -239,12 +239,12 @@ func (o *CreateTestExecutionUnauthorized) Code() int {
 
 func (o *CreateTestExecutionUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *CreateTestExecutionUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *CreateTestExecutionUnauthorized) GetPayload() *models.ErrorResponse {
@@ -309,12 +309,12 @@ func (o *CreateTestExecutionBadGateway) Code() int {
 
 func (o *CreateTestExecutionBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionBadGateway %s", 502, payload)
 }
 
 func (o *CreateTestExecutionBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /orgs/{orgName}/tests/{testName}/executions/][%d] createTestExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[POST /orgs/{orgName}/tests/executions/][%d] createTestExecutionBadGateway %s", 502, payload)
 }
 
 func (o *CreateTestExecutionBadGateway) GetPayload() *models.ErrorResponse {
