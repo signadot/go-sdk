@@ -24,6 +24,10 @@ type TestExecutionTemplate struct {
 	// cluster
 	Cluster string `json:"cluster,omitempty"`
 
+	// Publish represents whether the test execution will show up by default
+	// in the UI, i.e. to filter out ad-hoc and test the test usage.
+	Publish bool `json:"publish,omitempty"`
+
 	// Timeout represents an optional timeout for the test execution.
 	// If not supplied, it defaults to the DefaultTimeout of the associated
 	// test, if that is present.  If that is not present, it defaults to "5m".
