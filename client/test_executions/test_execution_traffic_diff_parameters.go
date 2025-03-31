@@ -73,12 +73,6 @@ type TestExecutionTrafficDiffParams struct {
 	*/
 	OrgName string
 
-	/* TestName.
-
-	   Test Name
-	*/
-	TestName string
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -154,17 +148,6 @@ func (o *TestExecutionTrafficDiffParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTestName adds the testName to the test execution traffic diff params
-func (o *TestExecutionTrafficDiffParams) WithTestName(testName string) *TestExecutionTrafficDiffParams {
-	o.SetTestName(testName)
-	return o
-}
-
-// SetTestName adds the testName to the test execution traffic diff params
-func (o *TestExecutionTrafficDiffParams) SetTestName(testName string) {
-	o.TestName = testName
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *TestExecutionTrafficDiffParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -180,11 +163,6 @@ func (o *TestExecutionTrafficDiffParams) WriteToRequest(r runtime.ClientRequest,
 
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
-		return err
-	}
-
-	// path param testName
-	if err := r.SetPathParam("testName", o.TestName); err != nil {
 		return err
 	}
 

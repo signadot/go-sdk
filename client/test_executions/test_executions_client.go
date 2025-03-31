@@ -88,7 +88,7 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-test-execution",
 		Method:             "PUT",
-		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}/cancel",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -211,7 +211,7 @@ func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runti
 	op := &runtime.ClientOperation{
 		ID:                 "get-test-execution",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/{executionName}",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -334,7 +334,7 @@ func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams
 	op := &runtime.ClientOperation{
 		ID:                 "test-execution-traffic-diff",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -375,7 +375,7 @@ func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDi
 	op := &runtime.ClientOperation{
 		ID:                 "test-execution-traffic-diff-findings",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

@@ -4576,6 +4576,12 @@
             "type": "string"
           },
           {
+            "description": "test source external or saas",
+            "in": "query",
+            "name": "source",
+            "type": "string"
+          },
+          {
             "description": "Target sandbox name",
             "in": "query",
             "name": "targetSandbox",
@@ -4811,6 +4817,280 @@
           }
         ],
         "summary": "Create a test execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/executions/{executionName}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch the details about a given test execution.",
+        "operationId": "get-test-execution",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TestExecution"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get a test execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/executions/{executionName}/cancel": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Cancel a given test execution.",
+        "operationId": "cancel-test-execution",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmptyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Cancel a test execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get the full traffic diff of a test execution",
+        "operationId": "test-execution-traffic-diff",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TrafficDiffResult"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get the full traffic diff of a test execution",
+        "tags": [
+          "TestExecutions"
+        ]
+      }
+    },
+    "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get the findings view of the traffic diff of a test execution",
+        "operationId": "test-execution-traffic-diff-findings",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Test Execution Name",
+            "in": "path",
+            "name": "executionName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Context",
+            "in": "query",
+            "name": "diffContext",
+            "type": "string"
+          },
+          {
+            "description": "Category",
+            "in": "query",
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "description": "Max Findings",
+            "in": "query",
+            "name": "maxFindings",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TrafficDiffResult"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get the findings view of the traffic diff of a test execution",
         "tags": [
           "TestExecutions"
         ]
@@ -5147,308 +5427,6 @@
           }
         ],
         "summary": "Create a Test Execution",
-        "tags": [
-          "TestExecutions"
-        ]
-      }
-    },
-    "/orgs/{orgName}/tests/{testName}/executions/{executionName}": {
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Fetch the details about a given test execution.",
-        "operationId": "get-test-execution",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Test Name",
-            "in": "path",
-            "name": "testName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Test Execution Name",
-            "in": "path",
-            "name": "executionName",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/TestExecution"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "502": {
-            "description": "Bad Gateway",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Get a test execution",
-        "tags": [
-          "TestExecutions"
-        ]
-      }
-    },
-    "/orgs/{orgName}/tests/{testName}/executions/{executionName}/cancel": {
-      "put": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Cancel a given test execution.",
-        "operationId": "cancel-test-execution",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Test Name",
-            "in": "path",
-            "name": "testName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Test Execution Name",
-            "in": "path",
-            "name": "executionName",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/EmptyResponse"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "502": {
-            "description": "Bad Gateway",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Cancel a test execution",
-        "tags": [
-          "TestExecutions"
-        ]
-      }
-    },
-    "/orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff": {
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Get the full traffic diff of a test execution",
-        "operationId": "test-execution-traffic-diff",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Test Name",
-            "in": "path",
-            "name": "testName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Test Execution Name",
-            "in": "path",
-            "name": "executionName",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/TrafficDiffResult"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "502": {
-            "description": "Bad Gateway",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Get the full traffic diff of a test execution",
-        "tags": [
-          "TestExecutions"
-        ]
-      }
-    },
-    "/orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings": {
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Get the findings view of the traffic diff of a test execution",
-        "operationId": "test-execution-traffic-diff-findings",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string",
-            "x-example": "my-company"
-          },
-          {
-            "description": "Test Name",
-            "in": "path",
-            "name": "testName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Test Execution Name",
-            "in": "path",
-            "name": "executionName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Context",
-            "in": "query",
-            "name": "diffContext",
-            "type": "string"
-          },
-          {
-            "description": "Category",
-            "in": "query",
-            "name": "category",
-            "type": "string"
-          },
-          {
-            "description": "Max Findings",
-            "in": "query",
-            "name": "maxFindings",
-            "type": "string"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/TrafficDiffResult"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "502": {
-            "description": "Bad Gateway",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Get the findings view of the traffic diff of a test execution",
         "tags": [
           "TestExecutions"
         ]

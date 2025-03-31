@@ -158,6 +158,12 @@ type QueryTestExecutionsParams struct {
 	*/
 	SkipDeletedTests *string
 
+	/* Source.
+
+	   test source external or saas
+	*/
+	Source *string
+
 	/* TargetRevision.
 
 	   Revision of the target routing context
@@ -433,6 +439,17 @@ func (o *QueryTestExecutionsParams) WithSkipDeletedTests(skipDeletedTests *strin
 // SetSkipDeletedTests adds the skipDeletedTests to the query test executions params
 func (o *QueryTestExecutionsParams) SetSkipDeletedTests(skipDeletedTests *string) {
 	o.SkipDeletedTests = skipDeletedTests
+}
+
+// WithSource adds the source to the query test executions params
+func (o *QueryTestExecutionsParams) WithSource(source *string) *QueryTestExecutionsParams {
+	o.SetSource(source)
+	return o
+}
+
+// SetSource adds the source to the query test executions params
+func (o *QueryTestExecutionsParams) SetSource(source *string) {
+	o.Source = source
 }
 
 // WithTargetRevision adds the targetRevision to the query test executions params
@@ -780,6 +797,23 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if qSkipDeletedTests != "" {
 
 			if err := r.SetQueryParam("skipDeletedTests", qSkipDeletedTests); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Source != nil {
+
+		// query param source
+		var qrSource string
+
+		if o.Source != nil {
+			qrSource = *o.Source
+		}
+		qSource := qrSource
+		if qSource != "" {
+
+			if err := r.SetQueryParam("source", qSource); err != nil {
 				return err
 			}
 		}
