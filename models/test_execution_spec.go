@@ -18,16 +18,24 @@ import (
 // swagger:model TestExecutionSpec
 type TestExecutionSpec struct {
 
+	// embedded spec
+	EmbeddedSpec *ExecutionSpec `json:"embeddedSpec,omitempty"`
+
 	// execution context
 	ExecutionContext *TestExecutionContext `json:"executionContext,omitempty"`
 
-	// test
+	// Test specifies the name of the hosted test that this execution
+	// refers to.  Exactly 1 of Test/EmbeddedSpec must be provided.
 	Test string `json:"test,omitempty"`
 }
 
 // Validate validates this test execution spec
 func (m *TestExecutionSpec) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateEmbeddedSpec(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateExecutionContext(formats); err != nil {
 		res = append(res, err)
@@ -36,6 +44,25 @@ func (m *TestExecutionSpec) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *TestExecutionSpec) validateEmbeddedSpec(formats strfmt.Registry) error {
+	if swag.IsZero(m.EmbeddedSpec) { // not required
+		return nil
+	}
+
+	if m.EmbeddedSpec != nil {
+		if err := m.EmbeddedSpec.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("embeddedSpec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("embeddedSpec")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -62,6 +89,10 @@ func (m *TestExecutionSpec) validateExecutionContext(formats strfmt.Registry) er
 func (m *TestExecutionSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateEmbeddedSpec(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateExecutionContext(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -69,6 +100,27 @@ func (m *TestExecutionSpec) ContextValidate(ctx context.Context, formats strfmt.
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *TestExecutionSpec) contextValidateEmbeddedSpec(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmbeddedSpec != nil {
+
+		if swag.IsZero(m.EmbeddedSpec) { // not required
+			return nil
+		}
+
+		if err := m.EmbeddedSpec.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("embeddedSpec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("embeddedSpec")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
