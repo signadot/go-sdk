@@ -49,7 +49,7 @@ func (o *GetTestExecutionReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}] get-test-execution", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/tests/executions/{executionName}] get-test-execution", response, response.Code())
 	}
 }
 
@@ -99,12 +99,12 @@ func (o *GetTestExecutionOK) Code() int {
 
 func (o *GetTestExecutionOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionOK %s", 200, payload)
 }
 
 func (o *GetTestExecutionOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionOK %s", 200, payload)
 }
 
 func (o *GetTestExecutionOK) GetPayload() *models.TestExecution {
@@ -169,12 +169,12 @@ func (o *GetTestExecutionBadRequest) Code() int {
 
 func (o *GetTestExecutionBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionBadRequest %s", 400, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionBadRequest %s", 400, payload)
 }
 
 func (o *GetTestExecutionBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionBadRequest %s", 400, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionBadRequest %s", 400, payload)
 }
 
 func (o *GetTestExecutionBadRequest) GetPayload() *models.ErrorResponse {
@@ -239,12 +239,12 @@ func (o *GetTestExecutionUnauthorized) Code() int {
 
 func (o *GetTestExecutionUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *GetTestExecutionUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *GetTestExecutionUnauthorized) GetPayload() *models.ErrorResponse {
@@ -309,12 +309,12 @@ func (o *GetTestExecutionBadGateway) Code() int {
 
 func (o *GetTestExecutionBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionBadGateway %s", 502, payload)
 }
 
 func (o *GetTestExecutionBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}][%d] getTestExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}][%d] getTestExecutionBadGateway %s", 502, payload)
 }
 
 func (o *GetTestExecutionBadGateway) GetPayload() *models.ErrorResponse {

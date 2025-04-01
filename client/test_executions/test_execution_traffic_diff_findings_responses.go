@@ -49,7 +49,7 @@ func (o *TestExecutionTrafficDiffFindingsReader) ReadResponse(response runtime.C
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings] test-execution-traffic-diff-findings", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings] test-execution-traffic-diff-findings", response, response.Code())
 	}
 }
 
@@ -99,12 +99,12 @@ func (o *TestExecutionTrafficDiffFindingsOK) Code() int {
 
 func (o *TestExecutionTrafficDiffFindingsOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsOK %s", 200, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsOK %s", 200, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsOK) GetPayload() *models.TrafficDiffResult {
@@ -169,12 +169,12 @@ func (o *TestExecutionTrafficDiffFindingsBadRequest) Code() int {
 
 func (o *TestExecutionTrafficDiffFindingsBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadRequest %s", 400, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadRequest %s", 400, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadRequest %s", 400, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadRequest %s", 400, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsBadRequest) GetPayload() *models.ErrorResponse {
@@ -239,12 +239,12 @@ func (o *TestExecutionTrafficDiffFindingsUnauthorized) Code() int {
 
 func (o *TestExecutionTrafficDiffFindingsUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsUnauthorized %s", 401, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsUnauthorized %s", 401, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsUnauthorized) GetPayload() *models.ErrorResponse {
@@ -309,12 +309,12 @@ func (o *TestExecutionTrafficDiffFindingsBadGateway) Code() int {
 
 func (o *TestExecutionTrafficDiffFindingsBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadGateway %s", 502, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadGateway %s", 502, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/tests/{testName}/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadGateway %s", 502, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings][%d] testExecutionTrafficDiffFindingsBadGateway %s", 502, payload)
 }
 
 func (o *TestExecutionTrafficDiffFindingsBadGateway) GetPayload() *models.ErrorResponse {
