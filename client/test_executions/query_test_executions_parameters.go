@@ -160,7 +160,7 @@ type QueryTestExecutionsParams struct {
 
 	/* Source.
 
-	   test source external or saas
+	   Test source external or saas
 	*/
 	Source *string
 
@@ -972,8 +972,8 @@ func (o *QueryTestExecutionsParams) bindParamLabel(formats strfmt.Registry) []st
 		labelIC = append(labelIC, labelIIV)
 	}
 
-	// items.CollectionFormat: ""
-	labelIS := swag.JoinByFormat(labelIC, "")
+	// items.CollectionFormat: "multi"
+	labelIS := swag.JoinByFormat(labelIC, "multi")
 
 	return labelIS
 }
