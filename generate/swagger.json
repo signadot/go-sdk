@@ -4576,7 +4576,7 @@
             "type": "string"
           },
           {
-            "description": "test source external or saas",
+            "description": "Test source external or saas",
             "in": "query",
             "name": "source",
             "type": "string"
@@ -4672,6 +4672,7 @@
             "type": "string"
           },
           {
+            "collectionFormat": "multi",
             "description": "Label constraint key:value (may be specified multiple times)",
             "in": "query",
             "items": {
