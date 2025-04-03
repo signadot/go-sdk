@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ExecutionSpec execution spec
+// ExternalSpec external spec
 //
-// swagger:model ExecutionSpec
-type ExecutionSpec struct {
+// swagger:model ExternalSpec
+type ExternalSpec struct {
 
 	// branch
 	Branch string `json:"branch,omitempty"`
@@ -23,17 +23,11 @@ type ExecutionSpec struct {
 	// commit s h a
 	CommitSHA string `json:"commitSHA,omitempty"`
 
-	// labels
-	Labels map[string]string `json:"labels,omitempty"`
-
 	// path
 	Path string `json:"path,omitempty"`
 
 	// repo
 	Repo string `json:"repo,omitempty"`
-
-	// run ID
-	RunID string `json:"runID,omitempty"`
 
 	// script
 	Script string `json:"script,omitempty"`
@@ -42,18 +36,18 @@ type ExecutionSpec struct {
 	TestName string `json:"testName,omitempty"`
 }
 
-// Validate validates this execution spec
-func (m *ExecutionSpec) Validate(formats strfmt.Registry) error {
+// Validate validates this external spec
+func (m *ExternalSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this execution spec based on context it is used
-func (m *ExecutionSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this external spec based on context it is used
+func (m *ExternalSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *ExecutionSpec) MarshalBinary() ([]byte, error) {
+func (m *ExternalSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -61,8 +55,8 @@ func (m *ExecutionSpec) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ExecutionSpec) UnmarshalBinary(b []byte) error {
-	var res ExecutionSpec
+func (m *ExternalSpec) UnmarshalBinary(b []byte) error {
+	var res ExternalSpec
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -61,11 +61,11 @@ CancelTestExecutionParams contains all the parameters to send to the API endpoin
 */
 type CancelTestExecutionParams struct {
 
-	/* ExecutionName.
+	/* ExecutionID.
 
-	   Test Execution Name
+	   Test Execution ID
 	*/
-	ExecutionName string
+	ExecutionID string
 
 	/* OrgName.
 
@@ -126,15 +126,15 @@ func (o *CancelTestExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionName adds the executionName to the cancel test execution params
-func (o *CancelTestExecutionParams) WithExecutionName(executionName string) *CancelTestExecutionParams {
-	o.SetExecutionName(executionName)
+// WithExecutionID adds the executionID to the cancel test execution params
+func (o *CancelTestExecutionParams) WithExecutionID(executionID string) *CancelTestExecutionParams {
+	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionName adds the executionName to the cancel test execution params
-func (o *CancelTestExecutionParams) SetExecutionName(executionName string) {
-	o.ExecutionName = executionName
+// SetExecutionID adds the executionId to the cancel test execution params
+func (o *CancelTestExecutionParams) SetExecutionID(executionID string) {
+	o.ExecutionID = executionID
 }
 
 // WithOrgName adds the orgName to the cancel test execution params
@@ -156,8 +156,8 @@ func (o *CancelTestExecutionParams) WriteToRequest(r runtime.ClientRequest, reg 
 	}
 	var res []error
 
-	// path param executionName
-	if err := r.SetPathParam("executionName", o.ExecutionName); err != nil {
+	// path param executionID
+	if err := r.SetPathParam("executionID", o.ExecutionID); err != nil {
 		return err
 	}
 

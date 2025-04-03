@@ -73,11 +73,11 @@ type TestExecutionTrafficDiffFindingsParams struct {
 	*/
 	DiffContext *string
 
-	/* ExecutionName.
+	/* ExecutionID.
 
-	   Test Execution Name
+	   Test Execution ID
 	*/
-	ExecutionName string
+	ExecutionID string
 
 	/* MaxFindings.
 
@@ -166,15 +166,15 @@ func (o *TestExecutionTrafficDiffFindingsParams) SetDiffContext(diffContext *str
 	o.DiffContext = diffContext
 }
 
-// WithExecutionName adds the executionName to the test execution traffic diff findings params
-func (o *TestExecutionTrafficDiffFindingsParams) WithExecutionName(executionName string) *TestExecutionTrafficDiffFindingsParams {
-	o.SetExecutionName(executionName)
+// WithExecutionID adds the executionID to the test execution traffic diff findings params
+func (o *TestExecutionTrafficDiffFindingsParams) WithExecutionID(executionID string) *TestExecutionTrafficDiffFindingsParams {
+	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionName adds the executionName to the test execution traffic diff findings params
-func (o *TestExecutionTrafficDiffFindingsParams) SetExecutionName(executionName string) {
-	o.ExecutionName = executionName
+// SetExecutionID adds the executionId to the test execution traffic diff findings params
+func (o *TestExecutionTrafficDiffFindingsParams) SetExecutionID(executionID string) {
+	o.ExecutionID = executionID
 }
 
 // WithMaxFindings adds the maxFindings to the test execution traffic diff findings params
@@ -241,8 +241,8 @@ func (o *TestExecutionTrafficDiffFindingsParams) WriteToRequest(r runtime.Client
 		}
 	}
 
-	// path param executionName
-	if err := r.SetPathParam("executionName", o.ExecutionName); err != nil {
+	// path param executionID
+	if err := r.SetPathParam("executionID", o.ExecutionID); err != nil {
 		return err
 	}
 

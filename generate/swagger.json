@@ -98,7 +98,7 @@
       },
       "type": "object"
     },
-    "ExecutionSpec": {
+    "ExternalSpec": {
       "properties": {
         "branch": {
           "type": "string"
@@ -106,24 +106,23 @@
         "commitSHA": {
           "type": "string"
         },
-        "labels": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
-        },
         "path": {
           "type": "string"
         },
         "repo": {
           "type": "string"
         },
-        "runID": {
-          "type": "string"
-        },
         "script": {
           "type": "string"
         },
+        "testName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HostedSpec": {
+      "properties": {
         "testName": {
           "type": "string"
         }
@@ -395,7 +394,7 @@
         "createdAt": {
           "type": "string"
         },
-        "name": {
+        "id": {
           "type": "string"
         },
         "results": {
@@ -448,6 +447,9 @@
         "routing": {
           "$ref": "#/definitions/job.RoutingContext"
         },
+        "runID": {
+          "type": "string"
+        },
         "timeout": {
           "description": "Timeout represents an optional timeout for the test execution.\nIf not supplied, it defaults to the DefaultTimeout of the associated\ntest, if that is present.  If that is not present, it defaults to \"5m\".\nIt should be a string representing an unsigned integer not exceeding 32 bits followed by\na units character, which can be one of the following.\n  - 'm' for minutes\n  - 'h' for hours\n  - 'd' for days\n  - 'w' for weeks",
           "type": "string"
@@ -476,15 +478,21 @@
     },
     "TestExecutionSpec": {
       "properties": {
-        "embeddedSpec": {
-          "$ref": "#/definitions/ExecutionSpec"
-        },
         "executionContext": {
           "$ref": "#/definitions/TestExecutionContext"
         },
-        "test": {
-          "description": "Test specifies the name of the hosted test that this execution\nrefers to.  Exactly 1 of Test/EmbeddedSpec must be provided.",
-          "type": "string"
+        "external": {
+          "$ref": "#/definitions/ExternalSpec"
+        },
+        "hosted": {
+          "$ref": "#/definitions/HostedSpec"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels",
+          "type": "object"
         }
       },
       "type": "object"
@@ -4762,8 +4770,8 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Create a test execution",
-        "operationId": "create-test-execution",
+        "description": "Create an external test execution",
+        "operationId": "create-external-test-execution",
         "parameters": [
           {
             "description": "Signadot Org Name",
@@ -4817,13 +4825,13 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Create a test execution",
+        "summary": "Create External Test Execution",
         "tags": [
           "TestExecutions"
         ]
       }
     },
-    "/orgs/{orgName}/tests/executions/{executionName}": {
+    "/orgs/{orgName}/tests/executions/{executionID}": {
       "get": {
         "consumes": [
           "application/json"
@@ -4840,9 +4848,9 @@
             "x-example": "my-company"
           },
           {
-            "description": "Test Execution Name",
+            "description": "Test Execution ID",
             "in": "path",
-            "name": "executionName",
+            "name": "executionID",
             "required": true,
             "type": "string"
           }
@@ -4887,7 +4895,7 @@
         ]
       }
     },
-    "/orgs/{orgName}/tests/executions/{executionName}/cancel": {
+    "/orgs/{orgName}/tests/executions/{executionID}/cancel": {
       "put": {
         "consumes": [
           "application/json"
@@ -4904,9 +4912,9 @@
             "x-example": "my-company"
           },
           {
-            "description": "Test Execution Name",
+            "description": "Test Execution ID",
             "in": "path",
-            "name": "executionName",
+            "name": "executionID",
             "required": true,
             "type": "string"
           }
@@ -4951,7 +4959,7 @@
         ]
       }
     },
-    "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff": {
+    "/orgs/{orgName}/tests/executions/{executionID}/traffic-diff": {
       "get": {
         "consumes": [
           "application/json"
@@ -4968,9 +4976,9 @@
             "x-example": "my-company"
           },
           {
-            "description": "Test Execution Name",
+            "description": "Test Execution ID",
             "in": "path",
-            "name": "executionName",
+            "name": "executionID",
             "required": true,
             "type": "string"
           }
@@ -5015,7 +5023,7 @@
         ]
       }
     },
-    "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings": {
+    "/orgs/{orgName}/tests/executions/{executionID}/traffic-diff-findings": {
       "get": {
         "consumes": [
           "application/json"
@@ -5032,9 +5040,9 @@
             "x-example": "my-company"
           },
           {
-            "description": "Test Execution Name",
+            "description": "Test Execution ID",
             "in": "path",
-            "name": "executionName",
+            "name": "executionID",
             "required": true,
             "type": "string"
           },
@@ -5365,8 +5373,8 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Creates a test with the provided parameters.",
-        "operationId": "create-test-execution-for-test",
+        "description": "Creates a hosted test execution",
+        "operationId": "create-hosted-test-execution",
         "parameters": [
           {
             "description": "Signadot Org Name",
@@ -5389,7 +5397,7 @@
             "name": "data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TestExecutionSpec"
+              "$ref": "#/definitions/TestExecution"
             }
           }
         ],
@@ -5427,7 +5435,7 @@
             "ApiKeyAuth": []
           }
         ],
-        "summary": "Create a Test Execution",
+        "summary": "Create Hosted Test Execution",
         "tags": [
           "TestExecutions"
         ]

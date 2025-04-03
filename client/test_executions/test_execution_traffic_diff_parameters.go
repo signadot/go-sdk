@@ -61,11 +61,11 @@ TestExecutionTrafficDiffParams contains all the parameters to send to the API en
 */
 type TestExecutionTrafficDiffParams struct {
 
-	/* ExecutionName.
+	/* ExecutionID.
 
-	   Test Execution Name
+	   Test Execution ID
 	*/
-	ExecutionName string
+	ExecutionID string
 
 	/* OrgName.
 
@@ -126,15 +126,15 @@ func (o *TestExecutionTrafficDiffParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionName adds the executionName to the test execution traffic diff params
-func (o *TestExecutionTrafficDiffParams) WithExecutionName(executionName string) *TestExecutionTrafficDiffParams {
-	o.SetExecutionName(executionName)
+// WithExecutionID adds the executionID to the test execution traffic diff params
+func (o *TestExecutionTrafficDiffParams) WithExecutionID(executionID string) *TestExecutionTrafficDiffParams {
+	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionName adds the executionName to the test execution traffic diff params
-func (o *TestExecutionTrafficDiffParams) SetExecutionName(executionName string) {
-	o.ExecutionName = executionName
+// SetExecutionID adds the executionId to the test execution traffic diff params
+func (o *TestExecutionTrafficDiffParams) SetExecutionID(executionID string) {
+	o.ExecutionID = executionID
 }
 
 // WithOrgName adds the orgName to the test execution traffic diff params
@@ -156,8 +156,8 @@ func (o *TestExecutionTrafficDiffParams) WriteToRequest(r runtime.ClientRequest,
 	}
 	var res []error
 
-	// path param executionName
-	if err := r.SetPathParam("executionName", o.ExecutionName); err != nil {
+	// path param executionID
+	if err := r.SetPathParam("executionID", o.ExecutionID); err != nil {
 		return err
 	}
 
