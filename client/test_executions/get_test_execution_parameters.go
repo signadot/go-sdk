@@ -61,11 +61,11 @@ GetTestExecutionParams contains all the parameters to send to the API endpoint
 */
 type GetTestExecutionParams struct {
 
-	/* ExecutionName.
+	/* ExecutionID.
 
-	   Test Execution Name
+	   Test Execution ID
 	*/
-	ExecutionName string
+	ExecutionID string
 
 	/* OrgName.
 
@@ -126,15 +126,15 @@ func (o *GetTestExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionName adds the executionName to the get test execution params
-func (o *GetTestExecutionParams) WithExecutionName(executionName string) *GetTestExecutionParams {
-	o.SetExecutionName(executionName)
+// WithExecutionID adds the executionID to the get test execution params
+func (o *GetTestExecutionParams) WithExecutionID(executionID string) *GetTestExecutionParams {
+	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionName adds the executionName to the get test execution params
-func (o *GetTestExecutionParams) SetExecutionName(executionName string) {
-	o.ExecutionName = executionName
+// SetExecutionID adds the executionId to the get test execution params
+func (o *GetTestExecutionParams) SetExecutionID(executionID string) {
+	o.ExecutionID = executionID
 }
 
 // WithOrgName adds the orgName to the get test execution params
@@ -156,8 +156,8 @@ func (o *GetTestExecutionParams) WriteToRequest(r runtime.ClientRequest, reg str
 	}
 	var res []error
 
-	// path param executionName
-	if err := r.SetPathParam("executionName", o.ExecutionName); err != nil {
+	// path param executionID
+	if err := r.SetPathParam("executionID", o.ExecutionID); err != nil {
 		return err
 	}
 

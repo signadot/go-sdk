@@ -21,8 +21,8 @@ type TestExecution struct {
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
 
-	// name
-	Name string `json:"name,omitempty"`
+	// id
+	ID string `json:"id,omitempty"`
 
 	// results
 	Results *TestExecutionResults `json:"results,omitempty"`

@@ -58,9 +58,9 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CancelTestExecution(params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error)
 
-	CreateTestExecution(params *CreateTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionOK, error)
+	CreateExternalTestExecution(params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error)
 
-	CreateTestExecutionForTest(params *CreateTestExecutionForTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionForTestOK, error)
+	CreateHostedTestExecution(params *CreateHostedTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateHostedTestExecutionOK, error)
 
 	GetTestExecution(params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error)
 
@@ -88,7 +88,7 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-test-execution",
 		Method:             "PUT",
-		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}/cancel",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionID}/cancel",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -117,24 +117,24 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 }
 
 /*
-CreateTestExecution creates a test execution
+CreateExternalTestExecution creates external test execution
 
-Create a test execution
+Create an external test execution
 */
-func (a *Client) CreateTestExecution(params *CreateTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionOK, error) {
+func (a *Client) CreateExternalTestExecution(params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateTestExecutionParams()
+		params = NewCreateExternalTestExecutionParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "create-test-execution",
+		ID:                 "create-external-test-execution",
 		Method:             "POST",
 		PathPattern:        "/orgs/{orgName}/tests/executions/",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateTestExecutionReader{formats: a.formats},
+		Reader:             &CreateExternalTestExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -147,35 +147,35 @@ func (a *Client) CreateTestExecution(params *CreateTestExecutionParams, authInfo
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateTestExecutionOK)
+	success, ok := result.(*CreateExternalTestExecutionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for create-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for create-external-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-CreateTestExecutionForTest creates a test execution
+CreateHostedTestExecution creates hosted test execution
 
-Creates a test with the provided parameters.
+Creates a hosted test execution
 */
-func (a *Client) CreateTestExecutionForTest(params *CreateTestExecutionForTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTestExecutionForTestOK, error) {
+func (a *Client) CreateHostedTestExecution(params *CreateHostedTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateHostedTestExecutionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCreateTestExecutionForTestParams()
+		params = NewCreateHostedTestExecutionParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "create-test-execution-for-test",
+		ID:                 "create-hosted-test-execution",
 		Method:             "POST",
 		PathPattern:        "/orgs/{orgName}/tests/{testName}/executions/",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CreateTestExecutionForTestReader{formats: a.formats},
+		Reader:             &CreateHostedTestExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -188,13 +188,13 @@ func (a *Client) CreateTestExecutionForTest(params *CreateTestExecutionForTestPa
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CreateTestExecutionForTestOK)
+	success, ok := result.(*CreateHostedTestExecutionOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for create-test-execution-for-test: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for create-hosted-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
@@ -211,7 +211,7 @@ func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runti
 	op := &runtime.ClientOperation{
 		ID:                 "get-test-execution",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionID}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -334,7 +334,7 @@ func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams
 	op := &runtime.ClientOperation{
 		ID:                 "test-execution-traffic-diff",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionID}/traffic-diff",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -375,7 +375,7 @@ func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDi
 	op := &runtime.ClientOperation{
 		ID:                 "test-execution-traffic-diff-findings",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/tests/executions/{executionName}/traffic-diff-findings",
+		PathPattern:        "/orgs/{orgName}/tests/executions/{executionID}/traffic-diff-findings",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
