@@ -723,6 +723,51 @@
       },
       "type": "object"
     },
+    "authdevices.Code": {
+      "properties": {
+        "deviceCode": {
+          "type": "string"
+        },
+        "expiresIn": {
+          "type": "integer"
+        },
+        "interval": {
+          "type": "integer"
+        },
+        "userCode": {
+          "type": "string"
+        },
+        "verificationURI": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "authdevices.Token": {
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "expiresIn": {
+          "type": "integer"
+        },
+        "orgName": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "authdevices.TokenInput": {
+      "properties": {
+        "deviceCode": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "capture.Message": {
       "properties": {
         "body": {},
@@ -2151,6 +2196,89 @@
     "version": "2.0"
   },
   "paths": {
+    "/auth/device/code/": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get an authentication code for a device login flow",
+        "operationId": "auth-device-get-code",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/authdevices.Code"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "summary": "Get Device Authentication Code",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/device/token/": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get an authentication token for a device login flow",
+        "operationId": "auth-device-get-token",
+        "parameters": [
+          {
+            "description": "Information to get the token",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/authdevices.TokenInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/authdevices.Token"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "summary": "Get Device Authentication Token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/orgs/{orgName}/artifacts/jobs/{jobName}/attempts/{jobAttempt}": {
       "get": {
         "consumes": [
