@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/strfmt"
 
 	"github.com/signadot/go-sdk/client/artifacts"
+	"github.com/signadot/go-sdk/client/assistants"
 	"github.com/signadot/go-sdk/client/auth"
 	"github.com/signadot/go-sdk/client/cluster"
 	"github.com/signadot/go-sdk/client/job_logs"
@@ -66,6 +67,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli := new(SignadotAPI)
 	cli.Transport = transport
 	cli.Artifacts = artifacts.New(transport, formats)
+	cli.Assistants = assistants.New(transport, formats)
 	cli.Auth = auth.New(transport, formats)
 	cli.Cluster = cluster.New(transport, formats)
 	cli.JobLogs = job_logs.New(transport, formats)
@@ -122,6 +124,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 type SignadotAPI struct {
 	Artifacts artifacts.ClientService
 
+	Assistants assistants.ClientService
+
 	Auth auth.ClientService
 
 	Cluster cluster.ClientService
@@ -149,6 +153,7 @@ type SignadotAPI struct {
 func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 	c.Artifacts.SetTransport(transport)
+	c.Assistants.SetTransport(transport)
 	c.Auth.SetTransport(transport)
 	c.Cluster.SetTransport(transport)
 	c.JobLogs.SetTransport(transport)
