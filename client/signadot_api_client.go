@@ -15,6 +15,7 @@ import (
 	"github.com/signadot/go-sdk/client/cluster"
 	"github.com/signadot/go-sdk/client/job_logs"
 	"github.com/signadot/go-sdk/client/jobs"
+	"github.com/signadot/go-sdk/client/orgs"
 	"github.com/signadot/go-sdk/client/resource_plugins"
 	"github.com/signadot/go-sdk/client/route_groups"
 	"github.com/signadot/go-sdk/client/runner_groups"
@@ -70,6 +71,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli.Cluster = cluster.New(transport, formats)
 	cli.JobLogs = job_logs.New(transport, formats)
 	cli.Jobs = jobs.New(transport, formats)
+	cli.Orgs = orgs.New(transport, formats)
 	cli.ResourcePlugins = resource_plugins.New(transport, formats)
 	cli.RouteGroups = route_groups.New(transport, formats)
 	cli.RunnerGroups = runner_groups.New(transport, formats)
@@ -130,6 +132,8 @@ type SignadotAPI struct {
 
 	Jobs jobs.ClientService
 
+	Orgs orgs.ClientService
+
 	ResourcePlugins resource_plugins.ClientService
 
 	RouteGroups route_groups.ClientService
@@ -153,6 +157,7 @@ func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Cluster.SetTransport(transport)
 	c.JobLogs.SetTransport(transport)
 	c.Jobs.SetTransport(transport)
+	c.Orgs.SetTransport(transport)
 	c.ResourcePlugins.SetTransport(transport)
 	c.RouteGroups.SetTransport(transport)
 	c.RunnerGroups.SetTransport(transport)
