@@ -723,6 +723,12 @@
       },
       "type": "object"
     },
+    "auth.UserFlags": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "type": "object"
+    },
     "authdevices.Code": {
       "properties": {
         "deviceCode": {
@@ -1356,6 +1362,69 @@
           "type": "integer"
         },
         "toLocal": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "orgs.GetOrgNameResponse": {
+      "properties": {
+        "featureFlags": {
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "type": "object"
+        },
+        "orgs": {
+          "items": {
+            "$ref": "#/definitions/orgs.Org"
+          },
+          "type": "array"
+        },
+        "user": {
+          "$ref": "#/definitions/orgs.User"
+        },
+        "userFlags": {
+          "$ref": "#/definitions/auth.UserFlags"
+        }
+      },
+      "type": "object"
+    },
+    "orgs.Org": {
+      "properties": {
+        "billingTier": {
+          "type": "integer"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "orgs.User": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "updatedAt": {
           "type": "string"
         }
       },
@@ -2276,6 +2345,53 @@
         "summary": "Get Device Authentication Token",
         "tags": [
           "Auth"
+        ]
+      }
+    },
+    "/orgs/": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get organization details",
+        "operationId": "get-org-name",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/orgs.GetOrgNameResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get Org Name",
+        "tags": [
+          "Orgs"
         ]
       }
     },
