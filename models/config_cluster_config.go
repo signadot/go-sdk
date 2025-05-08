@@ -24,6 +24,9 @@ type ConfigClusterConfig struct {
 	// allowed namespaces
 	AllowedNamespaces []string `json:"allowedNamespaces"`
 
+	// control plane
+	ControlPlane *ConfigControlPlaneConfig `json:"controlPlane,omitempty"`
+
 	// routing
 	Routing *ConfigRoutingConfig `json:"routing,omitempty"`
 
@@ -37,6 +40,10 @@ type ConfigClusterConfig struct {
 // Validate validates this config cluster config
 func (m *ConfigClusterConfig) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateControlPlane(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateRouting(formats); err != nil {
 		res = append(res, err)
@@ -53,6 +60,25 @@ func (m *ConfigClusterConfig) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ConfigClusterConfig) validateControlPlane(formats strfmt.Registry) error {
+	if swag.IsZero(m.ControlPlane) { // not required
+		return nil
+	}
+
+	if m.ControlPlane != nil {
+		if err := m.ControlPlane.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("controlPlane")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("controlPlane")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -117,6 +143,10 @@ func (m *ConfigClusterConfig) validateTrafficCapture(formats strfmt.Registry) er
 func (m *ConfigClusterConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateControlPlane(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateRouting(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -132,6 +162,27 @@ func (m *ConfigClusterConfig) ContextValidate(ctx context.Context, formats strfm
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ConfigClusterConfig) contextValidateControlPlane(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ControlPlane != nil {
+
+		if swag.IsZero(m.ControlPlane) { // not required
+			return nil
+		}
+
+		if err := m.ControlPlane.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("controlPlane")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("controlPlane")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
