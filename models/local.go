@@ -19,6 +19,12 @@ import (
 // swagger:model local
 type Local struct {
 
+	// env
+	Env []*SandboxEnvVar `json:"env"`
+
+	// files
+	Files []*SandboxFiles `json:"files"`
+
 	// from
 	From *LocalFrom `json:"from,omitempty"`
 
@@ -33,6 +39,14 @@ type Local struct {
 func (m *Local) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateEnv(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFiles(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateFrom(formats); err != nil {
 		res = append(res, err)
 	}
@@ -44,6 +58,58 @@ func (m *Local) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Local) validateEnv(formats strfmt.Registry) error {
+	if swag.IsZero(m.Env) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Env); i++ {
+		if swag.IsZero(m.Env[i]) { // not required
+			continue
+		}
+
+		if m.Env[i] != nil {
+			if err := m.Env[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("env" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("env" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Local) validateFiles(formats strfmt.Registry) error {
+	if swag.IsZero(m.Files) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Files); i++ {
+		if swag.IsZero(m.Files[i]) { // not required
+			continue
+		}
+
+		if m.Files[i] != nil {
+			if err := m.Files[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("files" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("files" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -96,6 +162,14 @@ func (m *Local) validateMappings(formats strfmt.Registry) error {
 func (m *Local) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateEnv(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFiles(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateFrom(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -107,6 +181,56 @@ func (m *Local) ContextValidate(ctx context.Context, formats strfmt.Registry) er
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Local) contextValidateEnv(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Env); i++ {
+
+		if m.Env[i] != nil {
+
+			if swag.IsZero(m.Env[i]) { // not required
+				return nil
+			}
+
+			if err := m.Env[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("env" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("env" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Local) contextValidateFiles(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Files); i++ {
+
+		if m.Files[i] != nil {
+
+			if swag.IsZero(m.Files[i]) { // not required
+				return nil
+			}
+
+			if err := m.Files[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("files" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("files" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

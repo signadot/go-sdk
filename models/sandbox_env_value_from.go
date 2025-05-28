@@ -18,16 +18,26 @@ import (
 // swagger:model sandbox.EnvValueFrom
 type SandboxEnvValueFrom struct {
 
+	// config map
+	ConfigMap *SandboxEnvValueFromMap `json:"configMap,omitempty"`
+
 	// fork
 	Fork *SandboxEnvValueFromFork `json:"fork,omitempty"`
 
 	// resource
 	Resource *SandboxEnvValueFromResource `json:"resource,omitempty"`
+
+	// secret
+	Secret *SandboxEnvValueFromMap `json:"secret,omitempty"`
 }
 
 // Validate validates this sandbox env value from
 func (m *SandboxEnvValueFrom) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateConfigMap(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateFork(formats); err != nil {
 		res = append(res, err)
@@ -37,9 +47,32 @@ func (m *SandboxEnvValueFrom) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateSecret(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxEnvValueFrom) validateConfigMap(formats strfmt.Registry) error {
+	if swag.IsZero(m.ConfigMap) { // not required
+		return nil
+	}
+
+	if m.ConfigMap != nil {
+		if err := m.ConfigMap.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("configMap")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("configMap")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -81,9 +114,32 @@ func (m *SandboxEnvValueFrom) validateResource(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SandboxEnvValueFrom) validateSecret(formats strfmt.Registry) error {
+	if swag.IsZero(m.Secret) { // not required
+		return nil
+	}
+
+	if m.Secret != nil {
+		if err := m.Secret.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("secret")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("secret")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this sandbox env value from based on the context it is used
 func (m *SandboxEnvValueFrom) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.contextValidateConfigMap(ctx, formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.contextValidateFork(ctx, formats); err != nil {
 		res = append(res, err)
@@ -93,9 +149,34 @@ func (m *SandboxEnvValueFrom) ContextValidate(ctx context.Context, formats strfm
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateSecret(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxEnvValueFrom) contextValidateConfigMap(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ConfigMap != nil {
+
+		if swag.IsZero(m.ConfigMap) { // not required
+			return nil
+		}
+
+		if err := m.ConfigMap.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("configMap")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("configMap")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -133,6 +214,27 @@ func (m *SandboxEnvValueFrom) contextValidateResource(ctx context.Context, forma
 				return ve.ValidateName("resource")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("resource")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SandboxEnvValueFrom) contextValidateSecret(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Secret != nil {
+
+		if swag.IsZero(m.Secret) { // not required
+			return nil
+		}
+
+		if err := m.Secret.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("secret")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("secret")
 			}
 			return err
 		}
