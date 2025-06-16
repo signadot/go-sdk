@@ -17,11 +17,11 @@ import (
 // swagger:model sandbox.FileSourceResource
 type SandboxFileSourceResource struct {
 
-	// output
-	Output string `json:"output,omitempty"`
+	// name
+	Name string `json:"name,omitempty"`
 
-	// resource
-	Resource string `json:"resource,omitempty"`
+	// output key
+	OutputKey string `json:"outputKey,omitempty"`
 }
 
 // Validate validates this sandbox file source resource

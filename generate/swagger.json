@@ -1953,10 +1953,10 @@
     },
     "sandbox.FileSourceResource": {
       "properties": {
-        "output": {
+        "name": {
           "type": "string"
         },
-        "resource": {
+        "outputKey": {
           "type": "string"
         }
       },
