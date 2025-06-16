@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -19,15 +20,76 @@ type ConfigLinkerdConfig struct {
 
 	// enabled
 	Enabled bool `json:"enabled,omitempty"`
+
+	// operator
+	Operator *ConfigLinkerdSignadotOperator `json:"operator,omitempty"`
 }
 
 // Validate validates this config linkerd config
 func (m *ConfigLinkerdConfig) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateOperator(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this config linkerd config based on context it is used
+func (m *ConfigLinkerdConfig) validateOperator(formats strfmt.Registry) error {
+	if swag.IsZero(m.Operator) { // not required
+		return nil
+	}
+
+	if m.Operator != nil {
+		if err := m.Operator.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("operator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("operator")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this config linkerd config based on the context it is used
 func (m *ConfigLinkerdConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateOperator(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConfigLinkerdConfig) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Operator != nil {
+
+		if swag.IsZero(m.Operator) { // not required
+			return nil
+		}
+
+		if err := m.Operator.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("operator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("operator")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
