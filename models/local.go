@@ -23,7 +23,7 @@ type Local struct {
 	Env []*SandboxEnvVar `json:"env"`
 
 	// files
-	Files []*SandboxFiles `json:"files"`
+	Files []*SandboxFileOp `json:"files"`
 
 	// from
 	From *LocalFrom `json:"from,omitempty"`

@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxFiles sandbox files
+// SandboxFileOp sandbox file op
 //
-// swagger:model sandbox.Files
-type SandboxFiles struct {
+// swagger:model sandbox.FileOp
+type SandboxFileOp struct {
 
 	// path
 	Path string `json:"path,omitempty"`
@@ -28,8 +28,8 @@ type SandboxFiles struct {
 	ValueFrom *SandboxFileSource `json:"valueFrom,omitempty"`
 }
 
-// Validate validates this sandbox files
-func (m *SandboxFiles) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox file op
+func (m *SandboxFileOp) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateValueFrom(formats); err != nil {
@@ -42,7 +42,7 @@ func (m *SandboxFiles) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxFiles) validateValueFrom(formats strfmt.Registry) error {
+func (m *SandboxFileOp) validateValueFrom(formats strfmt.Registry) error {
 	if swag.IsZero(m.ValueFrom) { // not required
 		return nil
 	}
@@ -61,8 +61,8 @@ func (m *SandboxFiles) validateValueFrom(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this sandbox files based on the context it is used
-func (m *SandboxFiles) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandbox file op based on the context it is used
+func (m *SandboxFileOp) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateValueFrom(ctx, formats); err != nil {
@@ -75,7 +75,7 @@ func (m *SandboxFiles) ContextValidate(ctx context.Context, formats strfmt.Regis
 	return nil
 }
 
-func (m *SandboxFiles) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxFileOp) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ValueFrom != nil {
 
@@ -97,7 +97,7 @@ func (m *SandboxFiles) contextValidateValueFrom(ctx context.Context, formats str
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxFiles) MarshalBinary() ([]byte, error) {
+func (m *SandboxFileOp) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -105,8 +105,8 @@ func (m *SandboxFiles) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxFiles) UnmarshalBinary(b []byte) error {
-	var res SandboxFiles
+func (m *SandboxFileOp) UnmarshalBinary(b []byte) error {
+	var res SandboxFileOp
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
