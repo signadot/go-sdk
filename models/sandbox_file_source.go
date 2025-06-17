@@ -13,33 +13,26 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxEnvValueFrom sandbox env value from
+// SandboxFileSource sandbox file source
 //
-// swagger:model sandbox.EnvValueFrom
-type SandboxEnvValueFrom struct {
+// swagger:model sandbox.FileSource
+type SandboxFileSource struct {
 
 	// config map
-	ConfigMap *SandboxEnvValueFromMap `json:"configMap,omitempty"`
-
-	// fork
-	Fork *SandboxEnvValueFromFork `json:"fork,omitempty"`
+	ConfigMap *SandboxFileSourceMap `json:"configMap,omitempty"`
 
 	// resource
-	Resource *SandboxEnvValueFromResource `json:"resource,omitempty"`
+	Resource *SandboxFileSourceResource `json:"resource,omitempty"`
 
 	// secret
-	Secret *SandboxEnvValueFromMap `json:"secret,omitempty"`
+	Secret *SandboxFileSourceMap `json:"secret,omitempty"`
 }
 
-// Validate validates this sandbox env value from
-func (m *SandboxEnvValueFrom) Validate(formats strfmt.Registry) error {
+// Validate validates this sandbox file source
+func (m *SandboxFileSource) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateConfigMap(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateFork(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -57,7 +50,7 @@ func (m *SandboxEnvValueFrom) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxEnvValueFrom) validateConfigMap(formats strfmt.Registry) error {
+func (m *SandboxFileSource) validateConfigMap(formats strfmt.Registry) error {
 	if swag.IsZero(m.ConfigMap) { // not required
 		return nil
 	}
@@ -76,26 +69,7 @@ func (m *SandboxEnvValueFrom) validateConfigMap(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxEnvValueFrom) validateFork(formats strfmt.Registry) error {
-	if swag.IsZero(m.Fork) { // not required
-		return nil
-	}
-
-	if m.Fork != nil {
-		if err := m.Fork.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("fork")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("fork")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *SandboxEnvValueFrom) validateResource(formats strfmt.Registry) error {
+func (m *SandboxFileSource) validateResource(formats strfmt.Registry) error {
 	if swag.IsZero(m.Resource) { // not required
 		return nil
 	}
@@ -114,7 +88,7 @@ func (m *SandboxEnvValueFrom) validateResource(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxEnvValueFrom) validateSecret(formats strfmt.Registry) error {
+func (m *SandboxFileSource) validateSecret(formats strfmt.Registry) error {
 	if swag.IsZero(m.Secret) { // not required
 		return nil
 	}
@@ -133,15 +107,11 @@ func (m *SandboxEnvValueFrom) validateSecret(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this sandbox env value from based on the context it is used
-func (m *SandboxEnvValueFrom) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandbox file source based on the context it is used
+func (m *SandboxFileSource) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateConfigMap(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateFork(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -159,7 +129,7 @@ func (m *SandboxEnvValueFrom) ContextValidate(ctx context.Context, formats strfm
 	return nil
 }
 
-func (m *SandboxEnvValueFrom) contextValidateConfigMap(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxFileSource) contextValidateConfigMap(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ConfigMap != nil {
 
@@ -180,28 +150,7 @@ func (m *SandboxEnvValueFrom) contextValidateConfigMap(ctx context.Context, form
 	return nil
 }
 
-func (m *SandboxEnvValueFrom) contextValidateFork(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Fork != nil {
-
-		if swag.IsZero(m.Fork) { // not required
-			return nil
-		}
-
-		if err := m.Fork.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("fork")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("fork")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *SandboxEnvValueFrom) contextValidateResource(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxFileSource) contextValidateResource(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Resource != nil {
 
@@ -222,7 +171,7 @@ func (m *SandboxEnvValueFrom) contextValidateResource(ctx context.Context, forma
 	return nil
 }
 
-func (m *SandboxEnvValueFrom) contextValidateSecret(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxFileSource) contextValidateSecret(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Secret != nil {
 
@@ -244,7 +193,7 @@ func (m *SandboxEnvValueFrom) contextValidateSecret(ctx context.Context, formats
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxEnvValueFrom) MarshalBinary() ([]byte, error) {
+func (m *SandboxFileSource) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -252,8 +201,8 @@ func (m *SandboxEnvValueFrom) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxEnvValueFrom) UnmarshalBinary(b []byte) error {
-	var res SandboxEnvValueFrom
+func (m *SandboxFileSource) UnmarshalBinary(b []byte) error {
+	var res SandboxFileSource
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

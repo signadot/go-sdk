@@ -906,6 +906,20 @@
         },
         "enabled": {
           "type": "boolean"
+        },
+        "operator": {
+          "$ref": "#/definitions/config.IstioSignadotOperator"
+        }
+      },
+      "type": "object"
+    },
+    "config.IstioSignadotOperator": {
+      "properties": {
+        "podLabels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
         }
       },
       "type": "object"
@@ -914,6 +928,20 @@
       "properties": {
         "enabled": {
           "type": "boolean"
+        },
+        "operator": {
+          "$ref": "#/definitions/config.LinkerdSignadotOperator"
+        }
+      },
+      "type": "object"
+    },
+    "config.LinkerdSignadotOperator": {
+      "properties": {
+        "podAnnotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
         }
       },
       "type": "object"
@@ -1324,6 +1352,18 @@
     },
     "local": {
       "properties": {
+        "env": {
+          "items": {
+            "$ref": "#/definitions/sandbox.EnvVar"
+          },
+          "type": "array"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/definitions/sandbox.FileOp"
+          },
+          "type": "array"
+        },
         "from": {
           "$ref": "#/definitions/local.From"
         },
@@ -1794,11 +1834,17 @@
     },
     "sandbox.EnvValueFrom": {
       "properties": {
+        "configMap": {
+          "$ref": "#/definitions/sandbox.EnvValueFromMap"
+        },
         "fork": {
           "$ref": "#/definitions/sandbox.EnvValueFromFork"
         },
         "resource": {
           "$ref": "#/definitions/sandbox.EnvValueFromResource"
+        },
+        "secret": {
+          "$ref": "#/definitions/sandbox.EnvValueFromMap"
         }
       },
       "type": "object"
@@ -1810,6 +1856,20 @@
         },
         "forkOf": {
           "$ref": "#/definitions/sandbox.ForkOf"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.EnvValueFromMap": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "optional": {
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -1845,6 +1905,59 @@
         },
         "valueFrom": {
           "$ref": "#/definitions/sandbox.EnvValueFrom"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.FileOp": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "valueFrom": {
+          "$ref": "#/definitions/sandbox.FileSource"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.FileSource": {
+      "properties": {
+        "configMap": {
+          "$ref": "#/definitions/sandbox.FileSourceMap"
+        },
+        "resource": {
+          "$ref": "#/definitions/sandbox.FileSourceResource"
+        },
+        "secret": {
+          "$ref": "#/definitions/sandbox.FileSourceMap"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.FileSourceMap": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "optional": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "sandbox.FileSourceResource": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "outputKey": {
+          "type": "string"
         }
       },
       "type": "object"
