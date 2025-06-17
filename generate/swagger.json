@@ -1360,7 +1360,7 @@
         },
         "files": {
           "items": {
-            "$ref": "#/definitions/sandbox.Files"
+            "$ref": "#/definitions/sandbox.FileOp"
           },
           "type": "array"
         },
@@ -1909,10 +1909,27 @@
       },
       "type": "object"
     },
+    "sandbox.FileOp": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "valueFrom": {
+          "$ref": "#/definitions/sandbox.FileSource"
+        }
+      },
+      "type": "object"
+    },
     "sandbox.FileSource": {
       "properties": {
         "configMap": {
           "$ref": "#/definitions/sandbox.FileSourceMap"
+        },
+        "resource": {
+          "$ref": "#/definitions/sandbox.FileSourceResource"
         },
         "secret": {
           "$ref": "#/definitions/sandbox.FileSourceMap"
@@ -1934,16 +1951,13 @@
       },
       "type": "object"
     },
-    "sandbox.Files": {
+    "sandbox.FileSourceResource": {
       "properties": {
-        "path": {
+        "name": {
           "type": "string"
         },
-        "value": {
+        "outputKey": {
           "type": "string"
-        },
-        "valueFrom": {
-          "$ref": "#/definitions/sandbox.FileSource"
         }
       },
       "type": "object"

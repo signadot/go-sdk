@@ -21,6 +21,9 @@ type SandboxFileSource struct {
 	// config map
 	ConfigMap *SandboxFileSourceMap `json:"configMap,omitempty"`
 
+	// resource
+	Resource *SandboxFileSourceResource `json:"resource,omitempty"`
+
 	// secret
 	Secret *SandboxFileSourceMap `json:"secret,omitempty"`
 }
@@ -30,6 +33,10 @@ func (m *SandboxFileSource) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateConfigMap(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateResource(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -54,6 +61,25 @@ func (m *SandboxFileSource) validateConfigMap(formats strfmt.Registry) error {
 				return ve.ValidateName("configMap")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("configMap")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SandboxFileSource) validateResource(formats strfmt.Registry) error {
+	if swag.IsZero(m.Resource) { // not required
+		return nil
+	}
+
+	if m.Resource != nil {
+		if err := m.Resource.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("resource")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("resource")
 			}
 			return err
 		}
@@ -89,6 +115,10 @@ func (m *SandboxFileSource) ContextValidate(ctx context.Context, formats strfmt.
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateResource(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateSecret(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -112,6 +142,27 @@ func (m *SandboxFileSource) contextValidateConfigMap(ctx context.Context, format
 				return ve.ValidateName("configMap")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("configMap")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SandboxFileSource) contextValidateResource(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Resource != nil {
+
+		if swag.IsZero(m.Resource) { // not required
+			return nil
+		}
+
+		if err := m.Resource.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("resource")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("resource")
 			}
 			return err
 		}
