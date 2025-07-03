@@ -757,6 +757,9 @@
         "expiresIn": {
           "type": "integer"
         },
+        "refreshToken": {
+          "type": "string"
+        },
         "status": {
           "type": "string"
         }
