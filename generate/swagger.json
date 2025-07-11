@@ -2472,6 +2472,59 @@
         ]
       }
     },
+    "/auth/device/token/refresh": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Refresh an authentication token using a refresh token",
+        "operationId": "auth-device-refresh-token",
+        "parameters": [
+          {
+            "description": "Refresh token string",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/authdevices.Token"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "summary": "Refresh Device Authentication Token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/orgs/": {
       "get": {
         "consumes": [
