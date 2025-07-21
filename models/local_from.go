@@ -19,7 +19,7 @@ import (
 // swagger:model local.From
 type LocalFrom struct {
 
-	// Kind of entity that we want to route to. One of (Service or Deployment or Rollout).
+	// Kind of the baseline workload.
 	// Example: Deployment
 	// Required: true
 	Kind *string `json:"kind"`
