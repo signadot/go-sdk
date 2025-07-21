@@ -23,9 +23,6 @@ type AuthdevicesToken struct {
 	// expires in
 	ExpiresIn int64 `json:"expiresIn,omitempty"`
 
-	// refresh token
-	RefreshToken string `json:"refreshToken,omitempty"`
-
 	// status
 	Status string `json:"status,omitempty"`
 }
