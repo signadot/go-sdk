@@ -1382,7 +1382,7 @@
     "local.From": {
       "properties": {
         "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
+          "description": "Kind of the baseline workload.",
           "example": "Deployment",
           "type": "string"
         },
@@ -2001,7 +2001,7 @@
     "sandbox.ForkOf": {
       "properties": {
         "kind": {
-          "description": "Kind of entity that we want to route to. One of (Service or Deployment or Rollout).",
+          "description": "Kind of the baseline workload.",
           "example": "Deployment",
           "type": "string"
         },
@@ -2194,6 +2194,13 @@
         },
         "ttl": {
           "$ref": "#/definitions/sandbox.TTL"
+        },
+        "virtual": {
+          "description": "Virtual Workloads",
+          "items": {
+            "$ref": "#/definitions/virtual"
+          },
+          "type": "array"
         }
       },
       "required": [
@@ -2373,6 +2380,17 @@
         },
         "namespace": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "virtual": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "workload": {
+          "$ref": "#/definitions/local.From"
         }
       },
       "type": "object"
