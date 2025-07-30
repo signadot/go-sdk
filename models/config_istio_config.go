@@ -18,7 +18,7 @@ import (
 // swagger:model config.IstioConfig
 type ConfigIstioConfig struct {
 
-	// enable host routing
+	// Deprecated fields
 	EnableHostRouting bool `json:"enableHostRouting,omitempty"`
 
 	// enabled

@@ -25,7 +25,7 @@ type TestTrigger struct {
 	ID string `json:"id,omitempty"`
 
 	// sandbox of
-	SandboxOf *SandboxForkOf `json:"sandboxOf,omitempty"`
+	SandboxOf *WorkloadWorkload `json:"sandboxOf,omitempty"`
 }
 
 // Validate validates this test trigger
