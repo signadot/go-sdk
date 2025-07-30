@@ -58,6 +58,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	AddCluster(params *AddClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterOK, error)
 
+	ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ClusterDevmeshAnalyzeOK, error)
+
 	CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error)
 
 	DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error)
@@ -113,6 +115,47 @@ func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAut
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for add-cluster: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ClusterDevmeshAnalyze clusters dev mesh analyze
+
+Analyze DevMesh status for a given cluster
+*/
+func (a *Client) ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ClusterDevmeshAnalyzeOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewClusterDevmeshAnalyzeParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "cluster-devmesh-analyze",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/clusters/{clusterName}/devmesh/analyze",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ClusterDevmeshAnalyzeReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ClusterDevmeshAnalyzeOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for cluster-devmesh-analyze: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
