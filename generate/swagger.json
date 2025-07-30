@@ -597,7 +597,7 @@
           "type": "string"
         },
         "sandboxOf": {
-          "$ref": "#/definitions/sandbox.ForkOf"
+          "$ref": "#/definitions/workload.Workload"
         }
       },
       "type": "object"
@@ -868,6 +868,31 @@
       },
       "type": "object"
     },
+    "clusters.DevMeshEnabledWorkload": {
+      "properties": {
+        "statusCounts": {
+          "items": {
+            "$ref": "#/definitions/clusters.DevMeshWorkloadStatusCount"
+          },
+          "type": "array"
+        },
+        "workload": {
+          "$ref": "#/definitions/workload.Workload"
+        }
+      },
+      "type": "object"
+    },
+    "clusters.DevMeshWorkloadStatusCount": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "config.ClusterConfig": {
       "properties": {
         "allowOrphanedResources": {
@@ -905,6 +930,7 @@
     "config.IstioConfig": {
       "properties": {
         "enableHostRouting": {
+          "description": "Deprecated fields",
           "type": "boolean"
         },
         "enabled": {
@@ -2152,7 +2178,7 @@
           "type": "string"
         },
         "disableSandboxTrafficManager": {
-          "description": "DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager\nfor forks in this sandbox.",
+          "description": "DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager\nfor forks in this sandbox.\nDeprecated in operators since v1.1. The sandbox traffic manager has been retired.",
           "type": "boolean"
         },
         "endpoints": {
@@ -2396,6 +2422,31 @@
           "$ref": "#/definitions/local.From"
         }
       },
+      "type": "object"
+    },
+    "workload.Workload": {
+      "properties": {
+        "kind": {
+          "description": "Kind of the baseline workload.",
+          "example": "Deployment",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the entity within the Kubernetes cluster.",
+          "example": "my-frontend",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace within which the entity lives in the Kubernetes cluster.",
+          "example": "default",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "namespace"
+      ],
       "type": "object"
     }
   },
@@ -3268,6 +3319,92 @@
           }
         ],
         "summary": "Add a cluster",
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/orgs/{orgName}/clusters/{clusterName}/devmesh/analyze": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Analyze DevMesh status for a given cluster",
+        "operationId": "cluster-devmesh-analyze",
+        "parameters": [
+          {
+            "description": "Signadot Org name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Cluster Name",
+            "in": "path",
+            "name": "clusterName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-new-cluster"
+          },
+          {
+            "description": "Filter by statuses (comma separated value)",
+            "in": "query",
+            "name": "namespace",
+            "type": "string"
+          },
+          {
+            "description": "Filter by namespaces (comma separated value)",
+            "in": "query",
+            "name": "status",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/clusters.DevMeshEnabledWorkload"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Cluster DevMesh Analyze",
         "tags": [
           "Cluster"
         ]

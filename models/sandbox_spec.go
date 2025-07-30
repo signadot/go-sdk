@@ -32,6 +32,7 @@ type SandboxSpec struct {
 
 	// DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager
 	// for forks in this sandbox.
+	// Deprecated in operators since v1.1. The sandbox traffic manager has been retired.
 	DisableSandboxTrafficManager bool `json:"disableSandboxTrafficManager,omitempty"`
 
 	// Deprecated. Use defaultRouteGroup.Endpoints instead.
