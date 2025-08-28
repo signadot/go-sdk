@@ -20,6 +20,7 @@ import (
 type RouteGroupSpec struct {
 
 	// Cluster gives the cluster to which the route group applies.
+	// If left empty, this RG will become a multi-cluster RG..
 	Cluster string `json:"cluster,omitempty"`
 
 	// Description provides a short description of the route group.
@@ -27,7 +28,7 @@ type RouteGroupSpec struct {
 
 	// Endpoints define endpoints which target different in-cluster
 	// services.
-	Endpoints []*RouteGroupSpecEndpoint `json:"endpoints"`
+	Endpoints []*RoutegroupsEndpoint `json:"endpoints"`
 
 	// match
 	Match *RouteGroupMatch `json:"match,omitempty"`

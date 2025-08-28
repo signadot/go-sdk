@@ -28,7 +28,7 @@ type TestExecutionStatus struct {
 	FinishedAt string `json:"finishedAt,omitempty"`
 
 	// phase
-	Phase string `json:"phase,omitempty"`
+	Phase TestexecutionsPhase `json:"phase,omitempty"`
 
 	// started at
 	StartedAt string `json:"startedAt,omitempty"`
@@ -48,6 +48,10 @@ func (m *TestExecutionStatus) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateFinalState(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePhase(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -80,6 +84,23 @@ func (m *TestExecutionStatus) validateFinalState(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *TestExecutionStatus) validatePhase(formats strfmt.Registry) error {
+	if swag.IsZero(m.Phase) { // not required
+		return nil
+	}
+
+	if err := m.Phase.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("phase")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("phase")
+		}
+		return err
+	}
+
+	return nil
+}
+
 func (m *TestExecutionStatus) validateTriggeredBy(formats strfmt.Registry) error {
 	if swag.IsZero(m.TriggeredBy) { // not required
 		return nil
@@ -104,6 +125,10 @@ func (m *TestExecutionStatus) ContextValidate(ctx context.Context, formats strfm
 	var res []error
 
 	if err := m.contextValidateFinalState(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePhase(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -133,6 +158,24 @@ func (m *TestExecutionStatus) contextValidateFinalState(ctx context.Context, for
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *TestExecutionStatus) contextValidatePhase(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Phase) { // not required
+		return nil
+	}
+
+	if err := m.Phase.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("phase")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("phase")
+		}
+		return err
 	}
 
 	return nil

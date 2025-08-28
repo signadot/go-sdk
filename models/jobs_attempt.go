@@ -31,7 +31,7 @@ type JobsAttempt struct {
 	ID int64 `json:"id,omitempty"`
 
 	// phase
-	Phase string `json:"phase,omitempty"`
+	Phase JobsPhase `json:"phase,omitempty"`
 
 	// started at
 	StartedAt string `json:"startedAt,omitempty"`
@@ -44,6 +44,10 @@ type JobsAttempt struct {
 func (m *JobsAttempt) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validatePhase(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateState(formats); err != nil {
 		res = append(res, err)
 	}
@@ -51,6 +55,23 @@ func (m *JobsAttempt) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *JobsAttempt) validatePhase(formats strfmt.Registry) error {
+	if swag.IsZero(m.Phase) { // not required
+		return nil
+	}
+
+	if err := m.Phase.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("phase")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("phase")
+		}
+		return err
+	}
+
 	return nil
 }
 
@@ -77,6 +98,10 @@ func (m *JobsAttempt) validateState(formats strfmt.Registry) error {
 func (m *JobsAttempt) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidatePhase(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateState(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -84,6 +109,24 @@ func (m *JobsAttempt) ContextValidate(ctx context.Context, formats strfmt.Regist
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *JobsAttempt) contextValidatePhase(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Phase) { // not required
+		return nil
+	}
+
+	if err := m.Phase.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("phase")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("phase")
+		}
+		return err
+	}
+
 	return nil
 }
 

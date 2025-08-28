@@ -24,8 +24,8 @@ type SandboxEnvVar struct {
 	// environmental variable name
 	Name string `json:"name,omitempty"`
 
-	// upsert or delete
-	Operation string `json:"operation,omitempty"`
+	// operation
+	Operation SandboxesEnvOpName `json:"operation,omitempty"`
 
 	// environmental variable value
 	Value string `json:"value,omitempty"`
@@ -38,6 +38,10 @@ type SandboxEnvVar struct {
 func (m *SandboxEnvVar) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateOperation(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateValueFrom(formats); err != nil {
 		res = append(res, err)
 	}
@@ -45,6 +49,23 @@ func (m *SandboxEnvVar) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxEnvVar) validateOperation(formats strfmt.Registry) error {
+	if swag.IsZero(m.Operation) { // not required
+		return nil
+	}
+
+	if err := m.Operation.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("operation")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("operation")
+		}
+		return err
+	}
+
 	return nil
 }
 
@@ -71,6 +92,10 @@ func (m *SandboxEnvVar) validateValueFrom(formats strfmt.Registry) error {
 func (m *SandboxEnvVar) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateOperation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateValueFrom(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -78,6 +103,24 @@ func (m *SandboxEnvVar) ContextValidate(ctx context.Context, formats strfmt.Regi
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxEnvVar) contextValidateOperation(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Operation) { // not required
+		return nil
+	}
+
+	if err := m.Operation.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("operation")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("operation")
+		}
+		return err
+	}
+
 	return nil
 }
 

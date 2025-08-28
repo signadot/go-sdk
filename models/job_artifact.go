@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -27,16 +28,69 @@ type JobArtifact struct {
 	Size int64 `json:"size,omitempty"`
 
 	// space
-	Space string `json:"space,omitempty"`
+	Space ArtifactsJobArtifactSpace `json:"space,omitempty"`
 }
 
 // Validate validates this job artifact
 func (m *JobArtifact) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateSpace(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this job artifact based on context it is used
+func (m *JobArtifact) validateSpace(formats strfmt.Registry) error {
+	if swag.IsZero(m.Space) { // not required
+		return nil
+	}
+
+	if err := m.Space.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("space")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("space")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this job artifact based on the context it is used
 func (m *JobArtifact) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateSpace(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *JobArtifact) contextValidateSpace(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Space) { // not required
+		return nil
+	}
+
+	if err := m.Space.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("space")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("space")
+		}
+		return err
+	}
+
 	return nil
 }
 
