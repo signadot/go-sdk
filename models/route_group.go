@@ -26,7 +26,7 @@ type RouteGroup struct {
 	Defaults *DefaultsCompositeDefaults `json:"defaults,omitempty"`
 
 	// endpoints
-	Endpoints []*RouteGroupEndpoint `json:"endpoints,omitempty"`
+	Endpoints []*RoutegroupsEndpointURL `json:"endpoints,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`

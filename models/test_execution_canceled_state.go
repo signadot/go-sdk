@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -21,7 +22,7 @@ type TestExecutionCanceledState struct {
 	CanceledAt string `json:"canceledAt,omitempty"`
 
 	// canceled by
-	CanceledBy string `json:"canceledBy,omitempty"`
+	CanceledBy JobsCanceledBy `json:"canceledBy,omitempty"`
 
 	// message
 	Message string `json:"message,omitempty"`
@@ -29,11 +30,64 @@ type TestExecutionCanceledState struct {
 
 // Validate validates this test execution canceled state
 func (m *TestExecutionCanceledState) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCanceledBy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this test execution canceled state based on context it is used
+func (m *TestExecutionCanceledState) validateCanceledBy(formats strfmt.Registry) error {
+	if swag.IsZero(m.CanceledBy) { // not required
+		return nil
+	}
+
+	if err := m.CanceledBy.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("canceledBy")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("canceledBy")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this test execution canceled state based on the context it is used
 func (m *TestExecutionCanceledState) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCanceledBy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *TestExecutionCanceledState) contextValidateCanceledBy(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CanceledBy) { // not required
+		return nil
+	}
+
+	if err := m.CanceledBy.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("canceledBy")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("canceledBy")
+		}
+		return err
+	}
+
 	return nil
 }
 

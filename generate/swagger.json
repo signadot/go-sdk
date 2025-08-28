@@ -4,7 +4,12 @@
     "Cluster": {
       "properties": {
         "clusterConfig": {
-          "$ref": "#/definitions/config.ClusterConfig"
+          "allOf": [
+            {
+              "$ref": "#/definitions/config.ClusterConfig"
+            }
+          ],
+          "description": "Cluster config read from the cluster"
         },
         "createdAt": {
           "description": "The time when this cluster was registered with Signadot.",
@@ -15,7 +20,12 @@
           "type": "string"
         },
         "operator": {
-          "$ref": "#/definitions/cluster.Operator"
+          "allOf": [
+            {
+              "$ref": "#/definitions/cluster.Operator"
+            }
+          ],
+          "description": "Information about the Signadot Operator in this cluster."
         }
       },
       "type": "object"
@@ -35,7 +45,12 @@
           "type": "string"
         },
         "status": {
-          "$ref": "#/definitions/ClusterTokenStatus"
+          "allOf": [
+            {
+              "$ref": "#/definitions/ClusterTokenStatus"
+            }
+          ],
+          "description": "Token status."
         },
         "token": {
           "description": "The token value.",
@@ -64,7 +79,7 @@
         },
         "oldValue": {},
         "op": {
-          "type": "string"
+          "$ref": "#/definitions/trafficmodels.DiffOperation"
         },
         "path": {
           "type": "string"
@@ -161,7 +176,7 @@
           "type": "integer"
         },
         "space": {
-          "type": "string"
+          "$ref": "#/definitions/artifacts.JobArtifactSpace"
         }
       },
       "type": "object"
@@ -260,10 +275,20 @@
           "type": "string"
         },
         "spec": {
-          "$ref": "#/definitions/resourceplugin.Spec"
+          "allOf": [
+            {
+              "$ref": "#/definitions/resourceplugin.Spec"
+            }
+          ],
+          "description": "Specification for the resource plugin"
         },
         "status": {
-          "$ref": "#/definitions/resourceplugin.Status"
+          "allOf": [
+            {
+              "$ref": "#/definitions/resourceplugin.Status"
+            }
+          ],
+          "description": "Status of the resource plugin"
         },
         "updatedAt": {
           "description": "The time at which the resource plugin was last updated",
@@ -299,7 +324,7 @@
         },
         "endpoints": {
           "items": {
-            "$ref": "#/definitions/routeGroup.Endpoint"
+            "$ref": "#/definitions/routegroups.EndpointURL"
           },
           "type": "array",
           "x-omitempty": true
@@ -347,7 +372,12 @@
           "$ref": "#/definitions/sandbox.Spec"
         },
         "status": {
-          "$ref": "#/definitions/sandbox.Readiness"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandbox.Readiness"
+            }
+          ],
+          "description": "Status *sdv1.SandboxReadiness `json:\"status,omitempty\"`"
         },
         "updatedAt": {
           "type": "string"
@@ -424,7 +454,7 @@
           "type": "string"
         },
         "canceledBy": {
-          "type": "string"
+          "$ref": "#/definitions/jobs.CanceledBy"
         },
         "message": {
           "type": "string"
@@ -479,13 +509,23 @@
     "TestExecutionSpec": {
       "properties": {
         "executionContext": {
-          "$ref": "#/definitions/TestExecutionContext"
+          "allOf": [
+            {
+              "$ref": "#/definitions/TestExecutionContext"
+            }
+          ],
+          "description": "Execution context"
         },
         "external": {
           "$ref": "#/definitions/ExternalSpec"
         },
         "hosted": {
-          "$ref": "#/definitions/HostedSpec"
+          "allOf": [
+            {
+              "$ref": "#/definitions/HostedSpec"
+            }
+          ],
+          "description": "Hosted/External source information, these are one or the other"
         },
         "labels": {
           "additionalProperties": {
@@ -520,7 +560,7 @@
           "type": "string"
         },
         "phase": {
-          "type": "string"
+          "$ref": "#/definitions/testexecutions.Phase"
         },
         "startedAt": {
           "type": "string"
@@ -532,7 +572,12 @@
           "type": "string"
         },
         "triggeredBy": {
-          "$ref": "#/definitions/TestExecutionTriggeredBy"
+          "allOf": [
+            {
+              "$ref": "#/definitions/TestExecutionTriggeredBy"
+            }
+          ],
+          "description": "info about the trigger of the execution, empty means a manual trigger"
         }
       },
       "type": "object"
@@ -591,13 +636,23 @@
     "TestTrigger": {
       "properties": {
         "executionTemplate": {
-          "$ref": "#/definitions/TestExecutionTemplate"
+          "allOf": [
+            {
+              "$ref": "#/definitions/TestExecutionTemplate"
+            }
+          ],
+          "description": "ExecutionTemplate specifies a template for creating the actual execution"
         },
         "id": {
           "type": "string"
         },
         "sandboxOf": {
-          "$ref": "#/definitions/workload.Workload"
+          "allOf": [
+            {
+              "$ref": "#/definitions/workload.Workload"
+            }
+          ],
+          "description": "SandboxOf specifies a workload that when being sandboxed, will\ntrigger an execution of the test (for now, only forks are supported)"
         }
       },
       "type": "object"
@@ -723,6 +778,17 @@
       },
       "type": "object"
     },
+    "artifacts.JobArtifactSpace": {
+      "enum": [
+        "user",
+        "system"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "UserSpace",
+        "SystemSpace"
+      ]
+    },
     "auth.UserFlags": {
       "additionalProperties": {
         "type": "boolean"
@@ -749,6 +815,19 @@
       },
       "type": "object"
     },
+    "authdevices.Status": {
+      "enum": [
+        "pending",
+        "slow_down",
+        "completed"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "PendingStatus",
+        "SlowDownStatus",
+        "CompletedStatus"
+      ]
+    },
     "authdevices.Token": {
       "properties": {
         "accessToken": {
@@ -761,7 +840,7 @@
           "type": "string"
         },
         "status": {
-          "type": "string"
+          "$ref": "#/definitions/authdevices.Status"
         }
       },
       "type": "object"
@@ -882,13 +961,26 @@
       },
       "type": "object"
     },
+    "clusters.DevMeshWorkloadStatus": {
+      "enum": [
+        "ok",
+        "missing",
+        "needs_update"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "OKDevMeshWorkloadStatus",
+        "MissingDevMeshWorkloadStatus",
+        "NeedsUpdateDevMeshWorkloadStatus"
+      ]
+    },
     "clusters.DevMeshWorkloadStatusCount": {
       "properties": {
         "count": {
           "type": "integer"
         },
         "status": {
-          "type": "string"
+          "$ref": "#/definitions/clusters.DevMeshWorkloadStatus"
         }
       },
       "type": "object"
@@ -911,7 +1003,12 @@
           "$ref": "#/definitions/config.RoutingConfig"
         },
         "sandboxTrafficManager": {
-          "$ref": "#/definitions/config.SandboxTrafficManagerConfig"
+          "allOf": [
+            {
+              "$ref": "#/definitions/config.SandboxTrafficManagerConfig"
+            }
+          ],
+          "description": "Deprecated field"
         },
         "trafficCapture": {
           "$ref": "#/definitions/config.TrafficCaptureConfig"
@@ -1037,18 +1134,49 @@
     "defaults.Default": {
       "properties": {
         "class": {
-          "type": "string"
+          "$ref": "#/definitions/defaults.DefaultClass"
         },
         "createdAt": {
           "type": "string"
         },
         "resourceKind": {
-          "type": "string"
+          "$ref": "#/definitions/defaults.ResourceKind"
         },
         "updatedAt": {
           "type": "string"
         },
         "value": {}
+      },
+      "type": "object"
+    },
+    "defaults.DefaultClass": {
+      "enum": [
+        "ttl"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "TTL"
+      ]
+    },
+    "defaults.ResourceKind": {
+      "enum": [
+        "sandbox",
+        "routegroup"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "SandboxResourceKind",
+        "RouteGroupResourceKind"
+      ]
+    },
+    "endpoints.Endpoint": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        }
       },
       "type": "object"
     },
@@ -1258,7 +1386,7 @@
           "type": "integer"
         },
         "phase": {
-          "type": "string"
+          "$ref": "#/definitions/jobs.Phase"
         },
         "startedAt": {
           "type": "string"
@@ -1269,13 +1397,26 @@
       },
       "type": "object"
     },
+    "jobs.CanceledBy": {
+      "enum": [
+        "timeout",
+        "apiRequest",
+        "internal"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "CanceledByTimeout",
+        "CanceledByAPIRequest",
+        "CanceledByInternal"
+      ]
+    },
     "jobs.CanceledState": {
       "properties": {
         "canceledAt": {
           "type": "string"
         },
         "canceledBy": {
-          "type": "string"
+          "$ref": "#/definitions/jobs.CanceledBy"
         },
         "inCluster": {
           "type": "boolean"
@@ -1301,13 +1442,30 @@
       },
       "type": "object"
     },
+    "jobs.Phase": {
+      "enum": [
+        "queued",
+        "running",
+        "failed",
+        "succeeded",
+        "canceled"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "QueuedPhase",
+        "RunningPhase",
+        "FailedPhase",
+        "SucceededPhase",
+        "CanceledPhase"
+      ]
+    },
     "jobs.PhaseCount": {
       "properties": {
         "count": {
           "type": "integer"
         },
         "phase": {
-          "type": "string"
+          "$ref": "#/definitions/jobs.Phase"
         }
       },
       "type": "object"
@@ -1545,7 +1703,12 @@
           "type": "string"
         },
         "runner": {
-          "$ref": "#/definitions/resourceplugin.Runner"
+          "allOf": [
+            {
+              "$ref": "#/definitions/resourceplugin.Runner"
+            }
+          ],
+          "description": "Runner for the resource plugin"
         }
       },
       "type": "object"
@@ -1592,7 +1755,12 @@
     "resourceplugin.StepInput": {
       "properties": {
         "as": {
-          "$ref": "#/definitions/resourceplugin.StepInputTo"
+          "allOf": [
+            {
+              "$ref": "#/definitions/resourceplugin.StepInputTo"
+            }
+          ],
+          "description": "If the As field is not speficied, we will take the input name\nuppercase it, convert \"-\" to \"_\", and inject it as an env var into\nthe main container"
         },
         "name": {
           "description": "Name for the input",
@@ -1607,7 +1775,12 @@
           "type": "boolean"
         },
         "valueFromStep": {
-          "$ref": "#/definitions/resourceplugin.ValueFromStep"
+          "allOf": [
+            {
+              "$ref": "#/definitions/resourceplugin.ValueFromStep"
+            }
+          ],
+          "description": "ValueFromStep is an optional string specifying the output of\nanother step when not nil.  Exactly one of ValueFromSandbox\nand 'ValueFromStep != nil' must hold."
         }
       },
       "type": "object"
@@ -1659,20 +1832,6 @@
       },
       "type": "object"
     },
-    "routeGroup.Endpoint": {
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "target": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "routeGroup.Match": {
       "properties": {
         "all": {
@@ -1692,7 +1851,12 @@
           "x-omitempty": true
         },
         "label": {
-          "$ref": "#/definitions/routeGroup.MatchLabel"
+          "allOf": [
+            {
+              "$ref": "#/definitions/routeGroup.MatchLabel"
+            }
+          ],
+          "description": "When Label is non-nil, T matches a set of labels L if and only if t.Label.Matches(L).\nOnly one field may be non-nil."
         }
       },
       "type": "object"
@@ -1713,7 +1877,7 @@
     "routeGroup.Spec": {
       "properties": {
         "cluster": {
-          "description": "Cluster gives the cluster to which the route group applies.",
+          "description": "Cluster gives the cluster to which the route group applies.\nIf left empty, this RG will become a multi-cluster RG..",
           "type": "string"
         },
         "description": {
@@ -1723,26 +1887,25 @@
         "endpoints": {
           "description": "Endpoints define endpoints which target different in-cluster\nservices.",
           "items": {
-            "$ref": "#/definitions/routeGroup.SpecEndpoint"
+            "$ref": "#/definitions/routegroups.Endpoint"
           },
           "type": "array"
         },
         "match": {
-          "$ref": "#/definitions/routeGroup.Match"
+          "allOf": [
+            {
+              "$ref": "#/definitions/routeGroup.Match"
+            }
+          ],
+          "description": "Match defines a matcher for labels, which matches\nsandboxes that should be a part of this route group."
         },
         "ttl": {
-          "$ref": "#/definitions/routeGroup.TTL"
-        }
-      },
-      "type": "object"
-    },
-    "routeGroup.SpecEndpoint": {
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "target": {
-          "type": "string"
+          "allOf": [
+            {
+              "$ref": "#/definitions/routeGroup.TTL"
+            }
+          ],
+          "description": "TTL define when/how the route group should be deleted"
         }
       },
       "type": "object"
@@ -1788,10 +1951,41 @@
       },
       "type": "object"
     },
+    "routegroups.Endpoint": {
+      "properties": {
+        "cluster": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "routegroups.EndpointURL": {
+      "properties": {
+        "cluster": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "sandbox.CustomPatch": {
       "properties": {
         "type": {
-          "type": "string"
+          "$ref": "#/definitions/sandboxes.PatchType"
         },
         "value": {
           "type": "string"
@@ -1825,7 +2019,7 @@
       "properties": {
         "endpoints": {
           "items": {
-            "$ref": "#/definitions/routeGroup.SpecEndpoint"
+            "$ref": "#/definitions/endpoints.Endpoint"
           },
           "type": "array"
         }
@@ -1925,15 +2119,24 @@
           "type": "string"
         },
         "operation": {
-          "description": "upsert or delete",
-          "type": "string"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandboxes.EnvOpName"
+            }
+          ],
+          "description": "upsert or delete"
         },
         "value": {
           "description": "environmental variable value",
           "type": "string"
         },
         "valueFrom": {
-          "$ref": "#/definitions/sandbox.EnvValueFrom"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandbox.EnvValueFrom"
+            }
+          ],
+          "description": "environmental variable dynamic value"
         }
       },
       "type": "object"
@@ -1994,7 +2197,12 @@
     "sandbox.Fork": {
       "properties": {
         "customizations": {
-          "$ref": "#/definitions/sandbox.Customizations"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandbox.Customizations"
+            }
+          ],
+          "description": "Customizations specify the customizations we will apply on the fork"
         },
         "endpoints": {
           "description": "Deprecated. Use defaultRouteGroup.Endpoints instead.",
@@ -2005,7 +2213,12 @@
           "x-omitempty": "true"
         },
         "forkOf": {
-          "$ref": "#/definitions/sandbox.ForkOf"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandbox.ForkOf"
+            }
+          ],
+          "description": "ForkOf specifies the target workload that we will be forking.  In this usage\nthe Kind of the ForkOf object must not be a service."
         }
       },
       "type": "object"
@@ -2116,7 +2329,12 @@
     "sandbox.Readiness": {
       "properties": {
         "jobs": {
-          "$ref": "#/definitions/sandboxes.JobsSummary"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandboxes.JobsSummary"
+            }
+          ],
+          "description": "status of the jobs running in the context of the given sandbox"
         },
         "local": {
           "description": "local workloads status",
@@ -2142,7 +2360,12 @@
           "type": "string"
         },
         "testExecutions": {
-          "$ref": "#/definitions/sandbox.TestExecutionsSummary"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandbox.TestExecutionsSummary"
+            }
+          ],
+          "description": "status of the test executions running in the context of the given sandbox"
         }
       },
       "type": "object"
@@ -2171,7 +2394,12 @@
           "type": "string"
         },
         "defaultRouteGroup": {
-          "$ref": "#/definitions/sandbox.DefaultRouteGroup"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandbox.DefaultRouteGroup"
+            }
+          ],
+          "description": "DefaultRouteGroup can be used to define route group endpoints for the sandbox."
         },
         "description": {
           "description": "Description of the purpose of this sandbox",
@@ -2222,7 +2450,12 @@
           "type": "array"
         },
         "ttl": {
-          "$ref": "#/definitions/sandbox.TTL"
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandbox.TTL"
+            }
+          ],
+          "description": "TTL gives the maximum lifetime of the sandbox.\nIt may be empty, in which case it defaults to forever."
         },
         "virtual": {
           "description": "Virtual Workloads",
@@ -2293,6 +2526,17 @@
       },
       "type": "object"
     },
+    "sandboxes.EnvOpName": {
+      "enum": [
+        "upsert",
+        "delete"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "EnvOpUpsert",
+        "EnvOpDelete"
+      ]
+    },
     "sandboxes.JobsSummary": {
       "properties": {
         "phaseCounts": {
@@ -2304,14 +2548,33 @@
       },
       "type": "object"
     },
+    "sandboxes.PatchType": {
+      "enum": [
+        "strategic",
+        "merge",
+        "json",
+        "signadot/env",
+        "signadot/image"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "PatchTypeStrategic",
+        "PatchTypeMerge",
+        "PatchTypeJSON",
+        "PatchTypeSDEnv",
+        "PatchTypeSDImage"
+      ]
+    },
     "syntax.Position": {
       "properties": {
         "col": {
           "description": "1-based column (rune) number; 0 if column unknown",
+          "format": "int32",
           "type": "integer"
         },
         "line": {
           "description": "1-based line number; 0 if line unknown",
+          "format": "int32",
           "type": "integer"
         }
       },
@@ -2363,13 +2626,30 @@
       },
       "type": "object"
     },
+    "testexecutions.Phase": {
+      "enum": [
+        "pending",
+        "in_progress",
+        "failed",
+        "succeeded",
+        "canceled"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "PendingPhase",
+        "InProgressPhase",
+        "FailedPhase",
+        "SucceededPhase",
+        "CanceledPhase"
+      ]
+    },
     "testexecutions.PhaseCount": {
       "properties": {
         "count": {
           "type": "integer"
         },
         "phase": {
-          "type": "string"
+          "$ref": "#/definitions/testexecutions.Phase"
         }
       },
       "type": "object"
@@ -2399,10 +2679,10 @@
     "trafficmodels.By": {
       "properties": {
         "direction": {
-          "type": "string"
+          "$ref": "#/definitions/trafficmodels.Direction"
         },
         "kind": {
-          "type": "string"
+          "$ref": "#/definitions/trafficmodels.Kind"
         },
         "name": {
           "type": "string"
@@ -2412,6 +2692,43 @@
         }
       },
       "type": "object"
+    },
+    "trafficmodels.DiffOperation": {
+      "enum": [
+        "add",
+        "remove",
+        "replace"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "Add",
+        "Remove",
+        "Replace"
+      ]
+    },
+    "trafficmodels.Direction": {
+      "enum": [
+        "Inbound",
+        "Outbound"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "Inbound",
+        "Outbound"
+      ]
+    },
+    "trafficmodels.Kind": {
+      "enum": [
+        "Job",
+        "Deployment",
+        "Rollout"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "Job",
+        "Deployment",
+        "Rollout"
+      ]
     },
     "virtual": {
       "properties": {

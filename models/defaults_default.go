@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -18,13 +19,13 @@ import (
 type DefaultsDefault struct {
 
 	// class
-	Class string `json:"class,omitempty"`
+	Class DefaultsDefaultClass `json:"class,omitempty"`
 
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
 
 	// resource kind
-	ResourceKind string `json:"resourceKind,omitempty"`
+	ResourceKind DefaultsResourceKind `json:"resourceKind,omitempty"`
 
 	// updated at
 	UpdatedAt string `json:"updatedAt,omitempty"`
@@ -35,11 +36,107 @@ type DefaultsDefault struct {
 
 // Validate validates this defaults default
 func (m *DefaultsDefault) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateClass(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateResourceKind(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this defaults default based on context it is used
+func (m *DefaultsDefault) validateClass(formats strfmt.Registry) error {
+	if swag.IsZero(m.Class) { // not required
+		return nil
+	}
+
+	if err := m.Class.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("class")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("class")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *DefaultsDefault) validateResourceKind(formats strfmt.Registry) error {
+	if swag.IsZero(m.ResourceKind) { // not required
+		return nil
+	}
+
+	if err := m.ResourceKind.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("resourceKind")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("resourceKind")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this defaults default based on the context it is used
 func (m *DefaultsDefault) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateClass(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResourceKind(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DefaultsDefault) contextValidateClass(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Class) { // not required
+		return nil
+	}
+
+	if err := m.Class.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("class")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("class")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *DefaultsDefault) contextValidateResourceKind(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ResourceKind) { // not required
+		return nil
+	}
+
+	if err := m.ResourceKind.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("resourceKind")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("resourceKind")
+		}
+		return err
+	}
+
 	return nil
 }
 
