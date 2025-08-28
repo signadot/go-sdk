@@ -19,14 +19,19 @@ import (
 // swagger:model sandbox.Fork
 type SandboxFork struct {
 
-	// customizations
-	Customizations *SandboxCustomizations `json:"customizations,omitempty"`
+	// Customizations specify the customizations we will apply on the fork
+	Customizations struct {
+		SandboxCustomizations
+	} `json:"customizations,omitempty"`
 
 	// Deprecated. Use defaultRouteGroup.Endpoints instead.
 	Endpoints []*SandboxForkEndpoint `json:"endpoints"`
 
-	// fork of
-	ForkOf *SandboxForkOf `json:"forkOf,omitempty"`
+	// ForkOf specifies the target workload that we will be forking.  In this usage
+	// the Kind of the ForkOf object must not be a service.
+	ForkOf struct {
+		SandboxForkOf
+	} `json:"forkOf,omitempty"`
 }
 
 // Validate validates this sandbox fork
@@ -54,17 +59,6 @@ func (m *SandboxFork) Validate(formats strfmt.Registry) error {
 func (m *SandboxFork) validateCustomizations(formats strfmt.Registry) error {
 	if swag.IsZero(m.Customizations) { // not required
 		return nil
-	}
-
-	if m.Customizations != nil {
-		if err := m.Customizations.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("customizations")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("customizations")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -101,17 +95,6 @@ func (m *SandboxFork) validateForkOf(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.ForkOf != nil {
-		if err := m.ForkOf.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("forkOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("forkOf")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -138,22 +121,6 @@ func (m *SandboxFork) ContextValidate(ctx context.Context, formats strfmt.Regist
 }
 
 func (m *SandboxFork) contextValidateCustomizations(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Customizations != nil {
-
-		if swag.IsZero(m.Customizations) { // not required
-			return nil
-		}
-
-		if err := m.Customizations.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("customizations")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("customizations")
-			}
-			return err
-		}
-	}
 
 	return nil
 }
@@ -184,22 +151,6 @@ func (m *SandboxFork) contextValidateEndpoints(ctx context.Context, formats strf
 }
 
 func (m *SandboxFork) contextValidateForkOf(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.ForkOf != nil {
-
-		if swag.IsZero(m.ForkOf) { // not required
-			return nil
-		}
-
-		if err := m.ForkOf.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("forkOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("forkOf")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

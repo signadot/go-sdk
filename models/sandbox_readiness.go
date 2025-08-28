@@ -19,8 +19,10 @@ import (
 // swagger:model sandbox.Readiness
 type SandboxReadiness struct {
 
-	// jobs
-	Jobs *SandboxesJobsSummary `json:"jobs,omitempty"`
+	// status of the jobs running in the context of the given sandbox
+	Jobs struct {
+		SandboxesJobsSummary
+	} `json:"jobs,omitempty"`
 
 	// local workloads status
 	Local []*SandboxLocalWorkloadStatus `json:"local"`
@@ -41,8 +43,10 @@ type SandboxReadiness struct {
 	// and OffsetFrom
 	ScheduledDeleteTime string `json:"scheduledDeleteTime,omitempty"`
 
-	// test executions
-	TestExecutions *SandboxTestExecutionsSummary `json:"testExecutions,omitempty"`
+	// status of the test executions running in the context of the given sandbox
+	TestExecutions struct {
+		SandboxTestExecutionsSummary
+	} `json:"testExecutions,omitempty"`
 }
 
 // Validate validates this sandbox readiness
@@ -70,17 +74,6 @@ func (m *SandboxReadiness) Validate(formats strfmt.Registry) error {
 func (m *SandboxReadiness) validateJobs(formats strfmt.Registry) error {
 	if swag.IsZero(m.Jobs) { // not required
 		return nil
-	}
-
-	if m.Jobs != nil {
-		if err := m.Jobs.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("jobs")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("jobs")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -117,17 +110,6 @@ func (m *SandboxReadiness) validateTestExecutions(formats strfmt.Registry) error
 		return nil
 	}
 
-	if m.TestExecutions != nil {
-		if err := m.TestExecutions.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("testExecutions")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("testExecutions")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -154,22 +136,6 @@ func (m *SandboxReadiness) ContextValidate(ctx context.Context, formats strfmt.R
 }
 
 func (m *SandboxReadiness) contextValidateJobs(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Jobs != nil {
-
-		if swag.IsZero(m.Jobs) { // not required
-			return nil
-		}
-
-		if err := m.Jobs.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("jobs")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("jobs")
-			}
-			return err
-		}
-	}
 
 	return nil
 }
@@ -200,22 +166,6 @@ func (m *SandboxReadiness) contextValidateLocal(ctx context.Context, formats str
 }
 
 func (m *SandboxReadiness) contextValidateTestExecutions(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.TestExecutions != nil {
-
-		if swag.IsZero(m.TestExecutions) { // not required
-			return nil
-		}
-
-		if err := m.TestExecutions.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("testExecutions")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("testExecutions")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

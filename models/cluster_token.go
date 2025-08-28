@@ -27,8 +27,10 @@ type ClusterToken struct {
 	// A Masked token value.
 	MaskedValue string `json:"maskedValue,omitempty"`
 
-	// status
-	Status *ClusterTokenStatus `json:"status,omitempty"`
+	// Token status.
+	Status struct {
+		ClusterTokenStatus
+	} `json:"status,omitempty"`
 
 	// The token value.
 	Token string `json:"token,omitempty"`
@@ -53,17 +55,6 @@ func (m *ClusterToken) validateStatus(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Status != nil {
-		if err := m.Status.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -82,22 +73,6 @@ func (m *ClusterToken) ContextValidate(ctx context.Context, formats strfmt.Regis
 }
 
 func (m *ClusterToken) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Status != nil {
-
-		if swag.IsZero(m.Status) { // not required
-			return nil
-		}
-
-		if err := m.Status.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

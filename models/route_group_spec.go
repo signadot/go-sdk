@@ -20,6 +20,7 @@ import (
 type RouteGroupSpec struct {
 
 	// Cluster gives the cluster to which the route group applies.
+	// If left empty, this RG will become a multi-cluster RG..
 	Cluster string `json:"cluster,omitempty"`
 
 	// Description provides a short description of the route group.
@@ -27,13 +28,18 @@ type RouteGroupSpec struct {
 
 	// Endpoints define endpoints which target different in-cluster
 	// services.
-	Endpoints []*RouteGroupSpecEndpoint `json:"endpoints"`
+	Endpoints []*RoutegroupsEndpoint `json:"endpoints"`
 
-	// match
-	Match *RouteGroupMatch `json:"match,omitempty"`
+	// Match defines a matcher for labels, which matches
+	// sandboxes that should be a part of this route group.
+	Match struct {
+		RouteGroupMatch
+	} `json:"match,omitempty"`
 
-	// ttl
-	TTL *RouteGroupTTL `json:"ttl,omitempty"`
+	// TTL define when/how the route group should be deleted
+	TTL struct {
+		RouteGroupTTL
+	} `json:"ttl,omitempty"`
 }
 
 // Validate validates this route group spec
@@ -89,34 +95,12 @@ func (m *RouteGroupSpec) validateMatch(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Match != nil {
-		if err := m.Match.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("match")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("match")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *RouteGroupSpec) validateTTL(formats strfmt.Registry) error {
 	if swag.IsZero(m.TTL) { // not required
 		return nil
-	}
-
-	if m.TTL != nil {
-		if err := m.TTL.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("ttl")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("ttl")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -171,42 +155,10 @@ func (m *RouteGroupSpec) contextValidateEndpoints(ctx context.Context, formats s
 
 func (m *RouteGroupSpec) contextValidateMatch(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.Match != nil {
-
-		if swag.IsZero(m.Match) { // not required
-			return nil
-		}
-
-		if err := m.Match.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("match")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("match")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *RouteGroupSpec) contextValidateTTL(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.TTL != nil {
-
-		if swag.IsZero(m.TTL) { // not required
-			return nil
-		}
-
-		if err := m.TTL.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("ttl")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("ttl")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

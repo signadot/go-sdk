@@ -18,14 +18,19 @@ import (
 // swagger:model TestTrigger
 type TestTrigger struct {
 
-	// execution template
-	ExecutionTemplate *TestExecutionTemplate `json:"executionTemplate,omitempty"`
+	// ExecutionTemplate specifies a template for creating the actual execution
+	ExecutionTemplate struct {
+		TestExecutionTemplate
+	} `json:"executionTemplate,omitempty"`
 
 	// id
 	ID string `json:"id,omitempty"`
 
-	// sandbox of
-	SandboxOf *WorkloadWorkload `json:"sandboxOf,omitempty"`
+	// SandboxOf specifies a workload that when being sandboxed, will
+	// trigger an execution of the test (for now, only forks are supported)
+	SandboxOf struct {
+		WorkloadWorkload
+	} `json:"sandboxOf,omitempty"`
 }
 
 // Validate validates this test trigger
@@ -51,34 +56,12 @@ func (m *TestTrigger) validateExecutionTemplate(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.ExecutionTemplate != nil {
-		if err := m.ExecutionTemplate.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("executionTemplate")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("executionTemplate")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *TestTrigger) validateSandboxOf(formats strfmt.Registry) error {
 	if swag.IsZero(m.SandboxOf) { // not required
 		return nil
-	}
-
-	if m.SandboxOf != nil {
-		if err := m.SandboxOf.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sandboxOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sandboxOf")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -104,42 +87,10 @@ func (m *TestTrigger) ContextValidate(ctx context.Context, formats strfmt.Regist
 
 func (m *TestTrigger) contextValidateExecutionTemplate(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.ExecutionTemplate != nil {
-
-		if swag.IsZero(m.ExecutionTemplate) { // not required
-			return nil
-		}
-
-		if err := m.ExecutionTemplate.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("executionTemplate")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("executionTemplate")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *TestTrigger) contextValidateSandboxOf(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.SandboxOf != nil {
-
-		if swag.IsZero(m.SandboxOf) { // not required
-			return nil
-		}
-
-		if err := m.SandboxOf.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sandboxOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sandboxOf")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -18,10 +19,10 @@ import (
 type TrafficmodelsBy struct {
 
 	// direction
-	Direction string `json:"direction,omitempty"`
+	Direction TrafficmodelsDirection `json:"direction,omitempty"`
 
 	// kind
-	Kind string `json:"kind,omitempty"`
+	Kind TrafficmodelsKind `json:"kind,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -32,11 +33,107 @@ type TrafficmodelsBy struct {
 
 // Validate validates this trafficmodels by
 func (m *TrafficmodelsBy) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateDirection(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateKind(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this trafficmodels by based on context it is used
+func (m *TrafficmodelsBy) validateDirection(formats strfmt.Registry) error {
+	if swag.IsZero(m.Direction) { // not required
+		return nil
+	}
+
+	if err := m.Direction.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("direction")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("direction")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *TrafficmodelsBy) validateKind(formats strfmt.Registry) error {
+	if swag.IsZero(m.Kind) { // not required
+		return nil
+	}
+
+	if err := m.Kind.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("kind")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("kind")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this trafficmodels by based on the context it is used
 func (m *TrafficmodelsBy) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDirection(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateKind(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *TrafficmodelsBy) contextValidateDirection(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Direction) { // not required
+		return nil
+	}
+
+	if err := m.Direction.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("direction")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("direction")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *TrafficmodelsBy) contextValidateKind(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Kind) { // not required
+		return nil
+	}
+
+	if err := m.Kind.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("kind")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("kind")
+		}
+		return err
+	}
+
 	return nil
 }
 

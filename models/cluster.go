@@ -18,8 +18,10 @@ import (
 // swagger:model Cluster
 type Cluster struct {
 
-	// cluster config
-	ClusterConfig *ConfigClusterConfig `json:"clusterConfig,omitempty"`
+	// Cluster config read from the cluster
+	ClusterConfig struct {
+		ConfigClusterConfig
+	} `json:"clusterConfig,omitempty"`
 
 	// The time when this cluster was registered with Signadot.
 	CreatedAt string `json:"createdAt,omitempty"`
@@ -27,8 +29,10 @@ type Cluster struct {
 	// The name of the cluster.
 	Name string `json:"name,omitempty"`
 
-	// operator
-	Operator *ClusterOperator `json:"operator,omitempty"`
+	// Information about the Signadot Operator in this cluster.
+	Operator struct {
+		ClusterOperator
+	} `json:"operator,omitempty"`
 }
 
 // Validate validates this cluster
@@ -54,34 +58,12 @@ func (m *Cluster) validateClusterConfig(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.ClusterConfig != nil {
-		if err := m.ClusterConfig.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("clusterConfig")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("clusterConfig")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *Cluster) validateOperator(formats strfmt.Registry) error {
 	if swag.IsZero(m.Operator) { // not required
 		return nil
-	}
-
-	if m.Operator != nil {
-		if err := m.Operator.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("operator")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("operator")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -107,42 +89,10 @@ func (m *Cluster) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 
 func (m *Cluster) contextValidateClusterConfig(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.ClusterConfig != nil {
-
-		if swag.IsZero(m.ClusterConfig) { // not required
-			return nil
-		}
-
-		if err := m.ClusterConfig.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("clusterConfig")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("clusterConfig")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *Cluster) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Operator != nil {
-
-		if swag.IsZero(m.Operator) { // not required
-			return nil
-		}
-
-		if err := m.Operator.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("operator")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("operator")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

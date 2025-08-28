@@ -18,14 +18,18 @@ import (
 // swagger:model TestExecutionSpec
 type TestExecutionSpec struct {
 
-	// execution context
-	ExecutionContext *TestExecutionContext `json:"executionContext,omitempty"`
+	// Execution context
+	ExecutionContext struct {
+		TestExecutionContext
+	} `json:"executionContext,omitempty"`
 
 	// external
 	External *ExternalSpec `json:"external,omitempty"`
 
-	// hosted
-	Hosted *HostedSpec `json:"hosted,omitempty"`
+	// Hosted/External source information, these are one or the other
+	Hosted struct {
+		HostedSpec
+	} `json:"hosted,omitempty"`
 
 	// Labels
 	Labels map[string]string `json:"labels,omitempty"`
@@ -58,17 +62,6 @@ func (m *TestExecutionSpec) validateExecutionContext(formats strfmt.Registry) er
 		return nil
 	}
 
-	if m.ExecutionContext != nil {
-		if err := m.ExecutionContext.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("executionContext")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("executionContext")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -94,17 +87,6 @@ func (m *TestExecutionSpec) validateExternal(formats strfmt.Registry) error {
 func (m *TestExecutionSpec) validateHosted(formats strfmt.Registry) error {
 	if swag.IsZero(m.Hosted) { // not required
 		return nil
-	}
-
-	if m.Hosted != nil {
-		if err := m.Hosted.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("hosted")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("hosted")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -134,22 +116,6 @@ func (m *TestExecutionSpec) ContextValidate(ctx context.Context, formats strfmt.
 
 func (m *TestExecutionSpec) contextValidateExecutionContext(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.ExecutionContext != nil {
-
-		if swag.IsZero(m.ExecutionContext) { // not required
-			return nil
-		}
-
-		if err := m.ExecutionContext.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("executionContext")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("executionContext")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -175,22 +141,6 @@ func (m *TestExecutionSpec) contextValidateExternal(ctx context.Context, formats
 }
 
 func (m *TestExecutionSpec) contextValidateHosted(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Hosted != nil {
-
-		if swag.IsZero(m.Hosted) { // not required
-			return nil
-		}
-
-		if err := m.Hosted.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("hosted")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("hosted")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

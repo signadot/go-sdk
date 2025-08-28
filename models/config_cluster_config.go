@@ -30,8 +30,10 @@ type ConfigClusterConfig struct {
 	// routing
 	Routing *ConfigRoutingConfig `json:"routing,omitempty"`
 
-	// sandbox traffic manager
-	SandboxTrafficManager *ConfigSandboxTrafficManagerConfig `json:"sandboxTrafficManager,omitempty"`
+	// Deprecated field
+	SandboxTrafficManager struct {
+		ConfigSandboxTrafficManagerConfig
+	} `json:"sandboxTrafficManager,omitempty"`
 
 	// traffic capture
 	TrafficCapture *ConfigTrafficCaptureConfig `json:"trafficCapture,omitempty"`
@@ -104,17 +106,6 @@ func (m *ConfigClusterConfig) validateRouting(formats strfmt.Registry) error {
 func (m *ConfigClusterConfig) validateSandboxTrafficManager(formats strfmt.Registry) error {
 	if swag.IsZero(m.SandboxTrafficManager) { // not required
 		return nil
-	}
-
-	if m.SandboxTrafficManager != nil {
-		if err := m.SandboxTrafficManager.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sandboxTrafficManager")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sandboxTrafficManager")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -208,22 +199,6 @@ func (m *ConfigClusterConfig) contextValidateRouting(ctx context.Context, format
 }
 
 func (m *ConfigClusterConfig) contextValidateSandboxTrafficManager(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.SandboxTrafficManager != nil {
-
-		if swag.IsZero(m.SandboxTrafficManager) { // not required
-			return nil
-		}
-
-		if err := m.SandboxTrafficManager.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sandboxTrafficManager")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sandboxTrafficManager")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

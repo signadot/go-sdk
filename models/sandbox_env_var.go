@@ -25,18 +25,26 @@ type SandboxEnvVar struct {
 	Name string `json:"name,omitempty"`
 
 	// upsert or delete
-	Operation string `json:"operation,omitempty"`
+	Operation struct {
+		SandboxesEnvOpName
+	} `json:"operation,omitempty"`
 
 	// environmental variable value
 	Value string `json:"value,omitempty"`
 
-	// value from
-	ValueFrom *SandboxEnvValueFrom `json:"valueFrom,omitempty"`
+	// environmental variable dynamic value
+	ValueFrom struct {
+		SandboxEnvValueFrom
+	} `json:"valueFrom,omitempty"`
 }
 
 // Validate validates this sandbox env var
 func (m *SandboxEnvVar) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateOperation(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateValueFrom(formats); err != nil {
 		res = append(res, err)
@@ -48,20 +56,17 @@ func (m *SandboxEnvVar) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxEnvVar) validateValueFrom(formats strfmt.Registry) error {
-	if swag.IsZero(m.ValueFrom) { // not required
+func (m *SandboxEnvVar) validateOperation(formats strfmt.Registry) error {
+	if swag.IsZero(m.Operation) { // not required
 		return nil
 	}
 
-	if m.ValueFrom != nil {
-		if err := m.ValueFrom.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("valueFrom")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("valueFrom")
-			}
-			return err
-		}
+	return nil
+}
+
+func (m *SandboxEnvVar) validateValueFrom(formats strfmt.Registry) error {
+	if swag.IsZero(m.ValueFrom) { // not required
+		return nil
 	}
 
 	return nil
@@ -70,6 +75,10 @@ func (m *SandboxEnvVar) validateValueFrom(formats strfmt.Registry) error {
 // ContextValidate validate this sandbox env var based on the context it is used
 func (m *SandboxEnvVar) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.contextValidateOperation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.contextValidateValueFrom(ctx, formats); err != nil {
 		res = append(res, err)
@@ -81,23 +90,12 @@ func (m *SandboxEnvVar) ContextValidate(ctx context.Context, formats strfmt.Regi
 	return nil
 }
 
+func (m *SandboxEnvVar) contextValidateOperation(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
 func (m *SandboxEnvVar) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.ValueFrom != nil {
-
-		if swag.IsZero(m.ValueFrom) { // not required
-			return nil
-		}
-
-		if err := m.ValueFrom.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("valueFrom")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("valueFrom")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

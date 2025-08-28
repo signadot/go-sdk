@@ -20,7 +20,7 @@ import (
 type SandboxDefaultRouteGroup struct {
 
 	// endpoints
-	Endpoints []*RouteGroupSpecEndpoint `json:"endpoints"`
+	Endpoints []*EndpointsEndpoint `json:"endpoints"`
 }
 
 // Validate validates this sandbox default route group

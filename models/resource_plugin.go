@@ -24,11 +24,15 @@ type ResourcePlugin struct {
 	// Name of the resource plugin
 	Name string `json:"name,omitempty"`
 
-	// spec
-	Spec *ResourcepluginSpec `json:"spec,omitempty"`
+	// Specification for the resource plugin
+	Spec struct {
+		ResourcepluginSpec
+	} `json:"spec,omitempty"`
 
-	// status
-	Status *ResourcepluginStatus `json:"status,omitempty"`
+	// Status of the resource plugin
+	Status struct {
+		ResourcepluginStatus
+	} `json:"status,omitempty"`
 
 	// The time at which the resource plugin was last updated
 	UpdatedAt string `json:"updatedAt,omitempty"`
@@ -57,34 +61,12 @@ func (m *ResourcePlugin) validateSpec(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Spec != nil {
-		if err := m.Spec.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("spec")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("spec")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *ResourcePlugin) validateStatus(formats strfmt.Registry) error {
 	if swag.IsZero(m.Status) { // not required
 		return nil
-	}
-
-	if m.Status != nil {
-		if err := m.Status.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -110,42 +92,10 @@ func (m *ResourcePlugin) ContextValidate(ctx context.Context, formats strfmt.Reg
 
 func (m *ResourcePlugin) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.Spec != nil {
-
-		if swag.IsZero(m.Spec) { // not required
-			return nil
-		}
-
-		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("spec")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("spec")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *ResourcePlugin) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Status != nil {
-
-		if swag.IsZero(m.Status) { // not required
-			return nil
-		}
-
-		if err := m.Status.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

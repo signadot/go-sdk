@@ -18,10 +18,10 @@ import (
 type SyntaxPosition struct {
 
 	// 1-based column (rune) number; 0 if column unknown
-	Col int64 `json:"col,omitempty"`
+	Col int32 `json:"col,omitempty"`
 
 	// 1-based line number; 0 if line unknown
-	Line int64 `json:"line,omitempty"`
+	Line int32 `json:"line,omitempty"`
 }
 
 // Validate validates this syntax position

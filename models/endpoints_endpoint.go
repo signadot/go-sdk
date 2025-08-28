@@ -12,33 +12,30 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RouteGroupEndpoint route group endpoint
+// EndpointsEndpoint endpoints endpoint
 //
-// swagger:model routeGroup.Endpoint
-type RouteGroupEndpoint struct {
+// swagger:model endpoints.Endpoint
+type EndpointsEndpoint struct {
 
 	// name
 	Name string `json:"name,omitempty"`
 
 	// target
 	Target string `json:"target,omitempty"`
-
-	// url
-	URL string `json:"url,omitempty"`
 }
 
-// Validate validates this route group endpoint
-func (m *RouteGroupEndpoint) Validate(formats strfmt.Registry) error {
+// Validate validates this endpoints endpoint
+func (m *EndpointsEndpoint) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this route group endpoint based on context it is used
-func (m *RouteGroupEndpoint) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this endpoints endpoint based on context it is used
+func (m *EndpointsEndpoint) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *RouteGroupEndpoint) MarshalBinary() ([]byte, error) {
+func (m *EndpointsEndpoint) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -46,8 +43,8 @@ func (m *RouteGroupEndpoint) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RouteGroupEndpoint) UnmarshalBinary(b []byte) error {
-	var res RouteGroupEndpoint
+func (m *EndpointsEndpoint) UnmarshalBinary(b []byte) error {
+	var res EndpointsEndpoint
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

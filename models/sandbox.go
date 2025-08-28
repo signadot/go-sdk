@@ -37,8 +37,10 @@ type Sandbox struct {
 	// spec
 	Spec *SandboxSpec `json:"spec,omitempty"`
 
-	// status
-	Status *SandboxReadiness `json:"status,omitempty"`
+	// Status *sdv1.SandboxReadiness `json:"status,omitempty"`
+	Status struct {
+		SandboxReadiness
+	} `json:"status,omitempty"`
 
 	// updated at
 	UpdatedAt string `json:"updatedAt,omitempty"`
@@ -139,17 +141,6 @@ func (m *Sandbox) validateStatus(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Status != nil {
-		if err := m.Status.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -247,22 +238,6 @@ func (m *Sandbox) contextValidateSpec(ctx context.Context, formats strfmt.Regist
 }
 
 func (m *Sandbox) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Status != nil {
-
-		if swag.IsZero(m.Status) { // not required
-			return nil
-		}
-
-		if err := m.Status.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("status")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("status")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

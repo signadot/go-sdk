@@ -25,7 +25,7 @@ type DiffOp struct {
 	OldValue interface{} `json:"oldValue,omitempty"`
 
 	// op
-	Op string `json:"op,omitempty"`
+	Op TrafficmodelsDiffOperation `json:"op,omitempty"`
 
 	// path
 	Path string `json:"path,omitempty"`
@@ -39,6 +39,10 @@ func (m *DiffOp) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateClassification(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOp(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -67,11 +71,32 @@ func (m *DiffOp) validateClassification(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *DiffOp) validateOp(formats strfmt.Registry) error {
+	if swag.IsZero(m.Op) { // not required
+		return nil
+	}
+
+	if err := m.Op.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("op")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("op")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // ContextValidate validate this diff op based on the context it is used
 func (m *DiffOp) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateClassification(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOp(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -97,6 +122,24 @@ func (m *DiffOp) contextValidateClassification(ctx context.Context, formats strf
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *DiffOp) contextValidateOp(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Op) { // not required
+		return nil
+	}
+
+	if err := m.Op.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("op")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("op")
+		}
+		return err
 	}
 
 	return nil

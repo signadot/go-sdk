@@ -18,8 +18,12 @@ import (
 // swagger:model resourceplugin.StepInput
 type ResourcepluginStepInput struct {
 
-	// as
-	As *ResourcepluginStepInputTo `json:"as,omitempty"`
+	// If the As field is not speficied, we will take the input name
+	// uppercase it, convert "-" to "_", and inject it as an env var into
+	// the main container
+	As struct {
+		ResourcepluginStepInputTo
+	} `json:"as,omitempty"`
 
 	// Name for the input
 	Name string `json:"name,omitempty"`
@@ -30,8 +34,12 @@ type ResourcepluginStepInput struct {
 	// ValueFromSandbox defines whether or not to source value from the sandbox spec
 	ValueFromSandbox bool `json:"valueFromSandbox,omitempty"`
 
-	// value from step
-	ValueFromStep *ResourcepluginValueFromStep `json:"valueFromStep,omitempty"`
+	// ValueFromStep is an optional string specifying the output of
+	// another step when not nil.  Exactly one of ValueFromSandbox
+	// and 'ValueFromStep != nil' must hold.
+	ValueFromStep struct {
+		ResourcepluginValueFromStep
+	} `json:"valueFromStep,omitempty"`
 }
 
 // Validate validates this resourceplugin step input
@@ -57,34 +65,12 @@ func (m *ResourcepluginStepInput) validateAs(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.As != nil {
-		if err := m.As.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("as")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("as")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *ResourcepluginStepInput) validateValueFromStep(formats strfmt.Registry) error {
 	if swag.IsZero(m.ValueFromStep) { // not required
 		return nil
-	}
-
-	if m.ValueFromStep != nil {
-		if err := m.ValueFromStep.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("valueFromStep")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("valueFromStep")
-			}
-			return err
-		}
 	}
 
 	return nil
@@ -110,42 +96,10 @@ func (m *ResourcepluginStepInput) ContextValidate(ctx context.Context, formats s
 
 func (m *ResourcepluginStepInput) contextValidateAs(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.As != nil {
-
-		if swag.IsZero(m.As) { // not required
-			return nil
-		}
-
-		if err := m.As.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("as")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("as")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (m *ResourcepluginStepInput) contextValidateValueFromStep(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.ValueFromStep != nil {
-
-		if swag.IsZero(m.ValueFromStep) { // not required
-			return nil
-		}
-
-		if err := m.ValueFromStep.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("valueFromStep")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("valueFromStep")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

@@ -28,8 +28,10 @@ type ResourcepluginSpec struct {
 	// Description for the resource
 	Description string `json:"description,omitempty"`
 
-	// runner
-	Runner *ResourcepluginRunner `json:"runner,omitempty"`
+	// Runner for the resource plugin
+	Runner struct {
+		ResourcepluginRunner
+	} `json:"runner,omitempty"`
 }
 
 // Validate validates this resourceplugin spec
@@ -111,17 +113,6 @@ func (m *ResourcepluginSpec) validateRunner(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Runner != nil {
-		if err := m.Runner.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("runner")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("runner")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -198,22 +189,6 @@ func (m *ResourcepluginSpec) contextValidateDelete(ctx context.Context, formats 
 }
 
 func (m *ResourcepluginSpec) contextValidateRunner(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Runner != nil {
-
-		if swag.IsZero(m.Runner) { // not required
-			return nil
-		}
-
-		if err := m.Runner.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("runner")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("runner")
-			}
-			return err
-		}
-	}
 
 	return nil
 }

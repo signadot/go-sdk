@@ -27,8 +27,11 @@ type RouteGroupMatch struct {
 	// Only one field may be non-nil.
 	Any []*RouteGroupMatch `json:"any,omitempty"`
 
-	// label
-	Label *RouteGroupMatchLabel `json:"label,omitempty"`
+	// When Label is non-nil, T matches a set of labels L if and only if t.Label.Matches(L).
+	// Only one field may be non-nil.
+	Label struct {
+		RouteGroupMatchLabel
+	} `json:"label,omitempty"`
 }
 
 // Validate validates this route group match
@@ -110,17 +113,6 @@ func (m *RouteGroupMatch) validateLabel(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Label != nil {
-		if err := m.Label.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("label")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("label")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -197,22 +189,6 @@ func (m *RouteGroupMatch) contextValidateAny(ctx context.Context, formats strfmt
 }
 
 func (m *RouteGroupMatch) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Label != nil {
-
-		if swag.IsZero(m.Label) { // not required
-			return nil
-		}
-
-		if err := m.Label.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("label")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("label")
-			}
-			return err
-		}
-	}
 
 	return nil
 }
