@@ -17,6 +17,9 @@ import (
 // swagger:model local.PortMapping
 type LocalPortMapping struct {
 
+	// app protocol
+	AppProtocol string `json:"appProtocol,omitempty"`
+
 	// port
 	Port int64 `json:"port,omitempty"`
 

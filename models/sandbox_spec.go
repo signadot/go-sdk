@@ -38,6 +38,9 @@ type SandboxSpec struct {
 	// Deprecated. Use defaultRouteGroup.Endpoints instead.
 	Endpoints []*SandboxHostEndpoint `json:"endpoints"`
 
+	// Experimental middleware support
+	ExpMiddleware []*V1RequestMiddlewareMatch `json:"exp-middleware"`
+
 	// Forks is the specification of each forked entity
 	// Required: true
 	Forks []*SandboxFork `json:"forks"`
@@ -75,6 +78,10 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEndpoints(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExpMiddleware(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -148,6 +155,32 @@ func (m *SandboxSpec) validateEndpoints(formats strfmt.Registry) error {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SandboxSpec) validateExpMiddleware(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExpMiddleware) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.ExpMiddleware); i++ {
+		if swag.IsZero(m.ExpMiddleware[i]) { // not required
+			continue
+		}
+
+		if m.ExpMiddleware[i] != nil {
+			if err := m.ExpMiddleware[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("exp-middleware" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("exp-middleware" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -294,6 +327,10 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateExpMiddleware(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateForks(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -356,6 +393,31 @@ func (m *SandboxSpec) contextValidateEndpoints(ctx context.Context, formats strf
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SandboxSpec) contextValidateExpMiddleware(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ExpMiddleware); i++ {
+
+		if m.ExpMiddleware[i] != nil {
+
+			if swag.IsZero(m.ExpMiddleware[i]) { // not required
+				return nil
+			}
+
+			if err := m.ExpMiddleware[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("exp-middleware" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("exp-middleware" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
