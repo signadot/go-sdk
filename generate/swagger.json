@@ -1341,7 +1341,7 @@
           "type": "string"
         },
         "jobTimeout": {
-          "description": "JobTimeout specifies the max job execution time\nof jobs running with this RunnerGroup.  If not\nspecified, it defaults to 30 minutes (\"30m\")",
+          "description": "JobTimeout specifies the max job execution time of jobs running with this\nRunnerGroup.  If not specified, it defaults to 30 minutes (\"30m\")",
           "type": "string"
         },
         "labels": {
@@ -1354,6 +1354,10 @@
           "type": "string"
         },
         "podTemplate": {},
+        "reusePods": {
+          "description": "ReusePods specifies whether JRG pods are reused after job executions.\nIf false (default), JRG pods are always recreated after each job.",
+          "type": "boolean"
+        },
         "scaling": {
           "$ref": "#/definitions/jobRunnerGroup.Scaling"
         }
@@ -1604,10 +1608,15 @@
     },
     "orgs.GetOrgNameResponse": {
       "properties": {
+        "clusterID": {
+          "description": "ID of Authenticated Cluster, if any (via signadot-cluster-token header)",
+          "type": "string"
+        },
         "featureFlags": {
           "additionalProperties": {
             "type": "boolean"
           },
+          "description": "Feature Flags as result of authentication",
           "type": "object"
         },
         "orgs": {
@@ -1617,19 +1626,26 @@
           "type": "array"
         },
         "user": {
-          "$ref": "#/definitions/orgs.User"
+          "allOf": [
+            {
+              "$ref": "#/definitions/orgs.User"
+            }
+          ],
+          "description": "Authenticated User, if any"
         },
         "userFlags": {
-          "$ref": "#/definitions/auth.UserFlags"
+          "allOf": [
+            {
+              "$ref": "#/definitions/auth.UserFlags"
+            }
+          ],
+          "description": "Flags of authenticated user, if any"
         }
       },
       "type": "object"
     },
     "orgs.Org": {
       "properties": {
-        "billingTier": {
-          "type": "integer"
-        },
         "displayName": {
           "type": "string"
         },
@@ -2219,6 +2235,9 @@
             }
           ],
           "description": "ForkOf specifies the target workload that we will be forking.  In this usage\nthe Kind of the ForkOf object must not be a service."
+        },
+        "name": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -2406,7 +2425,7 @@
           "type": "string"
         },
         "disableSandboxTrafficManager": {
-          "description": "DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager\nfor forks in this sandbox.\nDeprecated in operators since v1.1. The sandbox traffic manager has been retired.",
+          "description": "DisableSandboxTrafficManager provides a way of turning off the sandbox\ntraffic manager for forks in this sandbox.\nDeprecated in operators since v1.1. The sandbox traffic manager has been\nretired.",
           "type": "boolean"
         },
         "endpoints": {
@@ -2441,6 +2460,13 @@
         "localMachineID": {
           "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
           "type": "string"
+        },
+        "middlewares": {
+          "description": "Request Middlewares",
+          "items": {
+            "$ref": "#/definitions/sandboxes.MiddlewareInstance"
+          },
+          "type": "array"
         },
         "resources": {
           "description": "Resources specifies each required resource to spin up the sandbox",
@@ -2542,6 +2568,42 @@
         "phaseCounts": {
           "items": {
             "$ref": "#/definitions/jobs.PhaseCount"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.MiddlewareArgument": {
+      "properties": {
+        "name": {
+          "description": "Name indicates the name of the associated parameter.",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value indicates the value passed to the parameter of\nthe same name.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.MiddlewareInstance": {
+      "properties": {
+        "args": {
+          "description": "Middleware arguments",
+          "items": {
+            "$ref": "#/definitions/sandboxes.MiddlewareArgument"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Middleware name",
+          "type": "string"
+        },
+        "workloads": {
+          "description": "Matching sandboxed workloads, empty means all",
+          "items": {
+            "type": "string"
           },
           "type": "array"
         }

@@ -19,7 +19,10 @@ import (
 // swagger:model orgs.GetOrgNameResponse
 type OrgsGetOrgNameResponse struct {
 
-	// feature flags
+	// ID of Authenticated Cluster, if any (via signadot-cluster-token header)
+	ClusterID string `json:"clusterID,omitempty"`
+
+	// Feature Flags as result of authentication
 	FeatureFlags map[string]bool `json:"featureFlags,omitempty"`
 
 	// orgs
