@@ -2461,8 +2461,8 @@
           "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
           "type": "string"
         },
-        "middlewares": {
-          "description": "Request Middlewares",
+        "middleware": {
+          "description": "Request Middleware",
           "items": {
             "$ref": "#/definitions/sandboxes.MiddlewareInstance"
           },

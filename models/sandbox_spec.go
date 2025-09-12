@@ -53,8 +53,8 @@ type SandboxSpec struct {
 	// was created or is intended to be ran
 	LocalMachineID string `json:"localMachineID,omitempty"`
 
-	// Request Middlewares
-	Middlewares []*SandboxesMiddlewareInstance `json:"middlewares"`
+	// Request Middleware
+	Middleware []*SandboxesMiddlewareInstance `json:"middleware"`
 
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
@@ -90,7 +90,7 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateMiddlewares(formats); err != nil {
+	if err := m.validateMiddleware(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -219,22 +219,22 @@ func (m *SandboxSpec) validateLocal(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxSpec) validateMiddlewares(formats strfmt.Registry) error {
-	if swag.IsZero(m.Middlewares) { // not required
+func (m *SandboxSpec) validateMiddleware(formats strfmt.Registry) error {
+	if swag.IsZero(m.Middleware) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.Middlewares); i++ {
-		if swag.IsZero(m.Middlewares[i]) { // not required
+	for i := 0; i < len(m.Middleware); i++ {
+		if swag.IsZero(m.Middleware[i]) { // not required
 			continue
 		}
 
-		if m.Middlewares[i] != nil {
-			if err := m.Middlewares[i].Validate(formats); err != nil {
+		if m.Middleware[i] != nil {
+			if err := m.Middleware[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("middlewares" + "." + strconv.Itoa(i))
+					return ve.ValidateName("middleware" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("middlewares" + "." + strconv.Itoa(i))
+					return ce.ValidateName("middleware" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -336,7 +336,7 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateMiddlewares(ctx, formats); err != nil {
+	if err := m.contextValidateMiddleware(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -454,21 +454,21 @@ func (m *SandboxSpec) contextValidateLocal(ctx context.Context, formats strfmt.R
 	return nil
 }
 
-func (m *SandboxSpec) contextValidateMiddlewares(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxSpec) contextValidateMiddleware(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Middlewares); i++ {
+	for i := 0; i < len(m.Middleware); i++ {
 
-		if m.Middlewares[i] != nil {
+		if m.Middleware[i] != nil {
 
-			if swag.IsZero(m.Middlewares[i]) { // not required
+			if swag.IsZero(m.Middleware[i]) { // not required
 				return nil
 			}
 
-			if err := m.Middlewares[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.Middleware[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("middlewares" + "." + strconv.Itoa(i))
+					return ve.ValidateName("middleware" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("middlewares" + "." + strconv.Itoa(i))
+					return ce.ValidateName("middleware" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
