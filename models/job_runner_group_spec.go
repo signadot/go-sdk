@@ -24,9 +24,8 @@ type JobRunnerGroupSpec struct {
 	// image
 	Image string `json:"image,omitempty"`
 
-	// JobTimeout specifies the max job execution time
-	// of jobs running with this RunnerGroup.  If not
-	// specified, it defaults to 30 minutes ("30m")
+	// JobTimeout specifies the max job execution time of jobs running with this
+	// RunnerGroup.  If not specified, it defaults to 30 minutes ("30m")
 	JobTimeout string `json:"jobTimeout,omitempty"`
 
 	// labels
@@ -37,6 +36,10 @@ type JobRunnerGroupSpec struct {
 
 	// pod template
 	PodTemplate interface{} `json:"podTemplate,omitempty"`
+
+	// ReusePods specifies whether JRG pods are reused after job executions.
+	// If false (default), JRG pods are always recreated after each job.
+	ReusePods bool `json:"reusePods,omitempty"`
 
 	// scaling
 	Scaling *JobRunnerGroupScaling `json:"scaling,omitempty"`
