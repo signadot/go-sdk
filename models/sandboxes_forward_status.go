@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxLocalWorkloadStatus sandbox local workload status
+// SandboxesForwardStatus sandboxes forward status
 //
-// swagger:model sandbox.LocalWorkloadStatus
-type SandboxLocalWorkloadStatus struct {
+// swagger:model sandboxes.ForwardStatus
+type SandboxesForwardStatus struct {
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -25,8 +25,8 @@ type SandboxLocalWorkloadStatus struct {
 	Tunnel *SandboxTunnelStatus `json:"tunnel,omitempty"`
 }
 
-// Validate validates this sandbox local workload status
-func (m *SandboxLocalWorkloadStatus) Validate(formats strfmt.Registry) error {
+// Validate validates this sandboxes forward status
+func (m *SandboxesForwardStatus) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateTunnel(formats); err != nil {
@@ -39,7 +39,7 @@ func (m *SandboxLocalWorkloadStatus) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxLocalWorkloadStatus) validateTunnel(formats strfmt.Registry) error {
+func (m *SandboxesForwardStatus) validateTunnel(formats strfmt.Registry) error {
 	if swag.IsZero(m.Tunnel) { // not required
 		return nil
 	}
@@ -58,8 +58,8 @@ func (m *SandboxLocalWorkloadStatus) validateTunnel(formats strfmt.Registry) err
 	return nil
 }
 
-// ContextValidate validate this sandbox local workload status based on the context it is used
-func (m *SandboxLocalWorkloadStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandboxes forward status based on the context it is used
+func (m *SandboxesForwardStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateTunnel(ctx, formats); err != nil {
@@ -72,7 +72,7 @@ func (m *SandboxLocalWorkloadStatus) ContextValidate(ctx context.Context, format
 	return nil
 }
 
-func (m *SandboxLocalWorkloadStatus) contextValidateTunnel(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxesForwardStatus) contextValidateTunnel(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Tunnel != nil {
 
@@ -94,7 +94,7 @@ func (m *SandboxLocalWorkloadStatus) contextValidateTunnel(ctx context.Context, 
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxLocalWorkloadStatus) MarshalBinary() ([]byte, error) {
+func (m *SandboxesForwardStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -102,8 +102,8 @@ func (m *SandboxLocalWorkloadStatus) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxLocalWorkloadStatus) UnmarshalBinary(b []byte) error {
-	var res SandboxLocalWorkloadStatus
+func (m *SandboxesForwardStatus) UnmarshalBinary(b []byte) error {
+	var res SandboxesForwardStatus
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

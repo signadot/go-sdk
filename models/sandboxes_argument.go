@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxesMiddlewareArgument sandboxes middleware argument
+// SandboxesArgument sandboxes argument
 //
-// swagger:model sandboxes.MiddlewareArgument
-type SandboxesMiddlewareArgument struct {
+// swagger:model sandboxes.Argument
+type SandboxesArgument struct {
 
 	// Name indicates the name of the associated parameter.
 	Name string `json:"name,omitempty"`
@@ -25,18 +25,18 @@ type SandboxesMiddlewareArgument struct {
 	Value string `json:"value,omitempty"`
 }
 
-// Validate validates this sandboxes middleware argument
-func (m *SandboxesMiddlewareArgument) Validate(formats strfmt.Registry) error {
+// Validate validates this sandboxes argument
+func (m *SandboxesArgument) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this sandboxes middleware argument based on context it is used
-func (m *SandboxesMiddlewareArgument) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sandboxes argument based on context it is used
+func (m *SandboxesArgument) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxesMiddlewareArgument) MarshalBinary() ([]byte, error) {
+func (m *SandboxesArgument) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -44,8 +44,8 @@ func (m *SandboxesMiddlewareArgument) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxesMiddlewareArgument) UnmarshalBinary(b []byte) error {
-	var res SandboxesMiddlewareArgument
+func (m *SandboxesArgument) UnmarshalBinary(b []byte) error {
+	var res SandboxesArgument
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

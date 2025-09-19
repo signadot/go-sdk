@@ -54,10 +54,13 @@ type SandboxSpec struct {
 	LocalMachineID string `json:"localMachineID,omitempty"`
 
 	// Request Middleware
-	Middleware []*SandboxesMiddlewareInstance `json:"middleware"`
+	Middleware []*SandboxesMiddleware `json:"middleware"`
 
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
+
+	// routing
+	Routing *SandboxesRouting `json:"routing,omitempty"`
 
 	// ttl
 	TTL *SandboxTTL `json:"ttl,omitempty"`
@@ -95,6 +98,10 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateResources(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRouting(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -271,6 +278,25 @@ func (m *SandboxSpec) validateResources(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SandboxSpec) validateRouting(formats strfmt.Registry) error {
+	if swag.IsZero(m.Routing) { // not required
+		return nil
+	}
+
+	if m.Routing != nil {
+		if err := m.Routing.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("routing")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("routing")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *SandboxSpec) validateTTL(formats strfmt.Registry) error {
 	if swag.IsZero(m.TTL) { // not required
 		return nil
@@ -341,6 +367,10 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 	}
 
 	if err := m.contextValidateResources(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRouting(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -499,6 +529,27 @@ func (m *SandboxSpec) contextValidateResources(ctx context.Context, formats strf
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *SandboxSpec) contextValidateRouting(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Routing != nil {
+
+		if swag.IsZero(m.Routing) { // not required
+			return nil
+		}
+
+		if err := m.Routing.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("routing")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("routing")
+			}
+			return err
+		}
 	}
 
 	return nil

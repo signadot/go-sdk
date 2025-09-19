@@ -1018,8 +1018,20 @@
     },
     "config.ControlPlaneConfig": {
       "properties": {
+        "disabled": {
+          "description": "ControlPlane can be disabled",
+          "type": "boolean"
+        },
         "proxy": {
+          "description": "ControlPlaneProxy can be \"enabled\" or \"disabled\"",
           "type": "string"
+        },
+        "tunnelAddr": {
+          "description": "for on-prem",
+          "type": "string"
+        },
+        "tunnelTLS": {
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -1597,6 +1609,9 @@
     },
     "local.PortMapping": {
       "properties": {
+        "appProtocol": {
+          "type": "string"
+        },
         "port": {
           "type": "integer"
         },
@@ -2324,29 +2339,20 @@
           "type": "string"
         },
         "tunnel": {
-          "properties": {
-            "health": {
-              "properties": {
-                "connected": {
-                  "type": "boolean"
-                },
-                "lastCheckTime": {
-                  "type": "string"
-                },
-                "lastConnectedTime": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "type": "object"
+          "$ref": "#/definitions/sandbox.TunnelStatus"
         }
       },
       "type": "object"
     },
     "sandbox.Readiness": {
       "properties": {
+        "forwards": {
+          "description": "Forwards status",
+          "items": {
+            "$ref": "#/definitions/sandboxes.ForwardStatus"
+          },
+          "type": "array"
+        },
         "jobs": {
           "allOf": [
             {
@@ -2464,7 +2470,7 @@
         "middleware": {
           "description": "Request Middleware",
           "items": {
-            "$ref": "#/definitions/sandboxes.MiddlewareInstance"
+            "$ref": "#/definitions/sandboxes.Middleware"
           },
           "type": "array"
         },
@@ -2474,6 +2480,14 @@
             "$ref": "#/definitions/sandbox.Resource"
           },
           "type": "array"
+        },
+        "routing": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/sandboxes.Routing"
+            }
+          ],
+          "description": "Routing specification"
         },
         "ttl": {
           "allOf": [
@@ -2552,29 +2566,26 @@
       },
       "type": "object"
     },
-    "sandboxes.EnvOpName": {
-      "enum": [
-        "upsert",
-        "delete"
-      ],
-      "type": "string",
-      "x-enum-varnames": [
-        "EnvOpUpsert",
-        "EnvOpDelete"
-      ]
-    },
-    "sandboxes.JobsSummary": {
+    "sandbox.TunnelStatus": {
       "properties": {
-        "phaseCounts": {
-          "items": {
-            "$ref": "#/definitions/jobs.PhaseCount"
+        "health": {
+          "properties": {
+            "connected": {
+              "type": "boolean"
+            },
+            "lastCheckTime": {
+              "type": "string"
+            },
+            "lastConnectedTime": {
+              "type": "string"
+            }
           },
-          "type": "array"
+          "type": "object"
         }
       },
       "type": "object"
     },
-    "sandboxes.MiddlewareArgument": {
+    "sandboxes.Argument": {
       "properties": {
         "name": {
           "description": "Name indicates the name of the associated parameter.",
@@ -2587,25 +2598,84 @@
       },
       "type": "object"
     },
-    "sandboxes.MiddlewareInstance": {
+    "sandboxes.EnvOpName": {
+      "enum": [
+        "upsert",
+        "delete"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "EnvOpUpsert",
+        "EnvOpDelete"
+      ]
+    },
+    "sandboxes.Forward": {
+      "properties": {
+        "appProtocol": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "toLocal": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.ForwardStatus": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tunnel": {
+          "$ref": "#/definitions/sandbox.TunnelStatus"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.JobsSummary": {
+      "properties": {
+        "phaseCounts": {
+          "items": {
+            "$ref": "#/definitions/jobs.PhaseCount"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.Middleware": {
       "properties": {
         "args": {
           "description": "Middleware arguments",
           "items": {
-            "$ref": "#/definitions/sandboxes.MiddlewareArgument"
+            "$ref": "#/definitions/sandboxes.Argument"
+          },
+          "type": "array"
+        },
+        "match": {
+          "description": "Matches specifies a disjunction of matching criteria for dispatching\nthe middleware.  Any empty list means don't dispatch anything.",
+          "items": {
+            "$ref": "#/definitions/sandboxes.MiddlewareMatch"
           },
           "type": "array"
         },
         "name": {
           "description": "Middleware name",
           "type": "string"
-        },
-        "workloads": {
-          "description": "Matching sandboxed workloads, empty means all",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "sandboxes.MiddlewareMatch": {
+      "properties": {
+        "workload": {
+          "description": "Workload specifies a glob which matches\neach workload name in the spec.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2626,6 +2696,17 @@
         "PatchTypeSDEnv",
         "PatchTypeSDImage"
       ]
+    },
+    "sandboxes.Routing": {
+      "properties": {
+        "forwards": {
+          "items": {
+            "$ref": "#/definitions/sandboxes.Forward"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "syntax.Position": {
       "properties": {
