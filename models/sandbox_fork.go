@@ -27,6 +27,9 @@ type SandboxFork struct {
 
 	// fork of
 	ForkOf *SandboxForkOf `json:"forkOf,omitempty"`
+
+	// name
+	Name string `json:"name,omitempty"`
 }
 
 // Validate validates this sandbox fork
