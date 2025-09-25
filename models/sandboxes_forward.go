@@ -12,10 +12,16 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// LocalPortMapping local port mapping
+// SandboxesForward sandboxes forward
 //
-// swagger:model local.PortMapping
-type LocalPortMapping struct {
+// swagger:model sandboxes.Forward
+type SandboxesForward struct {
+
+	// app protocol
+	AppProtocol string `json:"appProtocol,omitempty"`
+
+	// name
+	Name string `json:"name,omitempty"`
 
 	// port
 	Port int64 `json:"port,omitempty"`
@@ -24,18 +30,18 @@ type LocalPortMapping struct {
 	ToLocal string `json:"toLocal,omitempty"`
 }
 
-// Validate validates this local port mapping
-func (m *LocalPortMapping) Validate(formats strfmt.Registry) error {
+// Validate validates this sandboxes forward
+func (m *SandboxesForward) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this local port mapping based on context it is used
-func (m *LocalPortMapping) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sandboxes forward based on context it is used
+func (m *SandboxesForward) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *LocalPortMapping) MarshalBinary() ([]byte, error) {
+func (m *SandboxesForward) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +49,8 @@ func (m *LocalPortMapping) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *LocalPortMapping) UnmarshalBinary(b []byte) error {
-	var res LocalPortMapping
+func (m *SandboxesForward) UnmarshalBinary(b []byte) error {
+	var res SandboxesForward
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
