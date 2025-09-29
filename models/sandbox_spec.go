@@ -30,9 +30,10 @@ type SandboxSpec struct {
 	// Description of the purpose of this sandbox
 	Description string `json:"description,omitempty"`
 
-	// DisableSandboxTrafficManager provides a way of turning off the sandbox traffic manager
-	// for forks in this sandbox.
-	// Deprecated in operators since v1.1. The sandbox traffic manager has been retired.
+	// DisableSandboxTrafficManager provides a way of turning off the sandbox
+	// traffic manager for forks in this sandbox.
+	// Deprecated in operators since v1.1. The sandbox traffic manager has been
+	// retired.
 	DisableSandboxTrafficManager bool `json:"disableSandboxTrafficManager,omitempty"`
 
 	// Deprecated. Use defaultRouteGroup.Endpoints instead.
@@ -45,15 +46,14 @@ type SandboxSpec struct {
 	// Labels are used to specify metadata associated with the sandbox as key-value pairs.
 	Labels map[string]string `json:"labels,omitempty"`
 
-	// Local Workloads
-	Local []*Local `json:"local"`
-
-	// Identifier of the machine from where a sandbox containing local workloads
-	// was created or is intended to be ran
-	LocalMachineID string `json:"localMachineID,omitempty"`
+	// Request Middleware
+	Middleware []*SandboxesMiddleware `json:"middleware"`
 
 	// Resources specifies each required resource to spin up the sandbox
 	Resources []*SandboxResource `json:"resources"`
+
+	// routing
+	Routing *SandboxesRouting `json:"routing,omitempty"`
 
 	// ttl
 	TTL *SandboxTTL `json:"ttl,omitempty"`
@@ -82,11 +82,15 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateLocal(formats); err != nil {
+	if err := m.validateMiddleware(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateResources(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRouting(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -185,22 +189,22 @@ func (m *SandboxSpec) validateForks(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxSpec) validateLocal(formats strfmt.Registry) error {
-	if swag.IsZero(m.Local) { // not required
+func (m *SandboxSpec) validateMiddleware(formats strfmt.Registry) error {
+	if swag.IsZero(m.Middleware) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.Local); i++ {
-		if swag.IsZero(m.Local[i]) { // not required
+	for i := 0; i < len(m.Middleware); i++ {
+		if swag.IsZero(m.Middleware[i]) { // not required
 			continue
 		}
 
-		if m.Local[i] != nil {
-			if err := m.Local[i].Validate(formats); err != nil {
+		if m.Middleware[i] != nil {
+			if err := m.Middleware[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("local" + "." + strconv.Itoa(i))
+					return ve.ValidateName("middleware" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("local" + "." + strconv.Itoa(i))
+					return ce.ValidateName("middleware" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -232,6 +236,25 @@ func (m *SandboxSpec) validateResources(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *SandboxSpec) validateRouting(formats strfmt.Registry) error {
+	if swag.IsZero(m.Routing) { // not required
+		return nil
+	}
+
+	if m.Routing != nil {
+		if err := m.Routing.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("routing")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("routing")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -298,11 +321,15 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateLocal(ctx, formats); err != nil {
+	if err := m.contextValidateMiddleware(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.contextValidateResources(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRouting(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -391,21 +418,21 @@ func (m *SandboxSpec) contextValidateForks(ctx context.Context, formats strfmt.R
 	return nil
 }
 
-func (m *SandboxSpec) contextValidateLocal(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxSpec) contextValidateMiddleware(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Local); i++ {
+	for i := 0; i < len(m.Middleware); i++ {
 
-		if m.Local[i] != nil {
+		if m.Middleware[i] != nil {
 
-			if swag.IsZero(m.Local[i]) { // not required
+			if swag.IsZero(m.Middleware[i]) { // not required
 				return nil
 			}
 
-			if err := m.Local[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.Middleware[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("local" + "." + strconv.Itoa(i))
+					return ve.ValidateName("middleware" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("local" + "." + strconv.Itoa(i))
+					return ce.ValidateName("middleware" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -436,6 +463,27 @@ func (m *SandboxSpec) contextValidateResources(ctx context.Context, formats strf
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *SandboxSpec) contextValidateRouting(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Routing != nil {
+
+		if swag.IsZero(m.Routing) { // not required
+			return nil
+		}
+
+		if err := m.Routing.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("routing")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("routing")
+			}
+			return err
+		}
 	}
 
 	return nil

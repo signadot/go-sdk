@@ -13,23 +13,24 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SandboxFileOp sandbox file op
+// SandboxesArgument sandboxes argument
 //
-// swagger:model sandbox.FileOp
-type SandboxFileOp struct {
+// swagger:model sandboxes.Argument
+type SandboxesArgument struct {
 
-	// path
-	Path string `json:"path,omitempty"`
+	// Name indicates the name of the associated parameter.
+	Name string `json:"name,omitempty"`
 
-	// value
+	// Value indicates the value passed to the parameter of
+	// the same name.
 	Value string `json:"value,omitempty"`
 
 	// value from
-	ValueFrom *SandboxFileSource `json:"valueFrom,omitempty"`
+	ValueFrom *SandboxesArgValueFrom `json:"valueFrom,omitempty"`
 }
 
-// Validate validates this sandbox file op
-func (m *SandboxFileOp) Validate(formats strfmt.Registry) error {
+// Validate validates this sandboxes argument
+func (m *SandboxesArgument) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateValueFrom(formats); err != nil {
@@ -42,7 +43,7 @@ func (m *SandboxFileOp) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SandboxFileOp) validateValueFrom(formats strfmt.Registry) error {
+func (m *SandboxesArgument) validateValueFrom(formats strfmt.Registry) error {
 	if swag.IsZero(m.ValueFrom) { // not required
 		return nil
 	}
@@ -61,8 +62,8 @@ func (m *SandboxFileOp) validateValueFrom(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this sandbox file op based on the context it is used
-func (m *SandboxFileOp) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sandboxes argument based on the context it is used
+func (m *SandboxesArgument) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateValueFrom(ctx, formats); err != nil {
@@ -75,7 +76,7 @@ func (m *SandboxFileOp) ContextValidate(ctx context.Context, formats strfmt.Regi
 	return nil
 }
 
-func (m *SandboxFileOp) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
+func (m *SandboxesArgument) contextValidateValueFrom(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ValueFrom != nil {
 
@@ -97,7 +98,7 @@ func (m *SandboxFileOp) contextValidateValueFrom(ctx context.Context, formats st
 }
 
 // MarshalBinary interface implementation
-func (m *SandboxFileOp) MarshalBinary() ([]byte, error) {
+func (m *SandboxesArgument) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -105,8 +106,8 @@ func (m *SandboxFileOp) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SandboxFileOp) UnmarshalBinary(b []byte) error {
-	var res SandboxFileOp
+func (m *SandboxesArgument) UnmarshalBinary(b []byte) error {
+	var res SandboxesArgument
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
