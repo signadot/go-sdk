@@ -17,9 +17,6 @@ import (
 // swagger:model orgs.Org
 type OrgsOrg struct {
 
-	// billing tier
-	BillingTier int64 `json:"billingTier,omitempty"`
-
 	// display name
 	DisplayName string `json:"displayName,omitempty"`
 

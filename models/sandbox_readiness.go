@@ -19,6 +19,9 @@ import (
 // swagger:model sandbox.Readiness
 type SandboxReadiness struct {
 
+	// Forwards status
+	Forwards []*SandboxesForwardStatus `json:"forwards"`
+
 	// jobs
 	Jobs *SandboxesJobsSummary `json:"jobs,omitempty"`
 
@@ -49,6 +52,10 @@ type SandboxReadiness struct {
 func (m *SandboxReadiness) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateForwards(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateJobs(formats); err != nil {
 		res = append(res, err)
 	}
@@ -64,6 +71,32 @@ func (m *SandboxReadiness) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxReadiness) validateForwards(formats strfmt.Registry) error {
+	if swag.IsZero(m.Forwards) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Forwards); i++ {
+		if swag.IsZero(m.Forwards[i]) { // not required
+			continue
+		}
+
+		if m.Forwards[i] != nil {
+			if err := m.Forwards[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("forwards" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("forwards" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -135,6 +168,10 @@ func (m *SandboxReadiness) validateTestExecutions(formats strfmt.Registry) error
 func (m *SandboxReadiness) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateForwards(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateJobs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -150,6 +187,31 @@ func (m *SandboxReadiness) ContextValidate(ctx context.Context, formats strfmt.R
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SandboxReadiness) contextValidateForwards(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Forwards); i++ {
+
+		if m.Forwards[i] != nil {
+
+			if swag.IsZero(m.Forwards[i]) { // not required
+				return nil
+			}
+
+			if err := m.Forwards[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("forwards" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("forwards" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
