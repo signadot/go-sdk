@@ -625,6 +625,280 @@
                 }
             }
         },
+        "/orgs/{orgName}/assistants/{assistantName}/threads/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates an assistant thread",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assistants"
+                ],
+                "summary": "Create Assistant Thread",
+                "operationId": "create-assistant-thread",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Assistant Name",
+                        "name": "assistantName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/assistants.Thread"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/assistants/{assistantName}/threads/{threadID}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Deletes an assistant thread",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assistants"
+                ],
+                "summary": "Delete Assistant Thread",
+                "operationId": "assistant-delete-thread",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Assistant Name",
+                        "name": "assistantName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/assistants/{assistantName}/threads/{threadID}/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Stream assistant thread messages and status information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/event-stream"
+                ],
+                "tags": [
+                    "Assistants"
+                ],
+                "summary": "Assistant Thread Stream",
+                "operationId": "stream-assistant-thread",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Assistant Name",
+                        "name": "assistantName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "If set, resume message stream from the given value",
+                        "name": "after",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Event stream",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/assistants/{assistantName}/threads/{threadID}/messages": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Adds a message to an assistant thread",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TestExecutions"
+                ],
+                "summary": "Add an Assistant Message",
+                "operationId": "assistant-add-message",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Assistant Name",
+                        "name": "assistantName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Message content",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/assistants.MessageContent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/assistants.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/clusters/": {
             "get": {
                 "security": [
@@ -4358,6 +4632,50 @@
                 "SystemSpace"
             ]
         },
+        "assistants.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/assistants.MessageRole"
+                }
+            }
+        },
+        "assistants.MessageContent": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "assistants.MessageRole": {
+            "type": "string",
+            "enum": [
+                "user",
+                "assistant"
+            ],
+            "x-enum-varnames": [
+                "UserMessageRole",
+                "AssistantMessageRole"
+            ]
+        },
+        "assistants.Thread": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "auth.UserFlags": {
             "type": "object",
             "additionalProperties": {
@@ -4582,6 +4900,9 @@
                 },
                 "trafficCapture": {
                     "$ref": "#/definitions/config.TrafficCaptureConfig"
+                },
+                "trafficManager": {
+                    "$ref": "#/definitions/config.TrafficManagerConfig"
                 }
             }
         },
@@ -4698,6 +5019,14 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "config.TrafficManagerConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
                 }
             }
         },
@@ -5122,35 +5451,6 @@
                 }
             }
         },
-        "local": {
-            "type": "object",
-            "properties": {
-                "env": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/sandbox.EnvVar"
-                    }
-                },
-                "files": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/sandbox.FileOp"
-                    }
-                },
-                "from": {
-                    "$ref": "#/definitions/local.From"
-                },
-                "mappings": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/local.PortMapping"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "local.From": {
             "type": "object",
             "required": [
@@ -5173,20 +5473,6 @@
                     "description": "Namespace within which the entity lives in the Kubernetes cluster.",
                     "type": "string",
                     "example": "default"
-                }
-            }
-        },
-        "local.PortMapping": {
-            "type": "object",
-            "properties": {
-                "appProtocol": {
-                    "type": "string"
-                },
-                "port": {
-                    "type": "integer"
-                },
-                "toLocal": {
-                    "type": "string"
                 }
             }
         },
@@ -5741,59 +6027,6 @@
                 }
             }
         },
-        "sandbox.FileOp": {
-            "type": "object",
-            "properties": {
-                "path": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                },
-                "valueFrom": {
-                    "$ref": "#/definitions/sandbox.FileSource"
-                }
-            }
-        },
-        "sandbox.FileSource": {
-            "type": "object",
-            "properties": {
-                "configMap": {
-                    "$ref": "#/definitions/sandbox.FileSourceMap"
-                },
-                "resource": {
-                    "$ref": "#/definitions/sandbox.FileSourceResource"
-                },
-                "secret": {
-                    "$ref": "#/definitions/sandbox.FileSourceMap"
-                }
-            }
-        },
-        "sandbox.FileSourceMap": {
-            "type": "object",
-            "properties": {
-                "key": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "optional": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "sandbox.FileSourceResource": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "outputKey": {
-                    "type": "string"
-                }
-            }
-        },
         "sandbox.Fork": {
             "type": "object",
             "properties": {
@@ -6029,17 +6262,6 @@
                     "additionalProperties": {
                         "type": "string"
                     }
-                },
-                "local": {
-                    "description": "Local Workloads",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/local"
-                    }
-                },
-                "localMachineID": {
-                    "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-                    "type": "string"
                 },
                 "middleware": {
                     "description": "Request Middleware",
