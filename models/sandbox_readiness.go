@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -86,11 +87,15 @@ func (m *SandboxReadiness) validateForwards(formats strfmt.Registry) error {
 
 		if m.Forwards[i] != nil {
 			if err := m.Forwards[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("forwards" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("forwards" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -107,11 +112,15 @@ func (m *SandboxReadiness) validateJobs(formats strfmt.Registry) error {
 
 	if m.Jobs != nil {
 		if err := m.Jobs.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("jobs")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("jobs")
 			}
+
 			return err
 		}
 	}
@@ -131,11 +140,15 @@ func (m *SandboxReadiness) validateLocal(formats strfmt.Registry) error {
 
 		if m.Local[i] != nil {
 			if err := m.Local[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("local" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("local" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -152,11 +165,15 @@ func (m *SandboxReadiness) validateTestExecutions(formats strfmt.Registry) error
 
 	if m.TestExecutions != nil {
 		if err := m.TestExecutions.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("testExecutions")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("testExecutions")
 			}
+
 			return err
 		}
 	}
@@ -201,11 +218,15 @@ func (m *SandboxReadiness) contextValidateForwards(ctx context.Context, formats 
 			}
 
 			if err := m.Forwards[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("forwards" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("forwards" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -224,11 +245,15 @@ func (m *SandboxReadiness) contextValidateJobs(ctx context.Context, formats strf
 		}
 
 		if err := m.Jobs.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("jobs")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("jobs")
 			}
+
 			return err
 		}
 	}
@@ -247,11 +272,15 @@ func (m *SandboxReadiness) contextValidateLocal(ctx context.Context, formats str
 			}
 
 			if err := m.Local[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("local" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("local" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -270,11 +299,15 @@ func (m *SandboxReadiness) contextValidateTestExecutions(ctx context.Context, fo
 		}
 
 		if err := m.TestExecutions.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("testExecutions")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("testExecutions")
 			}
+
 			return err
 		}
 	}

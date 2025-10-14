@@ -8,4 +8,4 @@ package models
 // TestStatus test status
 //
 // swagger:model TestStatus
-type TestStatus interface{}
+type TestStatus any

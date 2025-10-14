@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -58,11 +59,15 @@ func (m *RequestDiff) validateBaseline(formats strfmt.Registry) error {
 
 	if m.Baseline != nil {
 		if err := m.Baseline.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("baseline")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("baseline")
 			}
+
 			return err
 		}
 	}
@@ -82,11 +87,15 @@ func (m *RequestDiff) validateDiffOps(formats strfmt.Registry) error {
 
 		if m.DiffOps[i] != nil {
 			if err := m.DiffOps[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("diffOps" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("diffOps" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -103,11 +112,15 @@ func (m *RequestDiff) validateTarget(formats strfmt.Registry) error {
 
 	if m.Target != nil {
 		if err := m.Target.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("target")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("target")
 			}
+
 			return err
 		}
 	}
@@ -146,11 +159,15 @@ func (m *RequestDiff) contextValidateBaseline(ctx context.Context, formats strfm
 		}
 
 		if err := m.Baseline.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("baseline")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("baseline")
 			}
+
 			return err
 		}
 	}
@@ -169,11 +186,15 @@ func (m *RequestDiff) contextValidateDiffOps(ctx context.Context, formats strfmt
 			}
 
 			if err := m.DiffOps[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("diffOps" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("diffOps" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -192,11 +213,15 @@ func (m *RequestDiff) contextValidateTarget(ctx context.Context, formats strfmt.
 		}
 
 		if err := m.Target.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("target")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("target")
 			}
+
 			return err
 		}
 	}

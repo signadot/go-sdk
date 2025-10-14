@@ -38,7 +38,7 @@ const (
 )
 
 // for schema
-var artifactsJobArtifactSpaceEnum []interface{}
+var artifactsJobArtifactSpaceEnum []any
 
 func init() {
 	var res []ArtifactsJobArtifactSpace

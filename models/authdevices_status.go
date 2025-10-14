@@ -41,7 +41,7 @@ const (
 )
 
 // for schema
-var authdevicesStatusEnum []interface{}
+var authdevicesStatusEnum []any
 
 func init() {
 	var res []AuthdevicesStatus

@@ -56,6 +56,8 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	AssistantAddMessage(params *AssistantAddMessageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssistantAddMessageOK, error)
+
 	CancelTestExecution(params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error)
 
 	CreateExternalTestExecution(params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error)
@@ -76,12 +78,58 @@ type ClientService interface {
 }
 
 /*
+AssistantAddMessage adds an assistant message
+
+Adds a message to an assistant thread
+*/
+func (a *Client) AssistantAddMessage(params *AssistantAddMessageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AssistantAddMessageOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewAssistantAddMessageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "assistant-add-message",
+		Method:             "POST",
+		PathPattern:        "/orgs/{orgName}/assistants/{assistantName}/threads/{threadID}/messages",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AssistantAddMessageReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*AssistantAddMessageOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for assistant-add-message: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 CancelTestExecution cancels a test execution
 
 Cancel a given test execution.
 */
 func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCancelTestExecutionParams()
 	}
@@ -101,17 +149,22 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*CancelTestExecutionOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for cancel-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -122,7 +175,7 @@ CreateExternalTestExecution creates external test execution
 Create an external test execution
 */
 func (a *Client) CreateExternalTestExecution(params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateExternalTestExecutionParams()
 	}
@@ -142,17 +195,22 @@ func (a *Client) CreateExternalTestExecution(params *CreateExternalTestExecution
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*CreateExternalTestExecutionOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for create-external-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -163,7 +221,7 @@ CreateHostedTestExecution creates hosted test execution
 Creates a hosted test execution
 */
 func (a *Client) CreateHostedTestExecution(params *CreateHostedTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateHostedTestExecutionOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateHostedTestExecutionParams()
 	}
@@ -183,17 +241,22 @@ func (a *Client) CreateHostedTestExecution(params *CreateHostedTestExecutionPara
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*CreateHostedTestExecutionOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for create-hosted-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -204,7 +267,7 @@ GetTestExecution gets a test execution
 Fetch the details about a given test execution.
 */
 func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetTestExecutionParams()
 	}
@@ -224,17 +287,22 @@ func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runti
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*GetTestExecutionOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for get-test-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -245,7 +313,7 @@ ListTestExecutions lists test executions
 List test executions for a given test
 */
 func (a *Client) ListTestExecutions(params *ListTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestExecutionsOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListTestExecutionsParams()
 	}
@@ -265,17 +333,22 @@ func (a *Client) ListTestExecutions(params *ListTestExecutionsParams, authInfo r
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*ListTestExecutionsOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-test-executions: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -286,7 +359,7 @@ QueryTestExecutions queries test executions
 Query test executions based on different criteria
 */
 func (a *Client) QueryTestExecutions(params *QueryTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*QueryTestExecutionsOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewQueryTestExecutionsParams()
 	}
@@ -306,17 +379,22 @@ func (a *Client) QueryTestExecutions(params *QueryTestExecutionsParams, authInfo
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*QueryTestExecutionsOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for query-test-executions: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -327,7 +405,7 @@ TestExecutionTrafficDiff gets the full traffic diff of a test execution
 Get the full traffic diff of a test execution
 */
 func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewTestExecutionTrafficDiffParams()
 	}
@@ -347,17 +425,22 @@ func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*TestExecutionTrafficDiffOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for test-execution-traffic-diff: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -368,7 +451,7 @@ TestExecutionTrafficDiffFindings gets the findings view of the traffic diff of a
 Get the findings view of the traffic diff of a test execution
 */
 func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewTestExecutionTrafficDiffFindingsParams()
 	}
@@ -388,17 +471,22 @@ func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDi
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*TestExecutionTrafficDiffFindingsOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for test-execution-traffic-diff-findings: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }

@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -60,11 +61,15 @@ func (m *SandboxesMiddleware) validateArgs(formats strfmt.Registry) error {
 
 		if m.Args[i] != nil {
 			if err := m.Args[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("args" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("args" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -86,11 +91,15 @@ func (m *SandboxesMiddleware) validateMatch(formats strfmt.Registry) error {
 
 		if m.Match[i] != nil {
 			if err := m.Match[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("match" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("match" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -129,11 +138,15 @@ func (m *SandboxesMiddleware) contextValidateArgs(ctx context.Context, formats s
 			}
 
 			if err := m.Args[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("args" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("args" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -154,11 +167,15 @@ func (m *SandboxesMiddleware) contextValidateMatch(ctx context.Context, formats 
 			}
 
 			if err := m.Match[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("match" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("match" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}

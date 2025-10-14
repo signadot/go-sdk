@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -48,11 +49,15 @@ func (m *TestExecutionCanceledState) validateCanceledBy(formats strfmt.Registry)
 	}
 
 	if err := m.CanceledBy.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("canceledBy")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("canceledBy")
 		}
+
 		return err
 	}
 
@@ -80,11 +85,15 @@ func (m *TestExecutionCanceledState) contextValidateCanceledBy(ctx context.Conte
 	}
 
 	if err := m.CanceledBy.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("canceledBy")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("canceledBy")
 		}
+
 		return err
 	}
 
