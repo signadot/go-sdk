@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -98,11 +99,15 @@ func (m *TrafficDiff) validateCapturePoints(formats strfmt.Registry) error {
 
 		if m.CapturePoints[i] != nil {
 			if err := m.CapturePoints[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("capturePoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("capturePoints" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -119,11 +124,15 @@ func (m *TrafficDiff) validateGreen(formats strfmt.Registry) error {
 
 	if m.Green != nil {
 		if err := m.Green.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("green")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("green")
 			}
+
 			return err
 		}
 	}
@@ -138,11 +147,15 @@ func (m *TrafficDiff) validateRed(formats strfmt.Registry) error {
 
 	if m.Red != nil {
 		if err := m.Red.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("red")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("red")
 			}
+
 			return err
 		}
 	}
@@ -162,11 +175,15 @@ func (m *TrafficDiff) validateUnpairedCaptures(formats strfmt.Registry) error {
 
 		if m.UnpairedCaptures[i] != nil {
 			if err := m.UnpairedCaptures[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -183,11 +200,15 @@ func (m *TrafficDiff) validateYellow(formats strfmt.Registry) error {
 
 	if m.Yellow != nil {
 		if err := m.Yellow.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("yellow")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("yellow")
 			}
+
 			return err
 		}
 	}
@@ -236,11 +257,15 @@ func (m *TrafficDiff) contextValidateCapturePoints(ctx context.Context, formats 
 			}
 
 			if err := m.CapturePoints[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("capturePoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("capturePoints" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -259,11 +284,15 @@ func (m *TrafficDiff) contextValidateGreen(ctx context.Context, formats strfmt.R
 		}
 
 		if err := m.Green.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("green")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("green")
 			}
+
 			return err
 		}
 	}
@@ -280,11 +309,15 @@ func (m *TrafficDiff) contextValidateRed(ctx context.Context, formats strfmt.Reg
 		}
 
 		if err := m.Red.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("red")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("red")
 			}
+
 			return err
 		}
 	}
@@ -303,11 +336,15 @@ func (m *TrafficDiff) contextValidateUnpairedCaptures(ctx context.Context, forma
 			}
 
 			if err := m.UnpairedCaptures[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("unpairedCaptures" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -326,11 +363,15 @@ func (m *TrafficDiff) contextValidateYellow(ctx context.Context, formats strfmt.
 		}
 
 		if err := m.Yellow.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("yellow")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("yellow")
 			}
+
 			return err
 		}
 	}

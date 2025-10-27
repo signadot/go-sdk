@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -60,11 +61,15 @@ func (m *TestExecutionSpec) validateExecutionContext(formats strfmt.Registry) er
 
 	if m.ExecutionContext != nil {
 		if err := m.ExecutionContext.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("executionContext")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("executionContext")
 			}
+
 			return err
 		}
 	}
@@ -79,11 +84,15 @@ func (m *TestExecutionSpec) validateExternal(formats strfmt.Registry) error {
 
 	if m.External != nil {
 		if err := m.External.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("external")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("external")
 			}
+
 			return err
 		}
 	}
@@ -98,11 +107,15 @@ func (m *TestExecutionSpec) validateHosted(formats strfmt.Registry) error {
 
 	if m.Hosted != nil {
 		if err := m.Hosted.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("hosted")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("hosted")
 			}
+
 			return err
 		}
 	}
@@ -141,11 +154,15 @@ func (m *TestExecutionSpec) contextValidateExecutionContext(ctx context.Context,
 		}
 
 		if err := m.ExecutionContext.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("executionContext")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("executionContext")
 			}
+
 			return err
 		}
 	}
@@ -162,11 +179,15 @@ func (m *TestExecutionSpec) contextValidateExternal(ctx context.Context, formats
 		}
 
 		if err := m.External.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("external")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("external")
 			}
+
 			return err
 		}
 	}
@@ -183,11 +204,15 @@ func (m *TestExecutionSpec) contextValidateHosted(ctx context.Context, formats s
 		}
 
 		if err := m.Hosted.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("hosted")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("hosted")
 			}
+
 			return err
 		}
 	}

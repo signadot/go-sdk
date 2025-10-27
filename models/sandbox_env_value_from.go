@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -64,11 +65,15 @@ func (m *SandboxEnvValueFrom) validateConfigMap(formats strfmt.Registry) error {
 
 	if m.ConfigMap != nil {
 		if err := m.ConfigMap.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("configMap")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("configMap")
 			}
+
 			return err
 		}
 	}
@@ -83,11 +88,15 @@ func (m *SandboxEnvValueFrom) validateFork(formats strfmt.Registry) error {
 
 	if m.Fork != nil {
 		if err := m.Fork.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("fork")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("fork")
 			}
+
 			return err
 		}
 	}
@@ -102,11 +111,15 @@ func (m *SandboxEnvValueFrom) validateResource(formats strfmt.Registry) error {
 
 	if m.Resource != nil {
 		if err := m.Resource.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("resource")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("resource")
 			}
+
 			return err
 		}
 	}
@@ -121,11 +134,15 @@ func (m *SandboxEnvValueFrom) validateSecret(formats strfmt.Registry) error {
 
 	if m.Secret != nil {
 		if err := m.Secret.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("secret")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("secret")
 			}
+
 			return err
 		}
 	}
@@ -168,11 +185,15 @@ func (m *SandboxEnvValueFrom) contextValidateConfigMap(ctx context.Context, form
 		}
 
 		if err := m.ConfigMap.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("configMap")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("configMap")
 			}
+
 			return err
 		}
 	}
@@ -189,11 +210,15 @@ func (m *SandboxEnvValueFrom) contextValidateFork(ctx context.Context, formats s
 		}
 
 		if err := m.Fork.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("fork")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("fork")
 			}
+
 			return err
 		}
 	}
@@ -210,11 +235,15 @@ func (m *SandboxEnvValueFrom) contextValidateResource(ctx context.Context, forma
 		}
 
 		if err := m.Resource.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("resource")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("resource")
 			}
+
 			return err
 		}
 	}
@@ -231,11 +260,15 @@ func (m *SandboxEnvValueFrom) contextValidateSecret(ctx context.Context, formats
 		}
 
 		if err := m.Secret.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("secret")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("secret")
 			}
+
 			return err
 		}
 	}

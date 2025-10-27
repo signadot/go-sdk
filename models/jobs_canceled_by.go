@@ -41,7 +41,7 @@ const (
 )
 
 // for schema
-var jobsCanceledByEnum []interface{}
+var jobsCanceledByEnum []any
 
 func init() {
 	var res []JobsCanceledBy

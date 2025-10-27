@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -65,11 +66,15 @@ func (m *RouteGroupMatch) validateAll(formats strfmt.Registry) error {
 
 		if m.All[i] != nil {
 			if err := m.All[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("all" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("all" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -91,11 +96,15 @@ func (m *RouteGroupMatch) validateAny(formats strfmt.Registry) error {
 
 		if m.Any[i] != nil {
 			if err := m.Any[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("any" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("any" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -112,11 +121,15 @@ func (m *RouteGroupMatch) validateLabel(formats strfmt.Registry) error {
 
 	if m.Label != nil {
 		if err := m.Label.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("label")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("label")
 			}
+
 			return err
 		}
 	}
@@ -157,11 +170,15 @@ func (m *RouteGroupMatch) contextValidateAll(ctx context.Context, formats strfmt
 			}
 
 			if err := m.All[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("all" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("all" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -182,11 +199,15 @@ func (m *RouteGroupMatch) contextValidateAny(ctx context.Context, formats strfmt
 			}
 
 			if err := m.Any[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("any" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("any" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -205,11 +226,15 @@ func (m *RouteGroupMatch) contextValidateLabel(ctx context.Context, formats strf
 		}
 
 		if err := m.Label.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("label")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("label")
 			}
+
 			return err
 		}
 	}

@@ -47,7 +47,7 @@ const (
 )
 
 // for schema
-var sandboxesPatchTypeEnum []interface{}
+var sandboxesPatchTypeEnum []any
 
 func init() {
 	var res []SandboxesPatchType

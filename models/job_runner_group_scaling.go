@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -50,11 +51,15 @@ func (m *JobRunnerGroupScaling) validateAuto(formats strfmt.Registry) error {
 
 	if m.Auto != nil {
 		if err := m.Auto.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("auto")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("auto")
 			}
+
 			return err
 		}
 	}
@@ -69,11 +74,15 @@ func (m *JobRunnerGroupScaling) validateManual(formats strfmt.Registry) error {
 
 	if m.Manual != nil {
 		if err := m.Manual.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("manual")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("manual")
 			}
+
 			return err
 		}
 	}
@@ -108,11 +117,15 @@ func (m *JobRunnerGroupScaling) contextValidateAuto(ctx context.Context, formats
 		}
 
 		if err := m.Auto.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("auto")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("auto")
 			}
+
 			return err
 		}
 	}
@@ -129,11 +142,15 @@ func (m *JobRunnerGroupScaling) contextValidateManual(ctx context.Context, forma
 		}
 
 		if err := m.Manual.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("manual")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("manual")
 			}
+
 			return err
 		}
 	}

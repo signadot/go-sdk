@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -72,11 +73,15 @@ func (m *TestExecutionStatus) validateFinalState(formats strfmt.Registry) error 
 
 	if m.FinalState != nil {
 		if err := m.FinalState.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("finalState")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("finalState")
 			}
+
 			return err
 		}
 	}
@@ -90,11 +95,15 @@ func (m *TestExecutionStatus) validatePhase(formats strfmt.Registry) error {
 	}
 
 	if err := m.Phase.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("phase")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("phase")
 		}
+
 		return err
 	}
 
@@ -108,11 +117,15 @@ func (m *TestExecutionStatus) validateTriggeredBy(formats strfmt.Registry) error
 
 	if m.TriggeredBy != nil {
 		if err := m.TriggeredBy.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("triggeredBy")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("triggeredBy")
 			}
+
 			return err
 		}
 	}
@@ -151,11 +164,15 @@ func (m *TestExecutionStatus) contextValidateFinalState(ctx context.Context, for
 		}
 
 		if err := m.FinalState.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("finalState")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("finalState")
 			}
+
 			return err
 		}
 	}
@@ -170,11 +187,15 @@ func (m *TestExecutionStatus) contextValidatePhase(ctx context.Context, formats 
 	}
 
 	if err := m.Phase.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("phase")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("phase")
 		}
+
 		return err
 	}
 
@@ -190,11 +211,15 @@ func (m *TestExecutionStatus) contextValidateTriggeredBy(ctx context.Context, fo
 		}
 
 		if err := m.TriggeredBy.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("triggeredBy")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("triggeredBy")
 			}
+
 			return err
 		}
 	}

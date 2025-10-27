@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -22,7 +23,7 @@ type DiffOp struct {
 	Classification *DiffOpClassification `json:"classification,omitempty"`
 
 	// old value
-	OldValue interface{} `json:"oldValue,omitempty"`
+	OldValue any `json:"oldValue,omitempty"`
 
 	// op
 	Op TrafficmodelsDiffOperation `json:"op,omitempty"`
@@ -31,7 +32,7 @@ type DiffOp struct {
 	Path string `json:"path,omitempty"`
 
 	// value
-	Value interface{} `json:"value,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 // Validate validates this diff op
@@ -59,11 +60,15 @@ func (m *DiffOp) validateClassification(formats strfmt.Registry) error {
 
 	if m.Classification != nil {
 		if err := m.Classification.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("classification")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("classification")
 			}
+
 			return err
 		}
 	}
@@ -77,11 +82,15 @@ func (m *DiffOp) validateOp(formats strfmt.Registry) error {
 	}
 
 	if err := m.Op.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("op")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("op")
 		}
+
 		return err
 	}
 
@@ -115,11 +124,15 @@ func (m *DiffOp) contextValidateClassification(ctx context.Context, formats strf
 		}
 
 		if err := m.Classification.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("classification")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("classification")
 			}
+
 			return err
 		}
 	}
@@ -134,11 +147,15 @@ func (m *DiffOp) contextValidateOp(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.Op.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("op")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("op")
 		}
+
 		return err
 	}
 

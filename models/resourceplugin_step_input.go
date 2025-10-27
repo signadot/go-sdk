@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -59,11 +60,15 @@ func (m *ResourcepluginStepInput) validateAs(formats strfmt.Registry) error {
 
 	if m.As != nil {
 		if err := m.As.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("as")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("as")
 			}
+
 			return err
 		}
 	}
@@ -78,11 +83,15 @@ func (m *ResourcepluginStepInput) validateValueFromStep(formats strfmt.Registry)
 
 	if m.ValueFromStep != nil {
 		if err := m.ValueFromStep.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("valueFromStep")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("valueFromStep")
 			}
+
 			return err
 		}
 	}
@@ -117,11 +126,15 @@ func (m *ResourcepluginStepInput) contextValidateAs(ctx context.Context, formats
 		}
 
 		if err := m.As.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("as")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("as")
 			}
+
 			return err
 		}
 	}
@@ -138,11 +151,15 @@ func (m *ResourcepluginStepInput) contextValidateValueFromStep(ctx context.Conte
 		}
 
 		if err := m.ValueFromStep.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("valueFromStep")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("valueFromStep")
 			}
+
 			return err
 		}
 	}

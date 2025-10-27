@@ -47,7 +47,7 @@ const (
 )
 
 // for schema
-var jobsPhaseEnum []interface{}
+var jobsPhaseEnum []any
 
 func init() {
 	var res []JobsPhase

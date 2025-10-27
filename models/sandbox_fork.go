@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -61,11 +62,15 @@ func (m *SandboxFork) validateCustomizations(formats strfmt.Registry) error {
 
 	if m.Customizations != nil {
 		if err := m.Customizations.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("customizations")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("customizations")
 			}
+
 			return err
 		}
 	}
@@ -85,11 +90,15 @@ func (m *SandboxFork) validateEndpoints(formats strfmt.Registry) error {
 
 		if m.Endpoints[i] != nil {
 			if err := m.Endpoints[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -106,11 +115,15 @@ func (m *SandboxFork) validateForkOf(formats strfmt.Registry) error {
 
 	if m.ForkOf != nil {
 		if err := m.ForkOf.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("forkOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("forkOf")
 			}
+
 			return err
 		}
 	}
@@ -149,11 +162,15 @@ func (m *SandboxFork) contextValidateCustomizations(ctx context.Context, formats
 		}
 
 		if err := m.Customizations.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("customizations")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("customizations")
 			}
+
 			return err
 		}
 	}
@@ -172,11 +189,15 @@ func (m *SandboxFork) contextValidateEndpoints(ctx context.Context, formats strf
 			}
 
 			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -195,11 +216,15 @@ func (m *SandboxFork) contextValidateForkOf(ctx context.Context, formats strfmt.
 		}
 
 		if err := m.ForkOf.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("forkOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("forkOf")
 			}
+
 			return err
 		}
 	}

@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -51,11 +52,15 @@ func (m *TrafficDiffPointResult) validateBy(formats strfmt.Registry) error {
 
 	if m.By != nil {
 		if err := m.By.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("by")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("by")
 			}
+
 			return err
 		}
 	}
@@ -75,11 +80,15 @@ func (m *TrafficDiffPointResult) validateDiffs(formats strfmt.Registry) error {
 
 		if m.Diffs[i] != nil {
 			if err := m.Diffs[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("diffs" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("diffs" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -116,11 +125,15 @@ func (m *TrafficDiffPointResult) contextValidateBy(ctx context.Context, formats 
 		}
 
 		if err := m.By.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("by")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("by")
 			}
+
 			return err
 		}
 	}
@@ -139,11 +152,15 @@ func (m *TrafficDiffPointResult) contextValidateDiffs(ctx context.Context, forma
 			}
 
 			if err := m.Diffs[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("diffs" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("diffs" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}

@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -69,11 +70,15 @@ func (m *OrgsGetOrgNameResponse) validateOrgs(formats strfmt.Registry) error {
 
 		if m.Orgs[i] != nil {
 			if err := m.Orgs[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("orgs" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("orgs" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -90,11 +95,15 @@ func (m *OrgsGetOrgNameResponse) validateUser(formats strfmt.Registry) error {
 
 	if m.User != nil {
 		if err := m.User.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("user")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("user")
 			}
+
 			return err
 		}
 	}
@@ -109,11 +118,15 @@ func (m *OrgsGetOrgNameResponse) validateUserFlags(formats strfmt.Registry) erro
 
 	if m.UserFlags != nil {
 		if err := m.UserFlags.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("userFlags")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("userFlags")
 			}
+
 			return err
 		}
 	}
@@ -154,11 +167,15 @@ func (m *OrgsGetOrgNameResponse) contextValidateOrgs(ctx context.Context, format
 			}
 
 			if err := m.Orgs[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("orgs" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("orgs" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -177,11 +194,15 @@ func (m *OrgsGetOrgNameResponse) contextValidateUser(ctx context.Context, format
 		}
 
 		if err := m.User.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("user")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("user")
 			}
+
 			return err
 		}
 	}
@@ -196,11 +217,15 @@ func (m *OrgsGetOrgNameResponse) contextValidateUserFlags(ctx context.Context, f
 	}
 
 	if err := m.UserFlags.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("userFlags")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("userFlags")
 		}
+
 		return err
 	}
 
