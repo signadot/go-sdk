@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -58,11 +59,15 @@ func (m *SandboxTestExecutionsSummary) validateChecks(formats strfmt.Registry) e
 
 	if m.Checks != nil {
 		if err := m.Checks.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("checks")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("checks")
 			}
+
 			return err
 		}
 	}
@@ -82,11 +87,15 @@ func (m *SandboxTestExecutionsSummary) validatePhaseCounts(formats strfmt.Regist
 
 		if m.PhaseCounts[i] != nil {
 			if err := m.PhaseCounts[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("phaseCounts" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("phaseCounts" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -103,11 +112,15 @@ func (m *SandboxTestExecutionsSummary) validateTrafficDiffs(formats strfmt.Regis
 
 	if m.TrafficDiffs != nil {
 		if err := m.TrafficDiffs.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficDiffs")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficDiffs")
 			}
+
 			return err
 		}
 	}
@@ -146,11 +159,15 @@ func (m *SandboxTestExecutionsSummary) contextValidateChecks(ctx context.Context
 		}
 
 		if err := m.Checks.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("checks")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("checks")
 			}
+
 			return err
 		}
 	}
@@ -169,11 +186,15 @@ func (m *SandboxTestExecutionsSummary) contextValidatePhaseCounts(ctx context.Co
 			}
 
 			if err := m.PhaseCounts[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("phaseCounts" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("phaseCounts" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -192,11 +213,15 @@ func (m *SandboxTestExecutionsSummary) contextValidateTrafficDiffs(ctx context.C
 		}
 
 		if err := m.TrafficDiffs.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficDiffs")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficDiffs")
 			}
+
 			return err
 		}
 	}

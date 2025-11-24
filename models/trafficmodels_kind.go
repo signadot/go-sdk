@@ -41,7 +41,7 @@ const (
 )
 
 // for schema
-var trafficmodelsKindEnum []interface{}
+var trafficmodelsKindEnum []any
 
 func init() {
 	var res []TrafficmodelsKind

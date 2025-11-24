@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -85,11 +86,15 @@ func (m *JobSpec) validateEnv(formats strfmt.Registry) error {
 
 		if m.Env[i] != nil {
 			if err := m.Env[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("env" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("env" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -106,11 +111,15 @@ func (m *JobSpec) validateRoutingContext(formats strfmt.Registry) error {
 
 	if m.RoutingContext != nil {
 		if err := m.RoutingContext.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routingContext")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routingContext")
 			}
+
 			return err
 		}
 	}
@@ -125,11 +134,15 @@ func (m *JobSpec) validateTrafficManager(formats strfmt.Registry) error {
 
 	if m.TrafficManager != nil {
 		if err := m.TrafficManager.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficManager")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficManager")
 			}
+
 			return err
 		}
 	}
@@ -149,11 +162,15 @@ func (m *JobSpec) validateUploadArtifact(formats strfmt.Registry) error {
 
 		if m.UploadArtifact[i] != nil {
 			if err := m.UploadArtifact[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("uploadArtifact" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("uploadArtifact" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -200,11 +217,15 @@ func (m *JobSpec) contextValidateEnv(ctx context.Context, formats strfmt.Registr
 			}
 
 			if err := m.Env[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("env" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("env" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -223,11 +244,15 @@ func (m *JobSpec) contextValidateRoutingContext(ctx context.Context, formats str
 		}
 
 		if err := m.RoutingContext.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routingContext")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routingContext")
 			}
+
 			return err
 		}
 	}
@@ -244,11 +269,15 @@ func (m *JobSpec) contextValidateTrafficManager(ctx context.Context, formats str
 		}
 
 		if err := m.TrafficManager.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficManager")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficManager")
 			}
+
 			return err
 		}
 	}
@@ -267,11 +296,15 @@ func (m *JobSpec) contextValidateUploadArtifact(ctx context.Context, formats str
 			}
 
 			if err := m.UploadArtifact[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("uploadArtifact" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("uploadArtifact" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}

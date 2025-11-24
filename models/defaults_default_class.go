@@ -35,7 +35,7 @@ const (
 )
 
 // for schema
-var defaultsDefaultClassEnum []interface{}
+var defaultsDefaultClassEnum []any
 
 func init() {
 	var res []DefaultsDefaultClass

@@ -71,7 +71,7 @@ AuthDeviceGetCode gets device authentication code
 Get an authentication code for a device login flow
 */
 func (a *Client) AuthDeviceGetCode(params *AuthDeviceGetCodeParams, opts ...ClientOption) (*AuthDeviceGetCodeOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewAuthDeviceGetCodeParams()
 	}
@@ -90,17 +90,22 @@ func (a *Client) AuthDeviceGetCode(params *AuthDeviceGetCodeParams, opts ...Clie
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*AuthDeviceGetCodeOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for auth-device-get-code: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -111,7 +116,7 @@ AuthDeviceGetToken gets device authentication token
 Get an authentication token for a device login flow
 */
 func (a *Client) AuthDeviceGetToken(params *AuthDeviceGetTokenParams, opts ...ClientOption) (*AuthDeviceGetTokenOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewAuthDeviceGetTokenParams()
 	}
@@ -130,17 +135,22 @@ func (a *Client) AuthDeviceGetToken(params *AuthDeviceGetTokenParams, opts ...Cl
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*AuthDeviceGetTokenOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for auth-device-get-token: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -151,7 +161,7 @@ AuthDeviceRefreshToken refreshes device authentication token
 Refresh an authentication token using a refresh token
 */
 func (a *Client) AuthDeviceRefreshToken(params *AuthDeviceRefreshTokenParams, opts ...ClientOption) (*AuthDeviceRefreshTokenOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewAuthDeviceRefreshTokenParams()
 	}
@@ -170,17 +180,22 @@ func (a *Client) AuthDeviceRefreshToken(params *AuthDeviceRefreshTokenParams, op
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*AuthDeviceRefreshTokenOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for auth-device-refresh-token: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
