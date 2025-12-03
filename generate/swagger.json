@@ -1166,6 +1166,431 @@
                 }
             }
         },
+        "/orgs/{orgName}/devboxes/": {
+            "get": {
+                "description": "List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devboxes"
+                ],
+                "summary": "List devboxes",
+                "operationId": "get-devboxes",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Set to 'true' to list all devboxes in org",
+                        "name": "all",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Devbox"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devboxes"
+                ],
+                "summary": "Register a devbox (idempotent POST)",
+                "operationId": "register-devbox",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Devbox Registration",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DevboxRegistration"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Devbox"
+                        }
+                    },
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/Devbox"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/devboxes/{devboxId}": {
+            "get": {
+                "description": "Get a devbox by its deterministic ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devboxes"
+                ],
+                "summary": "Get a devbox by ID",
+                "operationId": "get-devbox",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Devbox Identifier",
+                        "name": "devboxId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Devbox"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a devbox by its deterministic ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devboxes"
+                ],
+                "summary": "Delete a devbox",
+                "operationId": "delete-devbox",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Devbox Identifier",
+                        "name": "devboxId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/devboxes/{devboxId}/claim": {
+            "get": {
+                "description": "Claim a devbox for a signadot local connect session",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devboxes"
+                ],
+                "summary": "Claim a devbox",
+                "operationId": "claim-devbox",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Devbox Identifier",
+                        "name": "devboxId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Devbox"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/devboxes/{devboxId}/release": {
+            "get": {
+                "description": "Release a devbox from a signadot local connect session lease",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devboxes"
+                ],
+                "summary": "Release a devbox's connection",
+                "operationId": "release-devbox",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Devbox Identifier",
+                        "name": "devboxId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Devbox"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/devboxes/{devboxId}/renew": {
+            "get": {
+                "description": "Renew a devbox for a signadot local connect session lease",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Devboxes"
+                ],
+                "summary": "Renew a devbox's connection",
+                "operationId": "renew-devbox",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Devbox Identifier",
+                        "name": "devboxId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Devbox"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/jobs": {
             "get": {
                 "security": [
@@ -3641,6 +4066,96 @@
                 }
             }
         },
+        "ConnectSession": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "renewedAt": {
+                    "type": "string"
+                },
+                "validUntil": {
+                    "type": "string"
+                }
+            }
+        },
+        "Connection": {
+            "type": "object",
+            "properties": {
+                "devboxId": {
+                    "description": "Required: deterministic ID from user+metadata hash",
+                    "type": "string"
+                }
+            }
+        },
+        "Devbox": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Deterministic ID: hash of user email + metadata",
+                    "type": "string"
+                },
+                "idMeta": {
+                    "description": "Metadata used to generate ID (host, machine-id, etc.)",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "$ref": "#/definitions/DevboxStatus"
+                },
+                "user": {
+                    "description": "User email attribute (for display/authorization)",
+                    "type": "string"
+                }
+            }
+        },
+        "DevboxRegistration": {
+            "type": "object",
+            "properties": {
+                "claim": {
+                    "type": "boolean"
+                },
+                "idMeta": {
+                    "description": "Required: used to generate deterministic ID (host, machine-id, etc.)",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "DevboxStatus": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "session": {
+                    "$ref": "#/definitions/ConnectSession"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "DiffOp": {
             "type": "object",
             "properties": {
@@ -4582,6 +5097,9 @@
                 },
                 "trafficCapture": {
                     "$ref": "#/definitions/config.TrafficCaptureConfig"
+                },
+                "trafficManager": {
+                    "$ref": "#/definitions/config.TrafficManagerConfig"
                 }
             }
         },
@@ -4589,15 +5107,14 @@
             "type": "object",
             "properties": {
                 "disabled": {
-                    "description": "ControlPlane can be disabled",
+                    "description": "control plane can be disabled",
                     "type": "boolean"
                 },
                 "proxy": {
-                    "description": "ControlPlaneProxy can be \"enabled\" or \"disabled\"",
+                    "description": "control plane proxy can be \"enabled\" or \"disabled\"",
                     "type": "string"
                 },
                 "tunnelAddr": {
-                    "description": "for on-prem",
                     "type": "string"
                 },
                 "tunnelTLS": {
@@ -4698,6 +5215,14 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "config.TrafficManagerConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
                 }
             }
         },
@@ -5582,6 +6107,23 @@
                 }
             }
         },
+        "sandbox.ConnectionStatus": {
+            "type": "object",
+            "properties": {
+                "devbox": {
+                    "description": "Machine to which local mappings in this sandbox may be linked.",
+                    "type": "string"
+                },
+                "session": {
+                    "description": "signadot local connect session id and info.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ConnectSession"
+                        }
+                    ]
+                }
+            }
+        },
         "sandbox.CustomPatch": {
             "type": "object",
             "properties": {
@@ -5916,6 +6458,14 @@
         "sandbox.Readiness": {
             "type": "object",
             "properties": {
+                "connection": {
+                    "description": "Connection describes an associated call to signadot local connect.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/sandbox.ConnectionStatus"
+                        }
+                    ]
+                },
                 "forwards": {
                     "description": "Forwards status",
                     "type": "array",
@@ -5932,7 +6482,7 @@
                     ]
                 },
                 "local": {
-                    "description": "local workloads status",
+                    "description": "Local mappings status",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/sandbox.LocalWorkloadStatus"
@@ -5992,6 +6542,14 @@
                     "description": "Cluster within which this sandbox should be created",
                     "type": "string"
                 },
+                "connection": {
+                    "description": "What signadot local connect connection to use.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/Connection"
+                        }
+                    ]
+                },
                 "defaultRouteGroup": {
                     "description": "DefaultRouteGroup can be used to define route group endpoints for the sandbox.",
                     "allOf": [
@@ -6036,10 +6594,6 @@
                     "items": {
                         "$ref": "#/definitions/local"
                     }
-                },
-                "localMachineID": {
-                    "description": "Identifier of the machine from where a sandbox containing local workloads\nwas created or is intended to be ran",
-                    "type": "string"
                 },
                 "middleware": {
                     "description": "Request Middleware",
