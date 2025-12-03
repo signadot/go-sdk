@@ -7,6 +7,7 @@ package test_executions
 
 import (
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"io"
 
@@ -22,7 +23,7 @@ type ListTestExecutionsReader struct {
 }
 
 // ReadResponse reads a server response into the received o.
-func (o *ListTestExecutionsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
+func (o *ListTestExecutionsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (any, error) {
 	switch response.Code() {
 	case 200:
 		result := NewListTestExecutionsOK()
@@ -114,7 +115,7 @@ func (o *ListTestExecutionsOK) GetPayload() []*models.TestExecution {
 func (o *ListTestExecutionsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -184,7 +185,7 @@ func (o *ListTestExecutionsBadRequest) readResponse(response runtime.ClientRespo
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -254,7 +255,7 @@ func (o *ListTestExecutionsUnauthorized) readResponse(response runtime.ClientRes
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -324,7 +325,7 @@ func (o *ListTestExecutionsBadGateway) readResponse(response runtime.ClientRespo
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 

@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -19,7 +20,7 @@ import (
 type CaptureMessage struct {
 
 	// body
-	Body interface{} `json:"body,omitempty"`
+	Body any `json:"body,omitempty"`
 
 	// finished at
 	FinishedAt string `json:"finishedAt,omitempty"`
@@ -52,11 +53,15 @@ func (m *CaptureMessage) validateHeaders(formats strfmt.Registry) error {
 
 	if m.Headers != nil {
 		if err := m.Headers.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("headers")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("headers")
 			}
+
 			return err
 		}
 	}
@@ -85,11 +90,15 @@ func (m *CaptureMessage) contextValidateHeaders(ctx context.Context, formats str
 	}
 
 	if err := m.Headers.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("headers")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("headers")
 		}
+
 		return err
 	}
 

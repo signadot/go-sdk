@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -46,11 +47,15 @@ func (m *Virtual) validateWorkload(formats strfmt.Registry) error {
 
 	if m.Workload != nil {
 		if err := m.Workload.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("workload")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("workload")
 			}
+
 			return err
 		}
 	}
@@ -81,11 +86,15 @@ func (m *Virtual) contextValidateWorkload(ctx context.Context, formats strfmt.Re
 		}
 
 		if err := m.Workload.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("workload")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("workload")
 			}
+
 			return err
 		}
 	}

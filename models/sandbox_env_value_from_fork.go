@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -46,11 +47,15 @@ func (m *SandboxEnvValueFromFork) validateForkOf(formats strfmt.Registry) error 
 
 	if m.ForkOf != nil {
 		if err := m.ForkOf.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("forkOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("forkOf")
 			}
+
 			return err
 		}
 	}
@@ -81,11 +86,15 @@ func (m *SandboxEnvValueFromFork) contextValidateForkOf(ctx context.Context, for
 		}
 
 		if err := m.ForkOf.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("forkOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("forkOf")
 			}
+
 			return err
 		}
 	}

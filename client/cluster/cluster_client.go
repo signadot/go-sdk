@@ -83,7 +83,7 @@ AddCluster adds a cluster
 Add a Kubernetes cluster to Signadot.
 */
 func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewAddClusterParams()
 	}
@@ -103,17 +103,22 @@ func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAut
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*AddClusterOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for add-cluster: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -124,7 +129,7 @@ ClusterDevmeshAnalyze clusters dev mesh analyze
 Analyze DevMesh status for a given cluster
 */
 func (a *Client) ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ClusterDevmeshAnalyzeOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewClusterDevmeshAnalyzeParams()
 	}
@@ -144,17 +149,22 @@ func (a *Client) ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, auth
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*ClusterDevmeshAnalyzeOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for cluster-devmesh-analyze: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -165,7 +175,7 @@ CreateClusterToken creates cluster token
 Create a new token for connecting a cluster.
 */
 func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateClusterTokenParams()
 	}
@@ -185,17 +195,22 @@ func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo r
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*CreateClusterTokenOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for create-cluster-token: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -206,7 +221,7 @@ DeleteClusterToken deletes cluster token
 Delete a cluster token associated with a cluster.
 */
 func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteClusterTokenParams()
 	}
@@ -226,17 +241,22 @@ func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo r
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*DeleteClusterTokenOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for delete-cluster-token: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -247,7 +267,7 @@ GetCluster gets a cluster
 Get a cluster.
 */
 func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetClusterParams()
 	}
@@ -267,17 +287,22 @@ func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAut
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*GetClusterOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for get-cluster: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -288,7 +313,7 @@ GetClusterToken gets a cluster token
 Get a cluster token associated with a cluster.
 */
 func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTokenOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetClusterTokenParams()
 	}
@@ -308,17 +333,22 @@ func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*GetClusterTokenOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for get-cluster-token: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -329,7 +359,7 @@ ListClusterTokens lists cluster tokens
 List the cluster tokens associated with a cluster.
 */
 func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterTokensOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListClusterTokensParams()
 	}
@@ -349,17 +379,22 @@ func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo run
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*ListClusterTokensOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-cluster-tokens: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -370,7 +405,7 @@ ListClusters lists clusters
 List clusters.
 */
 func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListClustersParams()
 	}
@@ -390,17 +425,22 @@ func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.Clien
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*ListClustersOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-clusters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -411,7 +451,7 @@ RemoveCluster removes a cluster
 Remove a Kubernetes cluster from Signadot.
 */
 func (a *Client) RemoveCluster(params *RemoveClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveClusterOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewRemoveClusterParams()
 	}
@@ -431,17 +471,22 @@ func (a *Client) RemoveCluster(params *RemoveClusterParams, authInfo runtime.Cli
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*RemoveClusterOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for remove-cluster: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }

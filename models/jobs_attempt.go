@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -64,11 +65,15 @@ func (m *JobsAttempt) validatePhase(formats strfmt.Registry) error {
 	}
 
 	if err := m.Phase.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("phase")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("phase")
 		}
+
 		return err
 	}
 
@@ -82,11 +87,15 @@ func (m *JobsAttempt) validateState(formats strfmt.Registry) error {
 
 	if m.State != nil {
 		if err := m.State.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("state")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("state")
 			}
+
 			return err
 		}
 	}
@@ -119,11 +128,15 @@ func (m *JobsAttempt) contextValidatePhase(ctx context.Context, formats strfmt.R
 	}
 
 	if err := m.Phase.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("phase")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("phase")
 		}
+
 		return err
 	}
 
@@ -139,11 +152,15 @@ func (m *JobsAttempt) contextValidateState(ctx context.Context, formats strfmt.R
 		}
 
 		if err := m.State.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("state")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("state")
 			}
+
 			return err
 		}
 	}

@@ -7,6 +7,7 @@ package test_executions
 
 import (
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"io"
 
@@ -22,7 +23,7 @@ type GetTestExecutionReader struct {
 }
 
 // ReadResponse reads a server response into the received o.
-func (o *GetTestExecutionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
+func (o *GetTestExecutionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (any, error) {
 	switch response.Code() {
 	case 200:
 		result := NewGetTestExecutionOK()
@@ -116,7 +117,7 @@ func (o *GetTestExecutionOK) readResponse(response runtime.ClientResponse, consu
 	o.Payload = new(models.TestExecution)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -186,7 +187,7 @@ func (o *GetTestExecutionBadRequest) readResponse(response runtime.ClientRespons
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -256,7 +257,7 @@ func (o *GetTestExecutionUnauthorized) readResponse(response runtime.ClientRespo
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -326,7 +327,7 @@ func (o *GetTestExecutionBadGateway) readResponse(response runtime.ClientRespons
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 

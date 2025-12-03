@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -19,7 +20,7 @@ import (
 type TestexecutionsCheckError struct {
 
 	// attrs
-	Attrs map[string]interface{} `json:"attrs,omitempty"`
+	Attrs map[string]any `json:"attrs,omitempty"`
 
 	// message
 	Message string `json:"message,omitempty"`
@@ -49,11 +50,15 @@ func (m *TestexecutionsCheckError) validateSourcePosition(formats strfmt.Registr
 
 	if m.SourcePosition != nil {
 		if err := m.SourcePosition.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("sourcePosition")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("sourcePosition")
 			}
+
 			return err
 		}
 	}
@@ -84,11 +89,15 @@ func (m *TestexecutionsCheckError) contextValidateSourcePosition(ctx context.Con
 		}
 
 		if err := m.SourcePosition.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("sourcePosition")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("sourcePosition")
 			}
+
 			return err
 		}
 	}

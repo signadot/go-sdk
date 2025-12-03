@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -50,11 +51,15 @@ func (m *TestExecutionState) validateCanceled(formats strfmt.Registry) error {
 
 	if m.Canceled != nil {
 		if err := m.Canceled.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("canceled")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("canceled")
 			}
+
 			return err
 		}
 	}
@@ -69,11 +74,15 @@ func (m *TestExecutionState) validateFailed(formats strfmt.Registry) error {
 
 	if m.Failed != nil {
 		if err := m.Failed.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("failed")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("failed")
 			}
+
 			return err
 		}
 	}
@@ -108,11 +117,15 @@ func (m *TestExecutionState) contextValidateCanceled(ctx context.Context, format
 		}
 
 		if err := m.Canceled.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("canceled")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("canceled")
 			}
+
 			return err
 		}
 	}
@@ -129,11 +142,15 @@ func (m *TestExecutionState) contextValidateFailed(ctx context.Context, formats 
 		}
 
 		if err := m.Failed.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("failed")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("failed")
 			}
+
 			return err
 		}
 	}

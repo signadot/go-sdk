@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -56,11 +57,15 @@ func (m *ClustersDevMeshEnabledWorkload) validateStatusCounts(formats strfmt.Reg
 
 		if m.StatusCounts[i] != nil {
 			if err := m.StatusCounts[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("statusCounts" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("statusCounts" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -77,11 +82,15 @@ func (m *ClustersDevMeshEnabledWorkload) validateWorkload(formats strfmt.Registr
 
 	if m.Workload != nil {
 		if err := m.Workload.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("workload")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("workload")
 			}
+
 			return err
 		}
 	}
@@ -118,11 +127,15 @@ func (m *ClustersDevMeshEnabledWorkload) contextValidateStatusCounts(ctx context
 			}
 
 			if err := m.StatusCounts[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("statusCounts" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("statusCounts" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -141,11 +154,15 @@ func (m *ClustersDevMeshEnabledWorkload) contextValidateWorkload(ctx context.Con
 		}
 
 		if err := m.Workload.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("workload")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("workload")
 			}
+
 			return err
 		}
 	}

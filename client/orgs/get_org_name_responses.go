@@ -7,6 +7,7 @@ package orgs
 
 import (
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"io"
 
@@ -22,7 +23,7 @@ type GetOrgNameReader struct {
 }
 
 // ReadResponse reads a server response into the received o.
-func (o *GetOrgNameReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
+func (o *GetOrgNameReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (any, error) {
 	switch response.Code() {
 	case 200:
 		result := NewGetOrgNameOK()
@@ -116,7 +117,7 @@ func (o *GetOrgNameOK) readResponse(response runtime.ClientResponse, consumer ru
 	o.Payload = new(models.OrgsGetOrgNameResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -186,7 +187,7 @@ func (o *GetOrgNameBadRequest) readResponse(response runtime.ClientResponse, con
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -256,7 +257,7 @@ func (o *GetOrgNameForbidden) readResponse(response runtime.ClientResponse, cons
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -326,7 +327,7 @@ func (o *GetOrgNameInternalServerError) readResponse(response runtime.ClientResp
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 

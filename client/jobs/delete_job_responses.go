@@ -7,6 +7,7 @@ package jobs
 
 import (
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"io"
 
@@ -22,7 +23,7 @@ type DeleteJobReader struct {
 }
 
 // ReadResponse reads a server response into the received o.
-func (o *DeleteJobReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
+func (o *DeleteJobReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (any, error) {
 	switch response.Code() {
 	case 200:
 		result := NewDeleteJobOK()
@@ -114,7 +115,7 @@ func (o *DeleteJobOK) GetPayload() models.EmptyResponse {
 func (o *DeleteJobOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -184,7 +185,7 @@ func (o *DeleteJobBadRequest) readResponse(response runtime.ClientResponse, cons
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -254,7 +255,7 @@ func (o *DeleteJobUnauthorized) readResponse(response runtime.ClientResponse, co
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -324,7 +325,7 @@ func (o *DeleteJobBadGateway) readResponse(response runtime.ClientResponse, cons
 	o.Payload = new(models.ErrorResponse)
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 

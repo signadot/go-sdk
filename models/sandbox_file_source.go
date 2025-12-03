@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -57,11 +58,15 @@ func (m *SandboxFileSource) validateConfigMap(formats strfmt.Registry) error {
 
 	if m.ConfigMap != nil {
 		if err := m.ConfigMap.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("configMap")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("configMap")
 			}
+
 			return err
 		}
 	}
@@ -76,11 +81,15 @@ func (m *SandboxFileSource) validateResource(formats strfmt.Registry) error {
 
 	if m.Resource != nil {
 		if err := m.Resource.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("resource")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("resource")
 			}
+
 			return err
 		}
 	}
@@ -95,11 +104,15 @@ func (m *SandboxFileSource) validateSecret(formats strfmt.Registry) error {
 
 	if m.Secret != nil {
 		if err := m.Secret.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("secret")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("secret")
 			}
+
 			return err
 		}
 	}
@@ -138,11 +151,15 @@ func (m *SandboxFileSource) contextValidateConfigMap(ctx context.Context, format
 		}
 
 		if err := m.ConfigMap.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("configMap")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("configMap")
 			}
+
 			return err
 		}
 	}
@@ -159,11 +176,15 @@ func (m *SandboxFileSource) contextValidateResource(ctx context.Context, formats
 		}
 
 		if err := m.Resource.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("resource")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("resource")
 			}
+
 			return err
 		}
 	}
@@ -180,11 +201,15 @@ func (m *SandboxFileSource) contextValidateSecret(ctx context.Context, formats s
 		}
 
 		if err := m.Secret.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("secret")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("secret")
 			}
+
 			return err
 		}
 	}
