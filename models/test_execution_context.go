@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -71,11 +72,15 @@ func (m *TestExecutionContext) validateAutoDiff(formats strfmt.Registry) error {
 
 	if m.AutoDiff != nil {
 		if err := m.AutoDiff.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("autoDiff")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("autoDiff")
 			}
+
 			return err
 		}
 	}
@@ -90,11 +95,15 @@ func (m *TestExecutionContext) validateRouting(formats strfmt.Registry) error {
 
 	if m.Routing != nil {
 		if err := m.Routing.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routing")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routing")
 			}
+
 			return err
 		}
 	}
@@ -129,11 +138,15 @@ func (m *TestExecutionContext) contextValidateAutoDiff(ctx context.Context, form
 		}
 
 		if err := m.AutoDiff.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("autoDiff")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("autoDiff")
 			}
+
 			return err
 		}
 	}
@@ -150,11 +163,15 @@ func (m *TestExecutionContext) contextValidateRouting(ctx context.Context, forma
 		}
 
 		if err := m.Routing.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routing")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routing")
 			}
+
 			return err
 		}
 	}

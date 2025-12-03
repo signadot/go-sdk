@@ -41,7 +41,7 @@ const (
 )
 
 // for schema
-var clustersDevMeshWorkloadStatusEnum []interface{}
+var clustersDevMeshWorkloadStatusEnum []any
 
 func init() {
 	var res []ClustersDevMeshWorkloadStatus

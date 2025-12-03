@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -50,11 +51,15 @@ func (m *JobRunnerGroupStatus) validateExecutions(formats strfmt.Registry) error
 
 	if m.Executions != nil {
 		if err := m.Executions.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("executions")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("executions")
 			}
+
 			return err
 		}
 	}
@@ -69,11 +74,15 @@ func (m *JobRunnerGroupStatus) validatePods(formats strfmt.Registry) error {
 
 	if m.Pods != nil {
 		if err := m.Pods.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("pods")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("pods")
 			}
+
 			return err
 		}
 	}
@@ -108,11 +117,15 @@ func (m *JobRunnerGroupStatus) contextValidateExecutions(ctx context.Context, fo
 		}
 
 		if err := m.Executions.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("executions")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("executions")
 			}
+
 			return err
 		}
 	}
@@ -129,11 +142,15 @@ func (m *JobRunnerGroupStatus) contextValidatePods(ctx context.Context, formats 
 		}
 
 		if err := m.Pods.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("pods")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("pods")
 			}
+
 			return err
 		}
 	}

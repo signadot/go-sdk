@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -71,11 +72,15 @@ func (m *JobsState) validateCanceled(formats strfmt.Registry) error {
 
 	if m.Canceled != nil {
 		if err := m.Canceled.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("canceled")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("canceled")
 			}
+
 			return err
 		}
 	}
@@ -90,11 +95,15 @@ func (m *JobsState) validateFailed(formats strfmt.Registry) error {
 
 	if m.Failed != nil {
 		if err := m.Failed.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("failed")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("failed")
 			}
+
 			return err
 		}
 	}
@@ -109,11 +118,15 @@ func (m *JobsState) validateQueued(formats strfmt.Registry) error {
 
 	if m.Queued != nil {
 		if err := m.Queued.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("queued")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("queued")
 			}
+
 			return err
 		}
 	}
@@ -128,11 +141,15 @@ func (m *JobsState) validateRunning(formats strfmt.Registry) error {
 
 	if m.Running != nil {
 		if err := m.Running.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("running")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("running")
 			}
+
 			return err
 		}
 	}
@@ -147,11 +164,15 @@ func (m *JobsState) validateSucceeded(formats strfmt.Registry) error {
 
 	if m.Succeeded != nil {
 		if err := m.Succeeded.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("succeeded")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("succeeded")
 			}
+
 			return err
 		}
 	}
@@ -198,11 +219,15 @@ func (m *JobsState) contextValidateCanceled(ctx context.Context, formats strfmt.
 		}
 
 		if err := m.Canceled.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("canceled")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("canceled")
 			}
+
 			return err
 		}
 	}
@@ -219,11 +244,15 @@ func (m *JobsState) contextValidateFailed(ctx context.Context, formats strfmt.Re
 		}
 
 		if err := m.Failed.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("failed")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("failed")
 			}
+
 			return err
 		}
 	}
@@ -240,11 +269,15 @@ func (m *JobsState) contextValidateQueued(ctx context.Context, formats strfmt.Re
 		}
 
 		if err := m.Queued.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("queued")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("queued")
 			}
+
 			return err
 		}
 	}
@@ -261,11 +294,15 @@ func (m *JobsState) contextValidateRunning(ctx context.Context, formats strfmt.R
 		}
 
 		if err := m.Running.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("running")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("running")
 			}
+
 			return err
 		}
 	}
@@ -282,11 +319,15 @@ func (m *JobsState) contextValidateSucceeded(ctx context.Context, formats strfmt
 		}
 
 		if err := m.Succeeded.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("succeeded")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("succeeded")
 			}
+
 			return err
 		}
 	}

@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -66,11 +67,15 @@ func (m *ResourcepluginSpec) validateCreate(formats strfmt.Registry) error {
 
 		if m.Create[i] != nil {
 			if err := m.Create[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("create" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("create" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -92,11 +97,15 @@ func (m *ResourcepluginSpec) validateDelete(formats strfmt.Registry) error {
 
 		if m.Delete[i] != nil {
 			if err := m.Delete[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("delete" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("delete" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -113,11 +122,15 @@ func (m *ResourcepluginSpec) validateRunner(formats strfmt.Registry) error {
 
 	if m.Runner != nil {
 		if err := m.Runner.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("runner")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("runner")
 			}
+
 			return err
 		}
 	}
@@ -158,11 +171,15 @@ func (m *ResourcepluginSpec) contextValidateCreate(ctx context.Context, formats 
 			}
 
 			if err := m.Create[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("create" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("create" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -183,11 +200,15 @@ func (m *ResourcepluginSpec) contextValidateDelete(ctx context.Context, formats 
 			}
 
 			if err := m.Delete[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("delete" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("delete" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -206,11 +227,15 @@ func (m *ResourcepluginSpec) contextValidateRunner(ctx context.Context, formats 
 		}
 
 		if err := m.Runner.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("runner")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("runner")
 			}
+
 			return err
 		}
 	}
