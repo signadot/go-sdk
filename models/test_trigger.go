@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -53,11 +54,15 @@ func (m *TestTrigger) validateExecutionTemplate(formats strfmt.Registry) error {
 
 	if m.ExecutionTemplate != nil {
 		if err := m.ExecutionTemplate.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("executionTemplate")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("executionTemplate")
 			}
+
 			return err
 		}
 	}
@@ -72,11 +77,15 @@ func (m *TestTrigger) validateSandboxOf(formats strfmt.Registry) error {
 
 	if m.SandboxOf != nil {
 		if err := m.SandboxOf.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("sandboxOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("sandboxOf")
 			}
+
 			return err
 		}
 	}
@@ -111,11 +120,15 @@ func (m *TestTrigger) contextValidateExecutionTemplate(ctx context.Context, form
 		}
 
 		if err := m.ExecutionTemplate.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("executionTemplate")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("executionTemplate")
 			}
+
 			return err
 		}
 	}
@@ -132,11 +145,15 @@ func (m *TestTrigger) contextValidateSandboxOf(ctx context.Context, formats strf
 		}
 
 		if err := m.SandboxOf.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("sandboxOf")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("sandboxOf")
 			}
+
 			return err
 		}
 	}

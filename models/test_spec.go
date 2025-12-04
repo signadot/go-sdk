@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -63,11 +64,15 @@ func (m *TestSpec) validateTriggers(formats strfmt.Registry) error {
 
 		if m.Triggers[i] != nil {
 			if err := m.Triggers[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("triggers" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("triggers" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -102,11 +107,15 @@ func (m *TestSpec) contextValidateTriggers(ctx context.Context, formats strfmt.R
 			}
 
 			if err := m.Triggers[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("triggers" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("triggers" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}

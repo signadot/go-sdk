@@ -46,7 +46,7 @@ func (m *JobTrafficManager) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-var jobTrafficManagerTypeInjectRoutingKeyPropEnum []interface{}
+var jobTrafficManagerTypeInjectRoutingKeyPropEnum []any
 
 func init() {
 	var res []string

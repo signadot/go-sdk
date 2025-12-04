@@ -38,7 +38,7 @@ const (
 )
 
 // for schema
-var defaultsResourceKindEnum []interface{}
+var defaultsResourceKindEnum []any
 
 func init() {
 	var res []DefaultsResourceKind

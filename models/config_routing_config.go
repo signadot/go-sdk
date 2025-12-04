@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -56,11 +57,15 @@ func (m *ConfigRoutingConfig) validateIstio(formats strfmt.Registry) error {
 
 	if m.Istio != nil {
 		if err := m.Istio.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("istio")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("istio")
 			}
+
 			return err
 		}
 	}
@@ -75,11 +80,15 @@ func (m *ConfigRoutingConfig) validateLinkerd(formats strfmt.Registry) error {
 
 	if m.Linkerd != nil {
 		if err := m.Linkerd.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("linkerd")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("linkerd")
 			}
+
 			return err
 		}
 	}
@@ -114,11 +123,15 @@ func (m *ConfigRoutingConfig) contextValidateIstio(ctx context.Context, formats 
 		}
 
 		if err := m.Istio.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("istio")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("istio")
 			}
+
 			return err
 		}
 	}
@@ -135,11 +148,15 @@ func (m *ConfigRoutingConfig) contextValidateLinkerd(ctx context.Context, format
 		}
 
 		if err := m.Linkerd.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("linkerd")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("linkerd")
 			}
+
 			return err
 		}
 	}
