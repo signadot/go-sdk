@@ -20,11 +20,8 @@ type DevboxRegistration struct {
 	// claim
 	Claim bool `json:"claim,omitempty"`
 
-	// Required: used to generate deterministic ID (host, machine-id, etc.)
-	IDMeta map[string]string `json:"idMeta,omitempty"`
-
-	// labels
-	Labels map[string]string `json:"labels,omitempty"`
+	// Required: metadata key-value pairs. Only "name" and "machine-id" are used for ID generation.
+	Metadata map[string]string `json:"metadata,omitempty"`
 }
 
 // Validate validates this devbox registration

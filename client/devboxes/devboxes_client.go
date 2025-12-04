@@ -211,7 +211,7 @@ func (a *Client) GetDevbox(params *GetDevboxParams, opts ...ClientOption) (*GetD
 /*
 GetDevboxes lists devboxes
 
-List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes.
+List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes. API key authentication returns org-scoped devboxes.
 */
 func (a *Client) GetDevboxes(params *GetDevboxesParams, opts ...ClientOption) (*GetDevboxesOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -256,7 +256,7 @@ func (a *Client) GetDevboxes(params *GetDevboxesParams, opts ...ClientOption) (*
 /*
 RegisterDevbox registers a devbox idempotent p o s t
 
-Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists.
+Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists. When authenticated via API key, creates org-scoped devboxes shared across all API keys in the org.
 */
 func (a *Client) RegisterDevbox(params *RegisterDevboxParams, opts ...ClientOption) (*RegisterDevboxOK, *RegisterDevboxCreated, error) {
 	// NOTE: parameters are not validated before sending

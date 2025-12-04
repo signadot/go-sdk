@@ -1168,7 +1168,7 @@
         },
         "/orgs/{orgName}/devboxes/": {
             "get": {
-                "description": "List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes.",
+                "description": "List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes. API key authentication returns org-scoped devboxes.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1227,7 +1227,7 @@
                 }
             },
             "post": {
-                "description": "Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists.",
+                "description": "Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists. When authenticated via API key, creates org-scoped devboxes shared across all API keys in the org.",
                 "consumes": [
                     "application/json"
                 ],
@@ -4096,17 +4096,11 @@
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "Deterministic ID: hash of user email + metadata",
+                    "description": "Deterministic ID: hash of user ID + metadata (for user-owned) or hash of metadata only (for API key-owned, org-scoped)",
                     "type": "string"
                 },
-                "idMeta": {
-                    "description": "Metadata used to generate ID (host, machine-id, etc.)",
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "labels": {
+                "metadata": {
+                    "description": "Metadata (all key-value pairs). Only \"name\" and \"machine-id\" are used for ID generation.",
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"
@@ -4116,7 +4110,7 @@
                     "$ref": "#/definitions/DevboxStatus"
                 },
                 "user": {
-                    "description": "User email attribute (for display/authorization)",
+                    "description": "User email attribute (for display/authorization). Empty string for API key-owned devboxes (org-scoped).",
                     "type": "string"
                 }
             }
@@ -4127,14 +4121,8 @@
                 "claim": {
                     "type": "boolean"
                 },
-                "idMeta": {
-                    "description": "Required: used to generate deterministic ID (host, machine-id, etc.)",
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "labels": {
+                "metadata": {
+                    "description": "Required: metadata key-value pairs. Only \"name\" and \"machine-id\" are used for ID generation.",
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"

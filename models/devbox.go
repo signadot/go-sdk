@@ -19,19 +19,16 @@ import (
 // swagger:model Devbox
 type Devbox struct {
 
-	// Deterministic ID: hash of user email + metadata
+	// Deterministic ID: hash of user ID + metadata (for user-owned) or hash of metadata only (for API key-owned, org-scoped)
 	ID string `json:"id,omitempty"`
 
-	// Metadata used to generate ID (host, machine-id, etc.)
-	IDMeta map[string]string `json:"idMeta,omitempty"`
-
-	// labels
-	Labels map[string]string `json:"labels,omitempty"`
+	// Metadata (all key-value pairs). Only "name" and "machine-id" are used for ID generation.
+	Metadata map[string]string `json:"metadata,omitempty"`
 
 	// status
 	Status *DevboxStatus `json:"status,omitempty"`
 
-	// User email attribute (for display/authorization)
+	// User email attribute (for display/authorization). Empty string for API key-owned devboxes (org-scoped).
 	User string `json:"user,omitempty"`
 }
 
