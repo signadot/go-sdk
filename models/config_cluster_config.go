@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -35,6 +36,9 @@ type ConfigClusterConfig struct {
 
 	// traffic capture
 	TrafficCapture *ConfigTrafficCaptureConfig `json:"trafficCapture,omitempty"`
+
+	// traffic manager
+	TrafficManager *ConfigTrafficManagerConfig `json:"trafficManager,omitempty"`
 }
 
 // Validate validates this config cluster config
@@ -57,6 +61,10 @@ func (m *ConfigClusterConfig) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateTrafficManager(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -70,11 +78,15 @@ func (m *ConfigClusterConfig) validateControlPlane(formats strfmt.Registry) erro
 
 	if m.ControlPlane != nil {
 		if err := m.ControlPlane.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("controlPlane")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("controlPlane")
 			}
+
 			return err
 		}
 	}
@@ -89,11 +101,15 @@ func (m *ConfigClusterConfig) validateRouting(formats strfmt.Registry) error {
 
 	if m.Routing != nil {
 		if err := m.Routing.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routing")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routing")
 			}
+
 			return err
 		}
 	}
@@ -108,11 +124,15 @@ func (m *ConfigClusterConfig) validateSandboxTrafficManager(formats strfmt.Regis
 
 	if m.SandboxTrafficManager != nil {
 		if err := m.SandboxTrafficManager.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("sandboxTrafficManager")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("sandboxTrafficManager")
 			}
+
 			return err
 		}
 	}
@@ -127,11 +147,38 @@ func (m *ConfigClusterConfig) validateTrafficCapture(formats strfmt.Registry) er
 
 	if m.TrafficCapture != nil {
 		if err := m.TrafficCapture.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficCapture")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficCapture")
 			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigClusterConfig) validateTrafficManager(formats strfmt.Registry) error {
+	if swag.IsZero(m.TrafficManager) { // not required
+		return nil
+	}
+
+	if m.TrafficManager != nil {
+		if err := m.TrafficManager.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("trafficManager")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("trafficManager")
+			}
+
 			return err
 		}
 	}
@@ -159,6 +206,10 @@ func (m *ConfigClusterConfig) ContextValidate(ctx context.Context, formats strfm
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateTrafficManager(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -174,11 +225,15 @@ func (m *ConfigClusterConfig) contextValidateControlPlane(ctx context.Context, f
 		}
 
 		if err := m.ControlPlane.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("controlPlane")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("controlPlane")
 			}
+
 			return err
 		}
 	}
@@ -195,11 +250,15 @@ func (m *ConfigClusterConfig) contextValidateRouting(ctx context.Context, format
 		}
 
 		if err := m.Routing.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routing")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routing")
 			}
+
 			return err
 		}
 	}
@@ -216,11 +275,15 @@ func (m *ConfigClusterConfig) contextValidateSandboxTrafficManager(ctx context.C
 		}
 
 		if err := m.SandboxTrafficManager.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("sandboxTrafficManager")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("sandboxTrafficManager")
 			}
+
 			return err
 		}
 	}
@@ -237,11 +300,40 @@ func (m *ConfigClusterConfig) contextValidateTrafficCapture(ctx context.Context,
 		}
 
 		if err := m.TrafficCapture.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficCapture")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficCapture")
 			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigClusterConfig) contextValidateTrafficManager(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TrafficManager != nil {
+
+		if swag.IsZero(m.TrafficManager) { // not required
+			return nil
+		}
+
+		if err := m.TrafficManager.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("trafficManager")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("trafficManager")
+			}
+
 			return err
 		}
 	}

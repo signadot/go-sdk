@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -23,6 +24,9 @@ type SandboxSpec struct {
 	// Cluster within which this sandbox should be created
 	// Required: true
 	Cluster *string `json:"cluster"`
+
+	// connection
+	Connection *Connection `json:"connection,omitempty"`
 
 	// default route group
 	DefaultRouteGroup *SandboxDefaultRouteGroup `json:"defaultRouteGroup,omitempty"`
@@ -49,10 +53,6 @@ type SandboxSpec struct {
 	// Local Workloads
 	Local []*Local `json:"local"`
 
-	// Identifier of the machine from where a sandbox containing local workloads
-	// was created or is intended to be ran
-	LocalMachineID string `json:"localMachineID,omitempty"`
-
 	// Request Middleware
 	Middleware []*SandboxesMiddleware `json:"middleware"`
 
@@ -74,6 +74,10 @@ func (m *SandboxSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCluster(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateConnection(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -128,6 +132,29 @@ func (m *SandboxSpec) validateCluster(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SandboxSpec) validateConnection(formats strfmt.Registry) error {
+	if swag.IsZero(m.Connection) { // not required
+		return nil
+	}
+
+	if m.Connection != nil {
+		if err := m.Connection.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("connection")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("connection")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *SandboxSpec) validateDefaultRouteGroup(formats strfmt.Registry) error {
 	if swag.IsZero(m.DefaultRouteGroup) { // not required
 		return nil
@@ -135,11 +162,15 @@ func (m *SandboxSpec) validateDefaultRouteGroup(formats strfmt.Registry) error {
 
 	if m.DefaultRouteGroup != nil {
 		if err := m.DefaultRouteGroup.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("defaultRouteGroup")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("defaultRouteGroup")
 			}
+
 			return err
 		}
 	}
@@ -159,11 +190,15 @@ func (m *SandboxSpec) validateEndpoints(formats strfmt.Registry) error {
 
 		if m.Endpoints[i] != nil {
 			if err := m.Endpoints[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -186,11 +221,15 @@ func (m *SandboxSpec) validateForks(formats strfmt.Registry) error {
 
 		if m.Forks[i] != nil {
 			if err := m.Forks[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("forks" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("forks" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -212,11 +251,15 @@ func (m *SandboxSpec) validateLocal(formats strfmt.Registry) error {
 
 		if m.Local[i] != nil {
 			if err := m.Local[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("local" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("local" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -238,11 +281,15 @@ func (m *SandboxSpec) validateMiddleware(formats strfmt.Registry) error {
 
 		if m.Middleware[i] != nil {
 			if err := m.Middleware[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("middleware" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("middleware" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -264,11 +311,15 @@ func (m *SandboxSpec) validateResources(formats strfmt.Registry) error {
 
 		if m.Resources[i] != nil {
 			if err := m.Resources[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("resources" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("resources" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -285,11 +336,15 @@ func (m *SandboxSpec) validateRouting(formats strfmt.Registry) error {
 
 	if m.Routing != nil {
 		if err := m.Routing.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routing")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routing")
 			}
+
 			return err
 		}
 	}
@@ -304,11 +359,15 @@ func (m *SandboxSpec) validateTTL(formats strfmt.Registry) error {
 
 	if m.TTL != nil {
 		if err := m.TTL.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("ttl")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("ttl")
 			}
+
 			return err
 		}
 	}
@@ -328,11 +387,15 @@ func (m *SandboxSpec) validateVirtual(formats strfmt.Registry) error {
 
 		if m.Virtual[i] != nil {
 			if err := m.Virtual[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("virtual" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("virtual" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -345,6 +408,10 @@ func (m *SandboxSpec) validateVirtual(formats strfmt.Registry) error {
 // ContextValidate validate this sandbox spec based on the context it is used
 func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.contextValidateConnection(ctx, formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.contextValidateDefaultRouteGroup(ctx, formats); err != nil {
 		res = append(res, err)
@@ -388,6 +455,31 @@ func (m *SandboxSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 	return nil
 }
 
+func (m *SandboxSpec) contextValidateConnection(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Connection != nil {
+
+		if swag.IsZero(m.Connection) { // not required
+			return nil
+		}
+
+		if err := m.Connection.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("connection")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("connection")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *SandboxSpec) contextValidateDefaultRouteGroup(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DefaultRouteGroup != nil {
@@ -397,11 +489,15 @@ func (m *SandboxSpec) contextValidateDefaultRouteGroup(ctx context.Context, form
 		}
 
 		if err := m.DefaultRouteGroup.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("defaultRouteGroup")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("defaultRouteGroup")
 			}
+
 			return err
 		}
 	}
@@ -420,11 +516,15 @@ func (m *SandboxSpec) contextValidateEndpoints(ctx context.Context, formats strf
 			}
 
 			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("endpoints" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -445,11 +545,15 @@ func (m *SandboxSpec) contextValidateForks(ctx context.Context, formats strfmt.R
 			}
 
 			if err := m.Forks[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("forks" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("forks" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -470,11 +574,15 @@ func (m *SandboxSpec) contextValidateLocal(ctx context.Context, formats strfmt.R
 			}
 
 			if err := m.Local[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("local" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("local" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -495,11 +603,15 @@ func (m *SandboxSpec) contextValidateMiddleware(ctx context.Context, formats str
 			}
 
 			if err := m.Middleware[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("middleware" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("middleware" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -520,11 +632,15 @@ func (m *SandboxSpec) contextValidateResources(ctx context.Context, formats strf
 			}
 
 			if err := m.Resources[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("resources" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("resources" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}
@@ -543,11 +659,15 @@ func (m *SandboxSpec) contextValidateRouting(ctx context.Context, formats strfmt
 		}
 
 		if err := m.Routing.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("routing")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("routing")
 			}
+
 			return err
 		}
 	}
@@ -564,11 +684,15 @@ func (m *SandboxSpec) contextValidateTTL(ctx context.Context, formats strfmt.Reg
 		}
 
 		if err := m.TTL.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("ttl")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("ttl")
 			}
+
 			return err
 		}
 	}
@@ -587,11 +711,15 @@ func (m *SandboxSpec) contextValidateVirtual(ctx context.Context, formats strfmt
 			}
 
 			if err := m.Virtual[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
 					return ve.ValidateName("virtual" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
 					return ce.ValidateName("virtual" + "." + strconv.Itoa(i))
 				}
+
 				return err
 			}
 		}

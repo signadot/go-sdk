@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -58,11 +59,15 @@ func (m *SandboxEnvVar) validateOperation(formats strfmt.Registry) error {
 	}
 
 	if err := m.Operation.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("operation")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("operation")
 		}
+
 		return err
 	}
 
@@ -76,11 +81,15 @@ func (m *SandboxEnvVar) validateValueFrom(formats strfmt.Registry) error {
 
 	if m.ValueFrom != nil {
 		if err := m.ValueFrom.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("valueFrom")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("valueFrom")
 			}
+
 			return err
 		}
 	}
@@ -113,11 +122,15 @@ func (m *SandboxEnvVar) contextValidateOperation(ctx context.Context, formats st
 	}
 
 	if err := m.Operation.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("operation")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("operation")
 		}
+
 		return err
 	}
 
@@ -133,11 +146,15 @@ func (m *SandboxEnvVar) contextValidateValueFrom(ctx context.Context, formats st
 		}
 
 		if err := m.ValueFrom.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("valueFrom")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("valueFrom")
 			}
+
 			return err
 		}
 	}

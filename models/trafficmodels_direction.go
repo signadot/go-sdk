@@ -38,7 +38,7 @@ const (
 )
 
 // for schema
-var trafficmodelsDirectionEnum []interface{}
+var trafficmodelsDirectionEnum []any
 
 func init() {
 	var res []TrafficmodelsDirection

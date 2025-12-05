@@ -17,13 +17,13 @@ import (
 // swagger:model config.ControlPlaneConfig
 type ConfigControlPlaneConfig struct {
 
-	// ControlPlane can be disabled
+	// control plane can be disabled
 	Disabled bool `json:"disabled,omitempty"`
 
-	// ControlPlaneProxy can be "enabled" or "disabled"
+	// control plane proxy can be "enabled" or "disabled"
 	Proxy string `json:"proxy,omitempty"`
 
-	// for on-prem
+	// tunnel addr
 	TunnelAddr string `json:"tunnelAddr,omitempty"`
 
 	// tunnel TLS

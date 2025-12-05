@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -35,7 +36,7 @@ type JobRunnerGroupSpec struct {
 	Namespace string `json:"namespace,omitempty"`
 
 	// pod template
-	PodTemplate interface{} `json:"podTemplate,omitempty"`
+	PodTemplate any `json:"podTemplate,omitempty"`
 
 	// ReusePods specifies whether JRG pods are reused after job executions.
 	// If false (default), JRG pods are always recreated after each job.
@@ -66,11 +67,15 @@ func (m *JobRunnerGroupSpec) validateScaling(formats strfmt.Registry) error {
 
 	if m.Scaling != nil {
 		if err := m.Scaling.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("scaling")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("scaling")
 			}
+
 			return err
 		}
 	}
@@ -101,11 +106,15 @@ func (m *JobRunnerGroupSpec) contextValidateScaling(ctx context.Context, formats
 		}
 
 		if err := m.Scaling.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("scaling")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("scaling")
 			}
+
 			return err
 		}
 	}

@@ -38,7 +38,7 @@ const (
 )
 
 // for schema
-var sandboxesEnvOpNameEnum []interface{}
+var sandboxesEnvOpNameEnum []any
 
 func init() {
 	var res []SandboxesEnvOpName

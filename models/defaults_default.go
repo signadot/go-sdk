@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -31,7 +32,7 @@ type DefaultsDefault struct {
 	UpdatedAt string `json:"updatedAt,omitempty"`
 
 	// value
-	Value interface{} `json:"value,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 // Validate validates this defaults default
@@ -58,11 +59,15 @@ func (m *DefaultsDefault) validateClass(formats strfmt.Registry) error {
 	}
 
 	if err := m.Class.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("class")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("class")
 		}
+
 		return err
 	}
 
@@ -75,11 +80,15 @@ func (m *DefaultsDefault) validateResourceKind(formats strfmt.Registry) error {
 	}
 
 	if err := m.ResourceKind.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("resourceKind")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("resourceKind")
 		}
+
 		return err
 	}
 
@@ -111,11 +120,15 @@ func (m *DefaultsDefault) contextValidateClass(ctx context.Context, formats strf
 	}
 
 	if err := m.Class.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("class")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("class")
 		}
+
 		return err
 	}
 
@@ -129,11 +142,15 @@ func (m *DefaultsDefault) contextValidateResourceKind(ctx context.Context, forma
 	}
 
 	if err := m.ResourceKind.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
+		ve := new(errors.Validation)
+		if stderrors.As(err, &ve) {
 			return ve.ValidateName("resourceKind")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
+		}
+		ce := new(errors.CompositeError)
+		if stderrors.As(err, &ce) {
 			return ce.ValidateName("resourceKind")
 		}
+
 		return err
 	}
 

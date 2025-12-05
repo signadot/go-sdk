@@ -13,6 +13,7 @@ import (
 	"github.com/signadot/go-sdk/client/artifacts"
 	"github.com/signadot/go-sdk/client/auth"
 	"github.com/signadot/go-sdk/client/cluster"
+	"github.com/signadot/go-sdk/client/devboxes"
 	"github.com/signadot/go-sdk/client/job_logs"
 	"github.com/signadot/go-sdk/client/jobs"
 	"github.com/signadot/go-sdk/client/orgs"
@@ -69,6 +70,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli.Artifacts = artifacts.New(transport, formats)
 	cli.Auth = auth.New(transport, formats)
 	cli.Cluster = cluster.New(transport, formats)
+	cli.Devboxes = devboxes.New(transport, formats)
 	cli.JobLogs = job_logs.New(transport, formats)
 	cli.Jobs = jobs.New(transport, formats)
 	cli.Orgs = orgs.New(transport, formats)
@@ -128,6 +130,8 @@ type SignadotAPI struct {
 
 	Cluster cluster.ClientService
 
+	Devboxes devboxes.ClientService
+
 	JobLogs job_logs.ClientService
 
 	Jobs jobs.ClientService
@@ -155,6 +159,7 @@ func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Artifacts.SetTransport(transport)
 	c.Auth.SetTransport(transport)
 	c.Cluster.SetTransport(transport)
+	c.Devboxes.SetTransport(transport)
 	c.JobLogs.SetTransport(transport)
 	c.Jobs.SetTransport(transport)
 	c.Orgs.SetTransport(transport)

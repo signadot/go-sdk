@@ -8,4 +8,4 @@ package models
 // EmptyResponse empty response
 //
 // swagger:model EmptyResponse
-type EmptyResponse interface{}
+type EmptyResponse any

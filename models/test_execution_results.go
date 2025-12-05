@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -50,11 +51,15 @@ func (m *TestExecutionResults) validateChecks(formats strfmt.Registry) error {
 
 	if m.Checks != nil {
 		if err := m.Checks.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("checks")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("checks")
 			}
+
 			return err
 		}
 	}
@@ -69,11 +74,15 @@ func (m *TestExecutionResults) validateTrafficDiff(formats strfmt.Registry) erro
 
 	if m.TrafficDiff != nil {
 		if err := m.TrafficDiff.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficDiff")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficDiff")
 			}
+
 			return err
 		}
 	}
@@ -108,11 +117,15 @@ func (m *TestExecutionResults) contextValidateChecks(ctx context.Context, format
 		}
 
 		if err := m.Checks.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("checks")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("checks")
 			}
+
 			return err
 		}
 	}
@@ -129,11 +142,15 @@ func (m *TestExecutionResults) contextValidateTrafficDiff(ctx context.Context, f
 		}
 
 		if err := m.TrafficDiff.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
 				return ve.ValidateName("trafficDiff")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
 				return ce.ValidateName("trafficDiff")
 			}
+
 			return err
 		}
 	}

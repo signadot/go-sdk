@@ -118,7 +118,7 @@ DownloadJobAttemptArtifact downloads job attempt artifact
 Downloads an artifact for a given job attempt.
 */
 func (a *Client) DownloadJobAttemptArtifact(params *DownloadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadJobAttemptArtifactOK, *DownloadJobAttemptArtifactPartialContent, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDownloadJobAttemptArtifactParams()
 	}
@@ -138,18 +138,22 @@ func (a *Client) DownloadJobAttemptArtifact(params *DownloadJobAttemptArtifactPa
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, nil, err
 	}
+
+	// several success responses have to be checked
 	switch value := result.(type) {
 	case *DownloadJobAttemptArtifactOK:
 		return value, nil, nil
 	case *DownloadJobAttemptArtifactPartialContent:
 		return nil, value, nil
 	}
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for artifacts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -160,7 +164,7 @@ InfoJobAttemptArtifact jobs attempt artifact info
 Get info about a job attempt artifact
 */
 func (a *Client) InfoJobAttemptArtifact(params *InfoJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InfoJobAttemptArtifactOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewInfoJobAttemptArtifactParams()
 	}
@@ -180,17 +184,22 @@ func (a *Client) InfoJobAttemptArtifact(params *InfoJobAttemptArtifactParams, au
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*InfoJobAttemptArtifactOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for info-job-attempt-artifact: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -201,7 +210,7 @@ ListJobAttemptArtifacts lists job attempt artifacts
 List all artifacts for a given job attempt.
 */
 func (a *Client) ListJobAttemptArtifacts(params *ListJobAttemptArtifactsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobAttemptArtifactsOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListJobAttemptArtifactsParams()
 	}
@@ -221,17 +230,22 @@ func (a *Client) ListJobAttemptArtifacts(params *ListJobAttemptArtifactsParams, 
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*ListJobAttemptArtifactsOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-job-attempt-artifacts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
@@ -242,7 +256,7 @@ UploadJobAttemptArtifact uploads job attempt artifact
 Uploads an artifact for a given job attempt.
 */
 func (a *Client) UploadJobAttemptArtifact(params *UploadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UploadJobAttemptArtifactOK, error) {
-	// TODO: Validate the params before sending
+	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewUploadJobAttemptArtifactParams()
 	}
@@ -262,17 +276,22 @@ func (a *Client) UploadJobAttemptArtifact(params *UploadJobAttemptArtifactParams
 	for _, opt := range opts {
 		opt(op)
 	}
-
 	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
+
+	// only one success response has to be checked
 	success, ok := result.(*UploadJobAttemptArtifactOK)
 	if ok {
 		return success, nil
 	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for upload-job-attempt-artifact: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
