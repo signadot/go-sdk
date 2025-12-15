@@ -356,7 +356,7 @@ func (a *Client) RenewDevbox(params *RenewDevboxParams, opts ...ClientOption) (*
 	op := &runtime.ClientOperation{
 		ID:                 "renew-devbox",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/devboxes/{devboxId}/renew",
+		PathPattern:        "/orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

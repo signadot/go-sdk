@@ -50,7 +50,7 @@ func (o *RenewDevboxReader) ReadResponse(response runtime.ClientResponse, consum
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/devboxes/{devboxId}/renew] renew-devbox", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}] renew-devbox", response, response.Code())
 	}
 }
 
@@ -100,12 +100,12 @@ func (o *RenewDevboxOK) Code() int {
 
 func (o *RenewDevboxOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxOK %s", 200, payload)
 }
 
 func (o *RenewDevboxOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxOK %s", 200, payload)
 }
 
 func (o *RenewDevboxOK) GetPayload() *models.Devbox {
@@ -170,12 +170,12 @@ func (o *RenewDevboxForbidden) Code() int {
 
 func (o *RenewDevboxForbidden) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxForbidden %s", 403, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxForbidden %s", 403, payload)
 }
 
 func (o *RenewDevboxForbidden) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxForbidden %s", 403, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxForbidden %s", 403, payload)
 }
 
 func (o *RenewDevboxForbidden) GetPayload() *models.ErrorResponse {
@@ -240,12 +240,12 @@ func (o *RenewDevboxTooManyRequests) Code() int {
 
 func (o *RenewDevboxTooManyRequests) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxTooManyRequests %s", 429, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxTooManyRequests %s", 429, payload)
 }
 
 func (o *RenewDevboxTooManyRequests) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxTooManyRequests %s", 429, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxTooManyRequests %s", 429, payload)
 }
 
 func (o *RenewDevboxTooManyRequests) GetPayload() *models.ErrorResponse {
@@ -310,12 +310,12 @@ func (o *RenewDevboxInternalServerError) Code() int {
 
 func (o *RenewDevboxInternalServerError) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxInternalServerError %s", 500, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxInternalServerError %s", 500, payload)
 }
 
 func (o *RenewDevboxInternalServerError) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew][%d] renewDevboxInternalServerError %s", 500, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}][%d] renewDevboxInternalServerError %s", 500, payload)
 }
 
 func (o *RenewDevboxInternalServerError) GetPayload() *models.ErrorResponse {
