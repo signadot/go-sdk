@@ -17,6 +17,9 @@ import (
 // swagger:model orgs.User
 type OrgsUser struct {
 
+	// avatar
+	Avatar string `json:"avatar,omitempty"`
+
 	// created at
 	CreatedAt string `json:"createdAt,omitempty"`
 

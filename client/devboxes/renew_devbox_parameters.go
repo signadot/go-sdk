@@ -67,6 +67,12 @@ type RenewDevboxParams struct {
 	*/
 	DevboxID string
 
+	/* DevboxSessionID.
+
+	   Devbox Connect Session
+	*/
+	DevboxSessionID string
+
 	/* OrgName.
 
 	   Signadot Org Name
@@ -137,6 +143,17 @@ func (o *RenewDevboxParams) SetDevboxID(devboxID string) {
 	o.DevboxID = devboxID
 }
 
+// WithDevboxSessionID adds the devboxSessionID to the renew devbox params
+func (o *RenewDevboxParams) WithDevboxSessionID(devboxSessionID string) *RenewDevboxParams {
+	o.SetDevboxSessionID(devboxSessionID)
+	return o
+}
+
+// SetDevboxSessionID adds the devboxSessionId to the renew devbox params
+func (o *RenewDevboxParams) SetDevboxSessionID(devboxSessionID string) {
+	o.DevboxSessionID = devboxSessionID
+}
+
 // WithOrgName adds the orgName to the renew devbox params
 func (o *RenewDevboxParams) WithOrgName(orgName string) *RenewDevboxParams {
 	o.SetOrgName(orgName)
@@ -158,6 +175,11 @@ func (o *RenewDevboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 
 	// path param devboxId
 	if err := r.SetPathParam("devboxId", o.DevboxID); err != nil {
+		return err
+	}
+
+	// path param devboxSessionId
+	if err := r.SetPathParam("devboxSessionId", o.DevboxSessionID); err != nil {
 		return err
 	}
 

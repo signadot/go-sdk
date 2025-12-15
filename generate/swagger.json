@@ -1532,7 +1532,7 @@
                 }
             }
         },
-        "/orgs/{orgName}/devboxes/{devboxId}/renew": {
+        "/orgs/{orgName}/devboxes/{devboxId}/renew/{devboxSessionId}": {
             "get": {
                 "description": "Renew a devbox for a signadot local connect session lease",
                 "consumes": [
@@ -1559,6 +1559,13 @@
                         "type": "string",
                         "description": "Devbox Identifier",
                         "name": "devboxId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Devbox Connect Session",
+                        "name": "devboxSessionId",
                         "in": "path",
                         "required": true
                     }
@@ -5755,6 +5762,9 @@
         "orgs.User": {
             "type": "object",
             "properties": {
+                "avatar": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
