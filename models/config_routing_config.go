@@ -22,6 +22,9 @@ type ConfigRoutingConfig struct {
 	// custom headers
 	CustomHeaders []string `json:"customHeaders"`
 
+	// gateway API
+	GatewayAPI *ConfigGatewayAPIConfig `json:"gatewayAPI,omitempty"`
+
 	// iptables mode
 	IptablesMode string `json:"iptablesMode,omitempty"`
 
@@ -36,6 +39,10 @@ type ConfigRoutingConfig struct {
 func (m *ConfigRoutingConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateGatewayAPI(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateIstio(formats); err != nil {
 		res = append(res, err)
 	}
@@ -47,6 +54,29 @@ func (m *ConfigRoutingConfig) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ConfigRoutingConfig) validateGatewayAPI(formats strfmt.Registry) error {
+	if swag.IsZero(m.GatewayAPI) { // not required
+		return nil
+	}
+
+	if m.GatewayAPI != nil {
+		if err := m.GatewayAPI.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("gatewayAPI")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("gatewayAPI")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -100,6 +130,10 @@ func (m *ConfigRoutingConfig) validateLinkerd(formats strfmt.Registry) error {
 func (m *ConfigRoutingConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateGatewayAPI(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateIstio(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -111,6 +145,31 @@ func (m *ConfigRoutingConfig) ContextValidate(ctx context.Context, formats strfm
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ConfigRoutingConfig) contextValidateGatewayAPI(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GatewayAPI != nil {
+
+		if swag.IsZero(m.GatewayAPI) { // not required
+			return nil
+		}
+
+		if err := m.GatewayAPI.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("gatewayAPI")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("gatewayAPI")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
