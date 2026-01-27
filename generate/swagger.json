@@ -5117,6 +5117,14 @@
                 }
             }
         },
+        "config.GatewayAPIConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
         "config.IstioConfig": {
             "type": "object",
             "properties": {
@@ -5165,6 +5173,17 @@
                 }
             }
         },
+        "config.QueryParamRoutingConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "paramName": {
+                    "type": "string"
+                }
+            }
+        },
         "config.RoutingConfig": {
             "type": "object",
             "properties": {
@@ -5174,6 +5193,9 @@
                         "type": "string"
                     }
                 },
+                "gatewayAPI": {
+                    "$ref": "#/definitions/config.GatewayAPIConfig"
+                },
                 "iptablesMode": {
                     "type": "string"
                 },
@@ -5182,6 +5204,9 @@
                 },
                 "linkerd": {
                     "$ref": "#/definitions/config.LinkerdConfig"
+                },
+                "queryParamRouting": {
+                    "$ref": "#/definitions/config.QueryParamRoutingConfig"
                 }
             }
         },
