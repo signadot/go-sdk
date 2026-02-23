@@ -3054,6 +3054,148 @@
                 }
             }
         },
+        "/orgs/{orgName}/sandboxes/{sandboxName}/explain-status": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Generate a natural-language explanation of why a sandbox is in its current state, using an LLM fed with cluster context.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sandboxes"
+                ],
+                "summary": "Explain sandbox status",
+                "operationId": "explain-sandbox-status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "my-sandbox",
+                        "description": "Sandbox Name",
+                        "name": "sandboxName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/sandboxes.ExplainStatusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/sandboxes/{sandboxName}/explain-status/context": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Return the assembled system prompt and JSON context for the sandbox status explanation. Callers can feed these into any LLM of their choice instead of using the built-in explain-status endpoint.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sandboxes"
+                ],
+                "summary": "Get sandbox status explanation context",
+                "operationId": "explain-sandbox-status-context",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "my-sandbox",
+                        "description": "Sandbox Name",
+                        "name": "sandboxName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/sandboxes.ExplainStatusContextResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/tests": {
             "get": {
                 "security": [
@@ -5117,6 +5259,26 @@
                 }
             }
         },
+        "config.GatewayAPIConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "preservedAnnotations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "preservedLabels": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "config.IstioConfig": {
             "type": "object",
             "properties": {
@@ -5165,6 +5327,17 @@
                 }
             }
         },
+        "config.QueryParamRoutingConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "paramName": {
+                    "type": "string"
+                }
+            }
+        },
         "config.RoutingConfig": {
             "type": "object",
             "properties": {
@@ -5174,6 +5347,9 @@
                         "type": "string"
                     }
                 },
+                "gatewayAPI": {
+                    "$ref": "#/definitions/config.GatewayAPIConfig"
+                },
                 "iptablesMode": {
                     "type": "string"
                 },
@@ -5182,6 +5358,9 @@
                 },
                 "linkerd": {
                     "$ref": "#/definitions/config.LinkerdConfig"
+                },
+                "queryParamRouting": {
+                    "$ref": "#/definitions/config.QueryParamRoutingConfig"
                 }
             }
         },
@@ -6745,6 +6924,39 @@
                 "EnvOpUpsert",
                 "EnvOpDelete"
             ]
+        },
+        "sandboxes.ExplainStatusContextResponse": {
+            "type": "object",
+            "properties": {
+                "context": {
+                    "description": "Context is the structured cluster/DB context that should be sent as the\nuser-role message to the LLM. It already includes the sandbox status.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "systemPrompt": {
+                    "description": "SystemPrompt is the system-role prompt for the LLM, including the CRD\nreference documentation.",
+                    "type": "string"
+                }
+            }
+        },
+        "sandboxes.ExplainStatusResponse": {
+            "type": "object",
+            "properties": {
+                "explanation": {
+                    "description": "Explanation is a natural-language explanation of why the sandbox\nis in its current state and what, if anything, the user can do.",
+                    "type": "string"
+                },
+                "sandboxStatus": {
+                    "description": "SandboxStatus is the current machine-readable status.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/sandbox.Readiness"
+                        }
+                    ]
+                }
+            }
         },
         "sandboxes.Forward": {
             "type": "object",
