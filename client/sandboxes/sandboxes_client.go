@@ -60,6 +60,10 @@ type ClientService interface {
 
 	DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSandboxOK, error)
 
+	ExplainSandboxStatus(params *ExplainSandboxStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusOK, error)
+
+	ExplainSandboxStatusContext(params *ExplainSandboxStatusContextParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusContextOK, error)
+
 	GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxOK, error)
 
 	ListSandboxes(params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error)
@@ -156,6 +160,98 @@ func (a *Client) DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.Cli
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for delete-sandbox: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ExplainSandboxStatus explains sandbox status
+
+Generate a natural-language explanation of why a sandbox is in its current state, using an LLM fed with cluster context.
+*/
+func (a *Client) ExplainSandboxStatus(params *ExplainSandboxStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewExplainSandboxStatusParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "explain-sandbox-status",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/sandboxes/{sandboxName}/explain-status",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ExplainSandboxStatusReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*ExplainSandboxStatusOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for explain-sandbox-status: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ExplainSandboxStatusContext gets sandbox status explanation context
+
+Return the assembled system prompt and JSON context for the sandbox status explanation. Callers can feed these into any LLM of their choice instead of using the built-in explain-status endpoint.
+*/
+func (a *Client) ExplainSandboxStatusContext(params *ExplainSandboxStatusContextParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusContextOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewExplainSandboxStatusContextParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "explain-sandbox-status-context",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/sandboxes/{sandboxName}/explain-status/context",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ExplainSandboxStatusContextReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*ExplainSandboxStatusContextOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for explain-sandbox-status-context: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
