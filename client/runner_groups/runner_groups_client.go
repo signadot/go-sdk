@@ -116,7 +116,7 @@ func (a *Client) ApplyRunnergroup(params *ApplyRunnergroupParams, authInfo runti
 /*
 DeleteRunnergroup deletes a runnergroup
 
-Delete a given runnergroup.
+Delete a given jobrunnergroup.
 */
 func (a *Client) DeleteRunnergroup(params *DeleteRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -162,7 +162,7 @@ func (a *Client) DeleteRunnergroup(params *DeleteRunnergroupParams, authInfo run
 /*
 GetRunnergroup gets a runnergroup
 
-Fetch the details about a given runnergroup.
+Fetch the details about a given jobrunnergroup.
 */
 func (a *Client) GetRunnergroup(params *GetRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
