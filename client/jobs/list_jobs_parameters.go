@@ -67,6 +67,12 @@ type ListJobsParams struct {
 	*/
 	OrgName string
 
+	/* TargetSandbox.
+
+	   Filter jobs by target sandbox name
+	*/
+	TargetSandbox *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -131,6 +137,17 @@ func (o *ListJobsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
+// WithTargetSandbox adds the targetSandbox to the list jobs params
+func (o *ListJobsParams) WithTargetSandbox(targetSandbox *string) *ListJobsParams {
+	o.SetTargetSandbox(targetSandbox)
+	return o
+}
+
+// SetTargetSandbox adds the targetSandbox to the list jobs params
+func (o *ListJobsParams) SetTargetSandbox(targetSandbox *string) {
+	o.TargetSandbox = targetSandbox
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -142,6 +159,23 @@ func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
 		return err
+	}
+
+	if o.TargetSandbox != nil {
+
+		// query param targetSandbox
+		var qrTargetSandbox string
+
+		if o.TargetSandbox != nil {
+			qrTargetSandbox = *o.TargetSandbox
+		}
+		qTargetSandbox := qrTargetSandbox
+		if qTargetSandbox != "" {
+
+			if err := r.SetQueryParam("targetSandbox", qTargetSandbox); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {

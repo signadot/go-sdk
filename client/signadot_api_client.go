@@ -21,6 +21,7 @@ import (
 	"github.com/signadot/go-sdk/client/route_groups"
 	"github.com/signadot/go-sdk/client/runner_groups"
 	"github.com/signadot/go-sdk/client/sandboxes"
+	"github.com/signadot/go-sdk/client/skill_runner_groups"
 	"github.com/signadot/go-sdk/client/test_executions"
 	"github.com/signadot/go-sdk/client/tests"
 )
@@ -78,6 +79,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli.RouteGroups = route_groups.New(transport, formats)
 	cli.RunnerGroups = runner_groups.New(transport, formats)
 	cli.Sandboxes = sandboxes.New(transport, formats)
+	cli.SkillRunnerGroups = skill_runner_groups.New(transport, formats)
 	cli.TestExecutions = test_executions.New(transport, formats)
 	cli.Tests = tests.New(transport, formats)
 	return cli
@@ -146,6 +148,8 @@ type SignadotAPI struct {
 
 	Sandboxes sandboxes.ClientService
 
+	SkillRunnerGroups skill_runner_groups.ClientService
+
 	TestExecutions test_executions.ClientService
 
 	Tests tests.ClientService
@@ -167,6 +171,7 @@ func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.RouteGroups.SetTransport(transport)
 	c.RunnerGroups.SetTransport(transport)
 	c.Sandboxes.SetTransport(transport)
+	c.SkillRunnerGroups.SetTransport(transport)
 	c.TestExecutions.SetTransport(transport)
 	c.Tests.SetTransport(transport)
 }
