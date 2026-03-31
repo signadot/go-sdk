@@ -1625,6 +1625,12 @@
                         "name": "orgName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter jobs by target sandbox name",
+                        "name": "targetSandbox",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1985,6 +1991,454 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/Job"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plan-actions": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all actions visible to the org (system + org-owned)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanActions"
+                ],
+                "summary": "List plan actions",
+                "operationId": "list-plan-actions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/plans.Action"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plan-actions/{actionName}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a single action by name (org-owned preferred over system)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanActions"
+                ],
+                "summary": "Get a plan action",
+                "operationId": "get-plan-action",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "request-http",
+                        "description": "Action Name",
+                        "name": "actionName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/plans.Action"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plan-runnergroup-settings": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Returns cluster eligibility information with nested plan runner group data.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "Get PlanRunnerGroup settings",
+                "operationId": "get-planrunnergroup-settings",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlanRunnerGroupSettingsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plan-runnergroups": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List PlanRunnerGroups.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "List PlanRunnerGroups",
+                "operationId": "list-planrunnergroup",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/PlanRunnerGroup"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetch the details about a given plan runner group.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "Get a plan runner group",
+                "operationId": "get-planrunnergroup",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "my-plan-runner-group",
+                        "description": "PlanRunnerGroup Name",
+                        "name": "planRunnerGroupName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlanRunnerGroup"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates or updates a plan runner group with the provided parameters.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "Create or update a plan runner group",
+                "operationId": "apply-planrunnergroup",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "my-plan-runner-group",
+                        "description": "PlanRunnerGroup Name",
+                        "name": "planRunnerGroupName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Request to create or update plan runner group",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/PlanRunnerGroup"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlanRunnerGroup"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a given plan runner group.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "Delete a plan runner group",
+                "operationId": "delete-planrunnergroup",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "my-plan-runner-group",
+                        "description": "PlanRunnerGroup Name",
+                        "name": "planRunnerGroupName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
                         }
                     },
                     "400": {
@@ -2595,7 +3049,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Fetch the details about a given runnergroup.",
+                "description": "Fetch the details about a given jobrunnergroup.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2730,7 +3184,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete a given runnergroup.",
+                "description": "Delete a given jobrunnergroup.",
                 "consumes": [
                     "application/json"
                 ],
@@ -3041,6 +3495,93 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/sandboxes/{sandboxName}/status/explain": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sandboxes"
+                ],
+                "summary": "Explain sandbox status",
+                "operationId": "explain-sandbox-status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "my-sandbox",
+                        "description": "Sandbox Name",
+                        "name": "sandboxName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "explain",
+                            "context"
+                        ],
+                        "type": "string",
+                        "description": "Response mode: 'explain' (default) calls the LLM, 'context' returns raw LLM messages",
+                        "name": "mode",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/sandboxes.SandboxStatusExplainResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -4309,6 +4850,40 @@
                 }
             }
         },
+        "PlanRunnerGroup": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/planRunnerGroup.Spec"
+                },
+                "status": {
+                    "$ref": "#/definitions/planRunnerGroup.Status"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "PlanRunnerGroupSettingsResponse": {
+            "type": "object",
+            "properties": {
+                "clusters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/planRunnerGroup.ClusterSettings"
+                    }
+                }
+            }
+        },
         "RequestDiff": {
             "type": "object",
             "properties": {
@@ -5117,6 +5692,26 @@
                 }
             }
         },
+        "config.GatewayAPIConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "preservedAnnotations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "preservedLabels": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "config.IstioConfig": {
             "type": "object",
             "properties": {
@@ -5165,6 +5760,17 @@
                 }
             }
         },
+        "config.QueryParamRoutingConfig": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "paramName": {
+                    "type": "string"
+                }
+            }
+        },
         "config.RoutingConfig": {
             "type": "object",
             "properties": {
@@ -5174,6 +5780,9 @@
                         "type": "string"
                     }
                 },
+                "gatewayAPI": {
+                    "$ref": "#/definitions/config.GatewayAPIConfig"
+                },
                 "iptablesMode": {
                     "type": "string"
                 },
@@ -5182,6 +5791,9 @@
                 },
                 "linkerd": {
                     "$ref": "#/definitions/config.LinkerdConfig"
+                },
+                "queryParamRouting": {
+                    "$ref": "#/definitions/config.QueryParamRoutingConfig"
                 }
             }
         },
@@ -5785,6 +6397,324 @@
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "planRunnerGroup.ActionValidation": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "response": {
+                    "description": "Response is the detailed validation response (requirement checks, script result).",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/plans.ValidateResponse"
+                        }
+                    ]
+                },
+                "stale": {
+                    "description": "Stale indicates the validation was performed at an older action or runner group revision.",
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "validatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "planRunnerGroup.ClusterSettings": {
+            "type": "object",
+            "properties": {
+                "cluster": {
+                    "type": "string"
+                },
+                "eligible": {
+                    "type": "boolean"
+                },
+                "notes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "runnerGroups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanRunnerGroup"
+                    }
+                }
+            }
+        },
+        "planRunnerGroup.ManualScaling": {
+            "type": "object",
+            "properties": {
+                "desiredPods": {
+                    "type": "integer"
+                }
+            }
+        },
+        "planRunnerGroup.PodsStatus": {
+            "type": "object",
+            "properties": {
+                "notReady": {
+                    "type": "integer"
+                },
+                "ready": {
+                    "type": "integer"
+                }
+            }
+        },
+        "planRunnerGroup.Scaling": {
+            "type": "object",
+            "properties": {
+                "manual": {
+                    "$ref": "#/definitions/planRunnerGroup.ManualScaling"
+                }
+            }
+        },
+        "planRunnerGroup.Spec": {
+            "type": "object",
+            "properties": {
+                "cluster": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "podTemplate": {},
+                "scaling": {
+                    "$ref": "#/definitions/planRunnerGroup.Scaling"
+                }
+            }
+        },
+        "planRunnerGroup.Status": {
+            "type": "object",
+            "properties": {
+                "pods": {
+                    "$ref": "#/definitions/planRunnerGroup.PodsStatus"
+                },
+                "validations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/planRunnerGroup.ActionValidation"
+                    }
+                }
+            }
+        },
+        "plans.Action": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "managedBy": {
+                    "description": "ManagedBy indicates whether this action is managed by the system\n(synced from git) or by an org (created via API).",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/plans.ActionSpec"
+                },
+                "status": {
+                    "$ref": "#/definitions/plans.ActionStatus"
+                }
+            }
+        },
+        "plans.ActionSpec": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "Body is the action implementation as markdown with code blocks.\nInputs and outputs are declared inline via \\input{...} and \\output{...} syntax.\nValidation scripts are declared via ```validation fenced code blocks\nand are extracted into Status.ValidationScript by the server.",
+                    "type": "string"
+                },
+                "published": {
+                    "description": "Published controls whether this action is visible and usable.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "plans.ActionStatus": {
+            "type": "object",
+            "properties": {
+                "bodyOutputs": {
+                    "description": "BodyOutputs are the output fields parsed from \\output{...} directives in the body.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/plans.Field"
+                    }
+                },
+                "bodyParams": {
+                    "description": "BodyParams are the input parameters parsed from \\input{...} directives in the body.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/plans.Field"
+                    }
+                },
+                "createdAt": {
+                    "description": "CreatedAt is when the action was created. Serialized as RFC3339.",
+                    "type": "string"
+                },
+                "requires": {
+                    "description": "Requires declares runtime dependencies that must be present on the runner.\nEach entry is a binary name with an optional semver constraint, e.g.\n\"node \u003e= 20\", \"npx\", \"playwright\".\nParsed from \\requires{...} directives in the body.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "revision": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "UpdatedAt is when the action was last updated. Serialized as RFC3339.",
+                    "type": "string"
+                },
+                "validationScript": {
+                    "description": "ValidationScript is the shell script extracted from ```validation code blocks in the body.",
+                    "type": "string"
+                },
+                "validations": {
+                    "description": "Validations contains per-runner-group validation results for this action.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/plans.ActionValidationStatus"
+                    }
+                }
+            }
+        },
+        "plans.ActionValidationStatus": {
+            "type": "object",
+            "properties": {
+                "response": {
+                    "description": "Response is the detailed validation response (requirement checks, script result).",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/plans.ValidateResponse"
+                        }
+                    ]
+                },
+                "runnerGroup": {
+                    "type": "string"
+                },
+                "stale": {
+                    "description": "Stale indicates the validation was performed at an older action or runner group revision.",
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "validatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "plans.Field": {
+            "type": "object",
+            "properties": {
+                "default": {
+                    "description": "Default is the default value used when the field is not provided. Must conform to Schema if set.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "metadata": {
+                    "description": "Metadata carries presentation hints and additional key-value pairs.\nWell-known keys: \"contentType\" (MIME type), \"displayName\" (UI label),\n\"encoding\" (e.g. \"base64\" for inlined binary values).",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "description": "Name is the field identifier, unique within the resource's params or outputs.",
+                    "type": "string"
+                },
+                "required": {
+                    "description": "Required indicates whether the field must be provided.",
+                    "type": "boolean"
+                },
+                "schema": {
+                    "description": "Schema is an optional JSON Schema describing the field's type and constraints.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "schemaRef": {
+                    "description": "SchemaRef is an optional reference to an external schema (name, file, or URL).",
+                    "type": "string"
+                }
+            }
+        },
+        "plans.RequireResult": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "description": "Detail provides additional context such as the binary path.",
+                    "type": "string"
+                },
+                "ok": {
+                    "description": "OK indicates whether the requirement is satisfied.",
+                    "type": "boolean"
+                },
+                "require": {
+                    "description": "Require is the original requirement string, e.g. \"node \u003e= 20\".",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Version is the detected semver version, if parseable from \u003cbinary\u003e --version output.",
+                    "type": "string"
+                }
+            }
+        },
+        "plans.ScriptResult": {
+            "type": "object",
+            "properties": {
+                "exitCode": {
+                    "description": "ExitCode is the script's exit code.",
+                    "type": "integer"
+                },
+                "ok": {
+                    "description": "OK indicates whether the script exited successfully (exit code 0).",
+                    "type": "boolean"
+                },
+                "output": {
+                    "description": "Output is the combined stdout/stderr from the script.",
+                    "type": "string"
+                }
+            }
+        },
+        "plans.ValidateResponse": {
+            "type": "object",
+            "properties": {
+                "requires": {
+                    "description": "Requires contains the result of each requirement check.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/plans.RequireResult"
+                    }
+                },
+                "script": {
+                    "description": "Script contains the result of the validation script, if one was provided.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/plans.ScriptResult"
+                        }
+                    ]
                 }
             }
         },
@@ -6746,6 +7676,17 @@
                 "EnvOpDelete"
             ]
         },
+        "sandboxes.ExplainMode": {
+            "type": "string",
+            "enum": [
+                "explain",
+                "context"
+            ],
+            "x-enum-varnames": [
+                "ExplainModeExplain",
+                "ExplainModeContext"
+            ]
+        },
         "sandboxes.Forward": {
             "type": "object",
             "properties": {
@@ -6784,6 +7725,39 @@
                     }
                 }
             }
+        },
+        "sandboxes.LLMContext": {
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/sandboxes.LLMMessage"
+                    }
+                }
+            }
+        },
+        "sandboxes.LLMMessage": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/sandboxes.LLMMessageRole"
+                }
+            }
+        },
+        "sandboxes.LLMMessageRole": {
+            "type": "string",
+            "enum": [
+                "system",
+                "user"
+            ],
+            "x-enum-varnames": [
+                "LLMMessageRoleSystem",
+                "LLMMessageRoleUser"
+            ]
         },
         "sandboxes.Middleware": {
             "type": "object",
@@ -6842,6 +7816,39 @@
                     "items": {
                         "$ref": "#/definitions/sandboxes.Forward"
                     }
+                }
+            }
+        },
+        "sandboxes.SandboxStatusExplainResponse": {
+            "type": "object",
+            "properties": {
+                "context": {
+                    "description": "Context contains the LLM messages (system prompt + user context)\nthat can be fed into any LLM. Only present when mode=context.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/sandboxes.LLMContext"
+                        }
+                    ]
+                },
+                "explanation": {
+                    "description": "Explanation is a natural-language explanation of why the sandbox\nis in its current state and what, if anything, the user can do.\nOnly present when mode=explain.",
+                    "type": "string"
+                },
+                "mode": {
+                    "description": "Mode indicates whether the response contains an LLM explanation or raw context.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/sandboxes.ExplainMode"
+                        }
+                    ]
+                },
+                "status": {
+                    "description": "Status is the current machine-readable sandbox status.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/sandbox.Readiness"
+                        }
+                    ]
                 }
             }
         },
