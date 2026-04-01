@@ -53,7 +53,7 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagNoContent, error)
+	DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagOK, error)
 
 	GetPlanTag(params *GetPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanTagOK, error)
 
@@ -69,7 +69,7 @@ DeletePlanTag deletes a plan tag
 
 Delete a plan tag (the plan itself is not deleted)
 */
-func (a *Client) DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagNoContent, error) {
+func (a *Client) DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeletePlanTagParams()
@@ -96,7 +96,7 @@ func (a *Client) DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.Cli
 	}
 
 	// only one success response has to be checked
-	success, ok := result.(*DeletePlanTagNoContent)
+	success, ok := result.(*DeletePlanTagOK)
 	if ok {
 		return success, nil
 	}

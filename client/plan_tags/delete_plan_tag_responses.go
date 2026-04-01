@@ -22,8 +22,8 @@ type DeletePlanTagReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeletePlanTagReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (any, error) {
 	switch response.Code() {
-	case 204:
-		result := NewDeletePlanTagNoContent()
+	case 200:
+		result := NewDeletePlanTagOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -45,58 +45,70 @@ func (o *DeletePlanTagReader) ReadResponse(response runtime.ClientResponse, cons
 	}
 }
 
-// NewDeletePlanTagNoContent creates a DeletePlanTagNoContent with default headers values
-func NewDeletePlanTagNoContent() *DeletePlanTagNoContent {
-	return &DeletePlanTagNoContent{}
+// NewDeletePlanTagOK creates a DeletePlanTagOK with default headers values
+func NewDeletePlanTagOK() *DeletePlanTagOK {
+	return &DeletePlanTagOK{}
 }
 
 /*
-DeletePlanTagNoContent describes a response with status code 204, with default header values.
+DeletePlanTagOK describes a response with status code 200, with default header values.
 
-No Content
+OK
 */
-type DeletePlanTagNoContent struct {
+type DeletePlanTagOK struct {
+	Payload models.EmptyResponse
 }
 
-// IsSuccess returns true when this delete plan tag no content response has a 2xx status code
-func (o *DeletePlanTagNoContent) IsSuccess() bool {
+// IsSuccess returns true when this delete plan tag o k response has a 2xx status code
+func (o *DeletePlanTagOK) IsSuccess() bool {
 	return true
 }
 
-// IsRedirect returns true when this delete plan tag no content response has a 3xx status code
-func (o *DeletePlanTagNoContent) IsRedirect() bool {
+// IsRedirect returns true when this delete plan tag o k response has a 3xx status code
+func (o *DeletePlanTagOK) IsRedirect() bool {
 	return false
 }
 
-// IsClientError returns true when this delete plan tag no content response has a 4xx status code
-func (o *DeletePlanTagNoContent) IsClientError() bool {
+// IsClientError returns true when this delete plan tag o k response has a 4xx status code
+func (o *DeletePlanTagOK) IsClientError() bool {
 	return false
 }
 
-// IsServerError returns true when this delete plan tag no content response has a 5xx status code
-func (o *DeletePlanTagNoContent) IsServerError() bool {
+// IsServerError returns true when this delete plan tag o k response has a 5xx status code
+func (o *DeletePlanTagOK) IsServerError() bool {
 	return false
 }
 
-// IsCode returns true when this delete plan tag no content response a status code equal to that given
-func (o *DeletePlanTagNoContent) IsCode(code int) bool {
-	return code == 204
+// IsCode returns true when this delete plan tag o k response a status code equal to that given
+func (o *DeletePlanTagOK) IsCode(code int) bool {
+	return code == 200
 }
 
-// Code gets the status code for the delete plan tag no content response
-func (o *DeletePlanTagNoContent) Code() int {
-	return 204
+// Code gets the status code for the delete plan tag o k response
+func (o *DeletePlanTagOK) Code() int {
+	return 200
 }
 
-func (o *DeletePlanTagNoContent) Error() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plan-tags/{planTagName}][%d] deletePlanTagNoContent", 204)
+func (o *DeletePlanTagOK) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plan-tags/{planTagName}][%d] deletePlanTagOK %s", 200, payload)
 }
 
-func (o *DeletePlanTagNoContent) String() string {
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plan-tags/{planTagName}][%d] deletePlanTagNoContent", 204)
+func (o *DeletePlanTagOK) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plan-tags/{planTagName}][%d] deletePlanTagOK %s", 200, payload)
 }
 
-func (o *DeletePlanTagNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *DeletePlanTagOK) GetPayload() models.EmptyResponse {
+	return o.Payload
+}
+
+func (o *DeletePlanTagOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
 
 	return nil
 }

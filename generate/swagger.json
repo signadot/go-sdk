@@ -2695,8 +2695,11 @@
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "No Content"
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
                     },
                     "401": {
                         "description": "Unauthorized",
