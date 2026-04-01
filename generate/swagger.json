@@ -2906,6 +2906,218 @@
                 }
             }
         },
+        "/orgs/{orgName}/plans/executions": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new execution of a compiled plan",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanExecutions"
+                ],
+                "summary": "Create a plan execution",
+                "operationId": "create-plan-execution",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Execution spec with plan ID and params",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/PlanExecutionSpec"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlanExecution"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plans/executions/{plan_execution_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get the current state of a plan execution by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanExecutions"
+                ],
+                "summary": "Get a plan execution",
+                "operationId": "get-plan-execution",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Execution ID",
+                        "name": "plan_execution_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlanExecution"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plans/executions/{plan_execution_id}/cancel": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Cancel a running plan execution. Returns 409 if already terminal.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanExecutions"
+                ],
+                "summary": "Cancel a plan execution",
+                "operationId": "cancel-plan-execution",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Execution ID",
+                        "name": "plan_execution_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlanExecution"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}": {
             "get": {
                 "security": [
@@ -5569,6 +5781,35 @@
                 }
             }
         },
+        "PhaseCounts": {
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "description": "Completed is the number of steps that finished successfully.",
+                    "type": "integer"
+                },
+                "failed": {
+                    "description": "Failed is the number of steps that finished with an error.",
+                    "type": "integer"
+                },
+                "init": {
+                    "description": "Init is the number of steps that have not yet started.",
+                    "type": "integer"
+                },
+                "running": {
+                    "description": "Running is the number of steps currently executing.",
+                    "type": "integer"
+                },
+                "skipped": {
+                    "description": "Skipped is the number of steps that were not executed.",
+                    "type": "integer"
+                },
+                "waiting": {
+                    "description": "Waiting is the number of steps waiting for routing context readiness.",
+                    "type": "integer"
+                }
+            }
+        },
         "PlanAction": {
             "type": "object",
             "properties": {
@@ -5693,6 +5934,27 @@
                 }
             }
         },
+        "PlanArtifactRef": {
+            "type": "object",
+            "properties": {
+                "checksum": {
+                    "description": "Checksum is the base64-encoded SHA-256 digest.",
+                    "type": "string"
+                },
+                "error": {
+                    "description": "Error is set if the artifact upload failed.",
+                    "type": "string"
+                },
+                "ready": {
+                    "description": "Ready is true once the artifact has been uploaded to S3.",
+                    "type": "boolean"
+                },
+                "size": {
+                    "description": "Size is the artifact size in bytes.",
+                    "type": "integer"
+                }
+            }
+        },
         "PlanClusterAffinity": {
             "type": "object",
             "properties": {
@@ -5719,6 +5981,101 @@
             "properties": {
                 "prompt": {
                     "description": "Prompt is the markdown source to compile into a Plan.",
+                    "type": "string"
+                }
+            }
+        },
+        "PlanExecution": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/PlanExecutionSpec"
+                },
+                "status": {
+                    "description": "Status is the runtime execution state.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanExecutionStatus"
+                        }
+                    ]
+                }
+            }
+        },
+        "PlanExecutionSpec": {
+            "type": "object",
+            "properties": {
+                "cluster": {
+                    "description": "Cluster is the target cluster for this execution.",
+                    "type": "string"
+                },
+                "params": {
+                    "description": "Params are the actual values bound to the plan's declared parameters.",
+                    "type": "object"
+                },
+                "planID": {
+                    "description": "PlanID is the ID of the compiled plan being executed.",
+                    "type": "string"
+                },
+                "runner": {
+                    "description": "Runner is the runner group name assigned to execute the plan.",
+                    "type": "string"
+                }
+            }
+        },
+        "PlanExecutionStatus": {
+            "type": "object",
+            "properties": {
+                "completedAt": {
+                    "description": "CompletedAt is when the execution finished. Serialized as RFC3339.",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "CreatedAt is when the execution was created. Serialized as RFC3339.",
+                    "type": "string"
+                },
+                "error": {
+                    "description": "Error is a human-readable error message for execution-level failures\n(e.g. artifact upload failures, plan output resolution errors).\nStep-level errors are in StepStatus.Error.",
+                    "type": "string"
+                },
+                "outputs": {
+                    "description": "Outputs contains the resolved plan-level outputs, populated on completion.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanOutputStatus"
+                    }
+                },
+                "phase": {
+                    "description": "Phase is the overall execution state.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/plans.ExecutionPhase"
+                        }
+                    ]
+                },
+                "runnerHost": {
+                    "description": "RunnerHost is the hostname of the runner executing the plan.",
+                    "type": "string"
+                },
+                "stepCounts": {
+                    "description": "StepCounts contains the count of steps in each step phase.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PhaseCounts"
+                        }
+                    ]
+                },
+                "steps": {
+                    "description": "Steps contains the per-step runtime status.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanStepStatus"
+                    }
+                },
+                "updatedAt": {
+                    "description": "UpdatedAt is when the execution status was last updated. Serialized as RFC3339.",
                     "type": "string"
                 }
             }
@@ -5752,6 +6109,67 @@
                 "schemaRef": {
                     "description": "SchemaRef is an optional reference to an external schema (name, file, or URL).",
                     "type": "string"
+                }
+            }
+        },
+        "PlanLogStatus": {
+            "type": "object",
+            "properties": {
+                "artifact": {
+                    "description": "Artifact is a reference to the log stored in S3.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanArtifactRef"
+                        }
+                    ]
+                },
+                "stream": {
+                    "description": "Stream is the log stream type (\"stdout\" or \"stderr\").",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/logs.LogType"
+                        }
+                    ]
+                },
+                "value": {
+                    "description": "Value holds the log content inline if small enough.",
+                    "type": "string"
+                }
+            }
+        },
+        "PlanOutputStatus": {
+            "type": "object",
+            "properties": {
+                "artifact": {
+                    "description": "Artifact holds a reference to the S3-stored output.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanArtifactRef"
+                        }
+                    ]
+                },
+                "metadata": {
+                    "description": "Metadata carries presentation hints (e.g. contentType, displayName).",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "description": "Name is the output field name.",
+                    "type": "string"
+                },
+                "stepRef": {
+                    "description": "StepRef identifies the source step output for alias plan outputs\n(e.g. \"steps.X.outputs.Y\"). Set whenever the plan output is a\ndirect reference to a step output, regardless of whether the value\nis inlined or stored as an artifact.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanStepOutputRef"
+                        }
+                    ]
+                },
+                "value": {
+                    "description": "Value holds the inlined output value (small text/JSON).",
+                    "type": "object"
                 }
             }
         },
@@ -5990,6 +6408,80 @@
                 "revision": {
                     "description": "Revision is the action revision at the time the plan was compiled.",
                     "type": "integer"
+                }
+            }
+        },
+        "PlanStepOutputRef": {
+            "type": "object",
+            "properties": {
+                "outputName": {
+                    "type": "string"
+                },
+                "stepID": {
+                    "type": "string"
+                }
+            }
+        },
+        "PlanStepOutputStatus": {
+            "type": "object",
+            "properties": {
+                "artifact": {
+                    "description": "Artifact holds a reference to the S3-stored output.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanArtifactRef"
+                        }
+                    ]
+                },
+                "metadata": {
+                    "description": "Metadata carries presentation hints (e.g. contentType, displayName).",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "description": "Name is the output field name.",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "Value holds the inlined output value (small text/JSON).",
+                    "type": "object"
+                }
+            }
+        },
+        "PlanStepStatus": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "description": "Error is a human-readable error message, populated when Phase is failed.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID is the step identifier, matching the corresponding Step.ID in the spec.",
+                    "type": "string"
+                },
+                "logs": {
+                    "description": "Logs contains the step's captured log streams (stdout, stderr),\npopulated when the step reaches a terminal phase.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanLogStatus"
+                    }
+                },
+                "outputs": {
+                    "description": "Outputs contains the step's output statuses, populated when Phase is completed.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanStepOutputStatus"
+                    }
+                },
+                "phase": {
+                    "description": "Phase is the current execution state of the step.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/plans.StepPhase"
+                        }
+                    ]
                 }
             }
         },
@@ -7510,6 +8002,17 @@
                 }
             }
         },
+        "logs.LogType": {
+            "type": "string",
+            "enum": [
+                "stdout",
+                "stderr"
+            ],
+            "x-enum-varnames": [
+                "StdOutType",
+                "StdErrType"
+            ]
+        },
         "orgs.GetOrgNameResponse": {
             "type": "object",
             "properties": {
@@ -7701,6 +8204,46 @@
                     }
                 }
             }
+        },
+        "plans.ExecutionPhase": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "dispatching",
+                "running",
+                "finalizing",
+                "completed",
+                "failed",
+                "cancelled"
+            ],
+            "x-enum-varnames": [
+                "ExecutionPending",
+                "ExecutionDispatching",
+                "ExecutionRunning",
+                "ExecutionFinalizing",
+                "ExecutionCompleted",
+                "ExecutionFailed",
+                "ExecutionCancelled"
+            ]
+        },
+        "plans.StepPhase": {
+            "type": "string",
+            "enum": [
+                "init",
+                "waiting",
+                "running",
+                "completed",
+                "failed",
+                "skipped"
+            ],
+            "x-enum-varnames": [
+                "StepInit",
+                "StepWaiting",
+                "StepRunning",
+                "StepCompleted",
+                "StepFailed",
+                "StepSkipped"
+            ]
         },
         "resourceplugin.Runner": {
             "type": "object",

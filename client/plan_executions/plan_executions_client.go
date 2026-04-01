@@ -78,11 +78,155 @@ func WithAcceptApplicationOctetStream(r *runtime.ClientOperation) {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CancelPlanExecution(params *CancelPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPlanExecutionOK, error)
+
+	CreatePlanExecution(params *CreatePlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanExecutionOK, error)
+
+	GetPlanExecution(params *GetPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanExecutionOK, error)
+
 	GetPlanExecutionOutput(params *GetPlanExecutionOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetPlanExecutionOutputOK, *GetPlanExecutionOutputPartialContent, error)
 
 	GetStepOutput(params *GetStepOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetStepOutputOK, *GetStepOutputPartialContent, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+CancelPlanExecution cancels a plan execution
+
+Cancel a running plan execution. Returns 409 if already terminal.
+*/
+func (a *Client) CancelPlanExecution(params *CancelPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPlanExecutionOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewCancelPlanExecutionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "cancel-plan-execution",
+		Method:             "PUT",
+		PathPattern:        "/orgs/{orgName}/plans/executions/{plan_execution_id}/cancel",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CancelPlanExecutionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*CancelPlanExecutionOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for cancel-plan-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+CreatePlanExecution creates a plan execution
+
+Creates a new execution of a compiled plan
+*/
+func (a *Client) CreatePlanExecution(params *CreatePlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanExecutionOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewCreatePlanExecutionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create-plan-execution",
+		Method:             "POST",
+		PathPattern:        "/orgs/{orgName}/plans/executions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreatePlanExecutionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*CreatePlanExecutionOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create-plan-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetPlanExecution gets a plan execution
+
+Get the current state of a plan execution by ID
+*/
+func (a *Client) GetPlanExecution(params *GetPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanExecutionOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewGetPlanExecutionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "get-plan-execution",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/plans/executions/{plan_execution_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetPlanExecutionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*GetPlanExecutionOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for get-plan-execution: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
