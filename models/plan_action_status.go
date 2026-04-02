@@ -26,6 +26,9 @@ type PlanActionStatus struct {
 	// CreatedAt is when the action was created. Serialized as RFC3339.
 	CreatedAt string `json:"createdAt,omitempty"`
 
+	// Description is a short one-line description parsed from the \description{...} directive in the body.
+	Description string `json:"description,omitempty"`
+
 	// Requires declares runtime dependencies that must be present on the runner.
 	// Each entry is a binary name with an optional semver constraint, e.g.
 	// "node >= 20", "npx", "playwright".

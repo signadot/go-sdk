@@ -5,6 +5,7 @@ package models
 import (
 	"context"
 	stderrors "errors"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -15,6 +16,9 @@ import (
 //
 // swagger:model PlanTag
 type PlanTag struct {
+
+	// history
+	History []*TagMapping `json:"history"`
 
 	// Name is the unique tag name within the org.
 	Name string `json:"name,omitempty"`
@@ -33,6 +37,10 @@ type PlanTag struct {
 func (m *PlanTag) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateHistory(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePlan(formats); err != nil {
 		res = append(res, err)
 	}
@@ -48,6 +56,36 @@ func (m *PlanTag) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanTag) validateHistory(formats strfmt.Registry) error {
+	if swag.IsZero(m.History) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.History); i++ {
+		if swag.IsZero(m.History[i]) { // not required
+			continue
+		}
+
+		if m.History[i] != nil {
+			if err := m.History[i].Validate(formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("history" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("history" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -124,6 +162,10 @@ func (m *PlanTag) validateStatus(formats strfmt.Registry) error {
 func (m *PlanTag) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateHistory(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidatePlan(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -139,6 +181,35 @@ func (m *PlanTag) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanTag) contextValidateHistory(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.History); i++ {
+
+		if m.History[i] != nil {
+
+			if swag.IsZero(m.History[i]) { // not required
+				return nil
+			}
+
+			if err := m.History[i].ContextValidate(ctx, formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("history" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("history" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

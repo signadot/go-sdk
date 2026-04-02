@@ -21,11 +21,12 @@ type PlanStatus struct {
 	// CreatedAt is when the plan was created. Serialized as RFC3339.
 	CreatedAt string `json:"createdAt,omitempty"`
 
-	// DeletedAt is when the plan was soft-deleted. Serialized as RFC3339.
-	DeletedAt string `json:"deletedAt,omitempty"`
-
 	// executions
 	Executions int64 `json:"executions,omitempty"`
+
+	// StepDependencies is the step dependency graph, computed from ref expressions.
+	// Keys are step IDs; values are the step IDs that step depends on.
+	StepDependencies map[string][]string `json:"stepDependencies,omitempty"`
 }
 
 // Validate validates this plan status

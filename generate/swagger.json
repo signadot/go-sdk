@@ -2717,64 +2717,6 @@
             }
         },
         "/orgs/{orgName}/plans": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "List all plans for the org",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Plans"
-                ],
-                "summary": "List plans",
-                "operationId": "list-plans",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "x-example": "my-company",
-                        "description": "Signadot Org Name",
-                        "name": "orgName",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/RunnablePlan"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
-            },
             "post": {
                 "security": [
                     {
@@ -3364,6 +3306,74 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plans/{plan_id}/compile": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Re-runs LLM compilation using the source plan's prompt, creating a new plan linked to the original",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Plans"
+                ],
+                "summary": "Recompile a plan",
+                "operationId": "recompile-plan",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "q860pz1v7t430",
+                        "description": "Plan ID",
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RunnablePlan"
                         }
                     },
                     "400": {
@@ -5865,6 +5875,10 @@
                     "description": "CreatedAt is when the action was created. Serialized as RFC3339.",
                     "type": "string"
                 },
+                "description": {
+                    "description": "Description is a short one-line description parsed from the \\description{...} directive in the body.",
+                    "type": "string"
+                },
                 "requires": {
                     "description": "Requires declares runtime dependencies that must be present on the runner.\nEach entry is a binary name with an optional semver constraint, e.g.\n\"node \u003e= 20\", \"npx\", \"playwright\".\nParsed from \\requires{...} directives in the body.",
                     "type": "array",
@@ -6334,12 +6348,18 @@
                     "description": "CreatedAt is when the plan was created. Serialized as RFC3339.",
                     "type": "string"
                 },
-                "deletedAt": {
-                    "description": "DeletedAt is when the plan was soft-deleted. Serialized as RFC3339.",
-                    "type": "string"
-                },
                 "executions": {
                     "type": "integer"
+                },
+                "stepDependencies": {
+                    "description": "StepDependencies is the step dependency graph, computed from ref expressions.\nKeys are step IDs; values are the step IDs that step depends on.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
                 }
             }
         },
@@ -6488,6 +6508,12 @@
         "PlanTag": {
             "type": "object",
             "properties": {
+                "history": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/TagMapping"
+                    }
+                },
                 "name": {
                     "description": "Name is the unique tag name within the org.",
                     "type": "string"
@@ -6730,6 +6756,23 @@
                 },
                 "scriptRef": {
                     "$ref": "#/definitions/capturemeta.ScriptRef"
+                }
+            }
+        },
+        "TagMapping": {
+            "type": "object",
+            "properties": {
+                "planID": {
+                    "description": "PlanID is the plan this tag pointed to during this period.",
+                    "type": "string"
+                },
+                "taggedAt": {
+                    "description": "TaggedAt is when the tag was assigned to this plan. Serialized as RFC3339.",
+                    "type": "string"
+                },
+                "untaggedAt": {
+                    "description": "UntaggedAt is when the tag was moved or deleted. Empty if current.",
+                    "type": "string"
                 }
             }
         },

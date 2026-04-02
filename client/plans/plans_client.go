@@ -61,7 +61,7 @@ type ClientService interface {
 
 	GetPlan(params *GetPlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanOK, error)
 
-	ListPlans(params *ListPlansParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlansOK, error)
+	RecompilePlan(params *RecompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecompilePlanOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -251,24 +251,24 @@ func (a *Client) GetPlan(params *GetPlanParams, authInfo runtime.ClientAuthInfoW
 }
 
 /*
-ListPlans lists plans
+RecompilePlan recompiles a plan
 
-List all plans for the org
+Re-runs LLM compilation using the source plan's prompt, creating a new plan linked to the original
 */
-func (a *Client) ListPlans(params *ListPlansParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlansOK, error) {
+func (a *Client) RecompilePlan(params *RecompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecompilePlanOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
-		params = NewListPlansParams()
+		params = NewRecompilePlanParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "list-plans",
-		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/plans",
+		ID:                 "recompile-plan",
+		Method:             "POST",
+		PathPattern:        "/orgs/{orgName}/plans/{plan_id}/compile",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListPlansReader{formats: a.formats},
+		Reader:             &RecompilePlanReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -282,7 +282,7 @@ func (a *Client) ListPlans(params *ListPlansParams, authInfo runtime.ClientAuthI
 	}
 
 	// only one success response has to be checked
-	success, ok := result.(*ListPlansOK)
+	success, ok := result.(*RecompilePlanOK)
 	if ok {
 		return success, nil
 	}
@@ -292,7 +292,7 @@ func (a *Client) ListPlans(params *ListPlansParams, authInfo runtime.ClientAuthI
 	// no default response is defined.
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for list-plans: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for recompile-plan: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
