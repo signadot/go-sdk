@@ -2849,6 +2849,94 @@
             }
         },
         "/orgs/{orgName}/plans/executions": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List executions for the org with optional filters and cursor-based pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanExecutions"
+                ],
+                "summary": "List plan executions",
+                "operationId": "list-plan-executions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by plan ID",
+                        "name": "planID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by plan tag name (resolved to plan ID at query time)",
+                        "name": "tag",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by execution phase",
+                        "name": "phase",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of results per page (default 50, max 500)",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pagination cursor from a previous response",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/PlanExecutionQueryResult"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -6167,6 +6255,28 @@
         "PlanExecution": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/PlanExecutionSpec"
+                },
+                "status": {
+                    "description": "Status is the runtime execution state.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanExecutionStatus"
+                        }
+                    ]
+                }
+            }
+        },
+        "PlanExecutionQueryResult": {
+            "type": "object",
+            "properties": {
+                "cursor": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },

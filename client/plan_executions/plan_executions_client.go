@@ -88,6 +88,8 @@ type ClientService interface {
 
 	GetStepOutput(params *GetStepOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetStepOutputOK, *GetStepOutputPartialContent, error)
 
+	ListPlanExecutions(params *ListPlanExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanExecutionsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -318,6 +320,52 @@ func (a *Client) GetStepOutput(params *GetStepOutputParams, authInfo runtime.Cli
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for plan_executions: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ListPlanExecutions lists plan executions
+
+List executions for the org with optional filters and cursor-based pagination
+*/
+func (a *Client) ListPlanExecutions(params *ListPlanExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanExecutionsOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewListPlanExecutionsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "list-plan-executions",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/plans/executions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListPlanExecutionsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*ListPlanExecutionsOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for list-plan-executions: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
