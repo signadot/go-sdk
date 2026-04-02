@@ -53,7 +53,7 @@ func (o *DeletePlanReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[DELETE /orgs/{orgName}/plans/{plan_id}] delete-plan", response, response.Code())
+		return nil, runtime.NewAPIError("[DELETE /orgs/{orgName}/plans/{planID}] delete-plan", response, response.Code())
 	}
 }
 
@@ -103,12 +103,12 @@ func (o *DeletePlanOK) Code() int {
 
 func (o *DeletePlanOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanOK %s", 200, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanOK %s", 200, payload)
 }
 
 func (o *DeletePlanOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanOK %s", 200, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanOK %s", 200, payload)
 }
 
 func (o *DeletePlanOK) GetPayload() models.EmptyResponse {
@@ -171,12 +171,12 @@ func (o *DeletePlanBadRequest) Code() int {
 
 func (o *DeletePlanBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanBadRequest %s", 400, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanBadRequest %s", 400, payload)
 }
 
 func (o *DeletePlanBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanBadRequest %s", 400, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanBadRequest %s", 400, payload)
 }
 
 func (o *DeletePlanBadRequest) GetPayload() *models.ErrorResponse {
@@ -241,12 +241,12 @@ func (o *DeletePlanUnauthorized) Code() int {
 
 func (o *DeletePlanUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanUnauthorized %s", 401, payload)
 }
 
 func (o *DeletePlanUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanUnauthorized %s", 401, payload)
 }
 
 func (o *DeletePlanUnauthorized) GetPayload() *models.ErrorResponse {
@@ -311,12 +311,12 @@ func (o *DeletePlanNotFound) Code() int {
 
 func (o *DeletePlanNotFound) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanNotFound %s", 404, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanNotFound %s", 404, payload)
 }
 
 func (o *DeletePlanNotFound) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanNotFound %s", 404, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanNotFound %s", 404, payload)
 }
 
 func (o *DeletePlanNotFound) GetPayload() *models.ErrorResponse {
@@ -381,12 +381,12 @@ func (o *DeletePlanBadGateway) Code() int {
 
 func (o *DeletePlanBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanBadGateway %s", 502, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanBadGateway %s", 502, payload)
 }
 
 func (o *DeletePlanBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{plan_id}][%d] deletePlanBadGateway %s", 502, payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/plans/{planID}][%d] deletePlanBadGateway %s", 502, payload)
 }
 
 func (o *DeletePlanBadGateway) GetPayload() *models.ErrorResponse {

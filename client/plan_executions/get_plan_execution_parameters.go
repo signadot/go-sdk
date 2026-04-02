@@ -58,17 +58,17 @@ GetPlanExecutionParams contains all the parameters to send to the API endpoint
 */
 type GetPlanExecutionParams struct {
 
+	/* ExecutionID.
+
+	   Plan Execution ID
+	*/
+	ExecutionID string
+
 	/* OrgName.
 
 	   Signadot Org Name
 	*/
 	OrgName string
-
-	/* PlanExecutionID.
-
-	   Plan Execution ID
-	*/
-	PlanExecutionID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -123,6 +123,17 @@ func (o *GetPlanExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithExecutionID adds the executionID to the get plan execution params
+func (o *GetPlanExecutionParams) WithExecutionID(executionID string) *GetPlanExecutionParams {
+	o.SetExecutionID(executionID)
+	return o
+}
+
+// SetExecutionID adds the executionId to the get plan execution params
+func (o *GetPlanExecutionParams) SetExecutionID(executionID string) {
+	o.ExecutionID = executionID
+}
+
 // WithOrgName adds the orgName to the get plan execution params
 func (o *GetPlanExecutionParams) WithOrgName(orgName string) *GetPlanExecutionParams {
 	o.SetOrgName(orgName)
@@ -134,17 +145,6 @@ func (o *GetPlanExecutionParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanExecutionID adds the planExecutionID to the get plan execution params
-func (o *GetPlanExecutionParams) WithPlanExecutionID(planExecutionID string) *GetPlanExecutionParams {
-	o.SetPlanExecutionID(planExecutionID)
-	return o
-}
-
-// SetPlanExecutionID adds the planExecutionId to the get plan execution params
-func (o *GetPlanExecutionParams) SetPlanExecutionID(planExecutionID string) {
-	o.PlanExecutionID = planExecutionID
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *GetPlanExecutionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -153,13 +153,13 @@ func (o *GetPlanExecutionParams) WriteToRequest(r runtime.ClientRequest, reg str
 	}
 	var res []error
 
-	// path param orgName
-	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
+	// path param executionID
+	if err := r.SetPathParam("executionID", o.ExecutionID); err != nil {
 		return err
 	}
 
-	// path param plan_execution_id
-	if err := r.SetPathParam("plan_execution_id", o.PlanExecutionID); err != nil {
+	// path param orgName
+	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
 		return err
 	}
 

@@ -104,7 +104,7 @@ func (a *Client) CancelPlanExecution(params *CancelPlanExecutionParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-plan-execution",
 		Method:             "PUT",
-		PathPattern:        "/orgs/{orgName}/plans/executions/{plan_execution_id}/cancel",
+		PathPattern:        "/orgs/{orgName}/plans/executions/{executionID}/cancel",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -196,7 +196,7 @@ func (a *Client) GetPlanExecution(params *GetPlanExecutionParams, authInfo runti
 	op := &runtime.ClientOperation{
 		ID:                 "get-plan-execution",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/plans/executions/{plan_execution_id}",
+		PathPattern:        "/orgs/{orgName}/plans/executions/{executionID}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -242,7 +242,7 @@ func (a *Client) GetPlanExecutionOutput(params *GetPlanExecutionOutputParams, au
 	op := &runtime.ClientOperation{
 		ID:                 "get-plan-execution-output",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}",
+		PathPattern:        "/orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}",
 		ProducesMediaTypes: []string{"application/octet-stream"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -288,7 +288,7 @@ func (a *Client) GetStepOutput(params *GetStepOutputParams, authInfo runtime.Cli
 	op := &runtime.ClientOperation{
 		ID:                 "get-step-output",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}",
+		PathPattern:        "/orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}",
 		ProducesMediaTypes: []string{"application/octet-stream"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

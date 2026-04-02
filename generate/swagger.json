@@ -2926,7 +2926,7 @@
                 }
             }
         },
-        "/orgs/{orgName}/plans/executions/{plan_execution_id}": {
+        "/orgs/{orgName}/plans/executions/{executionID}": {
             "get": {
                 "security": [
                     {
@@ -2957,7 +2957,7 @@
                     {
                         "type": "string",
                         "description": "Plan Execution ID",
-                        "name": "plan_execution_id",
+                        "name": "executionID",
                         "in": "path",
                         "required": true
                     }
@@ -2990,7 +2990,7 @@
                 }
             }
         },
-        "/orgs/{orgName}/plans/executions/{plan_execution_id}/cancel": {
+        "/orgs/{orgName}/plans/executions/{executionID}/cancel": {
             "put": {
                 "security": [
                     {
@@ -3021,7 +3021,7 @@
                     {
                         "type": "string",
                         "description": "Plan Execution ID",
-                        "name": "plan_execution_id",
+                        "name": "executionID",
                         "in": "path",
                         "required": true
                     }
@@ -3060,7 +3060,79 @@
                 }
             }
         },
-        "/orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}": {
+        "/orgs/{orgName}/plans/executions/{executionID}/logs/live": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Stream live logs for all steps of a plan execution, multiplexed into a single stream.",
+                "produces": [
+                    "text/event-stream"
+                ],
+                "tags": [
+                    "PlanExecutionLogs"
+                ],
+                "summary": "Stream aggregated plan logs",
+                "operationId": "stream-plan-execution-logs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Execution ID",
+                        "name": "executionID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "If set, the number of lines from the end of the logs to show",
+                        "name": "tailLines",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If set, resume logs stream from the given cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Aggregated log lines stream",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}": {
             "get": {
                 "security": [
                     {
@@ -3087,14 +3159,14 @@
                     {
                         "type": "string",
                         "description": "Plan Execution ID",
-                        "name": "plan_execution_id",
+                        "name": "executionID",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Output Name",
-                        "name": "step_output_name",
+                        "name": "outputName",
                         "in": "path",
                         "required": true
                     }
@@ -3127,7 +3199,97 @@
                 }
             }
         },
-        "/orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}": {
+        "/orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/logs/live": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Stream live stdout or stderr logs for a specific step of a plan execution.",
+                "produces": [
+                    "text/event-stream"
+                ],
+                "tags": [
+                    "PlanExecutionLogs"
+                ],
+                "summary": "Stream step logs",
+                "operationId": "stream-plan-execution-step-logs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Execution ID",
+                        "name": "executionID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Step ID",
+                        "name": "stepID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "stdout",
+                            "stderr"
+                        ],
+                        "type": "string",
+                        "description": "Stream type (stdout or stderr)",
+                        "name": "stream",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "If set, the number of lines from the end of the logs to show",
+                        "name": "tailLines",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If set, resume logs stream from the given cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Log lines stream",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}": {
             "get": {
                 "security": [
                     {
@@ -3154,21 +3316,21 @@
                     {
                         "type": "string",
                         "description": "Plan Execution ID",
-                        "name": "plan_execution_id",
+                        "name": "executionID",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Step ID",
-                        "name": "step_id",
+                        "name": "stepID",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Output Name",
-                        "name": "step_output_name",
+                        "name": "outputName",
                         "in": "path",
                         "required": true
                     }
@@ -3201,7 +3363,7 @@
                 }
             }
         },
-        "/orgs/{orgName}/plans/{plan_id}": {
+        "/orgs/{orgName}/plans/{planID}": {
             "get": {
                 "security": [
                     {
@@ -3233,7 +3395,7 @@
                         "type": "string",
                         "x-example": "q860pz1v7t430",
                         "description": "Plan ID",
-                        "name": "plan_id",
+                        "name": "planID",
                         "in": "path",
                         "required": true
                     }
@@ -3296,7 +3458,7 @@
                         "type": "string",
                         "x-example": "q860pz1v7t430",
                         "description": "Plan ID",
-                        "name": "plan_id",
+                        "name": "planID",
                         "in": "path",
                         "required": true
                     }
@@ -3343,6 +3505,9 @@
                     }
                 ],
                 "description": "Re-runs LLM compilation using the source plan's prompt, creating a new plan linked to the original",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],

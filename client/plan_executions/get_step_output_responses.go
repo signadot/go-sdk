@@ -48,7 +48,7 @@ func (o *GetStepOutputReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}] get-step-output", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}] get-step-output", response, response.Code())
 	}
 }
 
@@ -100,11 +100,11 @@ func (o *GetStepOutputOK) Code() int {
 }
 
 func (o *GetStepOutputOK) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputOK", 200)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputOK", 200)
 }
 
 func (o *GetStepOutputOK) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputOK", 200)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputOK", 200)
 }
 
 func (o *GetStepOutputOK) GetPayload() io.Writer {
@@ -169,11 +169,11 @@ func (o *GetStepOutputPartialContent) Code() int {
 }
 
 func (o *GetStepOutputPartialContent) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputPartialContent", 206)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputPartialContent", 206)
 }
 
 func (o *GetStepOutputPartialContent) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputPartialContent", 206)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputPartialContent", 206)
 }
 
 func (o *GetStepOutputPartialContent) GetPayload() io.Writer {
@@ -236,12 +236,12 @@ func (o *GetStepOutputNotFound) Code() int {
 
 func (o *GetStepOutputNotFound) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputNotFound %s", 404, payload)
 }
 
 func (o *GetStepOutputNotFound) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputNotFound %s", 404, payload)
 }
 
 func (o *GetStepOutputNotFound) GetPayload() *models.ErrorResponse {
@@ -306,12 +306,12 @@ func (o *GetStepOutputServiceUnavailable) Code() int {
 
 func (o *GetStepOutputServiceUnavailable) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputServiceUnavailable %s", 503, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputServiceUnavailable %s", 503, payload)
 }
 
 func (o *GetStepOutputServiceUnavailable) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/steps/{step_id}/outputs/{step_output_name}][%d] getStepOutputServiceUnavailable %s", 503, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/outputs/{outputName}][%d] getStepOutputServiceUnavailable %s", 503, payload)
 }
 
 func (o *GetStepOutputServiceUnavailable) GetPayload() *models.ErrorResponse {

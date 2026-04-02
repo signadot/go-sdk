@@ -158,8 +158,8 @@ func (o *GetPlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regis
 		return err
 	}
 
-	// path param plan_id
-	if err := r.SetPathParam("plan_id", o.PlanID); err != nil {
+	// path param planID
+	if err := r.SetPathParam("planID", o.PlanID); err != nil {
 		return err
 	}
 

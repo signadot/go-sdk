@@ -58,29 +58,29 @@ GetStepOutputParams contains all the parameters to send to the API endpoint
 */
 type GetStepOutputParams struct {
 
+	/* ExecutionID.
+
+	   Plan Execution ID
+	*/
+	ExecutionID string
+
 	/* OrgName.
 
 	   Signadot Org Name
 	*/
 	OrgName string
 
-	/* PlanExecutionID.
+	/* OutputName.
 
-	   Plan Execution ID
+	   Output Name
 	*/
-	PlanExecutionID string
+	OutputName string
 
 	/* StepID.
 
 	   Step ID
 	*/
 	StepID string
-
-	/* StepOutputName.
-
-	   Output Name
-	*/
-	StepOutputName string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -135,6 +135,17 @@ func (o *GetStepOutputParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithExecutionID adds the executionID to the get step output params
+func (o *GetStepOutputParams) WithExecutionID(executionID string) *GetStepOutputParams {
+	o.SetExecutionID(executionID)
+	return o
+}
+
+// SetExecutionID adds the executionId to the get step output params
+func (o *GetStepOutputParams) SetExecutionID(executionID string) {
+	o.ExecutionID = executionID
+}
+
 // WithOrgName adds the orgName to the get step output params
 func (o *GetStepOutputParams) WithOrgName(orgName string) *GetStepOutputParams {
 	o.SetOrgName(orgName)
@@ -146,15 +157,15 @@ func (o *GetStepOutputParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanExecutionID adds the planExecutionID to the get step output params
-func (o *GetStepOutputParams) WithPlanExecutionID(planExecutionID string) *GetStepOutputParams {
-	o.SetPlanExecutionID(planExecutionID)
+// WithOutputName adds the outputName to the get step output params
+func (o *GetStepOutputParams) WithOutputName(outputName string) *GetStepOutputParams {
+	o.SetOutputName(outputName)
 	return o
 }
 
-// SetPlanExecutionID adds the planExecutionId to the get step output params
-func (o *GetStepOutputParams) SetPlanExecutionID(planExecutionID string) {
-	o.PlanExecutionID = planExecutionID
+// SetOutputName adds the outputName to the get step output params
+func (o *GetStepOutputParams) SetOutputName(outputName string) {
+	o.OutputName = outputName
 }
 
 // WithStepID adds the stepID to the get step output params
@@ -168,17 +179,6 @@ func (o *GetStepOutputParams) SetStepID(stepID string) {
 	o.StepID = stepID
 }
 
-// WithStepOutputName adds the stepOutputName to the get step output params
-func (o *GetStepOutputParams) WithStepOutputName(stepOutputName string) *GetStepOutputParams {
-	o.SetStepOutputName(stepOutputName)
-	return o
-}
-
-// SetStepOutputName adds the stepOutputName to the get step output params
-func (o *GetStepOutputParams) SetStepOutputName(stepOutputName string) {
-	o.StepOutputName = stepOutputName
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *GetStepOutputParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -187,23 +187,23 @@ func (o *GetStepOutputParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 	}
 	var res []error
 
+	// path param executionID
+	if err := r.SetPathParam("executionID", o.ExecutionID); err != nil {
+		return err
+	}
+
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
 		return err
 	}
 
-	// path param plan_execution_id
-	if err := r.SetPathParam("plan_execution_id", o.PlanExecutionID); err != nil {
+	// path param outputName
+	if err := r.SetPathParam("outputName", o.OutputName); err != nil {
 		return err
 	}
 
-	// path param step_id
-	if err := r.SetPathParam("step_id", o.StepID); err != nil {
-		return err
-	}
-
-	// path param step_output_name
-	if err := r.SetPathParam("step_output_name", o.StepOutputName); err != nil {
+	// path param stepID
+	if err := r.SetPathParam("stepID", o.StepID); err != nil {
 		return err
 	}
 

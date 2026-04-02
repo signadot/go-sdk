@@ -53,7 +53,7 @@ func (o *CancelPlanExecutionReader) ReadResponse(response runtime.ClientResponse
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel] cancel-plan-execution", response, response.Code())
+		return nil, runtime.NewAPIError("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel] cancel-plan-execution", response, response.Code())
 	}
 }
 
@@ -103,12 +103,12 @@ func (o *CancelPlanExecutionOK) Code() int {
 
 func (o *CancelPlanExecutionOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionOK %s", 200, payload)
 }
 
 func (o *CancelPlanExecutionOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionOK %s", 200, payload)
 }
 
 func (o *CancelPlanExecutionOK) GetPayload() *models.PlanExecution {
@@ -173,12 +173,12 @@ func (o *CancelPlanExecutionUnauthorized) Code() int {
 
 func (o *CancelPlanExecutionUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *CancelPlanExecutionUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *CancelPlanExecutionUnauthorized) GetPayload() *models.ErrorResponse {
@@ -243,12 +243,12 @@ func (o *CancelPlanExecutionNotFound) Code() int {
 
 func (o *CancelPlanExecutionNotFound) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionNotFound %s", 404, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionNotFound %s", 404, payload)
 }
 
 func (o *CancelPlanExecutionNotFound) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionNotFound %s", 404, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionNotFound %s", 404, payload)
 }
 
 func (o *CancelPlanExecutionNotFound) GetPayload() *models.ErrorResponse {
@@ -313,12 +313,12 @@ func (o *CancelPlanExecutionConflict) Code() int {
 
 func (o *CancelPlanExecutionConflict) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionConflict %s", 409, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionConflict %s", 409, payload)
 }
 
 func (o *CancelPlanExecutionConflict) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionConflict %s", 409, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionConflict %s", 409, payload)
 }
 
 func (o *CancelPlanExecutionConflict) GetPayload() *models.ErrorResponse {
@@ -383,12 +383,12 @@ func (o *CancelPlanExecutionBadGateway) Code() int {
 
 func (o *CancelPlanExecutionBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionBadGateway %s", 502, payload)
 }
 
 func (o *CancelPlanExecutionBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{plan_execution_id}/cancel][%d] cancelPlanExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/plans/executions/{executionID}/cancel][%d] cancelPlanExecutionBadGateway %s", 502, payload)
 }
 
 func (o *CancelPlanExecutionBadGateway) GetPayload() *models.ErrorResponse {

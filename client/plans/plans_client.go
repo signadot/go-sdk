@@ -171,7 +171,7 @@ func (a *Client) DeletePlan(params *DeletePlanParams, authInfo runtime.ClientAut
 	op := &runtime.ClientOperation{
 		ID:                 "delete-plan",
 		Method:             "DELETE",
-		PathPattern:        "/orgs/{orgName}/plans/{plan_id}",
+		PathPattern:        "/orgs/{orgName}/plans/{planID}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -217,7 +217,7 @@ func (a *Client) GetPlan(params *GetPlanParams, authInfo runtime.ClientAuthInfoW
 	op := &runtime.ClientOperation{
 		ID:                 "get-plan",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/plans/{plan_id}",
+		PathPattern:        "/orgs/{orgName}/plans/{planID}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

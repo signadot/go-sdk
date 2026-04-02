@@ -48,7 +48,7 @@ func (o *GetPlanExecutionOutputReader) ReadResponse(response runtime.ClientRespo
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}] get-plan-execution-output", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}] get-plan-execution-output", response, response.Code())
 	}
 }
 
@@ -100,11 +100,11 @@ func (o *GetPlanExecutionOutputOK) Code() int {
 }
 
 func (o *GetPlanExecutionOutputOK) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputOK", 200)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputOK", 200)
 }
 
 func (o *GetPlanExecutionOutputOK) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputOK", 200)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputOK", 200)
 }
 
 func (o *GetPlanExecutionOutputOK) GetPayload() io.Writer {
@@ -169,11 +169,11 @@ func (o *GetPlanExecutionOutputPartialContent) Code() int {
 }
 
 func (o *GetPlanExecutionOutputPartialContent) Error() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputPartialContent", 206)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputPartialContent", 206)
 }
 
 func (o *GetPlanExecutionOutputPartialContent) String() string {
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputPartialContent", 206)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputPartialContent", 206)
 }
 
 func (o *GetPlanExecutionOutputPartialContent) GetPayload() io.Writer {
@@ -236,12 +236,12 @@ func (o *GetPlanExecutionOutputNotFound) Code() int {
 
 func (o *GetPlanExecutionOutputNotFound) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputNotFound %s", 404, payload)
 }
 
 func (o *GetPlanExecutionOutputNotFound) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputNotFound %s", 404, payload)
 }
 
 func (o *GetPlanExecutionOutputNotFound) GetPayload() *models.ErrorResponse {
@@ -306,12 +306,12 @@ func (o *GetPlanExecutionOutputServiceUnavailable) Code() int {
 
 func (o *GetPlanExecutionOutputServiceUnavailable) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputServiceUnavailable %s", 503, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputServiceUnavailable %s", 503, payload)
 }
 
 func (o *GetPlanExecutionOutputServiceUnavailable) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}/outputs/{step_output_name}][%d] getPlanExecutionOutputServiceUnavailable %s", 503, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}/outputs/{outputName}][%d] getPlanExecutionOutputServiceUnavailable %s", 503, payload)
 }
 
 func (o *GetPlanExecutionOutputServiceUnavailable) GetPayload() *models.ErrorResponse {

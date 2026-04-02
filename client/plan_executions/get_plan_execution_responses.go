@@ -47,7 +47,7 @@ func (o *GetPlanExecutionReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}] get-plan-execution", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/plans/executions/{executionID}] get-plan-execution", response, response.Code())
 	}
 }
 
@@ -97,12 +97,12 @@ func (o *GetPlanExecutionOK) Code() int {
 
 func (o *GetPlanExecutionOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionOK %s", 200, payload)
 }
 
 func (o *GetPlanExecutionOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionOK %s", 200, payload)
 }
 
 func (o *GetPlanExecutionOK) GetPayload() *models.PlanExecution {
@@ -167,12 +167,12 @@ func (o *GetPlanExecutionUnauthorized) Code() int {
 
 func (o *GetPlanExecutionUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *GetPlanExecutionUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionUnauthorized %s", 401, payload)
 }
 
 func (o *GetPlanExecutionUnauthorized) GetPayload() *models.ErrorResponse {
@@ -237,12 +237,12 @@ func (o *GetPlanExecutionNotFound) Code() int {
 
 func (o *GetPlanExecutionNotFound) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionNotFound %s", 404, payload)
 }
 
 func (o *GetPlanExecutionNotFound) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionNotFound %s", 404, payload)
 }
 
 func (o *GetPlanExecutionNotFound) GetPayload() *models.ErrorResponse {
@@ -307,12 +307,12 @@ func (o *GetPlanExecutionBadGateway) Code() int {
 
 func (o *GetPlanExecutionBadGateway) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionBadGateway %s", 502, payload)
 }
 
 func (o *GetPlanExecutionBadGateway) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{plan_execution_id}][%d] getPlanExecutionBadGateway %s", 502, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/plans/executions/{executionID}][%d] getPlanExecutionBadGateway %s", 502, payload)
 }
 
 func (o *GetPlanExecutionBadGateway) GetPayload() *models.ErrorResponse {

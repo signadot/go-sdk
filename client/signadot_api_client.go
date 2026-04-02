@@ -15,6 +15,7 @@ import (
 	"github.com/signadot/go-sdk/client/jobs"
 	"github.com/signadot/go-sdk/client/orgs"
 	"github.com/signadot/go-sdk/client/plan_actions"
+	"github.com/signadot/go-sdk/client/plan_execution_logs"
 	"github.com/signadot/go-sdk/client/plan_executions"
 	"github.com/signadot/go-sdk/client/plan_runner_groups"
 	"github.com/signadot/go-sdk/client/plan_tags"
@@ -77,6 +78,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli.Jobs = jobs.New(transport, formats)
 	cli.Orgs = orgs.New(transport, formats)
 	cli.PlanActions = plan_actions.New(transport, formats)
+	cli.PlanExecutionLogs = plan_execution_logs.New(transport, formats)
 	cli.PlanExecutions = plan_executions.New(transport, formats)
 	cli.PlanRunnerGroups = plan_runner_groups.New(transport, formats)
 	cli.PlanTags = plan_tags.New(transport, formats)
@@ -147,6 +149,8 @@ type SignadotAPI struct {
 
 	PlanActions plan_actions.ClientService
 
+	PlanExecutionLogs plan_execution_logs.ClientService
+
 	PlanExecutions plan_executions.ClientService
 
 	PlanRunnerGroups plan_runner_groups.ClientService
@@ -181,6 +185,7 @@ func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Jobs.SetTransport(transport)
 	c.Orgs.SetTransport(transport)
 	c.PlanActions.SetTransport(transport)
+	c.PlanExecutionLogs.SetTransport(transport)
 	c.PlanExecutions.SetTransport(transport)
 	c.PlanRunnerGroups.SetTransport(transport)
 	c.PlanTags.SetTransport(transport)
