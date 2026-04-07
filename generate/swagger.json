@@ -6650,7 +6650,7 @@
                     ]
                 },
                 "args": {
-                    "description": "Args provides the refs and literal values bound to the action's params.",
+                    "description": "Args provides the refs and literal values bound to the action's params\nand extra inputs.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/PlanArgs"
@@ -6660,6 +6660,13 @@
                 "condition": {
                     "description": "Condition is an expr-lang expression evaluated against the step's resolved\nargs. Must evaluate to true for the step to execute.",
                     "type": "string"
+                },
+                "extraInputs": {
+                    "description": "ExtraInputs declares additional named inputs for this step beyond\nthe action's declared params. These are wired via Args.Refs like\nregular params and become part of the action's eval environment.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanField"
+                    }
                 },
                 "id": {
                     "description": "ID is the unique identifier for this step within the plan.",

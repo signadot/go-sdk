@@ -5,6 +5,7 @@ package models
 import (
 	"context"
 	stderrors "errors"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -26,6 +27,11 @@ type PlanStep struct {
 	// args. Must evaluate to true for the step to execute.
 	Condition string `json:"condition,omitempty"`
 
+	// ExtraInputs declares additional named inputs for this step beyond
+	// the action's declared params. These are wired via Args.Refs like
+	// regular params and become part of the action's eval environment.
+	ExtraInputs []*PlanField `json:"extraInputs"`
+
 	// ID is the unique identifier for this step within the plan.
 	ID string `json:"id,omitempty"`
 
@@ -42,6 +48,10 @@ func (m *PlanStep) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateArgs(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExtraInputs(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -101,6 +111,36 @@ func (m *PlanStep) validateArgs(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *PlanStep) validateExtraInputs(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExtraInputs) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.ExtraInputs); i++ {
+		if swag.IsZero(m.ExtraInputs[i]) { // not required
+			continue
+		}
+
+		if m.ExtraInputs[i] != nil {
+			if err := m.ExtraInputs[i].Validate(formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("extraInputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("extraInputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 func (m *PlanStep) validateRoutingContext(formats strfmt.Registry) error {
 	if swag.IsZero(m.RoutingContext) { // not required
 		return nil
@@ -133,6 +173,10 @@ func (m *PlanStep) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateArgs(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExtraInputs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -191,6 +235,35 @@ func (m *PlanStep) contextValidateArgs(ctx context.Context, formats strfmt.Regis
 
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *PlanStep) contextValidateExtraInputs(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ExtraInputs); i++ {
+
+		if m.ExtraInputs[i] != nil {
+
+			if swag.IsZero(m.ExtraInputs[i]) { // not required
+				return nil
+			}
+
+			if err := m.ExtraInputs[i].ContextValidate(ctx, formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("extraInputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("extraInputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
 	}
 
 	return nil
