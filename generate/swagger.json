@@ -6225,6 +6225,10 @@
         "PlanClusterAffinity": {
             "type": "object",
             "properties": {
+                "fromAnyTarget": {
+                    "description": "FromAnyTarget names a plan param whose value is a RoutingTarget.\nThe cluster is inferred from the variant provided at execution time\n(sandbox → sandbox cluster, routeGroup → RG cluster).",
+                    "type": "string"
+                },
                 "fromCluster": {
                     "description": "FromCluster names a plan param whose value is a cluster name directly.",
                     "type": "string"
@@ -6486,29 +6490,21 @@
         "PlanRoutingContext": {
             "type": "object",
             "properties": {
-                "routeGroup": {
-                    "description": "RouteGroup is the literal name of the target route group. Mutually exclusive with Sandbox.",
-                    "type": "string"
+                "literal": {
+                    "description": "Literal is an inline routing target.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/RoutingTarget"
+                        }
+                    ]
                 },
-                "routeGroupRef": {
-                    "description": "RouteGroupRef is a reference expression that resolves to the route group name.",
-                    "type": "string"
-                },
-                "routingKey": {
-                    "description": "RoutingKey is the literal routing key used to direct traffic.",
-                    "type": "string"
-                },
-                "routingKeyRef": {
-                    "description": "RoutingKeyRef is a reference expression that resolves to the routing key.",
-                    "type": "string"
-                },
-                "sandbox": {
-                    "description": "Sandbox is the literal name of the target sandbox. Mutually exclusive with RouteGroup.",
-                    "type": "string"
-                },
-                "sandboxRef": {
-                    "description": "SandboxRef is a reference expression that resolves to the sandbox name.",
-                    "type": "string"
+                "ref": {
+                    "description": "Ref contains reference expressions that resolve to a routing target.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/RoutingTargetRef"
+                        }
+                    ]
                 }
             }
         },
@@ -6971,6 +6967,44 @@
                     "$ref": "#/definitions/routeGroup.Status"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "RoutingTarget": {
+            "type": "object",
+            "properties": {
+                "routeGroup": {
+                    "description": "RouteGroup is the name of the target route group.",
+                    "type": "string"
+                },
+                "routingKey": {
+                    "description": "RoutingKey is the routing key used to direct traffic.",
+                    "type": "string"
+                },
+                "sandbox": {
+                    "description": "Sandbox is the name of the target sandbox.",
+                    "type": "string"
+                }
+            }
+        },
+        "RoutingTargetRef": {
+            "type": "object",
+            "properties": {
+                "anyRef": {
+                    "description": "AnyRef is a reference to a plan param whose value is a RoutingTarget\n(polymorphic — the caller decides sandbox, routeGroup, or routingKey).",
+                    "type": "string"
+                },
+                "routeGroupRef": {
+                    "description": "RouteGroupRef is a reference expression that resolves to a route group name.",
+                    "type": "string"
+                },
+                "routingKeyRef": {
+                    "description": "RoutingKeyRef is a reference expression that resolves to a routing key.",
+                    "type": "string"
+                },
+                "sandboxRef": {
+                    "description": "SandboxRef is a reference expression that resolves to a sandbox name.",
                     "type": "string"
                 }
             }

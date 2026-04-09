@@ -4,7 +4,9 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -14,32 +16,142 @@ import (
 // swagger:model PlanRoutingContext
 type PlanRoutingContext struct {
 
-	// RouteGroup is the literal name of the target route group. Mutually exclusive with Sandbox.
-	RouteGroup string `json:"routeGroup,omitempty"`
+	// literal
+	Literal *RoutingTarget `json:"literal,omitempty"`
 
-	// RouteGroupRef is a reference expression that resolves to the route group name.
-	RouteGroupRef string `json:"routeGroupRef,omitempty"`
-
-	// RoutingKey is the literal routing key used to direct traffic.
-	RoutingKey string `json:"routingKey,omitempty"`
-
-	// RoutingKeyRef is a reference expression that resolves to the routing key.
-	RoutingKeyRef string `json:"routingKeyRef,omitempty"`
-
-	// Sandbox is the literal name of the target sandbox. Mutually exclusive with RouteGroup.
-	Sandbox string `json:"sandbox,omitempty"`
-
-	// SandboxRef is a reference expression that resolves to the sandbox name.
-	SandboxRef string `json:"sandboxRef,omitempty"`
+	// ref
+	Ref *RoutingTargetRef `json:"ref,omitempty"`
 }
 
 // Validate validates this plan routing context
 func (m *PlanRoutingContext) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateLiteral(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRef(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this plan routing context based on context it is used
+func (m *PlanRoutingContext) validateLiteral(formats strfmt.Registry) error {
+	if swag.IsZero(m.Literal) { // not required
+		return nil
+	}
+
+	if m.Literal != nil {
+		if err := m.Literal.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("literal")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("literal")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PlanRoutingContext) validateRef(formats strfmt.Registry) error {
+	if swag.IsZero(m.Ref) { // not required
+		return nil
+	}
+
+	if m.Ref != nil {
+		if err := m.Ref.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("ref")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("ref")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this plan routing context based on the context it is used
 func (m *PlanRoutingContext) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateLiteral(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRef(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *PlanRoutingContext) contextValidateLiteral(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Literal != nil {
+
+		if swag.IsZero(m.Literal) { // not required
+			return nil
+		}
+
+		if err := m.Literal.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("literal")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("literal")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PlanRoutingContext) contextValidateRef(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Ref != nil {
+
+		if swag.IsZero(m.Ref) { // not required
+			return nil
+		}
+
+		if err := m.Ref.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("ref")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("ref")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 

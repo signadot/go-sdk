@@ -14,6 +14,11 @@ import (
 // swagger:model PlanClusterAffinity
 type PlanClusterAffinity struct {
 
+	// FromAnyTarget names a plan param whose value is a RoutingTarget.
+	// The cluster is inferred from the variant provided at execution time
+	// (sandbox → sandbox cluster, routeGroup → RG cluster).
+	FromAnyTarget string `json:"fromAnyTarget,omitempty"`
+
 	// FromCluster names a plan param whose value is a cluster name directly.
 	FromCluster string `json:"fromCluster,omitempty"`
 
