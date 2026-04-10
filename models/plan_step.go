@@ -32,6 +32,12 @@ type PlanStep struct {
 	// regular params and become part of the action's eval environment.
 	ExtraInputs []*PlanField `json:"extraInputs"`
 
+	// ExtraOutputs declares additional named outputs for this step beyond
+	// the action's declared outputs. The action writes these to ./outputs/<name>
+	// and the runner reads them back according to their schema declarations.
+	// Names must not shadow the action's declared outputs.
+	ExtraOutputs []*PlanField `json:"extraOutputs"`
+
 	// ID is the unique identifier for this step within the plan.
 	ID string `json:"id,omitempty"`
 
@@ -52,6 +58,10 @@ func (m *PlanStep) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExtraInputs(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExtraOutputs(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -141,6 +151,36 @@ func (m *PlanStep) validateExtraInputs(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *PlanStep) validateExtraOutputs(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExtraOutputs) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.ExtraOutputs); i++ {
+		if swag.IsZero(m.ExtraOutputs[i]) { // not required
+			continue
+		}
+
+		if m.ExtraOutputs[i] != nil {
+			if err := m.ExtraOutputs[i].Validate(formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("extraOutputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("extraOutputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 func (m *PlanStep) validateRoutingContext(formats strfmt.Registry) error {
 	if swag.IsZero(m.RoutingContext) { // not required
 		return nil
@@ -177,6 +217,10 @@ func (m *PlanStep) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateExtraInputs(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExtraOutputs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -258,6 +302,35 @@ func (m *PlanStep) contextValidateExtraInputs(ctx context.Context, formats strfm
 				ce := new(errors.CompositeError)
 				if stderrors.As(err, &ce) {
 					return ce.ValidateName("extraInputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *PlanStep) contextValidateExtraOutputs(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ExtraOutputs); i++ {
+
+		if m.ExtraOutputs[i] != nil {
+
+			if swag.IsZero(m.ExtraOutputs[i]) { // not required
+				return nil
+			}
+
+			if err := m.ExtraOutputs[i].ContextValidate(ctx, formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("extraOutputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("extraOutputs" + "." + strconv.Itoa(i))
 				}
 
 				return err

@@ -19,6 +19,16 @@ type PlanOutputStatus struct {
 	// artifact
 	Artifact *PlanArtifactRef `json:"artifact,omitempty"`
 
+	// Drill is the path of segments to walk inside the source step
+	// output's parsed JSON to extract the actual plan output value. Set
+	// only for drill plan outputs (e.g. ["response", "statusCode"] for
+	// "steps.send.outputs.capture.response.statusCode"). The drill is
+	// applied at download time by the apiserver — the runner records
+	// it but does not materialize the drilled value, so the source
+	// step's existing artifact (or inline Value) is reused without any
+	// extra upload.
+	Drill []string `json:"drill"`
+
 	// Metadata carries presentation hints (e.g. contentType, displayName).
 	Metadata map[string]string `json:"metadata,omitempty"`
 

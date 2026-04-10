@@ -6441,6 +6441,13 @@
                         }
                     ]
                 },
+                "drill": {
+                    "description": "Drill is the path of segments to walk inside the source step\noutput's parsed JSON to extract the actual plan output value. Set\nonly for drill plan outputs (e.g. [\"response\", \"statusCode\"] for\n\"steps.send.outputs.capture.response.statusCode\"). The drill is\napplied at download time by the apiserver — the runner records\nit but does not materialize the drilled value, so the source\nstep's existing artifact (or inline Value) is reused without any\nextra upload.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "metadata": {
                     "description": "Metadata carries presentation hints (e.g. contentType, displayName).",
                     "type": "object",
@@ -6453,7 +6460,7 @@
                     "type": "string"
                 },
                 "stepRef": {
-                    "description": "StepRef identifies the source step output for alias plan outputs\n(e.g. \"steps.X.outputs.Y\"). Set whenever the plan output is a\ndirect reference to a step output, regardless of whether the value\nis inlined or stored as an artifact.",
+                    "description": "StepRef identifies the source step output for alias and drill plan\noutputs. Set when the plan output is a direct reference to a step\noutput (steps.X.outputs.Y), regardless of whether the value is\ninlined or stored as an artifact, AND for drill outputs\n(steps.X.outputs.Y.field) where it identifies the source whose\nbytes the apiserver will fetch and walk via Drill.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/PlanStepOutputRef"
@@ -6659,6 +6666,13 @@
                 },
                 "extraInputs": {
                     "description": "ExtraInputs declares additional named inputs for this step beyond\nthe action's declared params. These are wired via Args.Refs like\nregular params and become part of the action's eval environment.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanField"
+                    }
+                },
+                "extraOutputs": {
+                    "description": "ExtraOutputs declares additional named outputs for this step beyond\nthe action's declared outputs. The action writes these to ./outputs/\u003cname\u003e\nand the runner reads them back according to their schema declarations.\nNames must not shadow the action's declared outputs.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/PlanField"
