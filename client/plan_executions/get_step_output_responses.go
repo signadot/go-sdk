@@ -66,6 +66,11 @@ GetStepOutputOK describes a response with status code 200, with default header v
 OK
 */
 type GetStepOutputOK struct {
+
+	/* MIME type of the output body, resolved via plans.ResolveContentType
+	 */
+	ContentType string
+
 	Payload io.Writer
 }
 
@@ -113,6 +118,13 @@ func (o *GetStepOutputOK) GetPayload() io.Writer {
 
 func (o *GetStepOutputOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	// hydrates response header Content-Type
+	hdrContentType := response.GetHeader("Content-Type")
+
+	if hdrContentType != "" {
+		o.ContentType = hdrContentType
+	}
+
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
@@ -135,6 +147,11 @@ GetStepOutputPartialContent describes a response with status code 206, with defa
 Partial Content
 */
 type GetStepOutputPartialContent struct {
+
+	/* MIME type of the output body, resolved via plans.ResolveContentType
+	 */
+	ContentType string
+
 	Payload io.Writer
 }
 
@@ -181,6 +198,13 @@ func (o *GetStepOutputPartialContent) GetPayload() io.Writer {
 }
 
 func (o *GetStepOutputPartialContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header Content-Type
+	hdrContentType := response.GetHeader("Content-Type")
+
+	if hdrContentType != "" {
+		o.ContentType = hdrContentType
+	}
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {

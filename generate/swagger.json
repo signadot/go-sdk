@@ -3264,12 +3264,24 @@
                         "description": "OK",
                         "schema": {
                             "type": "file"
+                        },
+                        "headers": {
+                            "Content-Type": {
+                                "type": "string",
+                                "description": "MIME type of the output body, resolved via plans.ResolveContentType"
+                            }
                         }
                     },
                     "206": {
                         "description": "Partial Content",
                         "schema": {
                             "type": "file"
+                        },
+                        "headers": {
+                            "Content-Type": {
+                                "type": "string",
+                                "description": "MIME type of the output body, resolved via plans.ResolveContentType"
+                            }
                         }
                     },
                     "404": {
@@ -3428,12 +3440,24 @@
                         "description": "OK",
                         "schema": {
                             "type": "file"
+                        },
+                        "headers": {
+                            "Content-Type": {
+                                "type": "string",
+                                "description": "MIME type of the output body, resolved via plans.ResolveContentType"
+                            }
                         }
                     },
                     "206": {
                         "description": "Partial Content",
                         "schema": {
                             "type": "file"
+                        },
+                        "headers": {
+                            "Content-Type": {
+                                "type": "string",
+                                "description": "MIME type of the output body, resolved via plans.ResolveContentType"
+                            }
                         }
                     },
                     "404": {

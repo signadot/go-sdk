@@ -66,6 +66,11 @@ GetPlanExecutionOutputOK describes a response with status code 200, with default
 OK
 */
 type GetPlanExecutionOutputOK struct {
+
+	/* MIME type of the output body, resolved via plans.ResolveContentType
+	 */
+	ContentType string
+
 	Payload io.Writer
 }
 
@@ -113,6 +118,13 @@ func (o *GetPlanExecutionOutputOK) GetPayload() io.Writer {
 
 func (o *GetPlanExecutionOutputOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	// hydrates response header Content-Type
+	hdrContentType := response.GetHeader("Content-Type")
+
+	if hdrContentType != "" {
+		o.ContentType = hdrContentType
+	}
+
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
@@ -135,6 +147,11 @@ GetPlanExecutionOutputPartialContent describes a response with status code 206, 
 Partial Content
 */
 type GetPlanExecutionOutputPartialContent struct {
+
+	/* MIME type of the output body, resolved via plans.ResolveContentType
+	 */
+	ContentType string
+
 	Payload io.Writer
 }
 
@@ -181,6 +198,13 @@ func (o *GetPlanExecutionOutputPartialContent) GetPayload() io.Writer {
 }
 
 func (o *GetPlanExecutionOutputPartialContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// hydrates response header Content-Type
+	hdrContentType := response.GetHeader("Content-Type")
+
+	if hdrContentType != "" {
+		o.ContentType = hdrContentType
+	}
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
