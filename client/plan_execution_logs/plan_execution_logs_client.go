@@ -76,13 +76,66 @@ func WithAcceptTextEventStream(r *runtime.ClientOperation) {
 	r.ProducesMediaTypes = []string{"text/event-stream"}
 }
 
+// WithAcceptTextPlain sets the Accept header to "text/plain".
+func WithAcceptTextPlain(r *runtime.ClientOperation) {
+	r.ProducesMediaTypes = []string{"text/plain"}
+}
+
 // ClientService is the interface for Client methods
 type ClientService interface {
+	DownloadStepLog(params *DownloadStepLogParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadStepLogOK, *DownloadStepLogPartialContent, error)
+
 	StreamPlanExecutionLogs(params *StreamPlanExecutionLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionLogsOK, error)
 
 	StreamPlanExecutionStepLogs(params *StreamPlanExecutionStepLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionStepLogsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+DownloadStepLog downloads a step log
+
+Returns the captured stdout or stderr for a specific step. Inlined values are served directly; large logs are proxied from S3.
+*/
+func (a *Client) DownloadStepLog(params *DownloadStepLogParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadStepLogOK, *DownloadStepLogPartialContent, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewDownloadStepLogParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "download-step-log",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/logs/download",
+		ProducesMediaTypes: []string{"text/plain"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DownloadStepLogReader{formats: a.formats, writer: writer},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// several success responses have to be checked
+	switch value := result.(type) {
+	case *DownloadStepLogOK:
+		return value, nil, nil
+	case *DownloadStepLogPartialContent:
+		return nil, value, nil
+	}
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for plan_execution_logs: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*

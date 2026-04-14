@@ -3299,6 +3299,90 @@
                 }
             }
         },
+        "/orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/logs/download": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Returns the captured stdout or stderr for a specific step. Inlined values are served directly; large logs are proxied from S3.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "PlanExecutionLogs"
+                ],
+                "summary": "Download a step log",
+                "operationId": "download-step-log",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Execution ID",
+                        "name": "executionID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Step ID",
+                        "name": "stepID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "stdout",
+                            "stderr"
+                        ],
+                        "type": "string",
+                        "description": "Stream type (stdout or stderr)",
+                        "name": "stream",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/plans/executions/{executionID}/steps/{stepID}/logs/live": {
             "get": {
                 "security": [
