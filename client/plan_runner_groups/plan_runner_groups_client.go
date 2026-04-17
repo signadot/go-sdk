@@ -51,17 +51,47 @@ type Client struct {
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
+// This client is generated with a few options you might find useful for your swagger spec.
+//
+// Feel free to add you own set of options.
+
+// WithContentType allows the client to force the Content-Type header
+// to negotiate a specific Consumer from the server.
+//
+// You may use this option to set arbitrary extensions to your MIME media type.
+func WithContentType(mime string) ClientOption {
+	return func(r *runtime.ClientOperation) {
+		r.ConsumesMediaTypes = []string{mime}
+	}
+}
+
+// WithContentTypeApplicationJSON sets the Content-Type header to "application/json".
+func WithContentTypeApplicationJSON(r *runtime.ClientOperation) {
+	r.ConsumesMediaTypes = []string{"application/json"}
+}
+
+// WithContentTypeApplicationxTar sets the Content-Type header to "application/x-tar".
+func WithContentTypeApplicationxTar(r *runtime.ClientOperation) {
+	r.ConsumesMediaTypes = []string{"application/x-tar"}
+}
+
 // ClientService is the interface for Client methods
 type ClientService interface {
 	ApplyPlanrunnergroup(params *ApplyPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyPlanrunnergroupOK, error)
 
 	DeletePlanrunnergroup(params *DeletePlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanrunnergroupOK, error)
 
+	DeletePrgImage(params *DeletePrgImageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrgImageOK, error)
+
 	GetPlanrunnergroup(params *GetPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupOK, error)
 
 	GetPlanrunnergroupSettings(params *GetPlanrunnergroupSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupSettingsOK, error)
 
 	ListPlanrunnergroup(params *ListPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanrunnergroupOK, error)
+
+	ListPrgImages(params *ListPrgImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPrgImagesOK, error)
+
+	UploadPrgImage(params *UploadPrgImageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UploadPrgImageOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -155,6 +185,52 @@ func (a *Client) DeletePlanrunnergroup(params *DeletePlanrunnergroupParams, auth
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for delete-planrunnergroup: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeletePrgImage deletes an image from a plan runner group
+
+Marks the image as deleting, removes it from all PRG pods, and deletes the desired-state row.
+*/
+func (a *Client) DeletePrgImage(params *DeletePrgImageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrgImageOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewDeletePrgImageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete-prg-image",
+		Method:             "DELETE",
+		PathPattern:        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}/images/{imageDigest}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeletePrgImageReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*DeletePrgImageOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete-prg-image: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
@@ -293,6 +369,98 @@ func (a *Client) ListPlanrunnergroup(params *ListPlanrunnergroupParams, authInfo
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-planrunnergroup: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ListPrgImages lists images on a plan runner group
+
+Returns the desired images for a PRG from the control plane database.
+*/
+func (a *Client) ListPrgImages(params *ListPrgImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPrgImagesOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewListPrgImagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "list-prg-images",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}/images/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListPrgImagesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*ListPrgImagesOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for list-prg-images: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+UploadPrgImage uploads an image to a plan runner group
+
+Streams an OCI archive to a PRG pod and records the image for propagation across replicas.
+*/
+func (a *Client) UploadPrgImage(params *UploadPrgImageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UploadPrgImageOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewUploadPrgImageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "upload-prg-image",
+		Method:             "POST",
+		PathPattern:        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}/images/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/x-tar"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UploadPrgImageReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*UploadPrgImageOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for upload-prg-image: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

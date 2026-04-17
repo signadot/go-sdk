@@ -16,6 +16,9 @@ import (
 // swagger:model planRunnerGroup.Spec
 type PlanRunnerGroupSpec struct {
 
+	// cache
+	Cache *PlanRunnerGroupCacheSpec `json:"cache,omitempty"`
+
 	// cluster
 	Cluster string `json:"cluster,omitempty"`
 
@@ -39,6 +42,10 @@ type PlanRunnerGroupSpec struct {
 func (m *PlanRunnerGroupSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateCache(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateScaling(formats); err != nil {
 		res = append(res, err)
 	}
@@ -46,6 +53,29 @@ func (m *PlanRunnerGroupSpec) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanRunnerGroupSpec) validateCache(formats strfmt.Registry) error {
+	if swag.IsZero(m.Cache) { // not required
+		return nil
+	}
+
+	if m.Cache != nil {
+		if err := m.Cache.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("cache")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("cache")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -76,6 +106,10 @@ func (m *PlanRunnerGroupSpec) validateScaling(formats strfmt.Registry) error {
 func (m *PlanRunnerGroupSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateCache(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateScaling(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -83,6 +117,31 @@ func (m *PlanRunnerGroupSpec) ContextValidate(ctx context.Context, formats strfm
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanRunnerGroupSpec) contextValidateCache(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Cache != nil {
+
+		if swag.IsZero(m.Cache) { // not required
+			return nil
+		}
+
+		if err := m.Cache.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("cache")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("cache")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
