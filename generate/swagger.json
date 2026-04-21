@@ -2462,6 +2462,187 @@
                 }
             }
         },
+        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}/images/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Returns the desired images for a PRG from the control plane database.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "List images on a plan runner group",
+                "operationId": "list-prg-images",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Runner Group Name",
+                        "name": "planRunnerGroupName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v2api.PRGImageList"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Streams an OCI archive to a PRG pod and records the image for propagation across replicas.",
+                "consumes": [
+                    "application/x-tar"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "Upload an image to a plan runner group",
+                "operationId": "upload-prg-image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Runner Group Name",
+                        "name": "planRunnerGroupName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Image reference",
+                        "name": "ref",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}/images/{imageDigest}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Marks the image as deleting, removes it from all PRG pods, and deletes the desired-state row.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "Delete an image from a plan runner group",
+                "operationId": "delete-prg-image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Runner Group Name",
+                        "name": "planRunnerGroupName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Image digest (e.g. sha256:abc...)",
+                        "name": "imageDigest",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/plan-tags": {
             "get": {
                 "security": [
@@ -6218,6 +6399,14 @@
         "PlanActionStatus": {
             "type": "object",
             "properties": {
+                "bodyImage": {
+                    "description": "BodyImage is the image directive parsed from \\image{...} in the body, if any.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanImageRef"
+                        }
+                    ]
+                },
                 "bodyOutputs": {
                     "description": "BodyOutputs are the output fields parsed from \\output{...} directives in the body.",
                     "type": "array",
@@ -6239,6 +6428,14 @@
                 "description": {
                     "description": "Description is a short one-line description parsed from the \\description{...} directive in the body.",
                     "type": "string"
+                },
+                "extraInputsSchemaPolicy": {
+                    "description": "ExtraInputsSchemaPolicy is parsed from the \\extra_inputs_schema{...}\ndirective in the body. nil when the action did not declare one.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanExtraInputsSchemaPolicy"
+                        }
+                    ]
                 },
                 "requires": {
                     "description": "Requires declares runtime dependencies that must be present on the runner.\nEach entry is a binary name with an optional semver constraint, e.g.\n\"node \u003e= 20\", \"npx\", \"playwright\".\nParsed from \\requires{...} directives in the body.",
@@ -6481,6 +6678,19 @@
                 }
             }
         },
+        "PlanExtraInputsSchemaPolicy": {
+            "type": "object",
+            "properties": {
+                "default": {
+                    "description": "Default is the schema to apply when the plan author omitted one.\nEmpty (nil) when this primitive is not set.",
+                    "type": "object"
+                },
+                "require": {
+                    "description": "Require, when true, makes plan compile fail if any extra_input on\na step of this action is schemaless.",
+                    "type": "boolean"
+                }
+            }
+        },
         "PlanField": {
             "type": "object",
             "properties": {
@@ -6509,6 +6719,40 @@
                 },
                 "schemaRef": {
                     "description": "SchemaRef is an optional reference to an external schema (name, file, or URL).",
+                    "type": "string"
+                }
+            }
+        },
+        "PlanImageRef": {
+            "type": "object",
+            "properties": {
+                "inputName": {
+                    "description": "InputName names a declared input (\\input or extra_input on the\nstep) whose value at run time is the image reference. Set when the\naction declared \\image{input=name}.",
+                    "type": "string"
+                },
+                "literal": {
+                    "description": "Literal is the image reference itself, e.g. \"alpine:3.19\". Set when\nthe action declared \\image{\"...\"}. Requires the target PRG to have\nthe image pre-cached (wired in a later commit; currently rejected\nby the runner with a clear error pointing at the cache workflow).",
+                    "type": "string"
+                }
+            }
+        },
+        "PlanImageResult": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "description": "Detail provides context on why the image is unavailable.",
+                    "type": "string"
+                },
+                "digest": {
+                    "description": "Digest is the resolved content digest, set when OK is true.",
+                    "type": "string"
+                },
+                "ok": {
+                    "description": "OK indicates whether the image is cached on all PRG pods.",
+                    "type": "boolean"
+                },
+                "ref": {
+                    "description": "Ref is the image reference as declared in the action body.",
                     "type": "string"
                 }
             }
@@ -6811,6 +7055,22 @@
                     "description": "Body is the action implementation (markdown with code blocks).",
                     "type": "string"
                 },
+                "extraInputsSchemaPolicy": {
+                    "description": "ExtraInputsSchemaPolicy declares how the compile pass resolves\nmissing schemas on this step's extra_inputs. Nil when the action\ndid not declare an \\extra_inputs_schema{...} directive.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanExtraInputsSchemaPolicy"
+                        }
+                    ]
+                },
+                "image": {
+                    "description": "Image, if set, declares that the action's shell fenced block runs\ninside an OCI image via actionbox run-image. Either Literal or\nInputName is set; never both.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanImageRef"
+                        }
+                    ]
+                },
                 "outputs": {
                     "description": "Outputs are the output fields parsed from the action's body.",
                     "type": "array",
@@ -6959,6 +7219,13 @@
         "PlanValidateResponse": {
             "type": "object",
             "properties": {
+                "images": {
+                    "description": "Images contains the result of each literal image availability check.\nPopulated control-plane-side from the PRG's cached image inventory.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanImageResult"
+                    }
+                },
                 "requires": {
                     "description": "Requires contains the result of each requirement check.",
                     "type": "array",
@@ -8598,6 +8865,19 @@
                 }
             }
         },
+        "planRunnerGroup.CacheSpec": {
+            "type": "object",
+            "properties": {
+                "size": {
+                    "description": "Size is the requested PVC capacity, e.g. \"10Gi\".",
+                    "type": "string"
+                },
+                "storageClass": {
+                    "description": "StorageClass is the Kubernetes storage class name. Empty string\nuses the cluster default.",
+                    "type": "string"
+                }
+            }
+        },
         "planRunnerGroup.ClusterSettings": {
             "type": "object",
             "properties": {
@@ -8651,6 +8931,9 @@
         "planRunnerGroup.Spec": {
             "type": "object",
             "properties": {
+                "cache": {
+                    "$ref": "#/definitions/planRunnerGroup.CacheSpec"
+                },
                 "cluster": {
                     "type": "string"
                 },
@@ -10024,6 +10307,34 @@
                 "Deployment",
                 "Rollout"
             ]
+        },
+        "v2api.PRGImageEntry": {
+            "type": "object",
+            "properties": {
+                "deleting": {
+                    "type": "boolean"
+                },
+                "digest": {
+                    "type": "string"
+                },
+                "ref": {
+                    "type": "string"
+                }
+            }
+        },
+        "v2api.PRGImageList": {
+            "type": "object",
+            "properties": {
+                "arch": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v2api.PRGImageEntry"
+                    }
+                }
+            }
         },
         "virtual": {
             "type": "object",

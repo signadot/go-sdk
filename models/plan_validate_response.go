@@ -17,6 +17,10 @@ import (
 // swagger:model PlanValidateResponse
 type PlanValidateResponse struct {
 
+	// Images contains the result of each literal image availability check.
+	// Populated control-plane-side from the PRG's cached image inventory.
+	Images []*PlanImageResult `json:"images"`
+
 	// Requires contains the result of each requirement check.
 	Requires []*PlanRequireResult `json:"requires"`
 
@@ -27,6 +31,10 @@ type PlanValidateResponse struct {
 // Validate validates this plan validate response
 func (m *PlanValidateResponse) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateImages(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateRequires(formats); err != nil {
 		res = append(res, err)
@@ -39,6 +47,36 @@ func (m *PlanValidateResponse) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanValidateResponse) validateImages(formats strfmt.Registry) error {
+	if swag.IsZero(m.Images) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Images); i++ {
+		if swag.IsZero(m.Images[i]) { // not required
+			continue
+		}
+
+		if m.Images[i] != nil {
+			if err := m.Images[i].Validate(formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("images" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("images" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -99,6 +137,10 @@ func (m *PlanValidateResponse) validateScript(formats strfmt.Registry) error {
 func (m *PlanValidateResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateImages(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateRequires(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -110,6 +152,35 @@ func (m *PlanValidateResponse) ContextValidate(ctx context.Context, formats strf
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanValidateResponse) contextValidateImages(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Images); i++ {
+
+		if m.Images[i] != nil {
+
+			if swag.IsZero(m.Images[i]) { // not required
+				return nil
+			}
+
+			if err := m.Images[i].ContextValidate(ctx, formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("images" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("images" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
