@@ -4897,6 +4897,259 @@
                 }
             }
         },
+        "/orgs/{orgName}/secrets": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all secrets for the org (metadata only, no values).",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "List secrets",
+                "operationId": "list-secrets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Secret"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create a new encrypted secret for the org.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Create a secret",
+                "operationId": "create-secret",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Secret (name + value required)",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Secret"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Secret"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/secrets/{secretName}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get secret metadata (no value).",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Get a secret",
+                "operationId": "get-secret",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Secret Name",
+                        "name": "secretName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Secret"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update the value (and optionally description) of an existing secret.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Update a secret",
+                "operationId": "update-secret",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Secret Name",
+                        "name": "secretName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Secret (value required)",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Secret"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Secret"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a secret from the org.",
+                "tags": [
+                    "Secrets"
+                ],
+                "summary": "Delete a secret",
+                "operationId": "delete-secret",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Secret Name",
+                        "name": "secretName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/tests": {
             "get": {
                 "security": [
@@ -6240,6 +6493,14 @@
                     "description": "Description is a short one-line description parsed from the \\description{...} directive in the body.",
                     "type": "string"
                 },
+                "extraInputsSchemaPolicy": {
+                    "description": "ExtraInputsSchemaPolicy is parsed from the \\extra_inputs_schema{...}\ndirective in the body. nil when the action did not declare one.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanExtraInputsSchemaPolicy"
+                        }
+                    ]
+                },
                 "requires": {
                     "description": "Requires declares runtime dependencies that must be present on the runner.\nEach entry is a binary name with an optional semver constraint, e.g.\n\"node \u003e= 20\", \"npx\", \"playwright\".\nParsed from \\requires{...} directives in the body.",
                     "type": "array",
@@ -6423,6 +6684,13 @@
                 "runner": {
                     "description": "Runner is the runner group name assigned to execute the plan.",
                     "type": "string"
+                },
+                "secrets": {
+                    "description": "Secrets maps plan param names to org secret names. At dispatch time,\nthe control plane resolves each secret name to its decrypted value and\ndelivers it to the runner alongside regular params.\nAPI responses return the name mapping (never decrypted values).",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -6478,6 +6746,19 @@
                 "updatedAt": {
                     "description": "UpdatedAt is when the execution status was last updated. Serialized as RFC3339.",
                     "type": "string"
+                }
+            }
+        },
+        "PlanExtraInputsSchemaPolicy": {
+            "type": "object",
+            "properties": {
+                "default": {
+                    "description": "Default is the schema to apply when the plan author omitted one.\nEmpty (nil) when this primitive is not set.",
+                    "type": "object"
+                },
+                "require": {
+                    "description": "Require, when true, makes plan compile fail if any extra_input on\na step of this action is schemaless.",
+                    "type": "boolean"
                 }
             }
         },
@@ -6810,6 +7091,14 @@
                 "body": {
                     "description": "Body is the action implementation (markdown with code blocks).",
                     "type": "string"
+                },
+                "extraInputsSchemaPolicy": {
+                    "description": "ExtraInputsSchemaPolicy declares how the compile pass resolves\nmissing schemas on this step's extra_inputs. Nil when the action\ndid not declare an \\extra_inputs_schema{...} directive.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanExtraInputsSchemaPolicy"
+                        }
+                    ]
                 },
                 "outputs": {
                     "description": "Outputs are the output fields parsed from the action's body.",
@@ -7179,6 +7468,31 @@
                     ]
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "Secret": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "CreatedAt is when the secret was created. Read-only.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description is an optional human-readable description.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name is the unique identifier within the org.",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "UpdatedAt is when the secret was last updated. Read-only.",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "Value is the secret plaintext. Write-only: accepted on create/update,\nnever returned in any API response.",
                     "type": "string"
                 }
             }

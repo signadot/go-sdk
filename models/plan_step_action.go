@@ -23,6 +23,9 @@ type PlanStepAction struct {
 	// Body is the action implementation (markdown with code blocks).
 	Body string `json:"body,omitempty"`
 
+	// extra inputs schema policy
+	ExtraInputsSchemaPolicy *PlanExtraInputsSchemaPolicy `json:"extraInputsSchemaPolicy,omitempty"`
+
 	// Outputs are the output fields parsed from the action's body.
 	Outputs []*PlanField `json:"outputs"`
 
@@ -37,6 +40,10 @@ type PlanStepAction struct {
 func (m *PlanStepAction) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateExtraInputsSchemaPolicy(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateOutputs(formats); err != nil {
 		res = append(res, err)
 	}
@@ -48,6 +55,29 @@ func (m *PlanStepAction) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanStepAction) validateExtraInputsSchemaPolicy(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExtraInputsSchemaPolicy) { // not required
+		return nil
+	}
+
+	if m.ExtraInputsSchemaPolicy != nil {
+		if err := m.ExtraInputsSchemaPolicy.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("extraInputsSchemaPolicy")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("extraInputsSchemaPolicy")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -115,6 +145,10 @@ func (m *PlanStepAction) validateParams(formats strfmt.Registry) error {
 func (m *PlanStepAction) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateExtraInputsSchemaPolicy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateOutputs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -126,6 +160,31 @@ func (m *PlanStepAction) ContextValidate(ctx context.Context, formats strfmt.Reg
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanStepAction) contextValidateExtraInputsSchemaPolicy(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExtraInputsSchemaPolicy != nil {
+
+		if swag.IsZero(m.ExtraInputsSchemaPolicy) { // not required
+			return nil
+		}
+
+		if err := m.ExtraInputsSchemaPolicy.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("extraInputsSchemaPolicy")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("extraInputsSchemaPolicy")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 

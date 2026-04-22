@@ -25,6 +25,12 @@ type PlanExecutionSpec struct {
 
 	// Runner is the runner group name assigned to execute the plan.
 	Runner string `json:"runner,omitempty"`
+
+	// Secrets maps plan param names to org secret names. At dispatch time,
+	// the control plane resolves each secret name to its decrypted value and
+	// delivers it to the runner alongside regular params.
+	// API responses return the name mapping (never decrypted values).
+	Secrets map[string]string `json:"secrets,omitempty"`
 }
 
 // Validate validates this plan execution spec
