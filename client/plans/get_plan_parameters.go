@@ -58,6 +58,12 @@ GetPlanParams contains all the parameters to send to the API endpoint
 */
 type GetPlanParams struct {
 
+	/* Expand.
+
+	   Set to 'action' to include each step's full action contents (body, schemas, extraInputsSchemaPolicy). Default returns the compact by-ref form.
+	*/
+	Expand *string
+
 	/* OrgName.
 
 	   Signadot Org Name
@@ -123,6 +129,17 @@ func (o *GetPlanParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithExpand adds the expand to the get plan params
+func (o *GetPlanParams) WithExpand(expand *string) *GetPlanParams {
+	o.SetExpand(expand)
+	return o
+}
+
+// SetExpand adds the expand to the get plan params
+func (o *GetPlanParams) SetExpand(expand *string) {
+	o.Expand = expand
+}
+
 // WithOrgName adds the orgName to the get plan params
 func (o *GetPlanParams) WithOrgName(orgName string) *GetPlanParams {
 	o.SetOrgName(orgName)
@@ -152,6 +169,23 @@ func (o *GetPlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regis
 		return err
 	}
 	var res []error
+
+	if o.Expand != nil {
+
+		// query param expand
+		var qrExpand string
+
+		if o.Expand != nil {
+			qrExpand = *o.Expand
+		}
+		qExpand := qrExpand
+		if qExpand != "" {
+
+			if err := r.SetQueryParam("expand", qExpand); err != nil {
+				return err
+			}
+		}
+	}
 
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {

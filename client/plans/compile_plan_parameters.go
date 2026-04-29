@@ -66,6 +66,12 @@ type CompilePlanParams struct {
 	*/
 	Data *models.PlanCompileInput
 
+	/* Expand.
+
+	   Set to 'action' to include each step's full action contents (body, schemas, extraInputsSchemaPolicy). Default returns the compact by-ref form.
+	*/
+	Expand *string
+
 	/* OrgName.
 
 	   Signadot Org Name
@@ -136,6 +142,17 @@ func (o *CompilePlanParams) SetData(data *models.PlanCompileInput) {
 	o.Data = data
 }
 
+// WithExpand adds the expand to the compile plan params
+func (o *CompilePlanParams) WithExpand(expand *string) *CompilePlanParams {
+	o.SetExpand(expand)
+	return o
+}
+
+// SetExpand adds the expand to the compile plan params
+func (o *CompilePlanParams) SetExpand(expand *string) {
+	o.Expand = expand
+}
+
 // WithOrgName adds the orgName to the compile plan params
 func (o *CompilePlanParams) WithOrgName(orgName string) *CompilePlanParams {
 	o.SetOrgName(orgName)
@@ -157,6 +174,23 @@ func (o *CompilePlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 	if o.Data != nil {
 		if err := r.SetBodyParam(o.Data); err != nil {
 			return err
+		}
+	}
+
+	if o.Expand != nil {
+
+		// query param expand
+		var qrExpand string
+
+		if o.Expand != nil {
+			qrExpand = *o.Expand
+		}
+		qExpand := qrExpand
+		if qExpand != "" {
+
+			if err := r.SetQueryParam("expand", qExpand); err != nil {
+				return err
+			}
 		}
 	}
 

@@ -66,6 +66,12 @@ type CreatePlanParams struct {
 	*/
 	Data *models.PlanSpec
 
+	/* Expand.
+
+	   Set to 'action' to include each step's full action contents in the response (body, schemas, extraInputsSchemaPolicy). Default returns the compact by-ref form.
+	*/
+	Expand *string
+
 	/* OrgName.
 
 	   Signadot Org Name
@@ -136,6 +142,17 @@ func (o *CreatePlanParams) SetData(data *models.PlanSpec) {
 	o.Data = data
 }
 
+// WithExpand adds the expand to the create plan params
+func (o *CreatePlanParams) WithExpand(expand *string) *CreatePlanParams {
+	o.SetExpand(expand)
+	return o
+}
+
+// SetExpand adds the expand to the create plan params
+func (o *CreatePlanParams) SetExpand(expand *string) {
+	o.Expand = expand
+}
+
 // WithOrgName adds the orgName to the create plan params
 func (o *CreatePlanParams) WithOrgName(orgName string) *CreatePlanParams {
 	o.SetOrgName(orgName)
@@ -157,6 +174,23 @@ func (o *CreatePlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 	if o.Data != nil {
 		if err := r.SetBodyParam(o.Data); err != nil {
 			return err
+		}
+	}
+
+	if o.Expand != nil {
+
+		// query param expand
+		var qrExpand string
+
+		if o.Expand != nil {
+			qrExpand = *o.Expand
+		}
+		qExpand := qrExpand
+		if qExpand != "" {
+
+			if err := r.SetQueryParam("expand", qExpand); err != nil {
+				return err
+			}
 		}
 	}
 

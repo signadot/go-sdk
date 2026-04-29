@@ -28,6 +28,10 @@ type PlanExecutionStatus struct {
 	// Step-level errors are in StepStatus.Error.
 	Error string `json:"error,omitempty"`
 
+	// Inputs records how each plan-level input was resolved at dispatch
+	// time. Populated at the transition to dispatching. Mirrors Outputs.
+	Inputs []*PlanInputStatus `json:"inputs"`
+
 	// Outputs contains the resolved plan-level outputs, populated on completion.
 	Outputs []*PlanOutputStatus `json:"outputs"`
 
@@ -51,6 +55,10 @@ type PlanExecutionStatus struct {
 func (m *PlanExecutionStatus) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateInputs(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateOutputs(formats); err != nil {
 		res = append(res, err)
 	}
@@ -70,6 +78,36 @@ func (m *PlanExecutionStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanExecutionStatus) validateInputs(formats strfmt.Registry) error {
+	if swag.IsZero(m.Inputs) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Inputs); i++ {
+		if swag.IsZero(m.Inputs[i]) { // not required
+			continue
+		}
+
+		if m.Inputs[i] != nil {
+			if err := m.Inputs[i].Validate(formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -181,6 +219,10 @@ func (m *PlanExecutionStatus) validateSteps(formats strfmt.Registry) error {
 func (m *PlanExecutionStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateInputs(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateOutputs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -200,6 +242,35 @@ func (m *PlanExecutionStatus) ContextValidate(ctx context.Context, formats strfm
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanExecutionStatus) contextValidateInputs(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Inputs); i++ {
+
+		if m.Inputs[i] != nil {
+
+			if swag.IsZero(m.Inputs[i]) { // not required
+				return nil
+			}
+
+			if err := m.Inputs[i].ContextValidate(ctx, formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

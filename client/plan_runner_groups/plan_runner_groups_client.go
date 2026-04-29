@@ -61,6 +61,8 @@ type ClientService interface {
 
 	GetPlanrunnergroupSettings(params *GetPlanrunnergroupSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupSettingsOK, error)
 
+	GetPrgDesiredImages(params *GetPrgDesiredImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrgDesiredImagesOK, error)
+
 	ListPlanrunnergroup(params *ListPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanrunnergroupOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -247,6 +249,52 @@ func (a *Client) GetPlanrunnergroupSettings(params *GetPlanrunnergroupSettingsPa
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for get-planrunnergroup-settings: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetPrgDesiredImages desireds image set for a plan runner group
+
+Returns the set of literal \image refs declared by
+*/
+func (a *Client) GetPrgDesiredImages(params *GetPrgDesiredImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrgDesiredImagesOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewGetPrgDesiredImagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "get-prg-desired-images",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}/desired-images",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetPrgDesiredImagesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*GetPrgDesiredImagesOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for get-prg-desired-images: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

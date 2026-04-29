@@ -26,6 +26,9 @@ type PlanStepAction struct {
 	// extra inputs schema policy
 	ExtraInputsSchemaPolicy *PlanExtraInputsSchemaPolicy `json:"extraInputsSchemaPolicy,omitempty"`
 
+	// image
+	Image *PlanImageRef `json:"image,omitempty"`
+
 	// Outputs are the output fields parsed from the action's body.
 	Outputs []*PlanField `json:"outputs"`
 
@@ -41,6 +44,10 @@ func (m *PlanStepAction) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateExtraInputsSchemaPolicy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateImage(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -72,6 +79,29 @@ func (m *PlanStepAction) validateExtraInputsSchemaPolicy(formats strfmt.Registry
 			ce := new(errors.CompositeError)
 			if stderrors.As(err, &ce) {
 				return ce.ValidateName("extraInputsSchemaPolicy")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PlanStepAction) validateImage(formats strfmt.Registry) error {
+	if swag.IsZero(m.Image) { // not required
+		return nil
+	}
+
+	if m.Image != nil {
+		if err := m.Image.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("image")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("image")
 			}
 
 			return err
@@ -149,6 +179,10 @@ func (m *PlanStepAction) ContextValidate(ctx context.Context, formats strfmt.Reg
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateImage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateOutputs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -179,6 +213,31 @@ func (m *PlanStepAction) contextValidateExtraInputsSchemaPolicy(ctx context.Cont
 			ce := new(errors.CompositeError)
 			if stderrors.As(err, &ce) {
 				return ce.ValidateName("extraInputsSchemaPolicy")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PlanStepAction) contextValidateImage(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Image != nil {
+
+		if swag.IsZero(m.Image) { // not required
+			return nil
+		}
+
+		if err := m.Image.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("image")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("image")
 			}
 
 			return err

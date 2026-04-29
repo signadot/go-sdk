@@ -23,6 +23,10 @@ type PlanStepStatus struct {
 	// ID is the step identifier, matching the corresponding Step.ID in the spec.
 	ID string `json:"id,omitempty"`
 
+	// Inputs records how each of this step's declared inputs was resolved.
+	// Populated at the transition to running. Mirrors Outputs.
+	Inputs []*PlanStepInputStatus `json:"inputs"`
+
 	// Logs contains the step's captured log streams (stdout, stderr),
 	// populated when the step reaches a terminal phase.
 	Logs []*PlanLogStatus `json:"logs"`
@@ -37,6 +41,10 @@ type PlanStepStatus struct {
 // Validate validates this plan step status
 func (m *PlanStepStatus) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateInputs(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateLogs(formats); err != nil {
 		res = append(res, err)
@@ -53,6 +61,36 @@ func (m *PlanStepStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanStepStatus) validateInputs(formats strfmt.Registry) error {
+	if swag.IsZero(m.Inputs) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Inputs); i++ {
+		if swag.IsZero(m.Inputs[i]) { // not required
+			continue
+		}
+
+		if m.Inputs[i] != nil {
+			if err := m.Inputs[i].Validate(formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -141,6 +179,10 @@ func (m *PlanStepStatus) validatePhase(formats strfmt.Registry) error {
 func (m *PlanStepStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateInputs(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateLogs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -156,6 +198,35 @@ func (m *PlanStepStatus) ContextValidate(ctx context.Context, formats strfmt.Reg
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanStepStatus) contextValidateInputs(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Inputs); i++ {
+
+		if m.Inputs[i] != nil {
+
+			if swag.IsZero(m.Inputs[i]) { // not required
+				return nil
+			}
+
+			if err := m.Inputs[i].ContextValidate(ctx, formats); err != nil {
+				ve := new(errors.Validation)
+				if stderrors.As(err, &ve) {
+					return ve.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+				ce := new(errors.CompositeError)
+				if stderrors.As(err, &ce) {
+					return ce.ValidateName("inputs" + "." + strconv.Itoa(i))
+				}
+
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

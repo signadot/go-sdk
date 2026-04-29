@@ -17,6 +17,9 @@ import (
 // swagger:model PlanActionStatus
 type PlanActionStatus struct {
 
+	// body image
+	BodyImage *PlanImageRef `json:"bodyImage,omitempty"`
+
 	// BodyOutputs are the output fields parsed from \output{...} directives in the body.
 	BodyOutputs []*PlanField `json:"bodyOutputs"`
 
@@ -28,6 +31,12 @@ type PlanActionStatus struct {
 
 	// Description is a short one-line description parsed from the \description{...} directive in the body.
 	Description string `json:"description,omitempty"`
+
+	// Enabled is the org's effective view on whether this action can be used.
+	// Resolved from per-org overrides and system defaults via the same
+	// precedence the compile and validation paths apply. Distinct from
+	// Spec.Published, which is the action author's intent.
+	Enabled bool `json:"enabled,omitempty"`
 
 	// extra inputs schema policy
 	ExtraInputsSchemaPolicy *PlanExtraInputsSchemaPolicy `json:"extraInputsSchemaPolicy,omitempty"`
@@ -55,6 +64,10 @@ type PlanActionStatus struct {
 func (m *PlanActionStatus) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateBodyImage(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateBodyOutputs(formats); err != nil {
 		res = append(res, err)
 	}
@@ -74,6 +87,29 @@ func (m *PlanActionStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanActionStatus) validateBodyImage(formats strfmt.Registry) error {
+	if swag.IsZero(m.BodyImage) { // not required
+		return nil
+	}
+
+	if m.BodyImage != nil {
+		if err := m.BodyImage.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("bodyImage")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("bodyImage")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -194,6 +230,10 @@ func (m *PlanActionStatus) validateValidations(formats strfmt.Registry) error {
 func (m *PlanActionStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateBodyImage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateBodyOutputs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -213,6 +253,31 @@ func (m *PlanActionStatus) ContextValidate(ctx context.Context, formats strfmt.R
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PlanActionStatus) contextValidateBodyImage(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BodyImage != nil {
+
+		if swag.IsZero(m.BodyImage) { // not required
+			return nil
+		}
+
+		if err := m.BodyImage.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("bodyImage")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("bodyImage")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 

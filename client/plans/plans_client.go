@@ -115,7 +115,7 @@ func (a *Client) CompilePlan(params *CompilePlanParams, authInfo runtime.ClientA
 /*
 CreatePlan creates a plan
 
-Create a plan from a raw spec
+Create a plan from a raw spec. Each step's action may be supplied either fully embedded (body, params, outputs, etc. inline) or by reference — set only `action.actionID` and the server hydrates the contents from the registered action.
 */
 func (a *Client) CreatePlan(params *CreatePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanOK, error) {
 	// NOTE: parameters are not validated before sending

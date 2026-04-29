@@ -145,6 +145,33 @@
                 }
             }
         },
+        "/meta/plans": {
+            "get": {
+                "description": "Returns the JSON Schema for plans.PlanSpec, with descriptions",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meta"
+                ],
+                "summary": "Plan-authoring schema",
+                "operationId": "meta-plans",
+                "responses": {
+                    "200": {
+                        "description": "JSON Schema for PlanSpec",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/": {
             "get": {
                 "security": [
@@ -2462,6 +2489,57 @@
                 }
             }
         },
+        "/orgs/{orgName}/plan-runnergroups/{planRunnerGroupName}/desired-images": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Returns the set of literal \\image refs declared by",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PlanRunnerGroups"
+                ],
+                "summary": "Desired image set for a plan runner group",
+                "operationId": "get-prg-desired-images",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plan Runner Group Name",
+                        "name": "planRunnerGroupName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlanDesiredImagesResponse"
+                        }
+                    },
+                    "304": {
+                        "description": "Not Modified — desired set unchanged since the client's ETag"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orgs/{orgName}/plan-tags": {
             "get": {
                 "security": [
@@ -2723,7 +2801,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create a plan from a raw spec",
+                "description": "Create a plan from a raw spec. Each step's action may be supplied either fully embedded (body, params, outputs, etc. inline) or by reference — set only `action.actionID` and the server hydrates the contents from the registered action.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2743,6 +2821,15 @@
                         "name": "orgName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "action"
+                        ],
+                        "type": "string",
+                        "description": "Set to 'action' to include each step's full action contents in the response (body, schemas, extraInputsSchemaPolicy). Default returns the compact by-ref form.",
+                        "name": "expand",
+                        "in": "query"
                     },
                     {
                         "description": "Plan spec",
@@ -2809,6 +2896,15 @@
                         "name": "orgName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "action"
+                        ],
+                        "type": "string",
+                        "description": "Set to 'action' to include each step's full action contents (body, schemas, extraInputsSchemaPolicy). Default returns the compact by-ref form.",
+                        "name": "expand",
+                        "in": "query"
                     },
                     {
                         "description": "Compile input with prompt",
@@ -3594,6 +3690,15 @@
                         "name": "planID",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "action"
+                        ],
+                        "type": "string",
+                        "description": "Set to 'action' to include each step's full action contents (body, schemas, extraInputsSchemaPolicy). Default returns the compact by-ref form.",
+                        "name": "expand",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -3728,6 +3833,15 @@
                         "name": "plan_id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "action"
+                        ],
+                        "type": "string",
+                        "description": "Set to 'action' to include each step's full action contents (body, schemas, extraInputsSchemaPolicy). Default returns the compact by-ref form.",
+                        "name": "expand",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -6471,6 +6585,14 @@
         "PlanActionStatus": {
             "type": "object",
             "properties": {
+                "bodyImage": {
+                    "description": "BodyImage is the image directive parsed from \\image{...} in the body, if any.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanImageRef"
+                        }
+                    ]
+                },
                 "bodyOutputs": {
                     "description": "BodyOutputs are the output fields parsed from \\output{...} directives in the body.",
                     "type": "array",
@@ -6492,6 +6614,10 @@
                 "description": {
                     "description": "Description is a short one-line description parsed from the \\description{...} directive in the body.",
                     "type": "string"
+                },
+                "enabled": {
+                    "description": "Enabled is the org's effective view on whether this action can be used.\nResolved from per-org overrides and system defaults via the same\nprecedence the compile and validation paths apply. Distinct from\nSpec.Published, which is the action author's intent.",
+                    "type": "boolean"
                 },
                 "extraInputsSchemaPolicy": {
                     "description": "ExtraInputsSchemaPolicy is parsed from the \\extra_inputs_schema{...}\ndirective in the body. nil when the action did not declare one.",
@@ -6625,6 +6751,17 @@
                 }
             }
         },
+        "PlanDesiredImagesResponse": {
+            "type": "object",
+            "properties": {
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanImageSpec"
+                    }
+                }
+            }
+        },
         "PlanExecution": {
             "type": "object",
             "properties": {
@@ -6709,6 +6846,13 @@
                     "description": "Error is a human-readable error message for execution-level failures\n(e.g. artifact upload failures, plan output resolution errors).\nStep-level errors are in StepStatus.Error.",
                     "type": "string"
                 },
+                "inputs": {
+                    "description": "Inputs records how each plan-level input was resolved at dispatch\ntime. Populated at the transition to dispatching. Mirrors Outputs.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanInputStatus"
+                    }
+                },
                 "outputs": {
                     "description": "Outputs contains the resolved plan-level outputs, populated on completion.",
                     "type": "array",
@@ -6790,6 +6934,57 @@
                 },
                 "schemaRef": {
                     "description": "SchemaRef is an optional reference to an external schema (name, file, or URL).",
+                    "type": "string"
+                }
+            }
+        },
+        "PlanImageRef": {
+            "type": "object",
+            "properties": {
+                "inputName": {
+                    "description": "InputName names a declared input (\\input or extra_input on the\nstep) whose value at run time is the image reference. Set when the\naction declared \\image{input=name}.",
+                    "type": "string"
+                },
+                "literal": {
+                    "description": "Literal is the image reference itself, e.g. \"alpine:3.19\". Set when\nthe action declared \\image{\"...\"}. Requires the target PRG to have\nthe image pre-cached (wired in a later commit; currently rejected\nby the runner with a clear error pointing at the cache workflow).",
+                    "type": "string"
+                }
+            }
+        },
+        "PlanImageSpec": {
+            "type": "object",
+            "properties": {
+                "lastReferencedAt": {
+                    "description": "LastReferencedAt is the most recent timestamp at which a plan\nexecution or visible action referenced this ref, computed at the\napiserver. Zero when neither source supplies a timestamp.",
+                    "type": "string"
+                },
+                "ref": {
+                    "description": "Ref is the canonicalized image reference, e.g.\n\"index.docker.io/library/alpine:3.19\".",
+                    "type": "string"
+                },
+                "referenceCount": {
+                    "description": "ReferenceCount is the number of distinct plan executions and\nactions that referenced this ref over the apiserver's window.\nZero when neither source supplies a count.",
+                    "type": "integer"
+                }
+            }
+        },
+        "PlanInputStatus": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name is the plan param name.",
+                    "type": "string"
+                },
+                "resolvedVia": {
+                    "description": "ResolvedVia is the source that populated the value. Valid values at\nplan scope: literal, callerSecret, default, unbound.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/plans.InputResolvedVia"
+                        }
+                    ]
+                },
+                "secretName": {
+                    "description": "SecretName is the caller-supplied secret name when\nResolvedVia == callerSecret. Empty otherwise.",
                     "type": "string"
                 }
             }
@@ -7100,6 +7295,14 @@
                         }
                     ]
                 },
+                "image": {
+                    "description": "Image, if set, declares that the action's shell fenced block runs\ninside an OCI image via actionbox run-image. Either Literal or\nInputName is set; never both.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PlanImageRef"
+                        }
+                    ]
+                },
                 "outputs": {
                     "description": "Outputs are the output fields parsed from the action's body.",
                     "type": "array",
@@ -7117,6 +7320,27 @@
                 "revision": {
                     "description": "Revision is the action revision at the time the plan was compiled.",
                     "type": "integer"
+                }
+            }
+        },
+        "PlanStepInputStatus": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name is the step input name (action param or extra input).",
+                    "type": "string"
+                },
+                "ref": {
+                    "description": "Ref is the ref expression text when ResolvedVia == ref\n(e.g. \"params.region\", \"steps.s1.outputs.token\").",
+                    "type": "string"
+                },
+                "resolvedVia": {
+                    "description": "ResolvedVia is the source that populated the value. Valid values at\nstep scope: literal, ref, default, unbound.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/plans.InputResolvedVia"
+                        }
+                    ]
                 }
             }
         },
@@ -7169,6 +7393,13 @@
                 "id": {
                     "description": "ID is the step identifier, matching the corresponding Step.ID in the spec.",
                     "type": "string"
+                },
+                "inputs": {
+                    "description": "Inputs records how each of this step's declared inputs was resolved.\nPopulated at the transition to running. Mirrors Outputs.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PlanStepInputStatus"
+                    }
                 },
                 "logs": {
                     "description": "Logs contains the step's captured log streams (stdout, stderr),\npopulated when the step reaches a terminal phase.",
@@ -8912,6 +9143,19 @@
                 }
             }
         },
+        "planRunnerGroup.CacheSpec": {
+            "type": "object",
+            "properties": {
+                "size": {
+                    "description": "Size is the requested PVC capacity, e.g. \"10Gi\".",
+                    "type": "string"
+                },
+                "storageClass": {
+                    "description": "StorageClass is the Kubernetes storage class name. Empty string\nuses the cluster default.",
+                    "type": "string"
+                }
+            }
+        },
         "planRunnerGroup.ClusterSettings": {
             "type": "object",
             "properties": {
@@ -8965,6 +9209,9 @@
         "planRunnerGroup.Spec": {
             "type": "object",
             "properties": {
+                "cache": {
+                    "$ref": "#/definitions/planRunnerGroup.CacheSpec"
+                },
                 "cluster": {
                     "type": "string"
                 },
@@ -9019,6 +9266,23 @@
                 "ExecutionCompleted",
                 "ExecutionFailed",
                 "ExecutionCancelled"
+            ]
+        },
+        "plans.InputResolvedVia": {
+            "type": "string",
+            "enum": [
+                "literal",
+                "callerSecret",
+                "ref",
+                "default",
+                "unbound"
+            ],
+            "x-enum-varnames": [
+                "InputResolvedViaLiteral",
+                "InputResolvedViaCallerSecret",
+                "InputResolvedViaRef",
+                "InputResolvedViaDefault",
+                "InputResolvedViaUnbound"
             ]
         },
         "plans.StepPhase": {
