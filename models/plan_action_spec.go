@@ -16,8 +16,6 @@ type PlanActionSpec struct {
 
 	// Body is the action implementation as markdown with code blocks.
 	// Inputs and outputs are declared inline via \input{...} and \output{...} syntax.
-	// Validation scripts are declared via ```validation fenced code blocks
-	// and are extracted into Status.ValidationScript by the server.
 	Body string `json:"body,omitempty"`
 
 	// Published controls whether this action is visible and usable.

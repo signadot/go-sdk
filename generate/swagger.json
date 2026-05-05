@@ -6573,7 +6573,7 @@
             "type": "object",
             "properties": {
                 "body": {
-                    "description": "Body is the action implementation as markdown with code blocks.\nInputs and outputs are declared inline via \\input{...} and \\output{...} syntax.\nValidation scripts are declared via ```validation fenced code blocks\nand are extracted into Status.ValidationScript by the server.",
+                    "description": "Body is the action implementation as markdown with code blocks.\nInputs and outputs are declared inline via \\input{...} and \\output{...} syntax.",
                     "type": "string"
                 },
                 "published": {
@@ -6616,7 +6616,7 @@
                     "type": "string"
                 },
                 "enabled": {
-                    "description": "Enabled is the org's effective view on whether this action can be used.\nResolved from per-org overrides and system defaults via the same\nprecedence the compile and validation paths apply. Distinct from\nSpec.Published, which is the action author's intent.",
+                    "description": "Enabled is the org's effective view on whether this action can be used.\nResolved from per-org overrides and system defaults via the same\nprecedence the compile path applies. Distinct from Spec.Published,\nwhich is the action author's intent.",
                     "type": "boolean"
                 },
                 "extraInputsSchemaPolicy": {
@@ -6627,55 +6627,11 @@
                         }
                     ]
                 },
-                "requires": {
-                    "description": "Requires declares runtime dependencies that must be present on the runner.\nEach entry is a binary name with an optional semver constraint, e.g.\n\"node \u003e= 20\", \"npx\", \"playwright\".\nParsed from \\requires{...} directives in the body.",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "revision": {
                     "type": "integer"
                 },
                 "updatedAt": {
                     "description": "UpdatedAt is when the action was last updated. Serialized as RFC3339.",
-                    "type": "string"
-                },
-                "validationScript": {
-                    "description": "ValidationScript is the shell script extracted from ```validation code blocks in the body.",
-                    "type": "string"
-                },
-                "validations": {
-                    "description": "Validations contains per-runner-group validation results for this action.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/PlanActionValidationStatus"
-                    }
-                }
-            }
-        },
-        "PlanActionValidationStatus": {
-            "type": "object",
-            "properties": {
-                "response": {
-                    "description": "Response is the detailed validation response (requirement checks, script result).",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/PlanValidateResponse"
-                        }
-                    ]
-                },
-                "runnerGroup": {
-                    "type": "string"
-                },
-                "stale": {
-                    "description": "Stale indicates the validation was performed at an older action or runner group revision.",
-                    "type": "boolean"
-                },
-                "valid": {
-                    "type": "boolean"
-                },
-                "validatedAt": {
                     "type": "string"
                 }
             }
@@ -6941,12 +6897,26 @@
         "PlanImageRef": {
             "type": "object",
             "properties": {
+                "env": {
+                    "description": "Env carries env entries with literal values (KEY -\u003e literal).\nApplies in both paths. Reserved runner-set keys (SIGNADOT_*, HOME,\nTMPDIR, PATH) silently lose to the runner's values on collision.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "envFromInput": {
+                    "description": "EnvFromInput carries env entries whose values resolve from a\ndeclared input at run time (KEY -\u003e input name). Applies in both\npaths. Same reserved-key filtering as Env. The same KEY may not\nappear in both Env and EnvFromInput.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
                 "inputName": {
-                    "description": "InputName names a declared input (\\input or extra_input on the\nstep) whose value at run time is the image reference. Set when the\naction declared \\image{input=name}.",
+                    "description": "InputName names a declared input whose value at run time is the\nimage reference. Set when the action declared\n\\image{ref={\"input\":\"NAME\"}}. If the input resolves to the empty\nstring, the action runs in the runner's base image.",
                     "type": "string"
                 },
                 "literal": {
-                    "description": "Literal is the image reference itself, e.g. \"alpine:3.19\". Set when\nthe action declared \\image{\"...\"}. Requires the target PRG to have\nthe image pre-cached (wired in a later commit; currently rejected\nby the runner with a clear error pointing at the cache workflow).",
+                    "description": "Literal is the image reference itself, e.g. \"alpine:3.19\". Set when\nthe action declared \\image{\"...\"} or \\image{ref=\"...\"}. An empty\nliteral means \"run in the runner's base image\".",
                     "type": "string"
                 }
             }
@@ -7057,27 +7027,6 @@
                 }
             }
         },
-        "PlanRequireResult": {
-            "type": "object",
-            "properties": {
-                "detail": {
-                    "description": "Detail provides additional context such as the binary path.",
-                    "type": "string"
-                },
-                "ok": {
-                    "description": "OK indicates whether the requirement is satisfied.",
-                    "type": "boolean"
-                },
-                "require": {
-                    "description": "Require is the original requirement string, e.g. \"node \u003e= 20\".",
-                    "type": "string"
-                },
-                "version": {
-                    "description": "Version is the detected semver version, if parseable from \u003cbinary\u003e --version output.",
-                    "type": "string"
-                }
-            }
-        },
         "PlanRoutingContext": {
             "type": "object",
             "properties": {
@@ -7133,23 +7082,6 @@
                 }
             }
         },
-        "PlanScriptResult": {
-            "type": "object",
-            "properties": {
-                "exitCode": {
-                    "description": "ExitCode is the script's exit code.",
-                    "type": "integer"
-                },
-                "ok": {
-                    "description": "OK indicates whether the script exited successfully (exit code 0).",
-                    "type": "boolean"
-                },
-                "output": {
-                    "description": "Output is the combined stdout/stderr from the script.",
-                    "type": "string"
-                }
-            }
-        },
         "PlanSpec": {
             "type": "object",
             "properties": {
@@ -7179,15 +7111,8 @@
                     "description": "Prompt is the natural-language prompt body that was compiled to produce this plan.\nEmpty for hand-created plans.",
                     "type": "string"
                 },
-                "requires": {
-                    "description": "Requires is the aggregate set of runtime dependencies for this plan,\ncomputed at compile time as the union of all referenced actions' Requires.",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "runner": {
-                    "description": "Runner is the plan author's preferred runner group name.\nIf set, this runner is used directly at execution time (bypassing\nvalidation filtering). Conflicts with an execution-level runner.",
+                    "description": "Runner is the plan author's preferred runner group name.\nIf set, this runner is used directly at execution time. Conflicts\nwith an execution-level runner.",
                     "type": "string"
                 },
                 "steps": {
@@ -7280,7 +7205,7 @@
             "type": "object",
             "properties": {
                 "actionID": {
-                    "description": "ActionID is the action's ID at the time the plan was compiled.",
+                    "description": "ActionID is the action's ID. The only field a hand-authored plan\nmust set on a step's action; the server hydrates the rest.",
                     "type": "string"
                 },
                 "body": {
@@ -7288,7 +7213,7 @@
                     "type": "string"
                 },
                 "extraInputsSchemaPolicy": {
-                    "description": "ExtraInputsSchemaPolicy declares how the compile pass resolves\nmissing schemas on this step's extra_inputs. Nil when the action\ndid not declare an \\extra_inputs_schema{...} directive.",
+                    "description": "ExtraInputsSchemaPolicy declares how missing schemas on this\nstep's extra_inputs are resolved. Nil when the action did not\ndeclare an \\extra_inputs_schema{...} directive.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/PlanExtraInputsSchemaPolicy"
@@ -7302,6 +7227,10 @@
                             "$ref": "#/definitions/PlanImageRef"
                         }
                     ]
+                },
+                "name": {
+                    "description": "Name is the action's name at the time the snapshot was taken.\nDisplay label, not the canonical identifier — ActionID is. At\ncreate time the snapshot must round-trip the registry (an\nexplicitly supplied Name that doesn't match is rejected); at\nexecute time the snapshot is honored as-is so renames in the\nregistry don't break stored plans. Filled from the registry when\nomitted on input; otherwise preserved as supplied.",
+                    "type": "string"
                 },
                 "outputs": {
                     "description": "Outputs are the output fields parsed from the action's body.",
@@ -7318,8 +7247,16 @@
                     }
                 },
                 "revision": {
-                    "description": "Revision is the action revision at the time the plan was compiled.",
+                    "description": "Revision is the registered action revision the snapshot was taken\nfrom. Optional on input — set to pin the step to a historical\nrevision; otherwise the action's current revision is recorded.",
                     "type": "integer"
+                },
+                "timeout": {
+                    "description": "Timeout is a literal wall-clock duration string (parsed via\ntime.ParseDuration, e.g. \"60s\", \"5m\") parsed from the top-level\n\\timeout{\"...\"} directive. Empty means the system default cap\napplies. Mutually exclusive with TimeoutInputName.",
+                    "type": "string"
+                },
+                "timeoutInputName": {
+                    "description": "TimeoutInputName names a declared input whose value at run time is\nthe duration string. Set when the action declared\n\\timeout{{\"input\":\"NAME\"}}. Mutually exclusive with Timeout.",
+                    "type": "string"
                 }
             }
         },
@@ -7473,26 +7410,6 @@
                 "updatedAt": {
                     "description": "UpdatedAt is when the tag was last updated. Serialized as RFC3339.",
                     "type": "string"
-                }
-            }
-        },
-        "PlanValidateResponse": {
-            "type": "object",
-            "properties": {
-                "requires": {
-                    "description": "Requires contains the result of each requirement check.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/PlanRequireResult"
-                    }
-                },
-                "script": {
-                    "description": "Script contains the result of the validation script, if one was provided.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/PlanScriptResult"
-                        }
-                    ]
                 }
             }
         },
@@ -9117,32 +9034,6 @@
                 }
             }
         },
-        "planRunnerGroup.ActionValidation": {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "type": "string"
-                },
-                "response": {
-                    "description": "Response is the detailed validation response (requirement checks, script result).",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/PlanValidateResponse"
-                        }
-                    ]
-                },
-                "stale": {
-                    "description": "Stale indicates the validation was performed at an older action or runner group revision.",
-                    "type": "boolean"
-                },
-                "valid": {
-                    "type": "boolean"
-                },
-                "validatedAt": {
-                    "type": "string"
-                }
-            }
-        },
         "planRunnerGroup.CacheSpec": {
             "type": "object",
             "properties": {
@@ -9238,12 +9129,6 @@
             "properties": {
                 "pods": {
                     "$ref": "#/definitions/planRunnerGroup.PodsStatus"
-                },
-                "validations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/planRunnerGroup.ActionValidation"
-                    }
                 }
             }
         },

@@ -17,7 +17,8 @@ import (
 // swagger:model PlanStepAction
 type PlanStepAction struct {
 
-	// ActionID is the action's ID at the time the plan was compiled.
+	// ActionID is the action's ID. The only field a hand-authored plan
+	// must set on a step's action; the server hydrates the rest.
 	ActionID string `json:"actionID,omitempty"`
 
 	// Body is the action implementation (markdown with code blocks).
@@ -29,14 +30,36 @@ type PlanStepAction struct {
 	// image
 	Image *PlanImageRef `json:"image,omitempty"`
 
+	// Name is the action's name at the time the snapshot was taken.
+	// Display label, not the canonical identifier — ActionID is. At
+	// create time the snapshot must round-trip the registry (an
+	// explicitly supplied Name that doesn't match is rejected); at
+	// execute time the snapshot is honored as-is so renames in the
+	// registry don't break stored plans. Filled from the registry when
+	// omitted on input; otherwise preserved as supplied.
+	Name string `json:"name,omitempty"`
+
 	// Outputs are the output fields parsed from the action's body.
 	Outputs []*PlanField `json:"outputs"`
 
 	// Params are the input parameters parsed from the action's body.
 	Params []*PlanField `json:"params"`
 
-	// Revision is the action revision at the time the plan was compiled.
+	// Revision is the registered action revision the snapshot was taken
+	// from. Optional on input — set to pin the step to a historical
+	// revision; otherwise the action's current revision is recorded.
 	Revision int64 `json:"revision,omitempty"`
+
+	// Timeout is a literal wall-clock duration string (parsed via
+	// time.ParseDuration, e.g. "60s", "5m") parsed from the top-level
+	// \timeout{"..."} directive. Empty means the system default cap
+	// applies. Mutually exclusive with TimeoutInputName.
+	Timeout string `json:"timeout,omitempty"`
+
+	// TimeoutInputName names a declared input whose value at run time is
+	// the duration string. Set when the action declared
+	// \timeout{{"input":"NAME"}}. Mutually exclusive with Timeout.
+	TimeoutInputName string `json:"timeoutInputName,omitempty"`
 }
 
 // Validate validates this plan step action

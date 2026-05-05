@@ -14,15 +14,26 @@ import (
 // swagger:model PlanImageRef
 type PlanImageRef struct {
 
-	// InputName names a declared input (\input or extra_input on the
-	// step) whose value at run time is the image reference. Set when the
-	// action declared \image{input=name}.
+	// Env carries env entries with literal values (KEY -> literal).
+	// Applies in both paths. Reserved runner-set keys (SIGNADOT_*, HOME,
+	// TMPDIR, PATH) silently lose to the runner's values on collision.
+	Env map[string]string `json:"env,omitempty"`
+
+	// EnvFromInput carries env entries whose values resolve from a
+	// declared input at run time (KEY -> input name). Applies in both
+	// paths. Same reserved-key filtering as Env. The same KEY may not
+	// appear in both Env and EnvFromInput.
+	EnvFromInput map[string]string `json:"envFromInput,omitempty"`
+
+	// InputName names a declared input whose value at run time is the
+	// image reference. Set when the action declared
+	// \image{ref={"input":"NAME"}}. If the input resolves to the empty
+	// string, the action runs in the runner's base image.
 	InputName string `json:"inputName,omitempty"`
 
 	// Literal is the image reference itself, e.g. "alpine:3.19". Set when
-	// the action declared \image{"..."}. Requires the target PRG to have
-	// the image pre-cached (wired in a later commit; currently rejected
-	// by the runner with a clear error pointing at the cache workflow).
+	// the action declared \image{"..."} or \image{ref="..."}. An empty
+	// literal means "run in the runner's base image".
 	Literal string `json:"literal,omitempty"`
 }
 

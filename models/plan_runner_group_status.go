@@ -5,7 +5,6 @@ package models
 import (
 	"context"
 	stderrors "errors"
-	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -19,9 +18,6 @@ type PlanRunnerGroupStatus struct {
 
 	// pods
 	Pods *PlanRunnerGroupPodsStatus `json:"pods,omitempty"`
-
-	// validations
-	Validations []*PlanRunnerGroupActionValidation `json:"validations"`
 }
 
 // Validate validates this plan runner group status
@@ -29,10 +25,6 @@ func (m *PlanRunnerGroupStatus) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePods(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateValidations(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -65,45 +57,11 @@ func (m *PlanRunnerGroupStatus) validatePods(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *PlanRunnerGroupStatus) validateValidations(formats strfmt.Registry) error {
-	if swag.IsZero(m.Validations) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Validations); i++ {
-		if swag.IsZero(m.Validations[i]) { // not required
-			continue
-		}
-
-		if m.Validations[i] != nil {
-			if err := m.Validations[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
 // ContextValidate validate this plan runner group status based on the context it is used
 func (m *PlanRunnerGroupStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidatePods(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateValidations(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -133,35 +91,6 @@ func (m *PlanRunnerGroupStatus) contextValidatePods(ctx context.Context, formats
 
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *PlanRunnerGroupStatus) contextValidateValidations(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.Validations); i++ {
-
-		if m.Validations[i] != nil {
-
-			if swag.IsZero(m.Validations[i]) { // not required
-				return nil
-			}
-
-			if err := m.Validations[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-
-				return err
-			}
-		}
-
 	}
 
 	return nil

@@ -30,13 +30,9 @@ type PlanSpec struct {
 	// Empty for hand-created plans.
 	Prompt string `json:"prompt,omitempty"`
 
-	// Requires is the aggregate set of runtime dependencies for this plan,
-	// computed at compile time as the union of all referenced actions' Requires.
-	Requires []string `json:"requires"`
-
 	// Runner is the plan author's preferred runner group name.
-	// If set, this runner is used directly at execution time (bypassing
-	// validation filtering). Conflicts with an execution-level runner.
+	// If set, this runner is used directly at execution time. Conflicts
+	// with an execution-level runner.
 	Runner string `json:"runner,omitempty"`
 
 	// Steps are the action invocations that make up the plan's DAG.

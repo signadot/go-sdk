@@ -34,30 +34,18 @@ type PlanActionStatus struct {
 
 	// Enabled is the org's effective view on whether this action can be used.
 	// Resolved from per-org overrides and system defaults via the same
-	// precedence the compile and validation paths apply. Distinct from
-	// Spec.Published, which is the action author's intent.
+	// precedence the compile path applies. Distinct from Spec.Published,
+	// which is the action author's intent.
 	Enabled bool `json:"enabled,omitempty"`
 
 	// extra inputs schema policy
 	ExtraInputsSchemaPolicy *PlanExtraInputsSchemaPolicy `json:"extraInputsSchemaPolicy,omitempty"`
-
-	// Requires declares runtime dependencies that must be present on the runner.
-	// Each entry is a binary name with an optional semver constraint, e.g.
-	// "node >= 20", "npx", "playwright".
-	// Parsed from \requires{...} directives in the body.
-	Requires []string `json:"requires"`
 
 	// revision
 	Revision int64 `json:"revision,omitempty"`
 
 	// UpdatedAt is when the action was last updated. Serialized as RFC3339.
 	UpdatedAt string `json:"updatedAt,omitempty"`
-
-	// ValidationScript is the shell script extracted from ```validation code blocks in the body.
-	ValidationScript string `json:"validationScript,omitempty"`
-
-	// Validations contains per-runner-group validation results for this action.
-	Validations []*PlanActionValidationStatus `json:"validations"`
 }
 
 // Validate validates this plan action status
@@ -77,10 +65,6 @@ func (m *PlanActionStatus) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExtraInputsSchemaPolicy(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateValidations(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -196,36 +180,6 @@ func (m *PlanActionStatus) validateExtraInputsSchemaPolicy(formats strfmt.Regist
 	return nil
 }
 
-func (m *PlanActionStatus) validateValidations(formats strfmt.Registry) error {
-	if swag.IsZero(m.Validations) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Validations); i++ {
-		if swag.IsZero(m.Validations[i]) { // not required
-			continue
-		}
-
-		if m.Validations[i] != nil {
-			if err := m.Validations[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
 // ContextValidate validate this plan action status based on the context it is used
 func (m *PlanActionStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -243,10 +197,6 @@ func (m *PlanActionStatus) ContextValidate(ctx context.Context, formats strfmt.R
 	}
 
 	if err := m.contextValidateExtraInputsSchemaPolicy(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateValidations(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -359,35 +309,6 @@ func (m *PlanActionStatus) contextValidateExtraInputsSchemaPolicy(ctx context.Co
 
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *PlanActionStatus) contextValidateValidations(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.Validations); i++ {
-
-		if m.Validations[i] != nil {
-
-			if swag.IsZero(m.Validations[i]) { // not required
-				return nil
-			}
-
-			if err := m.Validations[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("validations" + "." + strconv.Itoa(i))
-				}
-
-				return err
-			}
-		}
-
 	}
 
 	return nil
