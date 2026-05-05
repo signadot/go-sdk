@@ -35,6 +35,13 @@ type PlanSpec struct {
 	// with an execution-level runner.
 	Runner string `json:"runner,omitempty"`
 
+	// SelectionHint is a one-line agent-readable description of when to
+	// pick this plan. Surfaced on tag-list responses so an agent
+	// scanning the catalog of tagged plans can pick by purpose
+	// (analogous to how an action's Description carries "what this
+	// action does"). Free-form prose; aim for one sentence.
+	SelectionHint string `json:"selectionHint,omitempty"`
+
 	// Steps are the action invocations that make up the plan's DAG.
 	Steps []*PlanStep `json:"steps"`
 }

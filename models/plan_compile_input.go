@@ -16,6 +16,12 @@ type PlanCompileInput struct {
 
 	// Prompt is the markdown source to compile into a Plan.
 	Prompt string `json:"prompt,omitempty"`
+
+	// SelectionHint, if set, is written onto the resulting plan's
+	// PlanSpec.SelectionHint field (the agent-readable "when to pick
+	// this plan" hint surfaced on tag-list responses). Optional;
+	// preserved across `plan recompile`.
+	SelectionHint string `json:"selectionHint,omitempty"`
 }
 
 // Validate validates this plan compile input

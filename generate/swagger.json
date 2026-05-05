@@ -6704,6 +6704,10 @@
                 "prompt": {
                     "description": "Prompt is the markdown source to compile into a Plan.",
                     "type": "string"
+                },
+                "selectionHint": {
+                    "description": "SelectionHint, if set, is written onto the resulting plan's\nPlanSpec.SelectionHint field (the agent-readable \"when to pick\nthis plan\" hint surfaced on tag-list responses). Optional;\npreserved across `plan recompile`.",
+                    "type": "string"
                 }
             }
         },
@@ -7113,6 +7117,10 @@
                 },
                 "runner": {
                     "description": "Runner is the plan author's preferred runner group name.\nIf set, this runner is used directly at execution time. Conflicts\nwith an execution-level runner.",
+                    "type": "string"
+                },
+                "selectionHint": {
+                    "description": "SelectionHint is a one-line agent-readable description of when to\npick this plan. Surfaced on tag-list responses so an agent\nscanning the catalog of tagged plans can pick by purpose\n(analogous to how an action's Description carries \"what this\naction does\"). Free-form prose; aim for one sentence.",
                     "type": "string"
                 },
                 "steps": {
