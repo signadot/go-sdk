@@ -4,7 +4,9 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -21,6 +23,9 @@ type PlanStatus struct {
 	// CreatedAt is when the plan was created. Serialized as RFC3339.
 	CreatedAt string `json:"createdAt,omitempty"`
 
+	// created by
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+
 	// executions
 	Executions int64 `json:"executions,omitempty"`
 
@@ -31,11 +36,77 @@ type PlanStatus struct {
 
 // Validate validates this plan status
 func (m *PlanStatus) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCreatedBy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this plan status based on context it is used
+func (m *PlanStatus) validateCreatedBy(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatedBy) { // not required
+		return nil
+	}
+
+	if m.CreatedBy != nil {
+		if err := m.CreatedBy.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("createdBy")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("createdBy")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this plan status based on the context it is used
 func (m *PlanStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreatedBy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *PlanStatus) contextValidateCreatedBy(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatedBy != nil {
+
+		if swag.IsZero(m.CreatedBy) { // not required
+			return nil
+		}
+
+		if err := m.CreatedBy.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("createdBy")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("createdBy")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 

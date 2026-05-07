@@ -6309,6 +6309,23 @@
                 }
             }
         },
+        "CreatedBy": {
+            "type": "object",
+            "properties": {
+                "actorType": {
+                    "description": "ActorType is \"user\", \"api_key\", or \"system\".",
+                    "type": "string"
+                },
+                "apiKeyMasked": {
+                    "description": "APIKeyMasked is set when ActorType is \"api_key\".",
+                    "type": "string"
+                },
+                "userEmail": {
+                    "description": "UserEmail is set when ActorType is \"user\".",
+                    "type": "string"
+                }
+            }
+        },
         "Devbox": {
             "type": "object",
             "properties": {
@@ -7142,6 +7159,14 @@
                 "createdAt": {
                     "description": "CreatedAt is when the plan was created. Serialized as RFC3339.",
                     "type": "string"
+                },
+                "createdBy": {
+                    "description": "CreatedBy describes who created this plan.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/CreatedBy"
+                        }
+                    ]
                 },
                 "executions": {
                     "type": "integer"
