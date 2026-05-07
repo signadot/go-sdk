@@ -9174,7 +9174,8 @@
                 "finalizing",
                 "completed",
                 "failed",
-                "cancelled"
+                "cancelled",
+                "redispatch-needed"
             ],
             "x-enum-varnames": [
                 "ExecutionPending",
@@ -9183,7 +9184,8 @@
                 "ExecutionFinalizing",
                 "ExecutionCompleted",
                 "ExecutionFailed",
-                "ExecutionCancelled"
+                "ExecutionCancelled",
+                "ExecutionRedispatchNeeded"
             ]
         },
         "plans.InputResolvedVia": {
