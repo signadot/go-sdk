@@ -59,6 +59,8 @@ type ClientService interface {
 
 	GetResourcePlugin(params *GetResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourcePluginOK, error)
 
+	ListResourcePluginVersions(params *ListResourcePluginVersionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginVersionsOK, error)
+
 	ListResourcePlugins(params *ListResourcePluginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -67,7 +69,7 @@ type ClientService interface {
 /*
 ApplyResourcePlugin applies a resource plugin
 
-Apply a resource plugin. Updates are not supported at this time.
+Creates a new version of a resource plugin. Versions are immutable; PUTting an existing (name, version) pair returns 409. Omit the version field in the body to create the default 0.0.0 version. The body version must be a concrete semver; "latest" is only accepted on the read and delete query parameters.
 */
 func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyResourcePluginOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -113,7 +115,7 @@ func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo
 /*
 DeleteResourcePlugin deletes a resource plugin
 
-Delete the resource plugin by name
+Delete a resource plugin version. Omit the version query parameter to delete the latest version. Deletion is blocked when any sandbox references the specific version being deleted.
 */
 func (a *Client) DeleteResourcePlugin(params *DeleteResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteResourcePluginOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -159,7 +161,7 @@ func (a *Client) DeleteResourcePlugin(params *DeleteResourcePluginParams, authIn
 /*
 GetResourcePlugin gets the requested resource plugin
 
-Get the specified resource plugin by name
+Get the specified resource plugin. Omit the version query parameter to get the latest version.
 */
 func (a *Client) GetResourcePlugin(params *GetResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourcePluginOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -199,6 +201,52 @@ func (a *Client) GetResourcePlugin(params *GetResourcePluginParams, authInfo run
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for get-resource-plugin: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ListResourcePluginVersions lists versions of a resource plugin
+
+List every published version of the named resource plugin.
+*/
+func (a *Client) ListResourcePluginVersions(params *ListResourcePluginVersionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginVersionsOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewListResourcePluginVersionsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "list-resource-plugin-versions",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/resource-plugins/{pluginName}/versions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListResourcePluginVersionsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*ListResourcePluginVersionsOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for list-resource-plugin-versions: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

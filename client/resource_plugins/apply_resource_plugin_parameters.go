@@ -62,7 +62,7 @@ type ApplyResourcePluginParams struct {
 
 	/* Data.
 
-	   Request to create or update a resource plugin
+	   Request to create a resource plugin version
 	*/
 	Data *models.ResourcePlugin
 

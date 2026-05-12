@@ -30,6 +30,9 @@ type ResourcePlugin struct {
 
 	// The time at which the resource plugin was last updated
 	UpdatedAt string `json:"updatedAt,omitempty"`
+
+	// Version of the resource plugin (semver format)
+	Version string `json:"version,omitempty"`
 }
 
 // Validate validates this resource plugin
