@@ -70,6 +70,12 @@ type GetResourcePluginParams struct {
 	*/
 	PluginName string
 
+	/* Version.
+
+	   Resource plugin version (semver); omit for latest
+	*/
+	Version *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -145,6 +151,17 @@ func (o *GetResourcePluginParams) SetPluginName(pluginName string) {
 	o.PluginName = pluginName
 }
 
+// WithVersion adds the version to the get resource plugin params
+func (o *GetResourcePluginParams) WithVersion(version *string) *GetResourcePluginParams {
+	o.SetVersion(version)
+	return o
+}
+
+// SetVersion adds the version to the get resource plugin params
+func (o *GetResourcePluginParams) SetVersion(version *string) {
+	o.Version = version
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *GetResourcePluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -161,6 +178,23 @@ func (o *GetResourcePluginParams) WriteToRequest(r runtime.ClientRequest, reg st
 	// path param pluginName
 	if err := r.SetPathParam("pluginName", o.PluginName); err != nil {
 		return err
+	}
+
+	if o.Version != nil {
+
+		// query param version
+		var qrVersion string
+
+		if o.Version != nil {
+			qrVersion = *o.Version
+		}
+		qVersion := qrVersion
+		if qVersion != "" {
+
+			if err := r.SetQueryParam("version", qVersion); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {
