@@ -20,7 +20,9 @@ type ResourcePlugin struct {
 	CreatedAt string `json:"createdAt,omitempty"`
 
 	// Plugin identity of the form `bareName[@semver]`. The bare-name
-	// form (no `@`) means the default version (0.0.0).
+	// form (no `@`) means the default version (0.0.0); responses
+	// for plugins at the default version use this bare form for
+	// backward compatibility with pre-versioning clients.
 	// Example: my-plugin@1.2.0
 	Name string `json:"name,omitempty"`
 

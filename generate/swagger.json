@@ -7576,7 +7576,7 @@
                     "type": "string"
                 },
                 "name": {
-                    "description": "Plugin identity of the form `bareName[@semver]`. The bare-name\nform (no `@`) means the default version (0.0.0).",
+                    "description": "Plugin identity of the form `bareName[@semver]`. The bare-name\nform (no `@`) means the default version (0.0.0); responses\nfor plugins at the default version use this bare form for\nbackward compatibility with pre-versioning clients.",
                     "type": "string",
                     "example": "my-plugin@1.2.0"
                 },
