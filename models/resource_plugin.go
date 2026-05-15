@@ -19,7 +19,9 @@ type ResourcePlugin struct {
 	// The time at which the resource plugin was created
 	CreatedAt string `json:"createdAt,omitempty"`
 
-	// Name of the resource plugin
+	// Plugin identity of the form `bareName[@semver]`. The bare-name
+	// form (no `@`) means the default version (0.0.0).
+	// Example: my-plugin@1.2.0
 	Name string `json:"name,omitempty"`
 
 	// spec
@@ -30,9 +32,6 @@ type ResourcePlugin struct {
 
 	// The time at which the resource plugin was last updated
 	UpdatedAt string `json:"updatedAt,omitempty"`
-
-	// Version of the resource plugin (semver format)
-	Version string `json:"version,omitempty"`
 }
 
 // Validate validates this resource plugin

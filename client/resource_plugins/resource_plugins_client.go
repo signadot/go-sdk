@@ -69,7 +69,7 @@ type ClientService interface {
 /*
 ApplyResourcePlugin applies a resource plugin
 
-Creates a new version of a resource plugin. Versions are immutable; PUTting an existing (name, version) pair returns 409. Omit the version field in the body to create the default 0.0.0 version. The body version must be a concrete semver; "latest" is only accepted on the read and delete query parameters.
+Creates a new version of a resource plugin. The body's `name` field carries the wire form `bareName[@semver]` (e.g. `my-plugin@1.2.0`); its bare part must match the URL path name. A bare-name form (no `@`) publishes the default version `0.0.0`. Versions are immutable; PUTting an existing (name, version) pair returns 409. The version suffix must be a concrete semver; "latest" is only accepted on the read and delete query parameters.
 */
 func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyResourcePluginOK, error) {
 	// NOTE: parameters are not validated before sending
