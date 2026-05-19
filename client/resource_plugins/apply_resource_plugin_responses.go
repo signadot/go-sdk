@@ -40,6 +40,12 @@ func (o *ApplyResourcePluginReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return nil, result
+	case 409:
+		result := NewApplyResourcePluginConflict()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 502:
 		result := NewApplyResourcePluginBadGateway()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -248,6 +254,76 @@ func (o *ApplyResourcePluginUnauthorized) GetPayload() *models.ErrorResponse {
 }
 
 func (o *ApplyResourcePluginUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewApplyResourcePluginConflict creates a ApplyResourcePluginConflict with default headers values
+func NewApplyResourcePluginConflict() *ApplyResourcePluginConflict {
+	return &ApplyResourcePluginConflict{}
+}
+
+/*
+ApplyResourcePluginConflict describes a response with status code 409, with default header values.
+
+Conflict
+*/
+type ApplyResourcePluginConflict struct {
+	Payload *models.ErrorResponse
+}
+
+// IsSuccess returns true when this apply resource plugin conflict response has a 2xx status code
+func (o *ApplyResourcePluginConflict) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this apply resource plugin conflict response has a 3xx status code
+func (o *ApplyResourcePluginConflict) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this apply resource plugin conflict response has a 4xx status code
+func (o *ApplyResourcePluginConflict) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this apply resource plugin conflict response has a 5xx status code
+func (o *ApplyResourcePluginConflict) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this apply resource plugin conflict response a status code equal to that given
+func (o *ApplyResourcePluginConflict) IsCode(code int) bool {
+	return code == 409
+}
+
+// Code gets the status code for the apply resource plugin conflict response
+func (o *ApplyResourcePluginConflict) Code() int {
+	return 409
+}
+
+func (o *ApplyResourcePluginConflict) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginConflict %s", 409, payload)
+}
+
+func (o *ApplyResourcePluginConflict) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /orgs/{orgName}/resource-plugins/{pluginName}][%d] applyResourcePluginConflict %s", 409, payload)
+}
+
+func (o *ApplyResourcePluginConflict) GetPayload() *models.ErrorResponse {
+	return o.Payload
+}
+
+func (o *ApplyResourcePluginConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 

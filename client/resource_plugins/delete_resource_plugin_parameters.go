@@ -70,6 +70,12 @@ type DeleteResourcePluginParams struct {
 	*/
 	PluginName string
 
+	/* Version.
+
+	   Resource plugin version (semver); omit for latest
+	*/
+	Version *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -145,6 +151,17 @@ func (o *DeleteResourcePluginParams) SetPluginName(pluginName string) {
 	o.PluginName = pluginName
 }
 
+// WithVersion adds the version to the delete resource plugin params
+func (o *DeleteResourcePluginParams) WithVersion(version *string) *DeleteResourcePluginParams {
+	o.SetVersion(version)
+	return o
+}
+
+// SetVersion adds the version to the delete resource plugin params
+func (o *DeleteResourcePluginParams) SetVersion(version *string) {
+	o.Version = version
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *DeleteResourcePluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -161,6 +178,23 @@ func (o *DeleteResourcePluginParams) WriteToRequest(r runtime.ClientRequest, reg
 	// path param pluginName
 	if err := r.SetPathParam("pluginName", o.PluginName); err != nil {
 		return err
+	}
+
+	if o.Version != nil {
+
+		// query param version
+		var qrVersion string
+
+		if o.Version != nil {
+			qrVersion = *o.Version
+		}
+		qVersion := qrVersion
+		if qVersion != "" {
+
+			if err := r.SetQueryParam("version", qVersion); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {
