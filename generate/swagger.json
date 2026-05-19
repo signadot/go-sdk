@@ -3945,7 +3945,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get the specified resource plugin by name",
+                "description": "Get the specified resource plugin. Omit the version query parameter to get the latest version.",
                 "consumes": [
                     "application/json"
                 ],
@@ -3973,6 +3973,13 @@
                         "name": "pluginName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "1.2.0",
+                        "description": "Resource plugin version (semver); omit for latest",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -4008,7 +4015,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Apply a resource plugin. Updates are not supported at this time.",
+                "description": "Creates a new version of a resource plugin. The body's `name` field carries the wire form `bareName[@semver]` (e.g. `my-plugin@1.2.0`); its bare part must match the URL path name. A bare-name form (no `@`) publishes the default version `0.0.0`. Versions are immutable; PUTting an existing (name, version) pair returns 409. The version suffix must be a concrete semver; \"latest\" is only accepted on the read and delete query parameters.",
                 "consumes": [
                     "application/json"
                 ],
@@ -4038,13 +4045,89 @@
                         "required": true
                     },
                     {
-                        "description": "Request to create or update a resource plugin",
+                        "description": "Request to create a resource plugin version",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/ResourcePlugin"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a resource plugin version. Omit the version query parameter to delete the latest version. Deletion is blocked when any sandbox references the specific version being deleted.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ResourcePlugins"
+                ],
+                "summary": "Delete a resource plugin",
+                "operationId": "delete-resource-plugin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "mariadb-plugin",
+                        "description": "Resource plugin name",
+                        "name": "pluginName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "1.2.0",
+                        "description": "Resource plugin version (semver); omit for latest",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -4073,14 +4156,16 @@
                         }
                     }
                 }
-            },
-            "delete": {
+            }
+        },
+        "/orgs/{orgName}/resource-plugins/{pluginName}/versions": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete the resource plugin by name",
+                "description": "List every published version of the named resource plugin.",
                 "consumes": [
                     "application/json"
                 ],
@@ -4090,8 +4175,8 @@
                 "tags": [
                     "ResourcePlugins"
                 ],
-                "summary": "Delete a resource plugin",
-                "operationId": "delete-resource-plugin",
+                "summary": "List versions of a resource plugin",
+                "operationId": "list-resource-plugin-versions",
                 "parameters": [
                     {
                         "type": "string",
@@ -4114,7 +4199,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/EmptyResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ResourcePlugin"
+                            }
                         }
                     },
                     "400": {
@@ -7488,8 +7576,9 @@
                     "type": "string"
                 },
                 "name": {
-                    "description": "Name of the resource plugin",
-                    "type": "string"
+                    "description": "Plugin identity of the form `bareName[@semver]`. The bare-name\nform (no `@`) means the default version (0.0.0); responses\nfor plugins at the default version use this bare form for\nbackward compatibility with pre-versioning clients.",
+                    "type": "string",
+                    "example": "my-plugin@1.2.0"
                 },
                 "spec": {
                     "description": "Specification for the resource plugin",
@@ -9174,7 +9263,8 @@
                 "finalizing",
                 "completed",
                 "failed",
-                "cancelled"
+                "cancelled",
+                "redispatch-needed"
             ],
             "x-enum-varnames": [
                 "ExecutionPending",
@@ -9183,7 +9273,8 @@
                 "ExecutionFinalizing",
                 "ExecutionCompleted",
                 "ExecutionFailed",
-                "ExecutionCancelled"
+                "ExecutionCancelled",
+                "ExecutionRedispatchNeeded"
             ]
         },
         "plans.InputResolvedVia": {
@@ -9950,15 +10041,18 @@
             "type": "object",
             "properties": {
                 "name": {
+                    "description": "Unique name for this resource (used to reference it in env vars and files)",
                     "type": "string"
                 },
                 "params": {
+                    "description": "Plugin-specific parameters as key-value pairs",
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"
                     }
                 },
                 "plugin": {
+                    "description": "Plugin name, optionally suffixed with @version (e.g. my-plugin@1.2.0)",
                     "type": "string"
                 }
             }
