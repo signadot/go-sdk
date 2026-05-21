@@ -253,7 +253,7 @@ func (a *Client) ListResourcePluginVersions(params *ListResourcePluginVersionsPa
 /*
 ListResourcePlugins lists resource plugins
 
-List all resource plugins under the specified Signadot org.
+List resource plugins under the specified Signadot org. By default returns only the highest-semver version of each plugin. Pass `?version=all` to expand the response into one row per published (name, version), sorted by name then semver-descending. `?version=latest` is accepted as an explicit alias for the default.
 */
 func (a *Client) ListResourcePlugins(params *ListResourcePluginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginsOK, error) {
 	// NOTE: parameters are not validated before sending

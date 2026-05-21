@@ -3885,7 +3885,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "List all resource plugins under the specified Signadot org.",
+                "description": "List resource plugins under the specified Signadot org. By default returns only the highest-semver version of each plugin. Pass `?version=all` to expand the response into one row per published (name, version), sorted by name then semver-descending. `?version=latest` is accepted as an explicit alias for the default.",
                 "consumes": [
                     "application/json"
                 ],
@@ -3905,6 +3905,16 @@
                         "name": "orgName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "latest",
+                            "all"
+                        ],
+                        "type": "string",
+                        "description": "'latest' (default) returns only the highest-semver version of each plugin; 'all' returns every published version",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
