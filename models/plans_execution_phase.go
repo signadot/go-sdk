@@ -47,6 +47,9 @@ const (
 
 	// PlansExecutionPhaseCancelled captures enum value "cancelled"
 	PlansExecutionPhaseCancelled PlansExecutionPhase = "cancelled"
+
+	// PlansExecutionPhaseRedispatchDashNeeded captures enum value "redispatch-needed"
+	PlansExecutionPhaseRedispatchDashNeeded PlansExecutionPhase = "redispatch-needed"
 )
 
 // for schema
@@ -54,7 +57,7 @@ var plansExecutionPhaseEnum []any
 
 func init() {
 	var res []PlansExecutionPhase
-	if err := json.Unmarshal([]byte(`["pending","dispatching","running","finalizing","completed","failed","cancelled"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["pending","dispatching","running","finalizing","completed","failed","cancelled","redispatch-needed"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
