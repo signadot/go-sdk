@@ -14,13 +14,13 @@ import (
 // swagger:model sandbox.Resource
 type SandboxResource struct {
 
-	// name
+	// Unique name for this resource (used to reference it in env vars and files)
 	Name string `json:"name,omitempty"`
 
-	// params
+	// Plugin-specific parameters as key-value pairs
 	Params map[string]string `json:"params,omitempty"`
 
-	// plugin
+	// Plugin name, optionally suffixed with @version (e.g. my-plugin@1.2.0)
 	Plugin string `json:"plugin,omitempty"`
 }
 

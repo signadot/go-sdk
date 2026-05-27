@@ -40,6 +40,12 @@ func (o *ExplainSandboxStatusReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return nil, result
+	case 403:
+		result := NewExplainSandboxStatusForbidden()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewExplainSandboxStatusNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -262,6 +268,76 @@ func (o *ExplainSandboxStatusUnauthorized) GetPayload() *models.ErrorResponse {
 }
 
 func (o *ExplainSandboxStatusUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewExplainSandboxStatusForbidden creates a ExplainSandboxStatusForbidden with default headers values
+func NewExplainSandboxStatusForbidden() *ExplainSandboxStatusForbidden {
+	return &ExplainSandboxStatusForbidden{}
+}
+
+/*
+ExplainSandboxStatusForbidden describes a response with status code 403, with default header values.
+
+Forbidden
+*/
+type ExplainSandboxStatusForbidden struct {
+	Payload *models.ErrorResponse
+}
+
+// IsSuccess returns true when this explain sandbox status forbidden response has a 2xx status code
+func (o *ExplainSandboxStatusForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this explain sandbox status forbidden response has a 3xx status code
+func (o *ExplainSandboxStatusForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this explain sandbox status forbidden response has a 4xx status code
+func (o *ExplainSandboxStatusForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this explain sandbox status forbidden response has a 5xx status code
+func (o *ExplainSandboxStatusForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this explain sandbox status forbidden response a status code equal to that given
+func (o *ExplainSandboxStatusForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
+// Code gets the status code for the explain sandbox status forbidden response
+func (o *ExplainSandboxStatusForbidden) Code() int {
+	return 403
+}
+
+func (o *ExplainSandboxStatusForbidden) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}/status/explain][%d] explainSandboxStatusForbidden %s", 403, payload)
+}
+
+func (o *ExplainSandboxStatusForbidden) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes/{sandboxName}/status/explain][%d] explainSandboxStatusForbidden %s", 403, payload)
+}
+
+func (o *ExplainSandboxStatusForbidden) GetPayload() *models.ErrorResponse {
+	return o.Payload
+}
+
+func (o *ExplainSandboxStatusForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 

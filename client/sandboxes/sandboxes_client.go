@@ -161,7 +161,7 @@ func (a *Client) DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.Cli
 /*
 ExplainSandboxStatus explains sandbox status
 
-Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM.
+Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context; this requires the sandbox explain AI feature to be enabled, otherwise it returns 403. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM; this is always available so callers can paste the prompt into their own LLM.
 */
 func (a *Client) ExplainSandboxStatus(params *ExplainSandboxStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusOK, error) {
 	// NOTE: parameters are not validated before sending
