@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateSecretParams() *CreateSecretParams {
-	return &CreateSecretParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewCreateSecretParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewCreateSecretParamsWithTimeout creates a new CreateSecretParams object
 // with the ability to set a timeout on a request.
 func NewCreateSecretParamsWithTimeout(timeout time.Duration) *CreateSecretParams {
 	return &CreateSecretParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewCreateSecretParamsWithContext creates a new CreateSecretParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateSecretParams].
 func NewCreateSecretParamsWithContext(ctx context.Context) *CreateSecretParams {
 	return &CreateSecretParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -72,9 +75,9 @@ type CreateSecretParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the create secret params (not the query body).
@@ -92,65 +95,68 @@ func (o *CreateSecretParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the create secret params
+// WithTimeout adds the timeout to the create secret params.
 func (o *CreateSecretParams) WithTimeout(timeout time.Duration) *CreateSecretParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the create secret params
+// SetTimeout adds the timeout to the create secret params.
 func (o *CreateSecretParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the create secret params
+// WithContext adds the context to the create secret params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateSecretParams].
 func (o *CreateSecretParams) WithContext(ctx context.Context) *CreateSecretParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the create secret params
+// SetContext adds the context to the create secret params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateSecretParams].
 func (o *CreateSecretParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the create secret params
+// WithHTTPClient adds the HTTPClient to the create secret params.
 func (o *CreateSecretParams) WithHTTPClient(client *http.Client) *CreateSecretParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the create secret params
+// SetHTTPClient adds the HTTPClient to the create secret params.
 func (o *CreateSecretParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the create secret params
+// WithData adds the data to the create secret params.
 func (o *CreateSecretParams) WithData(data *models.Secret) *CreateSecretParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the create secret params
+// SetData adds the data to the create secret params.
 func (o *CreateSecretParams) SetData(data *models.Secret) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the create secret params
+// WithOrgName adds the orgName to the create secret params.
 func (o *CreateSecretParams) WithOrgName(orgName string) *CreateSecretParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the create secret params
+// SetOrgName adds the orgName to the create secret params.
 func (o *CreateSecretParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *CreateSecretParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

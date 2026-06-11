@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TestExecutionStatus test execution status
@@ -64,7 +65,7 @@ func (m *TestExecutionStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionStatus) validateFinalState(formats strfmt.Registry) error {
-	if swag.IsZero(m.FinalState) { // not required
+	if typeutils.IsZero(m.FinalState) { // not required
 		return nil
 	}
 
@@ -87,7 +88,7 @@ func (m *TestExecutionStatus) validateFinalState(formats strfmt.Registry) error 
 }
 
 func (m *TestExecutionStatus) validatePhase(formats strfmt.Registry) error {
-	if swag.IsZero(m.Phase) { // not required
+	if typeutils.IsZero(m.Phase) { // not required
 		return nil
 	}
 
@@ -108,7 +109,7 @@ func (m *TestExecutionStatus) validatePhase(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionStatus) validateTriggeredBy(formats strfmt.Registry) error {
-	if swag.IsZero(m.TriggeredBy) { // not required
+	if typeutils.IsZero(m.TriggeredBy) { // not required
 		return nil
 	}
 
@@ -156,7 +157,7 @@ func (m *TestExecutionStatus) contextValidateFinalState(ctx context.Context, for
 
 	if m.FinalState != nil {
 
-		if swag.IsZero(m.FinalState) { // not required
+		if typeutils.IsZero(m.FinalState) { // not required
 			return nil
 		}
 
@@ -179,7 +180,7 @@ func (m *TestExecutionStatus) contextValidateFinalState(ctx context.Context, for
 
 func (m *TestExecutionStatus) contextValidatePhase(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Phase) { // not required
+	if typeutils.IsZero(m.Phase) { // not required
 		return nil
 	}
 
@@ -203,7 +204,7 @@ func (m *TestExecutionStatus) contextValidateTriggeredBy(ctx context.Context, fo
 
 	if m.TriggeredBy != nil {
 
-		if swag.IsZero(m.TriggeredBy) { // not required
+		if typeutils.IsZero(m.TriggeredBy) { // not required
 			return nil
 		}
 
@@ -229,13 +230,13 @@ func (m *TestExecutionStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TestExecutionStatus) UnmarshalBinary(b []byte) error {
 	var res TestExecutionStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

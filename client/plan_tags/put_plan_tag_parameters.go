@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewPutPlanTagParams() *PutPlanTagParams {
-	return &PutPlanTagParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewPutPlanTagParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewPutPlanTagParamsWithTimeout creates a new PutPlanTagParams object
 // with the ability to set a timeout on a request.
 func NewPutPlanTagParamsWithTimeout(timeout time.Duration) *PutPlanTagParams {
 	return &PutPlanTagParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewPutPlanTagParamsWithContext creates a new PutPlanTagParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [PutPlanTagParams].
 func NewPutPlanTagParamsWithContext(ctx context.Context) *PutPlanTagParams {
 	return &PutPlanTagParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -78,9 +81,9 @@ type PutPlanTagParams struct {
 	*/
 	PlanTagName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the put plan tag params (not the query body).
@@ -98,76 +101,79 @@ func (o *PutPlanTagParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the put plan tag params
+// WithTimeout adds the timeout to the put plan tag params.
 func (o *PutPlanTagParams) WithTimeout(timeout time.Duration) *PutPlanTagParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the put plan tag params
+// SetTimeout adds the timeout to the put plan tag params.
 func (o *PutPlanTagParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the put plan tag params
+// WithContext adds the context to the put plan tag params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [PutPlanTagParams].
 func (o *PutPlanTagParams) WithContext(ctx context.Context) *PutPlanTagParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the put plan tag params
+// SetContext adds the context to the put plan tag params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [PutPlanTagParams].
 func (o *PutPlanTagParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the put plan tag params
+// WithHTTPClient adds the HTTPClient to the put plan tag params.
 func (o *PutPlanTagParams) WithHTTPClient(client *http.Client) *PutPlanTagParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the put plan tag params
+// SetHTTPClient adds the HTTPClient to the put plan tag params.
 func (o *PutPlanTagParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the put plan tag params
+// WithData adds the data to the put plan tag params.
 func (o *PutPlanTagParams) WithData(data *models.PlanTagSpec) *PutPlanTagParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the put plan tag params
+// SetData adds the data to the put plan tag params.
 func (o *PutPlanTagParams) SetData(data *models.PlanTagSpec) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the put plan tag params
+// WithOrgName adds the orgName to the put plan tag params.
 func (o *PutPlanTagParams) WithOrgName(orgName string) *PutPlanTagParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the put plan tag params
+// SetOrgName adds the orgName to the put plan tag params.
 func (o *PutPlanTagParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanTagName adds the planTagName to the put plan tag params
+// WithPlanTagName adds the planTagName to the put plan tag params.
 func (o *PutPlanTagParams) WithPlanTagName(planTagName string) *PutPlanTagParams {
 	o.SetPlanTagName(planTagName)
 	return o
 }
 
-// SetPlanTagName adds the planTagName to the put plan tag params
+// SetPlanTagName adds the planTagName to the put plan tag params.
 func (o *PutPlanTagParams) SetPlanTagName(planTagName string) {
 	o.PlanTagName = planTagName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *PutPlanTagParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

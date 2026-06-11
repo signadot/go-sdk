@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanStep plan step
@@ -76,7 +77,7 @@ func (m *PlanStep) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanStep) validateAction(formats strfmt.Registry) error {
-	if swag.IsZero(m.Action) { // not required
+	if typeutils.IsZero(m.Action) { // not required
 		return nil
 	}
 
@@ -99,7 +100,7 @@ func (m *PlanStep) validateAction(formats strfmt.Registry) error {
 }
 
 func (m *PlanStep) validateArgs(formats strfmt.Registry) error {
-	if swag.IsZero(m.Args) { // not required
+	if typeutils.IsZero(m.Args) { // not required
 		return nil
 	}
 
@@ -122,12 +123,12 @@ func (m *PlanStep) validateArgs(formats strfmt.Registry) error {
 }
 
 func (m *PlanStep) validateExtraInputs(formats strfmt.Registry) error {
-	if swag.IsZero(m.ExtraInputs) { // not required
+	if typeutils.IsZero(m.ExtraInputs) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.ExtraInputs); i++ {
-		if swag.IsZero(m.ExtraInputs[i]) { // not required
+		if typeutils.IsZero(m.ExtraInputs[i]) { // not required
 			continue
 		}
 
@@ -152,12 +153,12 @@ func (m *PlanStep) validateExtraInputs(formats strfmt.Registry) error {
 }
 
 func (m *PlanStep) validateExtraOutputs(formats strfmt.Registry) error {
-	if swag.IsZero(m.ExtraOutputs) { // not required
+	if typeutils.IsZero(m.ExtraOutputs) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.ExtraOutputs); i++ {
-		if swag.IsZero(m.ExtraOutputs[i]) { // not required
+		if typeutils.IsZero(m.ExtraOutputs[i]) { // not required
 			continue
 		}
 
@@ -182,7 +183,7 @@ func (m *PlanStep) validateExtraOutputs(formats strfmt.Registry) error {
 }
 
 func (m *PlanStep) validateRoutingContext(formats strfmt.Registry) error {
-	if swag.IsZero(m.RoutingContext) { // not required
+	if typeutils.IsZero(m.RoutingContext) { // not required
 		return nil
 	}
 
@@ -238,7 +239,7 @@ func (m *PlanStep) contextValidateAction(ctx context.Context, formats strfmt.Reg
 
 	if m.Action != nil {
 
-		if swag.IsZero(m.Action) { // not required
+		if typeutils.IsZero(m.Action) { // not required
 			return nil
 		}
 
@@ -263,7 +264,7 @@ func (m *PlanStep) contextValidateArgs(ctx context.Context, formats strfmt.Regis
 
 	if m.Args != nil {
 
-		if swag.IsZero(m.Args) { // not required
+		if typeutils.IsZero(m.Args) { // not required
 			return nil
 		}
 
@@ -290,7 +291,7 @@ func (m *PlanStep) contextValidateExtraInputs(ctx context.Context, formats strfm
 
 		if m.ExtraInputs[i] != nil {
 
-			if swag.IsZero(m.ExtraInputs[i]) { // not required
+			if typeutils.IsZero(m.ExtraInputs[i]) { // not required
 				return nil
 			}
 
@@ -319,7 +320,7 @@ func (m *PlanStep) contextValidateExtraOutputs(ctx context.Context, formats strf
 
 		if m.ExtraOutputs[i] != nil {
 
-			if swag.IsZero(m.ExtraOutputs[i]) { // not required
+			if typeutils.IsZero(m.ExtraOutputs[i]) { // not required
 				return nil
 			}
 
@@ -346,7 +347,7 @@ func (m *PlanStep) contextValidateRoutingContext(ctx context.Context, formats st
 
 	if m.RoutingContext != nil {
 
-		if swag.IsZero(m.RoutingContext) { // not required
+		if typeutils.IsZero(m.RoutingContext) { // not required
 			return nil
 		}
 
@@ -372,13 +373,13 @@ func (m *PlanStep) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanStep) UnmarshalBinary(b []byte) error {
 	var res PlanStep
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
@@ -130,7 +131,7 @@ func (m *SandboxSpec) validateCluster(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateConnection(formats strfmt.Registry) error {
-	if swag.IsZero(m.Connection) { // not required
+	if typeutils.IsZero(m.Connection) { // not required
 		return nil
 	}
 
@@ -153,7 +154,7 @@ func (m *SandboxSpec) validateConnection(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateDefaultRouteGroup(formats strfmt.Registry) error {
-	if swag.IsZero(m.DefaultRouteGroup) { // not required
+	if typeutils.IsZero(m.DefaultRouteGroup) { // not required
 		return nil
 	}
 
@@ -176,12 +177,12 @@ func (m *SandboxSpec) validateDefaultRouteGroup(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateEndpoints(formats strfmt.Registry) error {
-	if swag.IsZero(m.Endpoints) { // not required
+	if typeutils.IsZero(m.Endpoints) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Endpoints); i++ {
-		if swag.IsZero(m.Endpoints[i]) { // not required
+		if typeutils.IsZero(m.Endpoints[i]) { // not required
 			continue
 		}
 
@@ -212,7 +213,7 @@ func (m *SandboxSpec) validateForks(formats strfmt.Registry) error {
 	}
 
 	for i := 0; i < len(m.Forks); i++ {
-		if swag.IsZero(m.Forks[i]) { // not required
+		if typeutils.IsZero(m.Forks[i]) { // not required
 			continue
 		}
 
@@ -237,12 +238,12 @@ func (m *SandboxSpec) validateForks(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateLocal(formats strfmt.Registry) error {
-	if swag.IsZero(m.Local) { // not required
+	if typeutils.IsZero(m.Local) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Local); i++ {
-		if swag.IsZero(m.Local[i]) { // not required
+		if typeutils.IsZero(m.Local[i]) { // not required
 			continue
 		}
 
@@ -267,12 +268,12 @@ func (m *SandboxSpec) validateLocal(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateMiddleware(formats strfmt.Registry) error {
-	if swag.IsZero(m.Middleware) { // not required
+	if typeutils.IsZero(m.Middleware) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Middleware); i++ {
-		if swag.IsZero(m.Middleware[i]) { // not required
+		if typeutils.IsZero(m.Middleware[i]) { // not required
 			continue
 		}
 
@@ -297,12 +298,12 @@ func (m *SandboxSpec) validateMiddleware(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateResources(formats strfmt.Registry) error {
-	if swag.IsZero(m.Resources) { // not required
+	if typeutils.IsZero(m.Resources) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Resources); i++ {
-		if swag.IsZero(m.Resources[i]) { // not required
+		if typeutils.IsZero(m.Resources[i]) { // not required
 			continue
 		}
 
@@ -327,7 +328,7 @@ func (m *SandboxSpec) validateResources(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateRouting(formats strfmt.Registry) error {
-	if swag.IsZero(m.Routing) { // not required
+	if typeutils.IsZero(m.Routing) { // not required
 		return nil
 	}
 
@@ -350,7 +351,7 @@ func (m *SandboxSpec) validateRouting(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateTTL(formats strfmt.Registry) error {
-	if swag.IsZero(m.TTL) { // not required
+	if typeutils.IsZero(m.TTL) { // not required
 		return nil
 	}
 
@@ -373,12 +374,12 @@ func (m *SandboxSpec) validateTTL(formats strfmt.Registry) error {
 }
 
 func (m *SandboxSpec) validateVirtual(formats strfmt.Registry) error {
-	if swag.IsZero(m.Virtual) { // not required
+	if typeutils.IsZero(m.Virtual) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Virtual); i++ {
-		if swag.IsZero(m.Virtual[i]) { // not required
+		if typeutils.IsZero(m.Virtual[i]) { // not required
 			continue
 		}
 
@@ -456,7 +457,7 @@ func (m *SandboxSpec) contextValidateConnection(ctx context.Context, formats str
 
 	if m.Connection != nil {
 
-		if swag.IsZero(m.Connection) { // not required
+		if typeutils.IsZero(m.Connection) { // not required
 			return nil
 		}
 
@@ -481,7 +482,7 @@ func (m *SandboxSpec) contextValidateDefaultRouteGroup(ctx context.Context, form
 
 	if m.DefaultRouteGroup != nil {
 
-		if swag.IsZero(m.DefaultRouteGroup) { // not required
+		if typeutils.IsZero(m.DefaultRouteGroup) { // not required
 			return nil
 		}
 
@@ -508,7 +509,7 @@ func (m *SandboxSpec) contextValidateEndpoints(ctx context.Context, formats strf
 
 		if m.Endpoints[i] != nil {
 
-			if swag.IsZero(m.Endpoints[i]) { // not required
+			if typeutils.IsZero(m.Endpoints[i]) { // not required
 				return nil
 			}
 
@@ -537,7 +538,7 @@ func (m *SandboxSpec) contextValidateForks(ctx context.Context, formats strfmt.R
 
 		if m.Forks[i] != nil {
 
-			if swag.IsZero(m.Forks[i]) { // not required
+			if typeutils.IsZero(m.Forks[i]) { // not required
 				return nil
 			}
 
@@ -566,7 +567,7 @@ func (m *SandboxSpec) contextValidateLocal(ctx context.Context, formats strfmt.R
 
 		if m.Local[i] != nil {
 
-			if swag.IsZero(m.Local[i]) { // not required
+			if typeutils.IsZero(m.Local[i]) { // not required
 				return nil
 			}
 
@@ -595,7 +596,7 @@ func (m *SandboxSpec) contextValidateMiddleware(ctx context.Context, formats str
 
 		if m.Middleware[i] != nil {
 
-			if swag.IsZero(m.Middleware[i]) { // not required
+			if typeutils.IsZero(m.Middleware[i]) { // not required
 				return nil
 			}
 
@@ -624,7 +625,7 @@ func (m *SandboxSpec) contextValidateResources(ctx context.Context, formats strf
 
 		if m.Resources[i] != nil {
 
-			if swag.IsZero(m.Resources[i]) { // not required
+			if typeutils.IsZero(m.Resources[i]) { // not required
 				return nil
 			}
 
@@ -651,7 +652,7 @@ func (m *SandboxSpec) contextValidateRouting(ctx context.Context, formats strfmt
 
 	if m.Routing != nil {
 
-		if swag.IsZero(m.Routing) { // not required
+		if typeutils.IsZero(m.Routing) { // not required
 			return nil
 		}
 
@@ -676,7 +677,7 @@ func (m *SandboxSpec) contextValidateTTL(ctx context.Context, formats strfmt.Reg
 
 	if m.TTL != nil {
 
-		if swag.IsZero(m.TTL) { // not required
+		if typeutils.IsZero(m.TTL) { // not required
 			return nil
 		}
 
@@ -703,7 +704,7 @@ func (m *SandboxSpec) contextValidateVirtual(ctx context.Context, formats strfmt
 
 		if m.Virtual[i] != nil {
 
-			if swag.IsZero(m.Virtual[i]) { // not required
+			if typeutils.IsZero(m.Virtual[i]) { // not required
 				return nil
 			}
 
@@ -731,13 +732,13 @@ func (m *SandboxSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxSpec) UnmarshalBinary(b []byte) error {
 	var res SandboxSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

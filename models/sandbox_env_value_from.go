@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxEnvValueFrom sandbox env value from
@@ -56,7 +57,7 @@ func (m *SandboxEnvValueFrom) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxEnvValueFrom) validateConfigMap(formats strfmt.Registry) error {
-	if swag.IsZero(m.ConfigMap) { // not required
+	if typeutils.IsZero(m.ConfigMap) { // not required
 		return nil
 	}
 
@@ -79,7 +80,7 @@ func (m *SandboxEnvValueFrom) validateConfigMap(formats strfmt.Registry) error {
 }
 
 func (m *SandboxEnvValueFrom) validateFork(formats strfmt.Registry) error {
-	if swag.IsZero(m.Fork) { // not required
+	if typeutils.IsZero(m.Fork) { // not required
 		return nil
 	}
 
@@ -102,7 +103,7 @@ func (m *SandboxEnvValueFrom) validateFork(formats strfmt.Registry) error {
 }
 
 func (m *SandboxEnvValueFrom) validateResource(formats strfmt.Registry) error {
-	if swag.IsZero(m.Resource) { // not required
+	if typeutils.IsZero(m.Resource) { // not required
 		return nil
 	}
 
@@ -125,7 +126,7 @@ func (m *SandboxEnvValueFrom) validateResource(formats strfmt.Registry) error {
 }
 
 func (m *SandboxEnvValueFrom) validateSecret(formats strfmt.Registry) error {
-	if swag.IsZero(m.Secret) { // not required
+	if typeutils.IsZero(m.Secret) { // not required
 		return nil
 	}
 
@@ -177,7 +178,7 @@ func (m *SandboxEnvValueFrom) contextValidateConfigMap(ctx context.Context, form
 
 	if m.ConfigMap != nil {
 
-		if swag.IsZero(m.ConfigMap) { // not required
+		if typeutils.IsZero(m.ConfigMap) { // not required
 			return nil
 		}
 
@@ -202,7 +203,7 @@ func (m *SandboxEnvValueFrom) contextValidateFork(ctx context.Context, formats s
 
 	if m.Fork != nil {
 
-		if swag.IsZero(m.Fork) { // not required
+		if typeutils.IsZero(m.Fork) { // not required
 			return nil
 		}
 
@@ -227,7 +228,7 @@ func (m *SandboxEnvValueFrom) contextValidateResource(ctx context.Context, forma
 
 	if m.Resource != nil {
 
-		if swag.IsZero(m.Resource) { // not required
+		if typeutils.IsZero(m.Resource) { // not required
 			return nil
 		}
 
@@ -252,7 +253,7 @@ func (m *SandboxEnvValueFrom) contextValidateSecret(ctx context.Context, formats
 
 	if m.Secret != nil {
 
-		if swag.IsZero(m.Secret) { // not required
+		if typeutils.IsZero(m.Secret) { // not required
 			return nil
 		}
 
@@ -278,13 +279,13 @@ func (m *SandboxEnvValueFrom) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxEnvValueFrom) UnmarshalBinary(b []byte) error {
 	var res SandboxEnvValueFrom
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

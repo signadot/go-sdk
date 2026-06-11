@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // RouteGroup route group
@@ -69,7 +70,7 @@ func (m *RouteGroup) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroup) validateDefaults(formats strfmt.Registry) error {
-	if swag.IsZero(m.Defaults) { // not required
+	if typeutils.IsZero(m.Defaults) { // not required
 		return nil
 	}
 
@@ -92,12 +93,12 @@ func (m *RouteGroup) validateDefaults(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroup) validateEndpoints(formats strfmt.Registry) error {
-	if swag.IsZero(m.Endpoints) { // not required
+	if typeutils.IsZero(m.Endpoints) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Endpoints); i++ {
-		if swag.IsZero(m.Endpoints[i]) { // not required
+		if typeutils.IsZero(m.Endpoints[i]) { // not required
 			continue
 		}
 
@@ -122,7 +123,7 @@ func (m *RouteGroup) validateEndpoints(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroup) validateSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.Spec) { // not required
+	if typeutils.IsZero(m.Spec) { // not required
 		return nil
 	}
 
@@ -145,7 +146,7 @@ func (m *RouteGroup) validateSpec(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroup) validateStatus(formats strfmt.Registry) error {
-	if swag.IsZero(m.Status) { // not required
+	if typeutils.IsZero(m.Status) { // not required
 		return nil
 	}
 
@@ -197,7 +198,7 @@ func (m *RouteGroup) contextValidateDefaults(ctx context.Context, formats strfmt
 
 	if m.Defaults != nil {
 
-		if swag.IsZero(m.Defaults) { // not required
+		if typeutils.IsZero(m.Defaults) { // not required
 			return nil
 		}
 
@@ -224,7 +225,7 @@ func (m *RouteGroup) contextValidateEndpoints(ctx context.Context, formats strfm
 
 		if m.Endpoints[i] != nil {
 
-			if swag.IsZero(m.Endpoints[i]) { // not required
+			if typeutils.IsZero(m.Endpoints[i]) { // not required
 				return nil
 			}
 
@@ -251,7 +252,7 @@ func (m *RouteGroup) contextValidateSpec(ctx context.Context, formats strfmt.Reg
 
 	if m.Spec != nil {
 
-		if swag.IsZero(m.Spec) { // not required
+		if typeutils.IsZero(m.Spec) { // not required
 			return nil
 		}
 
@@ -276,7 +277,7 @@ func (m *RouteGroup) contextValidateStatus(ctx context.Context, formats strfmt.R
 
 	if m.Status != nil {
 
-		if swag.IsZero(m.Status) { // not required
+		if typeutils.IsZero(m.Status) { // not required
 			return nil
 		}
 
@@ -302,13 +303,13 @@ func (m *RouteGroup) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *RouteGroup) UnmarshalBinary(b []byte) error {
 	var res RouteGroup
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

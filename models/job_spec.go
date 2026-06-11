@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // JobSpec job spec
@@ -72,12 +73,12 @@ func (m *JobSpec) Validate(formats strfmt.Registry) error {
 }
 
 func (m *JobSpec) validateEnv(formats strfmt.Registry) error {
-	if swag.IsZero(m.Env) { // not required
+	if typeutils.IsZero(m.Env) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Env); i++ {
-		if swag.IsZero(m.Env[i]) { // not required
+		if typeutils.IsZero(m.Env[i]) { // not required
 			continue
 		}
 
@@ -102,7 +103,7 @@ func (m *JobSpec) validateEnv(formats strfmt.Registry) error {
 }
 
 func (m *JobSpec) validateRoutingContext(formats strfmt.Registry) error {
-	if swag.IsZero(m.RoutingContext) { // not required
+	if typeutils.IsZero(m.RoutingContext) { // not required
 		return nil
 	}
 
@@ -125,7 +126,7 @@ func (m *JobSpec) validateRoutingContext(formats strfmt.Registry) error {
 }
 
 func (m *JobSpec) validateTrafficManager(formats strfmt.Registry) error {
-	if swag.IsZero(m.TrafficManager) { // not required
+	if typeutils.IsZero(m.TrafficManager) { // not required
 		return nil
 	}
 
@@ -148,12 +149,12 @@ func (m *JobSpec) validateTrafficManager(formats strfmt.Registry) error {
 }
 
 func (m *JobSpec) validateUploadArtifact(formats strfmt.Registry) error {
-	if swag.IsZero(m.UploadArtifact) { // not required
+	if typeutils.IsZero(m.UploadArtifact) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.UploadArtifact); i++ {
-		if swag.IsZero(m.UploadArtifact[i]) { // not required
+		if typeutils.IsZero(m.UploadArtifact[i]) { // not required
 			continue
 		}
 
@@ -209,7 +210,7 @@ func (m *JobSpec) contextValidateEnv(ctx context.Context, formats strfmt.Registr
 
 		if m.Env[i] != nil {
 
-			if swag.IsZero(m.Env[i]) { // not required
+			if typeutils.IsZero(m.Env[i]) { // not required
 				return nil
 			}
 
@@ -236,7 +237,7 @@ func (m *JobSpec) contextValidateRoutingContext(ctx context.Context, formats str
 
 	if m.RoutingContext != nil {
 
-		if swag.IsZero(m.RoutingContext) { // not required
+		if typeutils.IsZero(m.RoutingContext) { // not required
 			return nil
 		}
 
@@ -261,7 +262,7 @@ func (m *JobSpec) contextValidateTrafficManager(ctx context.Context, formats str
 
 	if m.TrafficManager != nil {
 
-		if swag.IsZero(m.TrafficManager) { // not required
+		if typeutils.IsZero(m.TrafficManager) { // not required
 			return nil
 		}
 
@@ -288,7 +289,7 @@ func (m *JobSpec) contextValidateUploadArtifact(ctx context.Context, formats str
 
 		if m.UploadArtifact[i] != nil {
 
-			if swag.IsZero(m.UploadArtifact[i]) { // not required
+			if typeutils.IsZero(m.UploadArtifact[i]) { // not required
 				return nil
 			}
 
@@ -316,13 +317,13 @@ func (m *JobSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *JobSpec) UnmarshalBinary(b []byte) error {
 	var res JobSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

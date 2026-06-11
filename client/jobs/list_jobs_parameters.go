@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListJobsParams() *ListJobsParams {
-	return &ListJobsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListJobsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListJobsParamsWithTimeout creates a new ListJobsParams object
 // with the ability to set a timeout on a request.
 func NewListJobsParamsWithTimeout(timeout time.Duration) *ListJobsParams {
 	return &ListJobsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListJobsParamsWithContext creates a new ListJobsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListJobsParams].
 func NewListJobsParamsWithContext(ctx context.Context) *ListJobsParams {
 	return &ListJobsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type ListJobsParams struct {
 	*/
 	TargetSandbox *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list jobs params (not the query body).
@@ -90,65 +94,68 @@ func (o *ListJobsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list jobs params
+// WithTimeout adds the timeout to the list jobs params.
 func (o *ListJobsParams) WithTimeout(timeout time.Duration) *ListJobsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list jobs params
+// SetTimeout adds the timeout to the list jobs params.
 func (o *ListJobsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list jobs params
+// WithContext adds the context to the list jobs params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListJobsParams].
 func (o *ListJobsParams) WithContext(ctx context.Context) *ListJobsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list jobs params
+// SetContext adds the context to the list jobs params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListJobsParams].
 func (o *ListJobsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list jobs params
+// WithHTTPClient adds the HTTPClient to the list jobs params.
 func (o *ListJobsParams) WithHTTPClient(client *http.Client) *ListJobsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list jobs params
+// SetHTTPClient adds the HTTPClient to the list jobs params.
 func (o *ListJobsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list jobs params
+// WithOrgName adds the orgName to the list jobs params.
 func (o *ListJobsParams) WithOrgName(orgName string) *ListJobsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list jobs params
+// SetOrgName adds the orgName to the list jobs params.
 func (o *ListJobsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTargetSandbox adds the targetSandbox to the list jobs params
+// WithTargetSandbox adds the targetSandbox to the list jobs params.
 func (o *ListJobsParams) WithTargetSandbox(targetSandbox *string) *ListJobsParams {
 	o.SetTargetSandbox(targetSandbox)
 	return o
 }
 
-// SetTargetSandbox adds the targetSandbox to the list jobs params
+// SetTargetSandbox adds the targetSandbox to the list jobs params.
 func (o *ListJobsParams) SetTargetSandbox(targetSandbox *string) {
 	o.TargetSandbox = targetSandbox
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

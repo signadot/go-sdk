@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListRunnergroupParams() *ListRunnergroupParams {
-	return &ListRunnergroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListRunnergroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListRunnergroupParamsWithTimeout creates a new ListRunnergroupParams object
 // with the ability to set a timeout on a request.
 func NewListRunnergroupParamsWithTimeout(timeout time.Duration) *ListRunnergroupParams {
 	return &ListRunnergroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListRunnergroupParamsWithContext creates a new ListRunnergroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListRunnergroupParams].
 func NewListRunnergroupParamsWithContext(ctx context.Context) *ListRunnergroupParams {
 	return &ListRunnergroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type ListRunnergroupParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list runnergroup params (not the query body).
@@ -84,54 +88,57 @@ func (o *ListRunnergroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list runnergroup params
+// WithTimeout adds the timeout to the list runnergroup params.
 func (o *ListRunnergroupParams) WithTimeout(timeout time.Duration) *ListRunnergroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list runnergroup params
+// SetTimeout adds the timeout to the list runnergroup params.
 func (o *ListRunnergroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list runnergroup params
+// WithContext adds the context to the list runnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListRunnergroupParams].
 func (o *ListRunnergroupParams) WithContext(ctx context.Context) *ListRunnergroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list runnergroup params
+// SetContext adds the context to the list runnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListRunnergroupParams].
 func (o *ListRunnergroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list runnergroup params
+// WithHTTPClient adds the HTTPClient to the list runnergroup params.
 func (o *ListRunnergroupParams) WithHTTPClient(client *http.Client) *ListRunnergroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list runnergroup params
+// SetHTTPClient adds the HTTPClient to the list runnergroup params.
 func (o *ListRunnergroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list runnergroup params
+// WithOrgName adds the orgName to the list runnergroup params.
 func (o *ListRunnergroupParams) WithOrgName(orgName string) *ListRunnergroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list runnergroup params
+// SetOrgName adds the orgName to the list runnergroup params.
 func (o *ListRunnergroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListRunnergroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetTestExecutionParams() *GetTestExecutionParams {
-	return &GetTestExecutionParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetTestExecutionParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetTestExecutionParamsWithTimeout creates a new GetTestExecutionParams object
 // with the ability to set a timeout on a request.
 func NewGetTestExecutionParamsWithTimeout(timeout time.Duration) *GetTestExecutionParams {
 	return &GetTestExecutionParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetTestExecutionParamsWithContext creates a new GetTestExecutionParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetTestExecutionParams].
 func NewGetTestExecutionParamsWithContext(ctx context.Context) *GetTestExecutionParams {
 	return &GetTestExecutionParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetTestExecutionParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get test execution params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetTestExecutionParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get test execution params
+// WithTimeout adds the timeout to the get test execution params.
 func (o *GetTestExecutionParams) WithTimeout(timeout time.Duration) *GetTestExecutionParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get test execution params
+// SetTimeout adds the timeout to the get test execution params.
 func (o *GetTestExecutionParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get test execution params
+// WithContext adds the context to the get test execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetTestExecutionParams].
 func (o *GetTestExecutionParams) WithContext(ctx context.Context) *GetTestExecutionParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get test execution params
+// SetContext adds the context to the get test execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetTestExecutionParams].
 func (o *GetTestExecutionParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get test execution params
+// WithHTTPClient adds the HTTPClient to the get test execution params.
 func (o *GetTestExecutionParams) WithHTTPClient(client *http.Client) *GetTestExecutionParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get test execution params
+// SetHTTPClient adds the HTTPClient to the get test execution params.
 func (o *GetTestExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionID adds the executionID to the get test execution params
+// WithExecutionID adds the executionID to the get test execution params.
 func (o *GetTestExecutionParams) WithExecutionID(executionID string) *GetTestExecutionParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the get test execution params
+// SetExecutionID adds the executionId to the get test execution params.
 func (o *GetTestExecutionParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the get test execution params
+// WithOrgName adds the orgName to the get test execution params.
 func (o *GetTestExecutionParams) WithOrgName(orgName string) *GetTestExecutionParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get test execution params
+// SetOrgName adds the orgName to the get test execution params.
 func (o *GetTestExecutionParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetTestExecutionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

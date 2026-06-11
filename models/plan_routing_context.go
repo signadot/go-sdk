@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanRoutingContext plan routing context
@@ -42,7 +43,7 @@ func (m *PlanRoutingContext) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanRoutingContext) validateLiteral(formats strfmt.Registry) error {
-	if swag.IsZero(m.Literal) { // not required
+	if typeutils.IsZero(m.Literal) { // not required
 		return nil
 	}
 
@@ -65,7 +66,7 @@ func (m *PlanRoutingContext) validateLiteral(formats strfmt.Registry) error {
 }
 
 func (m *PlanRoutingContext) validateRef(formats strfmt.Registry) error {
-	if swag.IsZero(m.Ref) { // not required
+	if typeutils.IsZero(m.Ref) { // not required
 		return nil
 	}
 
@@ -109,7 +110,7 @@ func (m *PlanRoutingContext) contextValidateLiteral(ctx context.Context, formats
 
 	if m.Literal != nil {
 
-		if swag.IsZero(m.Literal) { // not required
+		if typeutils.IsZero(m.Literal) { // not required
 			return nil
 		}
 
@@ -134,7 +135,7 @@ func (m *PlanRoutingContext) contextValidateRef(ctx context.Context, formats str
 
 	if m.Ref != nil {
 
-		if swag.IsZero(m.Ref) { // not required
+		if typeutils.IsZero(m.Ref) { // not required
 			return nil
 		}
 
@@ -160,13 +161,13 @@ func (m *PlanRoutingContext) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanRoutingContext) UnmarshalBinary(b []byte) error {
 	var res PlanRoutingContext
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

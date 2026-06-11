@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteSecretParams() *DeleteSecretParams {
-	return &DeleteSecretParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteSecretParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteSecretParamsWithTimeout creates a new DeleteSecretParams object
 // with the ability to set a timeout on a request.
 func NewDeleteSecretParamsWithTimeout(timeout time.Duration) *DeleteSecretParams {
 	return &DeleteSecretParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteSecretParamsWithContext creates a new DeleteSecretParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteSecretParams].
 func NewDeleteSecretParamsWithContext(ctx context.Context) *DeleteSecretParams {
 	return &DeleteSecretParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeleteSecretParams struct {
 	*/
 	SecretName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete secret params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeleteSecretParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete secret params
+// WithTimeout adds the timeout to the delete secret params.
 func (o *DeleteSecretParams) WithTimeout(timeout time.Duration) *DeleteSecretParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete secret params
+// SetTimeout adds the timeout to the delete secret params.
 func (o *DeleteSecretParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete secret params
+// WithContext adds the context to the delete secret params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteSecretParams].
 func (o *DeleteSecretParams) WithContext(ctx context.Context) *DeleteSecretParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete secret params
+// SetContext adds the context to the delete secret params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteSecretParams].
 func (o *DeleteSecretParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete secret params
+// WithHTTPClient adds the HTTPClient to the delete secret params.
 func (o *DeleteSecretParams) WithHTTPClient(client *http.Client) *DeleteSecretParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete secret params
+// SetHTTPClient adds the HTTPClient to the delete secret params.
 func (o *DeleteSecretParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete secret params
+// WithOrgName adds the orgName to the delete secret params.
 func (o *DeleteSecretParams) WithOrgName(orgName string) *DeleteSecretParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete secret params
+// SetOrgName adds the orgName to the delete secret params.
 func (o *DeleteSecretParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSecretName adds the secretName to the delete secret params
+// WithSecretName adds the secretName to the delete secret params.
 func (o *DeleteSecretParams) WithSecretName(secretName string) *DeleteSecretParams {
 	o.SetSecretName(secretName)
 	return o
 }
 
-// SetSecretName adds the secretName to the delete secret params
+// SetSecretName adds the secretName to the delete secret params.
 func (o *DeleteSecretParams) SetSecretName(secretName string) {
 	o.SecretName = secretName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteSecretParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

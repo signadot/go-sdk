@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeletePlanParams() *DeletePlanParams {
-	return &DeletePlanParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeletePlanParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeletePlanParamsWithTimeout creates a new DeletePlanParams object
 // with the ability to set a timeout on a request.
 func NewDeletePlanParamsWithTimeout(timeout time.Duration) *DeletePlanParams {
 	return &DeletePlanParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeletePlanParamsWithContext creates a new DeletePlanParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanParams].
 func NewDeletePlanParamsWithContext(ctx context.Context) *DeletePlanParams {
 	return &DeletePlanParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeletePlanParams struct {
 	*/
 	PlanID string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete plan params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeletePlanParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete plan params
+// WithTimeout adds the timeout to the delete plan params.
 func (o *DeletePlanParams) WithTimeout(timeout time.Duration) *DeletePlanParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete plan params
+// SetTimeout adds the timeout to the delete plan params.
 func (o *DeletePlanParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete plan params
+// WithContext adds the context to the delete plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanParams].
 func (o *DeletePlanParams) WithContext(ctx context.Context) *DeletePlanParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete plan params
+// SetContext adds the context to the delete plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanParams].
 func (o *DeletePlanParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete plan params
+// WithHTTPClient adds the HTTPClient to the delete plan params.
 func (o *DeletePlanParams) WithHTTPClient(client *http.Client) *DeletePlanParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete plan params
+// SetHTTPClient adds the HTTPClient to the delete plan params.
 func (o *DeletePlanParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete plan params
+// WithOrgName adds the orgName to the delete plan params.
 func (o *DeletePlanParams) WithOrgName(orgName string) *DeletePlanParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete plan params
+// SetOrgName adds the orgName to the delete plan params.
 func (o *DeletePlanParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanID adds the planID to the delete plan params
+// WithPlanID adds the planID to the delete plan params.
 func (o *DeletePlanParams) WithPlanID(planID string) *DeletePlanParams {
 	o.SetPlanID(planID)
 	return o
 }
 
-// SetPlanID adds the planId to the delete plan params
+// SetPlanID adds the planId to the delete plan params.
 func (o *DeletePlanParams) SetPlanID(planID string) {
 	o.PlanID = planID
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeletePlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

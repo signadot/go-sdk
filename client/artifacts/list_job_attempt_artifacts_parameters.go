@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewListJobAttemptArtifactsParams creates a new ListJobAttemptArtifactsParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListJobAttemptArtifactsParams() *ListJobAttemptArtifactsParams {
-	return &ListJobAttemptArtifactsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListJobAttemptArtifactsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListJobAttemptArtifactsParamsWithTimeout creates a new ListJobAttemptArtifactsParams object
 // with the ability to set a timeout on a request.
 func NewListJobAttemptArtifactsParamsWithTimeout(timeout time.Duration) *ListJobAttemptArtifactsParams {
 	return &ListJobAttemptArtifactsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListJobAttemptArtifactsParamsWithContext creates a new ListJobAttemptArtifactsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListJobAttemptArtifactsParams].
 func NewListJobAttemptArtifactsParamsWithContext(ctx context.Context) *ListJobAttemptArtifactsParams {
 	return &ListJobAttemptArtifactsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -83,9 +87,9 @@ type ListJobAttemptArtifactsParams struct {
 	*/
 	Space *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list job attempt artifacts params (not the query body).
@@ -103,93 +107,96 @@ func (o *ListJobAttemptArtifactsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list job attempt artifacts params
+// WithTimeout adds the timeout to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) WithTimeout(timeout time.Duration) *ListJobAttemptArtifactsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list job attempt artifacts params
+// SetTimeout adds the timeout to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list job attempt artifacts params
+// WithContext adds the context to the list job attempt artifacts params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListJobAttemptArtifactsParams].
 func (o *ListJobAttemptArtifactsParams) WithContext(ctx context.Context) *ListJobAttemptArtifactsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list job attempt artifacts params
+// SetContext adds the context to the list job attempt artifacts params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListJobAttemptArtifactsParams].
 func (o *ListJobAttemptArtifactsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list job attempt artifacts params
+// WithHTTPClient adds the HTTPClient to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) WithHTTPClient(client *http.Client) *ListJobAttemptArtifactsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list job attempt artifacts params
+// SetHTTPClient adds the HTTPClient to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithJobAttempt adds the jobAttempt to the list job attempt artifacts params
+// WithJobAttempt adds the jobAttempt to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) WithJobAttempt(jobAttempt int64) *ListJobAttemptArtifactsParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
-// SetJobAttempt adds the jobAttempt to the list job attempt artifacts params
+// SetJobAttempt adds the jobAttempt to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
-// WithJobName adds the jobName to the list job attempt artifacts params
+// WithJobName adds the jobName to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) WithJobName(jobName string) *ListJobAttemptArtifactsParams {
 	o.SetJobName(jobName)
 	return o
 }
 
-// SetJobName adds the jobName to the list job attempt artifacts params
+// SetJobName adds the jobName to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) SetJobName(jobName string) {
 	o.JobName = jobName
 }
 
-// WithOrgName adds the orgName to the list job attempt artifacts params
+// WithOrgName adds the orgName to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) WithOrgName(orgName string) *ListJobAttemptArtifactsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list job attempt artifacts params
+// SetOrgName adds the orgName to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSpace adds the space to the list job attempt artifacts params
+// WithSpace adds the space to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) WithSpace(space *string) *ListJobAttemptArtifactsParams {
 	o.SetSpace(space)
 	return o
 }
 
-// SetSpace adds the space to the list job attempt artifacts params
+// SetSpace adds the space to the list job attempt artifacts params.
 func (o *ListJobAttemptArtifactsParams) SetSpace(space *string) {
 	o.Space = space
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListJobAttemptArtifactsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
+	if err := r.SetPathParam("jobAttempt", conv.FormatInteger(o.JobAttempt)); err != nil {
 		return err
 	}
 

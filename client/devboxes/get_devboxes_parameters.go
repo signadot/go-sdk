@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetDevboxesParams() *GetDevboxesParams {
-	return &GetDevboxesParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetDevboxesParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetDevboxesParamsWithTimeout creates a new GetDevboxesParams object
 // with the ability to set a timeout on a request.
 func NewGetDevboxesParamsWithTimeout(timeout time.Duration) *GetDevboxesParams {
 	return &GetDevboxesParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetDevboxesParamsWithContext creates a new GetDevboxesParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetDevboxesParams].
 func NewGetDevboxesParamsWithContext(ctx context.Context) *GetDevboxesParams {
 	return &GetDevboxesParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetDevboxesParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get devboxes params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetDevboxesParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get devboxes params
+// WithTimeout adds the timeout to the get devboxes params.
 func (o *GetDevboxesParams) WithTimeout(timeout time.Duration) *GetDevboxesParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get devboxes params
+// SetTimeout adds the timeout to the get devboxes params.
 func (o *GetDevboxesParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get devboxes params
+// WithContext adds the context to the get devboxes params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetDevboxesParams].
 func (o *GetDevboxesParams) WithContext(ctx context.Context) *GetDevboxesParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get devboxes params
+// SetContext adds the context to the get devboxes params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetDevboxesParams].
 func (o *GetDevboxesParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get devboxes params
+// WithHTTPClient adds the HTTPClient to the get devboxes params.
 func (o *GetDevboxesParams) WithHTTPClient(client *http.Client) *GetDevboxesParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get devboxes params
+// SetHTTPClient adds the HTTPClient to the get devboxes params.
 func (o *GetDevboxesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithAll adds the all to the get devboxes params
+// WithAll adds the all to the get devboxes params.
 func (o *GetDevboxesParams) WithAll(all *string) *GetDevboxesParams {
 	o.SetAll(all)
 	return o
 }
 
-// SetAll adds the all to the get devboxes params
+// SetAll adds the all to the get devboxes params.
 func (o *GetDevboxesParams) SetAll(all *string) {
 	o.All = all
 }
 
-// WithOrgName adds the orgName to the get devboxes params
+// WithOrgName adds the orgName to the get devboxes params.
 func (o *GetDevboxesParams) WithOrgName(orgName string) *GetDevboxesParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get devboxes params
+// SetOrgName adds the orgName to the get devboxes params.
 func (o *GetDevboxesParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetDevboxesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

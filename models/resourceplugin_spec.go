@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // ResourcepluginSpec resourceplugin spec
@@ -53,12 +54,12 @@ func (m *ResourcepluginSpec) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ResourcepluginSpec) validateCreate(formats strfmt.Registry) error {
-	if swag.IsZero(m.Create) { // not required
+	if typeutils.IsZero(m.Create) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Create); i++ {
-		if swag.IsZero(m.Create[i]) { // not required
+		if typeutils.IsZero(m.Create[i]) { // not required
 			continue
 		}
 
@@ -83,12 +84,12 @@ func (m *ResourcepluginSpec) validateCreate(formats strfmt.Registry) error {
 }
 
 func (m *ResourcepluginSpec) validateDelete(formats strfmt.Registry) error {
-	if swag.IsZero(m.Delete) { // not required
+	if typeutils.IsZero(m.Delete) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Delete); i++ {
-		if swag.IsZero(m.Delete[i]) { // not required
+		if typeutils.IsZero(m.Delete[i]) { // not required
 			continue
 		}
 
@@ -113,7 +114,7 @@ func (m *ResourcepluginSpec) validateDelete(formats strfmt.Registry) error {
 }
 
 func (m *ResourcepluginSpec) validateRunner(formats strfmt.Registry) error {
-	if swag.IsZero(m.Runner) { // not required
+	if typeutils.IsZero(m.Runner) { // not required
 		return nil
 	}
 
@@ -163,7 +164,7 @@ func (m *ResourcepluginSpec) contextValidateCreate(ctx context.Context, formats 
 
 		if m.Create[i] != nil {
 
-			if swag.IsZero(m.Create[i]) { // not required
+			if typeutils.IsZero(m.Create[i]) { // not required
 				return nil
 			}
 
@@ -192,7 +193,7 @@ func (m *ResourcepluginSpec) contextValidateDelete(ctx context.Context, formats 
 
 		if m.Delete[i] != nil {
 
-			if swag.IsZero(m.Delete[i]) { // not required
+			if typeutils.IsZero(m.Delete[i]) { // not required
 				return nil
 			}
 
@@ -219,7 +220,7 @@ func (m *ResourcepluginSpec) contextValidateRunner(ctx context.Context, formats 
 
 	if m.Runner != nil {
 
-		if swag.IsZero(m.Runner) { // not required
+		if typeutils.IsZero(m.Runner) { // not required
 			return nil
 		}
 
@@ -245,13 +246,13 @@ func (m *ResourcepluginSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ResourcepluginSpec) UnmarshalBinary(b []byte) error {
 	var res ResourcepluginSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

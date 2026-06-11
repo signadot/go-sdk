@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAuthDeviceGetCodeParams() *AuthDeviceGetCodeParams {
-	return &AuthDeviceGetCodeParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewAuthDeviceGetCodeParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewAuthDeviceGetCodeParamsWithTimeout creates a new AuthDeviceGetCodeParams object
 // with the ability to set a timeout on a request.
 func NewAuthDeviceGetCodeParamsWithTimeout(timeout time.Duration) *AuthDeviceGetCodeParams {
 	return &AuthDeviceGetCodeParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewAuthDeviceGetCodeParamsWithContext creates a new AuthDeviceGetCodeParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceGetCodeParams].
 func NewAuthDeviceGetCodeParamsWithContext(ctx context.Context) *AuthDeviceGetCodeParams {
 	return &AuthDeviceGetCodeParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -57,9 +61,9 @@ AuthDeviceGetCodeParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type AuthDeviceGetCodeParams struct {
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the auth device get code params (not the query body).
@@ -77,43 +81,46 @@ func (o *AuthDeviceGetCodeParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the auth device get code params
+// WithTimeout adds the timeout to the auth device get code params.
 func (o *AuthDeviceGetCodeParams) WithTimeout(timeout time.Duration) *AuthDeviceGetCodeParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the auth device get code params
+// SetTimeout adds the timeout to the auth device get code params.
 func (o *AuthDeviceGetCodeParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the auth device get code params
+// WithContext adds the context to the auth device get code params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceGetCodeParams].
 func (o *AuthDeviceGetCodeParams) WithContext(ctx context.Context) *AuthDeviceGetCodeParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the auth device get code params
+// SetContext adds the context to the auth device get code params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceGetCodeParams].
 func (o *AuthDeviceGetCodeParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the auth device get code params
+// WithHTTPClient adds the HTTPClient to the auth device get code params.
 func (o *AuthDeviceGetCodeParams) WithHTTPClient(client *http.Client) *AuthDeviceGetCodeParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the auth device get code params
+// SetHTTPClient adds the HTTPClient to the auth device get code params.
 func (o *AuthDeviceGetCodeParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *AuthDeviceGetCodeParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

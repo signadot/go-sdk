@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TrafficDiffPointResult traffic diff point result
@@ -43,7 +44,7 @@ func (m *TrafficDiffPointResult) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiffPointResult) validateBy(formats strfmt.Registry) error {
-	if swag.IsZero(m.By) { // not required
+	if typeutils.IsZero(m.By) { // not required
 		return nil
 	}
 
@@ -66,12 +67,12 @@ func (m *TrafficDiffPointResult) validateBy(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiffPointResult) validateDiffs(formats strfmt.Registry) error {
-	if swag.IsZero(m.Diffs) { // not required
+	if typeutils.IsZero(m.Diffs) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Diffs); i++ {
-		if swag.IsZero(m.Diffs[i]) { // not required
+		if typeutils.IsZero(m.Diffs[i]) { // not required
 			continue
 		}
 
@@ -117,7 +118,7 @@ func (m *TrafficDiffPointResult) contextValidateBy(ctx context.Context, formats 
 
 	if m.By != nil {
 
-		if swag.IsZero(m.By) { // not required
+		if typeutils.IsZero(m.By) { // not required
 			return nil
 		}
 
@@ -144,7 +145,7 @@ func (m *TrafficDiffPointResult) contextValidateDiffs(ctx context.Context, forma
 
 		if m.Diffs[i] != nil {
 
-			if swag.IsZero(m.Diffs[i]) { // not required
+			if typeutils.IsZero(m.Diffs[i]) { // not required
 				return nil
 			}
 
@@ -172,13 +173,13 @@ func (m *TrafficDiffPointResult) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TrafficDiffPointResult) UnmarshalBinary(b []byte) error {
 	var res TrafficDiffPointResult
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

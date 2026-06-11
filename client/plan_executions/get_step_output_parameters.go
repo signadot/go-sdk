@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetStepOutputParams() *GetStepOutputParams {
-	return &GetStepOutputParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetStepOutputParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetStepOutputParamsWithTimeout creates a new GetStepOutputParams object
 // with the ability to set a timeout on a request.
 func NewGetStepOutputParamsWithTimeout(timeout time.Duration) *GetStepOutputParams {
 	return &GetStepOutputParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetStepOutputParamsWithContext creates a new GetStepOutputParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetStepOutputParams].
 func NewGetStepOutputParamsWithContext(ctx context.Context) *GetStepOutputParams {
 	return &GetStepOutputParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -82,9 +86,9 @@ type GetStepOutputParams struct {
 	*/
 	StepID string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get step output params (not the query body).
@@ -102,87 +106,90 @@ func (o *GetStepOutputParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get step output params
+// WithTimeout adds the timeout to the get step output params.
 func (o *GetStepOutputParams) WithTimeout(timeout time.Duration) *GetStepOutputParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get step output params
+// SetTimeout adds the timeout to the get step output params.
 func (o *GetStepOutputParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get step output params
+// WithContext adds the context to the get step output params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetStepOutputParams].
 func (o *GetStepOutputParams) WithContext(ctx context.Context) *GetStepOutputParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get step output params
+// SetContext adds the context to the get step output params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetStepOutputParams].
 func (o *GetStepOutputParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get step output params
+// WithHTTPClient adds the HTTPClient to the get step output params.
 func (o *GetStepOutputParams) WithHTTPClient(client *http.Client) *GetStepOutputParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get step output params
+// SetHTTPClient adds the HTTPClient to the get step output params.
 func (o *GetStepOutputParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionID adds the executionID to the get step output params
+// WithExecutionID adds the executionID to the get step output params.
 func (o *GetStepOutputParams) WithExecutionID(executionID string) *GetStepOutputParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the get step output params
+// SetExecutionID adds the executionId to the get step output params.
 func (o *GetStepOutputParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the get step output params
+// WithOrgName adds the orgName to the get step output params.
 func (o *GetStepOutputParams) WithOrgName(orgName string) *GetStepOutputParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get step output params
+// SetOrgName adds the orgName to the get step output params.
 func (o *GetStepOutputParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithOutputName adds the outputName to the get step output params
+// WithOutputName adds the outputName to the get step output params.
 func (o *GetStepOutputParams) WithOutputName(outputName string) *GetStepOutputParams {
 	o.SetOutputName(outputName)
 	return o
 }
 
-// SetOutputName adds the outputName to the get step output params
+// SetOutputName adds the outputName to the get step output params.
 func (o *GetStepOutputParams) SetOutputName(outputName string) {
 	o.OutputName = outputName
 }
 
-// WithStepID adds the stepID to the get step output params
+// WithStepID adds the stepID to the get step output params.
 func (o *GetStepOutputParams) WithStepID(stepID string) *GetStepOutputParams {
 	o.SetStepID(stepID)
 	return o
 }
 
-// SetStepID adds the stepId to the get step output params
+// SetStepID adds the stepId to the get step output params.
 func (o *GetStepOutputParams) SetStepID(stepID string) {
 	o.StepID = stepID
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetStepOutputParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

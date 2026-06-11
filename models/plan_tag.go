@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanTag plan tag
@@ -60,12 +61,12 @@ func (m *PlanTag) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanTag) validateHistory(formats strfmt.Registry) error {
-	if swag.IsZero(m.History) { // not required
+	if typeutils.IsZero(m.History) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.History); i++ {
-		if swag.IsZero(m.History[i]) { // not required
+		if typeutils.IsZero(m.History[i]) { // not required
 			continue
 		}
 
@@ -90,7 +91,7 @@ func (m *PlanTag) validateHistory(formats strfmt.Registry) error {
 }
 
 func (m *PlanTag) validatePlan(formats strfmt.Registry) error {
-	if swag.IsZero(m.Plan) { // not required
+	if typeutils.IsZero(m.Plan) { // not required
 		return nil
 	}
 
@@ -113,7 +114,7 @@ func (m *PlanTag) validatePlan(formats strfmt.Registry) error {
 }
 
 func (m *PlanTag) validateSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.Spec) { // not required
+	if typeutils.IsZero(m.Spec) { // not required
 		return nil
 	}
 
@@ -136,7 +137,7 @@ func (m *PlanTag) validateSpec(formats strfmt.Registry) error {
 }
 
 func (m *PlanTag) validateStatus(formats strfmt.Registry) error {
-	if swag.IsZero(m.Status) { // not required
+	if typeutils.IsZero(m.Status) { // not required
 		return nil
 	}
 
@@ -190,7 +191,7 @@ func (m *PlanTag) contextValidateHistory(ctx context.Context, formats strfmt.Reg
 
 		if m.History[i] != nil {
 
-			if swag.IsZero(m.History[i]) { // not required
+			if typeutils.IsZero(m.History[i]) { // not required
 				return nil
 			}
 
@@ -217,7 +218,7 @@ func (m *PlanTag) contextValidatePlan(ctx context.Context, formats strfmt.Regist
 
 	if m.Plan != nil {
 
-		if swag.IsZero(m.Plan) { // not required
+		if typeutils.IsZero(m.Plan) { // not required
 			return nil
 		}
 
@@ -242,7 +243,7 @@ func (m *PlanTag) contextValidateSpec(ctx context.Context, formats strfmt.Regist
 
 	if m.Spec != nil {
 
-		if swag.IsZero(m.Spec) { // not required
+		if typeutils.IsZero(m.Spec) { // not required
 			return nil
 		}
 
@@ -267,7 +268,7 @@ func (m *PlanTag) contextValidateStatus(ctx context.Context, formats strfmt.Regi
 
 	if m.Status != nil {
 
-		if swag.IsZero(m.Status) { // not required
+		if typeutils.IsZero(m.Status) { // not required
 			return nil
 		}
 
@@ -293,13 +294,13 @@ func (m *PlanTag) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanTag) UnmarshalBinary(b []byte) error {
 	var res PlanTag
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

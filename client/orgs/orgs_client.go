@@ -3,7 +3,9 @@
 package orgs
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new orgs API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new orgs API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new orgs API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,33 +45,62 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for orgs API
+Client for orgs API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// GetOrgName get org name.
 	GetOrgName(params *GetOrgNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrgNameOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// GetOrgNameContext get org name.
+	GetOrgNameContext(ctx context.Context, params *GetOrgNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrgNameOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-GetOrgName gets org name
+GetOrgNamegets org name.
 
-Get organization details
+Get organization details.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetOrgNameContext] instead.
 */
 func (a *Client) GetOrgName(params *GetOrgNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrgNameOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetOrgNameContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetOrgNameContextgets org name.
+
+Get organization details.
+
+Do not use the deprecated [GetOrgNameParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetOrgNameContext(ctx context.Context, params *GetOrgNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrgNameOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetOrgNameParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-org-name",
 		Method:             "GET",
@@ -78,13 +111,14 @@ func (a *Client) GetOrgName(params *GetOrgNameParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &GetOrgNameReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -105,6 +139,14 @@ func (a *Client) GetOrgName(params *GetOrgNameParams, authInfo runtime.ClientAut
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [OrgsParams].
+	ctx context.Context
 }

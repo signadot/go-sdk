@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateJobParams() *CreateJobParams {
-	return &CreateJobParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewCreateJobParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewCreateJobParamsWithTimeout creates a new CreateJobParams object
 // with the ability to set a timeout on a request.
 func NewCreateJobParamsWithTimeout(timeout time.Duration) *CreateJobParams {
 	return &CreateJobParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewCreateJobParamsWithContext creates a new CreateJobParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateJobParams].
 func NewCreateJobParamsWithContext(ctx context.Context) *CreateJobParams {
 	return &CreateJobParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -72,9 +75,9 @@ type CreateJobParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the create job params (not the query body).
@@ -92,65 +95,68 @@ func (o *CreateJobParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the create job params
+// WithTimeout adds the timeout to the create job params.
 func (o *CreateJobParams) WithTimeout(timeout time.Duration) *CreateJobParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the create job params
+// SetTimeout adds the timeout to the create job params.
 func (o *CreateJobParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the create job params
+// WithContext adds the context to the create job params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateJobParams].
 func (o *CreateJobParams) WithContext(ctx context.Context) *CreateJobParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the create job params
+// SetContext adds the context to the create job params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateJobParams].
 func (o *CreateJobParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the create job params
+// WithHTTPClient adds the HTTPClient to the create job params.
 func (o *CreateJobParams) WithHTTPClient(client *http.Client) *CreateJobParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the create job params
+// SetHTTPClient adds the HTTPClient to the create job params.
 func (o *CreateJobParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the create job params
+// WithData adds the data to the create job params.
 func (o *CreateJobParams) WithData(data *models.Job) *CreateJobParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the create job params
+// SetData adds the data to the create job params.
 func (o *CreateJobParams) SetData(data *models.Job) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the create job params
+// WithOrgName adds the orgName to the create job params.
 func (o *CreateJobParams) WithOrgName(orgName string) *CreateJobParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the create job params
+// SetOrgName adds the orgName to the create job params.
 func (o *CreateJobParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *CreateJobParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

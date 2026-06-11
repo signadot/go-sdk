@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewUploadJobAttemptArtifactParams creates a new UploadJobAttemptArtifactParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUploadJobAttemptArtifactParams() *UploadJobAttemptArtifactParams {
-	return &UploadJobAttemptArtifactParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewUploadJobAttemptArtifactParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewUploadJobAttemptArtifactParamsWithTimeout creates a new UploadJobAttemptArtifactParams object
 // with the ability to set a timeout on a request.
 func NewUploadJobAttemptArtifactParamsWithTimeout(timeout time.Duration) *UploadJobAttemptArtifactParams {
 	return &UploadJobAttemptArtifactParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewUploadJobAttemptArtifactParamsWithContext creates a new UploadJobAttemptArtifactParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [UploadJobAttemptArtifactParams].
 func NewUploadJobAttemptArtifactParamsWithContext(ctx context.Context) *UploadJobAttemptArtifactParams {
 	return &UploadJobAttemptArtifactParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -113,9 +117,9 @@ type UploadJobAttemptArtifactParams struct {
 	*/
 	Space *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the upload job attempt artifact params (not the query body).
@@ -133,142 +137,145 @@ func (o *UploadJobAttemptArtifactParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the upload job attempt artifact params
+// WithTimeout adds the timeout to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithTimeout(timeout time.Duration) *UploadJobAttemptArtifactParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the upload job attempt artifact params
+// SetTimeout adds the timeout to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the upload job attempt artifact params
+// WithContext adds the context to the upload job attempt artifact params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [UploadJobAttemptArtifactParams].
 func (o *UploadJobAttemptArtifactParams) WithContext(ctx context.Context) *UploadJobAttemptArtifactParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the upload job attempt artifact params
+// SetContext adds the context to the upload job attempt artifact params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [UploadJobAttemptArtifactParams].
 func (o *UploadJobAttemptArtifactParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the upload job attempt artifact params
+// WithHTTPClient adds the HTTPClient to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithHTTPClient(client *http.Client) *UploadJobAttemptArtifactParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the upload job attempt artifact params
+// SetHTTPClient adds the HTTPClient to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithArtifact adds the artifact to the upload job attempt artifact params
+// WithArtifact adds the artifact to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithArtifact(artifact runtime.NamedReadCloser) *UploadJobAttemptArtifactParams {
 	o.SetArtifact(artifact)
 	return o
 }
 
-// SetArtifact adds the artifact to the upload job attempt artifact params
+// SetArtifact adds the artifact to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetArtifact(artifact runtime.NamedReadCloser) {
 	o.Artifact = artifact
 }
 
-// WithChecksumSHA256 adds the checksumSHA256 to the upload job attempt artifact params
+// WithChecksumSHA256 adds the checksumSHA256 to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithChecksumSHA256(checksumSHA256 *string) *UploadJobAttemptArtifactParams {
 	o.SetChecksumSHA256(checksumSHA256)
 	return o
 }
 
-// SetChecksumSHA256 adds the checksumSHA256 to the upload job attempt artifact params
+// SetChecksumSHA256 adds the checksumSHA256 to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetChecksumSHA256(checksumSHA256 *string) {
 	o.ChecksumSHA256 = checksumSHA256
 }
 
-// WithJobAttempt adds the jobAttempt to the upload job attempt artifact params
+// WithJobAttempt adds the jobAttempt to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithJobAttempt(jobAttempt int64) *UploadJobAttemptArtifactParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
-// SetJobAttempt adds the jobAttempt to the upload job attempt artifact params
+// SetJobAttempt adds the jobAttempt to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
-// WithJobExecution adds the jobExecution to the upload job attempt artifact params
+// WithJobExecution adds the jobExecution to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithJobExecution(jobExecution *int64) *UploadJobAttemptArtifactParams {
 	o.SetJobExecution(jobExecution)
 	return o
 }
 
-// SetJobExecution adds the jobExecution to the upload job attempt artifact params
+// SetJobExecution adds the jobExecution to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetJobExecution(jobExecution *int64) {
 	o.JobExecution = jobExecution
 }
 
-// WithJobName adds the jobName to the upload job attempt artifact params
+// WithJobName adds the jobName to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithJobName(jobName string) *UploadJobAttemptArtifactParams {
 	o.SetJobName(jobName)
 	return o
 }
 
-// SetJobName adds the jobName to the upload job attempt artifact params
+// SetJobName adds the jobName to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetJobName(jobName string) {
 	o.JobName = jobName
 }
 
-// WithMetadata adds the metadata to the upload job attempt artifact params
+// WithMetadata adds the metadata to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithMetadata(metadata *string) *UploadJobAttemptArtifactParams {
 	o.SetMetadata(metadata)
 	return o
 }
 
-// SetMetadata adds the metadata to the upload job attempt artifact params
+// SetMetadata adds the metadata to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetMetadata(metadata *string) {
 	o.Metadata = metadata
 }
 
-// WithOrgName adds the orgName to the upload job attempt artifact params
+// WithOrgName adds the orgName to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithOrgName(orgName string) *UploadJobAttemptArtifactParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the upload job attempt artifact params
+// SetOrgName adds the orgName to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPath adds the path to the upload job attempt artifact params
+// WithPath adds the path to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithPath(path string) *UploadJobAttemptArtifactParams {
 	o.SetPath(path)
 	return o
 }
 
-// SetPath adds the path to the upload job attempt artifact params
+// SetPath adds the path to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
-// WithSpace adds the space to the upload job attempt artifact params
+// WithSpace adds the space to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) WithSpace(space *string) *UploadJobAttemptArtifactParams {
 	o.SetSpace(space)
 	return o
 }
 
-// SetSpace adds the space to the upload job attempt artifact params
+// SetSpace adds the space to the upload job attempt artifact params.
 func (o *UploadJobAttemptArtifactParams) SetSpace(space *string) {
 	o.Space = space
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *UploadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
@@ -293,7 +300,7 @@ func (o *UploadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest,
 	}
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
+	if err := r.SetPathParam("jobAttempt", conv.FormatInteger(o.JobAttempt)); err != nil {
 		return err
 	}
 
@@ -304,7 +311,7 @@ func (o *UploadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest,
 		if o.JobExecution != nil {
 			frJobExecution = *o.JobExecution
 		}
-		fJobExecution := swag.FormatInt64(frJobExecution)
+		fJobExecution := conv.FormatInteger(frJobExecution)
 		if fJobExecution != "" {
 			if err := r.SetFormParam("jobExecution", fJobExecution); err != nil {
 				return err

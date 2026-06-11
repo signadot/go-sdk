@@ -3,7 +3,9 @@
 package tests
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new tests API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new tests API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new tests API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,39 +45,80 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for tests API
+Client for tests API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// ApplyTest create or update a test.
 	ApplyTest(params *ApplyTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyTestOK, error)
 
+	// ApplyTestContext create or update a test.
+	ApplyTestContext(ctx context.Context, params *ApplyTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyTestOK, error)
+
+	// DeleteTest delete a test.
 	DeleteTest(params *DeleteTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteTestOK, error)
 
+	// DeleteTestContext delete a test.
+	DeleteTestContext(ctx context.Context, params *DeleteTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteTestOK, error)
+
+	// GetTest get a test.
 	GetTest(params *GetTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestOK, error)
 
+	// GetTestContext get a test.
+	GetTestContext(ctx context.Context, params *GetTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestOK, error)
+
+	// ListTests list tests.
 	ListTests(params *ListTestsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListTestsContext list tests.
+	ListTestsContext(ctx context.Context, params *ListTestsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-ApplyTest creates or update a test
+ApplyTestcreates or update a test.
 
-Creates or updates a test with the provided parameters.
+Creates or updates a test with the provided parameters..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ApplyTestContext] instead.
 */
 func (a *Client) ApplyTest(params *ApplyTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyTestOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ApplyTestContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ApplyTestContextcreates or update a test.
+
+Creates or updates a test with the provided parameters..
+
+Do not use the deprecated [ApplyTestParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ApplyTestContext(ctx context.Context, params *ApplyTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyTestOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewApplyTestParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "apply-test",
 		Method:             "PUT",
@@ -84,13 +129,14 @@ func (a *Client) ApplyTest(params *ApplyTestParams, authInfo runtime.ClientAuthI
 		Params:             params,
 		Reader:             &ApplyTestReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -111,15 +157,39 @@ func (a *Client) ApplyTest(params *ApplyTestParams, authInfo runtime.ClientAuthI
 }
 
 /*
-DeleteTest deletes a test
+DeleteTestdeletes a test.
 
-Delete a given test.
+Delete a given test..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteTestContext] instead.
 */
 func (a *Client) DeleteTest(params *DeleteTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteTestOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteTestContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteTestContextdeletes a test.
+
+Delete a given test..
+
+Do not use the deprecated [DeleteTestParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteTestContext(ctx context.Context, params *DeleteTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteTestOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteTestParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-test",
 		Method:             "DELETE",
@@ -130,13 +200,14 @@ func (a *Client) DeleteTest(params *DeleteTestParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &DeleteTestReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -157,15 +228,39 @@ func (a *Client) DeleteTest(params *DeleteTestParams, authInfo runtime.ClientAut
 }
 
 /*
-GetTest gets a test
+GetTestgets a test.
 
-Fetch the details about a given test.
+Fetch the details about a given test..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetTestContext] instead.
 */
 func (a *Client) GetTest(params *GetTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetTestContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetTestContextgets a test.
+
+Fetch the details about a given test..
+
+Do not use the deprecated [GetTestParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetTestContext(ctx context.Context, params *GetTestParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetTestParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-test",
 		Method:             "GET",
@@ -176,13 +271,14 @@ func (a *Client) GetTest(params *GetTestParams, authInfo runtime.ClientAuthInfoW
 		Params:             params,
 		Reader:             &GetTestReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -203,15 +299,39 @@ func (a *Client) GetTest(params *GetTestParams, authInfo runtime.ClientAuthInfoW
 }
 
 /*
-ListTests lists tests
+ListTestslists tests.
 
-List Tests
+List Tests.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListTestsContext] instead.
 */
 func (a *Client) ListTests(params *ListTestsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListTestsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListTestsContextlists tests.
+
+List Tests.
+
+Do not use the deprecated [ListTestsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListTestsContext(ctx context.Context, params *ListTestsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListTestsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-tests",
 		Method:             "GET",
@@ -222,13 +342,14 @@ func (a *Client) ListTests(params *ListTestsParams, authInfo runtime.ClientAuthI
 		Params:             params,
 		Reader:             &ListTestsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -249,6 +370,14 @@ func (a *Client) ListTests(params *ListTestsParams, authInfo runtime.ClientAuthI
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [TestsParams].
+	ctx context.Context
 }

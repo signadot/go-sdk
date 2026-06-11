@@ -3,8 +3,10 @@
 package plan_execution_logs
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -12,11 +14,12 @@ import (
 )
 
 // New creates a new plan execution logs API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new plan execution logs API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -30,6 +33,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new plan execution logs API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -42,10 +46,10 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for plan execution logs API
+Client for plan execution logs API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
@@ -81,27 +85,64 @@ func WithAcceptTextPlain(r *runtime.ClientOperation) {
 	r.ProducesMediaTypes = []string{"text/plain"}
 }
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// DownloadStepLog download a step log.
 	DownloadStepLog(params *DownloadStepLogParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadStepLogOK, *DownloadStepLogPartialContent, error)
 
+	// DownloadStepLogContext download a step log.
+	DownloadStepLogContext(ctx context.Context, params *DownloadStepLogParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadStepLogOK, *DownloadStepLogPartialContent, error)
+
+	// StreamPlanExecutionLogs stream aggregated plan logs.
 	StreamPlanExecutionLogs(params *StreamPlanExecutionLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionLogsOK, error)
 
+	// StreamPlanExecutionLogsContext stream aggregated plan logs.
+	StreamPlanExecutionLogsContext(ctx context.Context, params *StreamPlanExecutionLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionLogsOK, error)
+
+	// StreamPlanExecutionStepLogs stream step logs.
 	StreamPlanExecutionStepLogs(params *StreamPlanExecutionStepLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionStepLogsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// StreamPlanExecutionStepLogsContext stream step logs.
+	StreamPlanExecutionStepLogsContext(ctx context.Context, params *StreamPlanExecutionStepLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionStepLogsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-DownloadStepLog downloads a step log
+DownloadStepLogdownloads a step log.
 
-Returns the captured stdout or stderr for a specific step. Inlined values are served directly; large logs are proxied from S3.
+Returns the captured stdout or stderr for a specific step. Inlined values are served directly; large logs are proxied from S3..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DownloadStepLogContext] instead.
 */
 func (a *Client) DownloadStepLog(params *DownloadStepLogParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadStepLogOK, *DownloadStepLogPartialContent, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DownloadStepLogContext(ctx, params, authInfo, writer, opts...)
+}
+
+/*
+DownloadStepLogContextdownloads a step log.
+
+Returns the captured stdout or stderr for a specific step. Inlined values are served directly; large logs are proxied from S3..
+
+Do not use the deprecated [DownloadStepLogParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DownloadStepLogContext(ctx context.Context, params *DownloadStepLogParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadStepLogOK, *DownloadStepLogPartialContent, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDownloadStepLogParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "download-step-log",
 		Method:             "GET",
@@ -112,13 +153,14 @@ func (a *Client) DownloadStepLog(params *DownloadStepLogParams, authInfo runtime
 		Params:             params,
 		Reader:             &DownloadStepLogReader{formats: a.formats, writer: writer},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -139,15 +181,39 @@ func (a *Client) DownloadStepLog(params *DownloadStepLogParams, authInfo runtime
 }
 
 /*
-StreamPlanExecutionLogs streams aggregated plan logs
+StreamPlanExecutionLogsstreams aggregated plan logs.
 
-Stream live logs for all steps of a plan execution, multiplexed into a single stream.
+Stream live logs for all steps of a plan execution, multiplexed into a single stream..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.StreamPlanExecutionLogsContext] instead.
 */
 func (a *Client) StreamPlanExecutionLogs(params *StreamPlanExecutionLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionLogsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.StreamPlanExecutionLogsContext(ctx, params, authInfo, writer, opts...)
+}
+
+/*
+StreamPlanExecutionLogsContextstreams aggregated plan logs.
+
+Stream live logs for all steps of a plan execution, multiplexed into a single stream..
+
+Do not use the deprecated [StreamPlanExecutionLogsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) StreamPlanExecutionLogsContext(ctx context.Context, params *StreamPlanExecutionLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionLogsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewStreamPlanExecutionLogsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "stream-plan-execution-logs",
 		Method:             "GET",
@@ -158,13 +224,14 @@ func (a *Client) StreamPlanExecutionLogs(params *StreamPlanExecutionLogsParams, 
 		Params:             params,
 		Reader:             &StreamPlanExecutionLogsReader{formats: a.formats, writer: writer},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -185,15 +252,39 @@ func (a *Client) StreamPlanExecutionLogs(params *StreamPlanExecutionLogsParams, 
 }
 
 /*
-StreamPlanExecutionStepLogs streams step logs
+StreamPlanExecutionStepLogsstreams step logs.
 
-Stream live stdout or stderr logs for a specific step of a plan execution.
+Stream live stdout or stderr logs for a specific step of a plan execution..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.StreamPlanExecutionStepLogsContext] instead.
 */
 func (a *Client) StreamPlanExecutionStepLogs(params *StreamPlanExecutionStepLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionStepLogsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.StreamPlanExecutionStepLogsContext(ctx, params, authInfo, writer, opts...)
+}
+
+/*
+StreamPlanExecutionStepLogsContextstreams step logs.
+
+Stream live stdout or stderr logs for a specific step of a plan execution..
+
+Do not use the deprecated [StreamPlanExecutionStepLogsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) StreamPlanExecutionStepLogsContext(ctx context.Context, params *StreamPlanExecutionStepLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamPlanExecutionStepLogsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewStreamPlanExecutionStepLogsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "stream-plan-execution-step-logs",
 		Method:             "GET",
@@ -204,13 +295,14 @@ func (a *Client) StreamPlanExecutionStepLogs(params *StreamPlanExecutionStepLogs
 		Params:             params,
 		Reader:             &StreamPlanExecutionStepLogsReader{formats: a.formats, writer: writer},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -231,6 +323,14 @@ func (a *Client) StreamPlanExecutionStepLogs(params *StreamPlanExecutionStepLogs
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [PlanExecutionLogsParams].
+	ctx context.Context
 }

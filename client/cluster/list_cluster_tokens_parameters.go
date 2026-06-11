@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListClusterTokensParams() *ListClusterTokensParams {
-	return &ListClusterTokensParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListClusterTokensParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListClusterTokensParamsWithTimeout creates a new ListClusterTokensParams object
 // with the ability to set a timeout on a request.
 func NewListClusterTokensParamsWithTimeout(timeout time.Duration) *ListClusterTokensParams {
 	return &ListClusterTokensParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListClusterTokensParamsWithContext creates a new ListClusterTokensParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListClusterTokensParams].
 func NewListClusterTokensParamsWithContext(ctx context.Context) *ListClusterTokensParams {
 	return &ListClusterTokensParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type ListClusterTokensParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list cluster tokens params (not the query body).
@@ -90,65 +94,68 @@ func (o *ListClusterTokensParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list cluster tokens params
+// WithTimeout adds the timeout to the list cluster tokens params.
 func (o *ListClusterTokensParams) WithTimeout(timeout time.Duration) *ListClusterTokensParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list cluster tokens params
+// SetTimeout adds the timeout to the list cluster tokens params.
 func (o *ListClusterTokensParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list cluster tokens params
+// WithContext adds the context to the list cluster tokens params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListClusterTokensParams].
 func (o *ListClusterTokensParams) WithContext(ctx context.Context) *ListClusterTokensParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list cluster tokens params
+// SetContext adds the context to the list cluster tokens params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListClusterTokensParams].
 func (o *ListClusterTokensParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list cluster tokens params
+// WithHTTPClient adds the HTTPClient to the list cluster tokens params.
 func (o *ListClusterTokensParams) WithHTTPClient(client *http.Client) *ListClusterTokensParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list cluster tokens params
+// SetHTTPClient adds the HTTPClient to the list cluster tokens params.
 func (o *ListClusterTokensParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithClusterName adds the clusterName to the list cluster tokens params
+// WithClusterName adds the clusterName to the list cluster tokens params.
 func (o *ListClusterTokensParams) WithClusterName(clusterName string) *ListClusterTokensParams {
 	o.SetClusterName(clusterName)
 	return o
 }
 
-// SetClusterName adds the clusterName to the list cluster tokens params
+// SetClusterName adds the clusterName to the list cluster tokens params.
 func (o *ListClusterTokensParams) SetClusterName(clusterName string) {
 	o.ClusterName = clusterName
 }
 
-// WithOrgName adds the orgName to the list cluster tokens params
+// WithOrgName adds the orgName to the list cluster tokens params.
 func (o *ListClusterTokensParams) WithOrgName(orgName string) *ListClusterTokensParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list cluster tokens params
+// SetOrgName adds the orgName to the list cluster tokens params.
 func (o *ListClusterTokensParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListClusterTokensParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

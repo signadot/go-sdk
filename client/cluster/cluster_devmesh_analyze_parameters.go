@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewClusterDevmeshAnalyzeParams() *ClusterDevmeshAnalyzeParams {
-	return &ClusterDevmeshAnalyzeParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewClusterDevmeshAnalyzeParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewClusterDevmeshAnalyzeParamsWithTimeout creates a new ClusterDevmeshAnalyzeParams object
 // with the ability to set a timeout on a request.
 func NewClusterDevmeshAnalyzeParamsWithTimeout(timeout time.Duration) *ClusterDevmeshAnalyzeParams {
 	return &ClusterDevmeshAnalyzeParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewClusterDevmeshAnalyzeParamsWithContext creates a new ClusterDevmeshAnalyzeParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ClusterDevmeshAnalyzeParams].
 func NewClusterDevmeshAnalyzeParamsWithContext(ctx context.Context) *ClusterDevmeshAnalyzeParams {
 	return &ClusterDevmeshAnalyzeParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -82,9 +86,9 @@ type ClusterDevmeshAnalyzeParams struct {
 	*/
 	Status *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the cluster devmesh analyze params (not the query body).
@@ -102,87 +106,90 @@ func (o *ClusterDevmeshAnalyzeParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the cluster devmesh analyze params
+// WithTimeout adds the timeout to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) WithTimeout(timeout time.Duration) *ClusterDevmeshAnalyzeParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the cluster devmesh analyze params
+// SetTimeout adds the timeout to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the cluster devmesh analyze params
+// WithContext adds the context to the cluster devmesh analyze params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ClusterDevmeshAnalyzeParams].
 func (o *ClusterDevmeshAnalyzeParams) WithContext(ctx context.Context) *ClusterDevmeshAnalyzeParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the cluster devmesh analyze params
+// SetContext adds the context to the cluster devmesh analyze params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ClusterDevmeshAnalyzeParams].
 func (o *ClusterDevmeshAnalyzeParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the cluster devmesh analyze params
+// WithHTTPClient adds the HTTPClient to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) WithHTTPClient(client *http.Client) *ClusterDevmeshAnalyzeParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the cluster devmesh analyze params
+// SetHTTPClient adds the HTTPClient to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithClusterName adds the clusterName to the cluster devmesh analyze params
+// WithClusterName adds the clusterName to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) WithClusterName(clusterName string) *ClusterDevmeshAnalyzeParams {
 	o.SetClusterName(clusterName)
 	return o
 }
 
-// SetClusterName adds the clusterName to the cluster devmesh analyze params
+// SetClusterName adds the clusterName to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) SetClusterName(clusterName string) {
 	o.ClusterName = clusterName
 }
 
-// WithNamespace adds the namespace to the cluster devmesh analyze params
+// WithNamespace adds the namespace to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) WithNamespace(namespace *string) *ClusterDevmeshAnalyzeParams {
 	o.SetNamespace(namespace)
 	return o
 }
 
-// SetNamespace adds the namespace to the cluster devmesh analyze params
+// SetNamespace adds the namespace to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) SetNamespace(namespace *string) {
 	o.Namespace = namespace
 }
 
-// WithOrgName adds the orgName to the cluster devmesh analyze params
+// WithOrgName adds the orgName to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) WithOrgName(orgName string) *ClusterDevmeshAnalyzeParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the cluster devmesh analyze params
+// SetOrgName adds the orgName to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithStatus adds the status to the cluster devmesh analyze params
+// WithStatus adds the status to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) WithStatus(status *string) *ClusterDevmeshAnalyzeParams {
 	o.SetStatus(status)
 	return o
 }
 
-// SetStatus adds the status to the cluster devmesh analyze params
+// SetStatus adds the status to the cluster devmesh analyze params.
 func (o *ClusterDevmeshAnalyzeParams) SetStatus(status *string) {
 	o.Status = status
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ClusterDevmeshAnalyzeParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

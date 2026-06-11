@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TrafficDiffPairedDiff traffic diff paired diff
@@ -58,7 +59,7 @@ func (m *TrafficDiffPairedDiff) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiffPairedDiff) validateRequest(formats strfmt.Registry) error {
-	if swag.IsZero(m.Request) { // not required
+	if typeutils.IsZero(m.Request) { // not required
 		return nil
 	}
 
@@ -81,7 +82,7 @@ func (m *TrafficDiffPairedDiff) validateRequest(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiffPairedDiff) validateResponse(formats strfmt.Registry) error {
-	if swag.IsZero(m.Response) { // not required
+	if typeutils.IsZero(m.Response) { // not required
 		return nil
 	}
 
@@ -104,7 +105,7 @@ func (m *TrafficDiffPairedDiff) validateResponse(formats strfmt.Registry) error 
 }
 
 func (m *TrafficDiffPairedDiff) validateSource(formats strfmt.Registry) error {
-	if swag.IsZero(m.Source) { // not required
+	if typeutils.IsZero(m.Source) { // not required
 		return nil
 	}
 
@@ -152,7 +153,7 @@ func (m *TrafficDiffPairedDiff) contextValidateRequest(ctx context.Context, form
 
 	if m.Request != nil {
 
-		if swag.IsZero(m.Request) { // not required
+		if typeutils.IsZero(m.Request) { // not required
 			return nil
 		}
 
@@ -177,7 +178,7 @@ func (m *TrafficDiffPairedDiff) contextValidateResponse(ctx context.Context, for
 
 	if m.Response != nil {
 
-		if swag.IsZero(m.Response) { // not required
+		if typeutils.IsZero(m.Response) { // not required
 			return nil
 		}
 
@@ -202,7 +203,7 @@ func (m *TrafficDiffPairedDiff) contextValidateSource(ctx context.Context, forma
 
 	if m.Source != nil {
 
-		if swag.IsZero(m.Source) { // not required
+		if typeutils.IsZero(m.Source) { // not required
 			return nil
 		}
 
@@ -228,13 +229,13 @@ func (m *TrafficDiffPairedDiff) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TrafficDiffPairedDiff) UnmarshalBinary(b []byte) error {
 	var res TrafficDiffPairedDiff
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

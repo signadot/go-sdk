@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeletePlanrunnergroupParams() *DeletePlanrunnergroupParams {
-	return &DeletePlanrunnergroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeletePlanrunnergroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeletePlanrunnergroupParamsWithTimeout creates a new DeletePlanrunnergroupParams object
 // with the ability to set a timeout on a request.
 func NewDeletePlanrunnergroupParamsWithTimeout(timeout time.Duration) *DeletePlanrunnergroupParams {
 	return &DeletePlanrunnergroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeletePlanrunnergroupParamsWithContext creates a new DeletePlanrunnergroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanrunnergroupParams].
 func NewDeletePlanrunnergroupParamsWithContext(ctx context.Context) *DeletePlanrunnergroupParams {
 	return &DeletePlanrunnergroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeletePlanrunnergroupParams struct {
 	*/
 	PlanRunnerGroupName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete planrunnergroup params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeletePlanrunnergroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete planrunnergroup params
+// WithTimeout adds the timeout to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) WithTimeout(timeout time.Duration) *DeletePlanrunnergroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete planrunnergroup params
+// SetTimeout adds the timeout to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete planrunnergroup params
+// WithContext adds the context to the delete planrunnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanrunnergroupParams].
 func (o *DeletePlanrunnergroupParams) WithContext(ctx context.Context) *DeletePlanrunnergroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete planrunnergroup params
+// SetContext adds the context to the delete planrunnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanrunnergroupParams].
 func (o *DeletePlanrunnergroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete planrunnergroup params
+// WithHTTPClient adds the HTTPClient to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) WithHTTPClient(client *http.Client) *DeletePlanrunnergroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete planrunnergroup params
+// SetHTTPClient adds the HTTPClient to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete planrunnergroup params
+// WithOrgName adds the orgName to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) WithOrgName(orgName string) *DeletePlanrunnergroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete planrunnergroup params
+// SetOrgName adds the orgName to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanRunnerGroupName adds the planRunnerGroupName to the delete planrunnergroup params
+// WithPlanRunnerGroupName adds the planRunnerGroupName to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) WithPlanRunnerGroupName(planRunnerGroupName string) *DeletePlanrunnergroupParams {
 	o.SetPlanRunnerGroupName(planRunnerGroupName)
 	return o
 }
 
-// SetPlanRunnerGroupName adds the planRunnerGroupName to the delete planrunnergroup params
+// SetPlanRunnerGroupName adds the planRunnerGroupName to the delete planrunnergroup params.
 func (o *DeletePlanrunnergroupParams) SetPlanRunnerGroupName(planRunnerGroupName string) {
 	o.PlanRunnerGroupName = planRunnerGroupName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeletePlanrunnergroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

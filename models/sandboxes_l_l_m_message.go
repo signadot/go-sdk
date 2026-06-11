@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxesLLMMessage sandboxes l l m message
@@ -38,7 +39,7 @@ func (m *SandboxesLLMMessage) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxesLLMMessage) validateRole(formats strfmt.Registry) error {
-	if swag.IsZero(m.Role) { // not required
+	if typeutils.IsZero(m.Role) { // not required
 		return nil
 	}
 
@@ -74,7 +75,7 @@ func (m *SandboxesLLMMessage) ContextValidate(ctx context.Context, formats strfm
 
 func (m *SandboxesLLMMessage) contextValidateRole(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Role) { // not required
+	if typeutils.IsZero(m.Role) { // not required
 		return nil
 	}
 
@@ -99,13 +100,13 @@ func (m *SandboxesLLMMessage) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxesLLMMessage) UnmarshalBinary(b []byte) error {
 	var res SandboxesLLMMessage
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

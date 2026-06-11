@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteDevboxParams() *DeleteDevboxParams {
-	return &DeleteDevboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteDevboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteDevboxParamsWithTimeout creates a new DeleteDevboxParams object
 // with the ability to set a timeout on a request.
 func NewDeleteDevboxParamsWithTimeout(timeout time.Duration) *DeleteDevboxParams {
 	return &DeleteDevboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteDevboxParamsWithContext creates a new DeleteDevboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteDevboxParams].
 func NewDeleteDevboxParamsWithContext(ctx context.Context) *DeleteDevboxParams {
 	return &DeleteDevboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeleteDevboxParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete devbox params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeleteDevboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete devbox params
+// WithTimeout adds the timeout to the delete devbox params.
 func (o *DeleteDevboxParams) WithTimeout(timeout time.Duration) *DeleteDevboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete devbox params
+// SetTimeout adds the timeout to the delete devbox params.
 func (o *DeleteDevboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete devbox params
+// WithContext adds the context to the delete devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteDevboxParams].
 func (o *DeleteDevboxParams) WithContext(ctx context.Context) *DeleteDevboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete devbox params
+// SetContext adds the context to the delete devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteDevboxParams].
 func (o *DeleteDevboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete devbox params
+// WithHTTPClient adds the HTTPClient to the delete devbox params.
 func (o *DeleteDevboxParams) WithHTTPClient(client *http.Client) *DeleteDevboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete devbox params
+// SetHTTPClient adds the HTTPClient to the delete devbox params.
 func (o *DeleteDevboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithDevboxID adds the devboxID to the delete devbox params
+// WithDevboxID adds the devboxID to the delete devbox params.
 func (o *DeleteDevboxParams) WithDevboxID(devboxID string) *DeleteDevboxParams {
 	o.SetDevboxID(devboxID)
 	return o
 }
 
-// SetDevboxID adds the devboxId to the delete devbox params
+// SetDevboxID adds the devboxId to the delete devbox params.
 func (o *DeleteDevboxParams) SetDevboxID(devboxID string) {
 	o.DevboxID = devboxID
 }
 
-// WithOrgName adds the orgName to the delete devbox params
+// WithOrgName adds the orgName to the delete devbox params.
 func (o *DeleteDevboxParams) WithOrgName(orgName string) *DeleteDevboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete devbox params
+// SetOrgName adds the orgName to the delete devbox params.
 func (o *DeleteDevboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteDevboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

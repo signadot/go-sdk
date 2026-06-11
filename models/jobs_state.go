@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // JobsState jobs state
@@ -63,7 +64,7 @@ func (m *JobsState) Validate(formats strfmt.Registry) error {
 }
 
 func (m *JobsState) validateCanceled(formats strfmt.Registry) error {
-	if swag.IsZero(m.Canceled) { // not required
+	if typeutils.IsZero(m.Canceled) { // not required
 		return nil
 	}
 
@@ -86,7 +87,7 @@ func (m *JobsState) validateCanceled(formats strfmt.Registry) error {
 }
 
 func (m *JobsState) validateFailed(formats strfmt.Registry) error {
-	if swag.IsZero(m.Failed) { // not required
+	if typeutils.IsZero(m.Failed) { // not required
 		return nil
 	}
 
@@ -109,7 +110,7 @@ func (m *JobsState) validateFailed(formats strfmt.Registry) error {
 }
 
 func (m *JobsState) validateQueued(formats strfmt.Registry) error {
-	if swag.IsZero(m.Queued) { // not required
+	if typeutils.IsZero(m.Queued) { // not required
 		return nil
 	}
 
@@ -132,7 +133,7 @@ func (m *JobsState) validateQueued(formats strfmt.Registry) error {
 }
 
 func (m *JobsState) validateRunning(formats strfmt.Registry) error {
-	if swag.IsZero(m.Running) { // not required
+	if typeutils.IsZero(m.Running) { // not required
 		return nil
 	}
 
@@ -155,7 +156,7 @@ func (m *JobsState) validateRunning(formats strfmt.Registry) error {
 }
 
 func (m *JobsState) validateSucceeded(formats strfmt.Registry) error {
-	if swag.IsZero(m.Succeeded) { // not required
+	if typeutils.IsZero(m.Succeeded) { // not required
 		return nil
 	}
 
@@ -211,7 +212,7 @@ func (m *JobsState) contextValidateCanceled(ctx context.Context, formats strfmt.
 
 	if m.Canceled != nil {
 
-		if swag.IsZero(m.Canceled) { // not required
+		if typeutils.IsZero(m.Canceled) { // not required
 			return nil
 		}
 
@@ -236,7 +237,7 @@ func (m *JobsState) contextValidateFailed(ctx context.Context, formats strfmt.Re
 
 	if m.Failed != nil {
 
-		if swag.IsZero(m.Failed) { // not required
+		if typeutils.IsZero(m.Failed) { // not required
 			return nil
 		}
 
@@ -261,7 +262,7 @@ func (m *JobsState) contextValidateQueued(ctx context.Context, formats strfmt.Re
 
 	if m.Queued != nil {
 
-		if swag.IsZero(m.Queued) { // not required
+		if typeutils.IsZero(m.Queued) { // not required
 			return nil
 		}
 
@@ -286,7 +287,7 @@ func (m *JobsState) contextValidateRunning(ctx context.Context, formats strfmt.R
 
 	if m.Running != nil {
 
-		if swag.IsZero(m.Running) { // not required
+		if typeutils.IsZero(m.Running) { // not required
 			return nil
 		}
 
@@ -311,7 +312,7 @@ func (m *JobsState) contextValidateSucceeded(ctx context.Context, formats strfmt
 
 	if m.Succeeded != nil {
 
-		if swag.IsZero(m.Succeeded) { // not required
+		if typeutils.IsZero(m.Succeeded) { // not required
 			return nil
 		}
 
@@ -337,13 +338,13 @@ func (m *JobsState) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *JobsState) UnmarshalBinary(b []byte) error {
 	var res JobsState
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

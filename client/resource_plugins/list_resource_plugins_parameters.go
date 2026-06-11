@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListResourcePluginsParams() *ListResourcePluginsParams {
-	return &ListResourcePluginsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListResourcePluginsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListResourcePluginsParamsWithTimeout creates a new ListResourcePluginsParams object
 // with the ability to set a timeout on a request.
 func NewListResourcePluginsParamsWithTimeout(timeout time.Duration) *ListResourcePluginsParams {
 	return &ListResourcePluginsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListResourcePluginsParamsWithContext creates a new ListResourcePluginsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListResourcePluginsParams].
 func NewListResourcePluginsParamsWithContext(ctx context.Context) *ListResourcePluginsParams {
 	return &ListResourcePluginsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type ListResourcePluginsParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list resource plugins params (not the query body).
@@ -84,54 +88,57 @@ func (o *ListResourcePluginsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list resource plugins params
+// WithTimeout adds the timeout to the list resource plugins params.
 func (o *ListResourcePluginsParams) WithTimeout(timeout time.Duration) *ListResourcePluginsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list resource plugins params
+// SetTimeout adds the timeout to the list resource plugins params.
 func (o *ListResourcePluginsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list resource plugins params
+// WithContext adds the context to the list resource plugins params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListResourcePluginsParams].
 func (o *ListResourcePluginsParams) WithContext(ctx context.Context) *ListResourcePluginsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list resource plugins params
+// SetContext adds the context to the list resource plugins params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListResourcePluginsParams].
 func (o *ListResourcePluginsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list resource plugins params
+// WithHTTPClient adds the HTTPClient to the list resource plugins params.
 func (o *ListResourcePluginsParams) WithHTTPClient(client *http.Client) *ListResourcePluginsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list resource plugins params
+// SetHTTPClient adds the HTTPClient to the list resource plugins params.
 func (o *ListResourcePluginsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list resource plugins params
+// WithOrgName adds the orgName to the list resource plugins params.
 func (o *ListResourcePluginsParams) WithOrgName(orgName string) *ListResourcePluginsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list resource plugins params
+// SetOrgName adds the orgName to the list resource plugins params.
 func (o *ListResourcePluginsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListResourcePluginsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

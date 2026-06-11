@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxReadiness sandbox readiness
@@ -80,7 +81,7 @@ func (m *SandboxReadiness) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxReadiness) validateConnection(formats strfmt.Registry) error {
-	if swag.IsZero(m.Connection) { // not required
+	if typeutils.IsZero(m.Connection) { // not required
 		return nil
 	}
 
@@ -103,12 +104,12 @@ func (m *SandboxReadiness) validateConnection(formats strfmt.Registry) error {
 }
 
 func (m *SandboxReadiness) validateForwards(formats strfmt.Registry) error {
-	if swag.IsZero(m.Forwards) { // not required
+	if typeutils.IsZero(m.Forwards) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Forwards); i++ {
-		if swag.IsZero(m.Forwards[i]) { // not required
+		if typeutils.IsZero(m.Forwards[i]) { // not required
 			continue
 		}
 
@@ -133,7 +134,7 @@ func (m *SandboxReadiness) validateForwards(formats strfmt.Registry) error {
 }
 
 func (m *SandboxReadiness) validateJobs(formats strfmt.Registry) error {
-	if swag.IsZero(m.Jobs) { // not required
+	if typeutils.IsZero(m.Jobs) { // not required
 		return nil
 	}
 
@@ -156,12 +157,12 @@ func (m *SandboxReadiness) validateJobs(formats strfmt.Registry) error {
 }
 
 func (m *SandboxReadiness) validateLocal(formats strfmt.Registry) error {
-	if swag.IsZero(m.Local) { // not required
+	if typeutils.IsZero(m.Local) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Local); i++ {
-		if swag.IsZero(m.Local[i]) { // not required
+		if typeutils.IsZero(m.Local[i]) { // not required
 			continue
 		}
 
@@ -186,7 +187,7 @@ func (m *SandboxReadiness) validateLocal(formats strfmt.Registry) error {
 }
 
 func (m *SandboxReadiness) validateTestExecutions(formats strfmt.Registry) error {
-	if swag.IsZero(m.TestExecutions) { // not required
+	if typeutils.IsZero(m.TestExecutions) { // not required
 		return nil
 	}
 
@@ -242,7 +243,7 @@ func (m *SandboxReadiness) contextValidateConnection(ctx context.Context, format
 
 	if m.Connection != nil {
 
-		if swag.IsZero(m.Connection) { // not required
+		if typeutils.IsZero(m.Connection) { // not required
 			return nil
 		}
 
@@ -269,7 +270,7 @@ func (m *SandboxReadiness) contextValidateForwards(ctx context.Context, formats 
 
 		if m.Forwards[i] != nil {
 
-			if swag.IsZero(m.Forwards[i]) { // not required
+			if typeutils.IsZero(m.Forwards[i]) { // not required
 				return nil
 			}
 
@@ -296,7 +297,7 @@ func (m *SandboxReadiness) contextValidateJobs(ctx context.Context, formats strf
 
 	if m.Jobs != nil {
 
-		if swag.IsZero(m.Jobs) { // not required
+		if typeutils.IsZero(m.Jobs) { // not required
 			return nil
 		}
 
@@ -323,7 +324,7 @@ func (m *SandboxReadiness) contextValidateLocal(ctx context.Context, formats str
 
 		if m.Local[i] != nil {
 
-			if swag.IsZero(m.Local[i]) { // not required
+			if typeutils.IsZero(m.Local[i]) { // not required
 				return nil
 			}
 
@@ -350,7 +351,7 @@ func (m *SandboxReadiness) contextValidateTestExecutions(ctx context.Context, fo
 
 	if m.TestExecutions != nil {
 
-		if swag.IsZero(m.TestExecutions) { // not required
+		if typeutils.IsZero(m.TestExecutions) { // not required
 			return nil
 		}
 
@@ -376,13 +377,13 @@ func (m *SandboxReadiness) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxReadiness) UnmarshalBinary(b []byte) error {
 	var res SandboxReadiness
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

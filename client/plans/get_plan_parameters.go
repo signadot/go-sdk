@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPlanParams() *GetPlanParams {
-	return &GetPlanParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetPlanParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetPlanParamsWithTimeout creates a new GetPlanParams object
 // with the ability to set a timeout on a request.
 func NewGetPlanParamsWithTimeout(timeout time.Duration) *GetPlanParams {
 	return &GetPlanParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetPlanParamsWithContext creates a new GetPlanParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanParams].
 func NewGetPlanParamsWithContext(ctx context.Context) *GetPlanParams {
 	return &GetPlanParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -76,9 +80,9 @@ type GetPlanParams struct {
 	*/
 	PlanID string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get plan params (not the query body).
@@ -96,76 +100,79 @@ func (o *GetPlanParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get plan params
+// WithTimeout adds the timeout to the get plan params.
 func (o *GetPlanParams) WithTimeout(timeout time.Duration) *GetPlanParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get plan params
+// SetTimeout adds the timeout to the get plan params.
 func (o *GetPlanParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get plan params
+// WithContext adds the context to the get plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanParams].
 func (o *GetPlanParams) WithContext(ctx context.Context) *GetPlanParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get plan params
+// SetContext adds the context to the get plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanParams].
 func (o *GetPlanParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get plan params
+// WithHTTPClient adds the HTTPClient to the get plan params.
 func (o *GetPlanParams) WithHTTPClient(client *http.Client) *GetPlanParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get plan params
+// SetHTTPClient adds the HTTPClient to the get plan params.
 func (o *GetPlanParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExpand adds the expand to the get plan params
+// WithExpand adds the expand to the get plan params.
 func (o *GetPlanParams) WithExpand(expand *string) *GetPlanParams {
 	o.SetExpand(expand)
 	return o
 }
 
-// SetExpand adds the expand to the get plan params
+// SetExpand adds the expand to the get plan params.
 func (o *GetPlanParams) SetExpand(expand *string) {
 	o.Expand = expand
 }
 
-// WithOrgName adds the orgName to the get plan params
+// WithOrgName adds the orgName to the get plan params.
 func (o *GetPlanParams) WithOrgName(orgName string) *GetPlanParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get plan params
+// SetOrgName adds the orgName to the get plan params.
 func (o *GetPlanParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanID adds the planID to the get plan params
+// WithPlanID adds the planID to the get plan params.
 func (o *GetPlanParams) WithPlanID(planID string) *GetPlanParams {
 	o.SetPlanID(planID)
 	return o
 }
 
-// SetPlanID adds the planId to the get plan params
+// SetPlanID adds the planId to the get plan params.
 func (o *GetPlanParams) SetPlanID(planID string) {
 	o.PlanID = planID
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetPlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

@@ -3,7 +3,9 @@
 package meta
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new meta API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new meta API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new meta API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,33 +45,62 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for meta API
+Client for meta API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// MetaPlans plan authoring schema.
 	MetaPlans(params *MetaPlansParams, opts ...ClientOption) (*MetaPlansOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// MetaPlansContext plan authoring schema.
+	MetaPlansContext(ctx context.Context, params *MetaPlansParams, opts ...ClientOption) (*MetaPlansOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-MetaPlans plans authoring schema
+MetaPlansplans authoring schema.
 
-Returns the JSON Schema for plans.PlanSpec, with descriptions
+Returns the JSON Schema for plans.PlanSpec, with descriptions.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.MetaPlansContext] instead.
 */
 func (a *Client) MetaPlans(params *MetaPlansParams, opts ...ClientOption) (*MetaPlansOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.MetaPlansContext(ctx, params, opts...)
+}
+
+/*
+MetaPlansContextplans authoring schema.
+
+Returns the JSON Schema for plans.PlanSpec, with descriptions.
+
+Do not use the deprecated [MetaPlansParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) MetaPlansContext(ctx context.Context, params *MetaPlansParams, opts ...ClientOption) (*MetaPlansOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewMetaPlansParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "meta-plans",
 		Method:             "GET",
@@ -77,13 +110,14 @@ func (a *Client) MetaPlans(params *MetaPlansParams, opts ...ClientOption) (*Meta
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &MetaPlansReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -104,6 +138,14 @@ func (a *Client) MetaPlans(params *MetaPlansParams, opts ...ClientOption) (*Meta
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [MetaParams].
+	ctx context.Context
 }

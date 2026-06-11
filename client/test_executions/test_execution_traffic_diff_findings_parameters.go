@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewTestExecutionTrafficDiffFindingsParams() *TestExecutionTrafficDiffFindingsParams {
-	return &TestExecutionTrafficDiffFindingsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewTestExecutionTrafficDiffFindingsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewTestExecutionTrafficDiffFindingsParamsWithTimeout creates a new TestExecutionTrafficDiffFindingsParams object
 // with the ability to set a timeout on a request.
 func NewTestExecutionTrafficDiffFindingsParamsWithTimeout(timeout time.Duration) *TestExecutionTrafficDiffFindingsParams {
 	return &TestExecutionTrafficDiffFindingsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewTestExecutionTrafficDiffFindingsParamsWithContext creates a new TestExecutionTrafficDiffFindingsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [TestExecutionTrafficDiffFindingsParams].
 func NewTestExecutionTrafficDiffFindingsParamsWithContext(ctx context.Context) *TestExecutionTrafficDiffFindingsParams {
 	return &TestExecutionTrafficDiffFindingsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -88,9 +92,9 @@ type TestExecutionTrafficDiffFindingsParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the test execution traffic diff findings params (not the query body).
@@ -108,98 +112,101 @@ func (o *TestExecutionTrafficDiffFindingsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the test execution traffic diff findings params
+// WithTimeout adds the timeout to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) WithTimeout(timeout time.Duration) *TestExecutionTrafficDiffFindingsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the test execution traffic diff findings params
+// SetTimeout adds the timeout to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the test execution traffic diff findings params
+// WithContext adds the context to the test execution traffic diff findings params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [TestExecutionTrafficDiffFindingsParams].
 func (o *TestExecutionTrafficDiffFindingsParams) WithContext(ctx context.Context) *TestExecutionTrafficDiffFindingsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the test execution traffic diff findings params
+// SetContext adds the context to the test execution traffic diff findings params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [TestExecutionTrafficDiffFindingsParams].
 func (o *TestExecutionTrafficDiffFindingsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the test execution traffic diff findings params
+// WithHTTPClient adds the HTTPClient to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) WithHTTPClient(client *http.Client) *TestExecutionTrafficDiffFindingsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the test execution traffic diff findings params
+// SetHTTPClient adds the HTTPClient to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithCategory adds the category to the test execution traffic diff findings params
+// WithCategory adds the category to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) WithCategory(category *string) *TestExecutionTrafficDiffFindingsParams {
 	o.SetCategory(category)
 	return o
 }
 
-// SetCategory adds the category to the test execution traffic diff findings params
+// SetCategory adds the category to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) SetCategory(category *string) {
 	o.Category = category
 }
 
-// WithDiffContext adds the diffContext to the test execution traffic diff findings params
+// WithDiffContext adds the diffContext to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) WithDiffContext(diffContext *string) *TestExecutionTrafficDiffFindingsParams {
 	o.SetDiffContext(diffContext)
 	return o
 }
 
-// SetDiffContext adds the diffContext to the test execution traffic diff findings params
+// SetDiffContext adds the diffContext to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) SetDiffContext(diffContext *string) {
 	o.DiffContext = diffContext
 }
 
-// WithExecutionID adds the executionID to the test execution traffic diff findings params
+// WithExecutionID adds the executionID to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) WithExecutionID(executionID string) *TestExecutionTrafficDiffFindingsParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the test execution traffic diff findings params
+// SetExecutionID adds the executionId to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithMaxFindings adds the maxFindings to the test execution traffic diff findings params
+// WithMaxFindings adds the maxFindings to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) WithMaxFindings(maxFindings *string) *TestExecutionTrafficDiffFindingsParams {
 	o.SetMaxFindings(maxFindings)
 	return o
 }
 
-// SetMaxFindings adds the maxFindings to the test execution traffic diff findings params
+// SetMaxFindings adds the maxFindings to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) SetMaxFindings(maxFindings *string) {
 	o.MaxFindings = maxFindings
 }
 
-// WithOrgName adds the orgName to the test execution traffic diff findings params
+// WithOrgName adds the orgName to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) WithOrgName(orgName string) *TestExecutionTrafficDiffFindingsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the test execution traffic diff findings params
+// SetOrgName adds the orgName to the test execution traffic diff findings params.
 func (o *TestExecutionTrafficDiffFindingsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *TestExecutionTrafficDiffFindingsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

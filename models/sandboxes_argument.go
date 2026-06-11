@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxesArgument sandboxes argument
@@ -42,7 +43,7 @@ func (m *SandboxesArgument) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxesArgument) validateValueFrom(formats strfmt.Registry) error {
-	if swag.IsZero(m.ValueFrom) { // not required
+	if typeutils.IsZero(m.ValueFrom) { // not required
 		return nil
 	}
 
@@ -82,7 +83,7 @@ func (m *SandboxesArgument) contextValidateValueFrom(ctx context.Context, format
 
 	if m.ValueFrom != nil {
 
-		if swag.IsZero(m.ValueFrom) { // not required
+		if typeutils.IsZero(m.ValueFrom) { // not required
 			return nil
 		}
 
@@ -108,13 +109,13 @@ func (m *SandboxesArgument) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxesArgument) UnmarshalBinary(b []byte) error {
 	var res SandboxesArgument
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

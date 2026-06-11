@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPlanTagParams() *GetPlanTagParams {
-	return &GetPlanTagParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetPlanTagParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetPlanTagParamsWithTimeout creates a new GetPlanTagParams object
 // with the ability to set a timeout on a request.
 func NewGetPlanTagParamsWithTimeout(timeout time.Duration) *GetPlanTagParams {
 	return &GetPlanTagParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetPlanTagParamsWithContext creates a new GetPlanTagParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanTagParams].
 func NewGetPlanTagParamsWithContext(ctx context.Context) *GetPlanTagParams {
 	return &GetPlanTagParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetPlanTagParams struct {
 	*/
 	PlanTagName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get plan tag params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetPlanTagParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get plan tag params
+// WithTimeout adds the timeout to the get plan tag params.
 func (o *GetPlanTagParams) WithTimeout(timeout time.Duration) *GetPlanTagParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get plan tag params
+// SetTimeout adds the timeout to the get plan tag params.
 func (o *GetPlanTagParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get plan tag params
+// WithContext adds the context to the get plan tag params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanTagParams].
 func (o *GetPlanTagParams) WithContext(ctx context.Context) *GetPlanTagParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get plan tag params
+// SetContext adds the context to the get plan tag params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanTagParams].
 func (o *GetPlanTagParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get plan tag params
+// WithHTTPClient adds the HTTPClient to the get plan tag params.
 func (o *GetPlanTagParams) WithHTTPClient(client *http.Client) *GetPlanTagParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get plan tag params
+// SetHTTPClient adds the HTTPClient to the get plan tag params.
 func (o *GetPlanTagParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get plan tag params
+// WithOrgName adds the orgName to the get plan tag params.
 func (o *GetPlanTagParams) WithOrgName(orgName string) *GetPlanTagParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get plan tag params
+// SetOrgName adds the orgName to the get plan tag params.
 func (o *GetPlanTagParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanTagName adds the planTagName to the get plan tag params
+// WithPlanTagName adds the planTagName to the get plan tag params.
 func (o *GetPlanTagParams) WithPlanTagName(planTagName string) *GetPlanTagParams {
 	o.SetPlanTagName(planTagName)
 	return o
 }
 
-// SetPlanTagName adds the planTagName to the get plan tag params
+// SetPlanTagName adds the planTagName to the get plan tag params.
 func (o *GetPlanTagParams) SetPlanTagName(planTagName string) {
 	o.PlanTagName = planTagName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetPlanTagParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

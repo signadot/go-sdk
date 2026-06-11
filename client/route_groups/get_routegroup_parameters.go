@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetRoutegroupParams() *GetRoutegroupParams {
-	return &GetRoutegroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetRoutegroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetRoutegroupParamsWithTimeout creates a new GetRoutegroupParams object
 // with the ability to set a timeout on a request.
 func NewGetRoutegroupParamsWithTimeout(timeout time.Duration) *GetRoutegroupParams {
 	return &GetRoutegroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetRoutegroupParamsWithContext creates a new GetRoutegroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetRoutegroupParams].
 func NewGetRoutegroupParamsWithContext(ctx context.Context) *GetRoutegroupParams {
 	return &GetRoutegroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetRoutegroupParams struct {
 	*/
 	RoutegroupName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get routegroup params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetRoutegroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get routegroup params
+// WithTimeout adds the timeout to the get routegroup params.
 func (o *GetRoutegroupParams) WithTimeout(timeout time.Duration) *GetRoutegroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get routegroup params
+// SetTimeout adds the timeout to the get routegroup params.
 func (o *GetRoutegroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get routegroup params
+// WithContext adds the context to the get routegroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetRoutegroupParams].
 func (o *GetRoutegroupParams) WithContext(ctx context.Context) *GetRoutegroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get routegroup params
+// SetContext adds the context to the get routegroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetRoutegroupParams].
 func (o *GetRoutegroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get routegroup params
+// WithHTTPClient adds the HTTPClient to the get routegroup params.
 func (o *GetRoutegroupParams) WithHTTPClient(client *http.Client) *GetRoutegroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get routegroup params
+// SetHTTPClient adds the HTTPClient to the get routegroup params.
 func (o *GetRoutegroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get routegroup params
+// WithOrgName adds the orgName to the get routegroup params.
 func (o *GetRoutegroupParams) WithOrgName(orgName string) *GetRoutegroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get routegroup params
+// SetOrgName adds the orgName to the get routegroup params.
 func (o *GetRoutegroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithRoutegroupName adds the routegroupName to the get routegroup params
+// WithRoutegroupName adds the routegroupName to the get routegroup params.
 func (o *GetRoutegroupParams) WithRoutegroupName(routegroupName string) *GetRoutegroupParams {
 	o.SetRoutegroupName(routegroupName)
 	return o
 }
 
-// SetRoutegroupName adds the routegroupName to the get routegroup params
+// SetRoutegroupName adds the routegroupName to the get routegroup params.
 func (o *GetRoutegroupParams) SetRoutegroupName(routegroupName string) {
 	o.RoutegroupName = routegroupName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetRoutegroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

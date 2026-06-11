@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewMetaPlansParams() *MetaPlansParams {
-	return &MetaPlansParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewMetaPlansParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewMetaPlansParamsWithTimeout creates a new MetaPlansParams object
 // with the ability to set a timeout on a request.
 func NewMetaPlansParamsWithTimeout(timeout time.Duration) *MetaPlansParams {
 	return &MetaPlansParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewMetaPlansParamsWithContext creates a new MetaPlansParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [MetaPlansParams].
 func NewMetaPlansParamsWithContext(ctx context.Context) *MetaPlansParams {
 	return &MetaPlansParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -57,9 +61,9 @@ MetaPlansParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type MetaPlansParams struct {
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the meta plans params (not the query body).
@@ -77,43 +81,46 @@ func (o *MetaPlansParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the meta plans params
+// WithTimeout adds the timeout to the meta plans params.
 func (o *MetaPlansParams) WithTimeout(timeout time.Duration) *MetaPlansParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the meta plans params
+// SetTimeout adds the timeout to the meta plans params.
 func (o *MetaPlansParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the meta plans params
+// WithContext adds the context to the meta plans params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [MetaPlansParams].
 func (o *MetaPlansParams) WithContext(ctx context.Context) *MetaPlansParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the meta plans params
+// SetContext adds the context to the meta plans params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [MetaPlansParams].
 func (o *MetaPlansParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the meta plans params
+// WithHTTPClient adds the HTTPClient to the meta plans params.
 func (o *MetaPlansParams) WithHTTPClient(client *http.Client) *MetaPlansParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the meta plans params
+// SetHTTPClient adds the HTTPClient to the meta plans params.
 func (o *MetaPlansParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *MetaPlansParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

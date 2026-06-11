@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPlanrunnergroupParams() *GetPlanrunnergroupParams {
-	return &GetPlanrunnergroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetPlanrunnergroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetPlanrunnergroupParamsWithTimeout creates a new GetPlanrunnergroupParams object
 // with the ability to set a timeout on a request.
 func NewGetPlanrunnergroupParamsWithTimeout(timeout time.Duration) *GetPlanrunnergroupParams {
 	return &GetPlanrunnergroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetPlanrunnergroupParamsWithContext creates a new GetPlanrunnergroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanrunnergroupParams].
 func NewGetPlanrunnergroupParamsWithContext(ctx context.Context) *GetPlanrunnergroupParams {
 	return &GetPlanrunnergroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetPlanrunnergroupParams struct {
 	*/
 	PlanRunnerGroupName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get planrunnergroup params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetPlanrunnergroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get planrunnergroup params
+// WithTimeout adds the timeout to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) WithTimeout(timeout time.Duration) *GetPlanrunnergroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get planrunnergroup params
+// SetTimeout adds the timeout to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get planrunnergroup params
+// WithContext adds the context to the get planrunnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanrunnergroupParams].
 func (o *GetPlanrunnergroupParams) WithContext(ctx context.Context) *GetPlanrunnergroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get planrunnergroup params
+// SetContext adds the context to the get planrunnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanrunnergroupParams].
 func (o *GetPlanrunnergroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get planrunnergroup params
+// WithHTTPClient adds the HTTPClient to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) WithHTTPClient(client *http.Client) *GetPlanrunnergroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get planrunnergroup params
+// SetHTTPClient adds the HTTPClient to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get planrunnergroup params
+// WithOrgName adds the orgName to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) WithOrgName(orgName string) *GetPlanrunnergroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get planrunnergroup params
+// SetOrgName adds the orgName to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanRunnerGroupName adds the planRunnerGroupName to the get planrunnergroup params
+// WithPlanRunnerGroupName adds the planRunnerGroupName to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) WithPlanRunnerGroupName(planRunnerGroupName string) *GetPlanrunnergroupParams {
 	o.SetPlanRunnerGroupName(planRunnerGroupName)
 	return o
 }
 
-// SetPlanRunnerGroupName adds the planRunnerGroupName to the get planrunnergroup params
+// SetPlanRunnerGroupName adds the planRunnerGroupName to the get planrunnergroup params.
 func (o *GetPlanrunnergroupParams) SetPlanRunnerGroupName(planRunnerGroupName string) {
 	o.PlanRunnerGroupName = planRunnerGroupName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetPlanrunnergroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

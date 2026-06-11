@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // ConfigIstioConfig config istio config
@@ -41,7 +42,7 @@ func (m *ConfigIstioConfig) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConfigIstioConfig) validateOperator(formats strfmt.Registry) error {
-	if swag.IsZero(m.Operator) { // not required
+	if typeutils.IsZero(m.Operator) { // not required
 		return nil
 	}
 
@@ -81,7 +82,7 @@ func (m *ConfigIstioConfig) contextValidateOperator(ctx context.Context, formats
 
 	if m.Operator != nil {
 
-		if swag.IsZero(m.Operator) { // not required
+		if typeutils.IsZero(m.Operator) { // not required
 			return nil
 		}
 
@@ -107,13 +108,13 @@ func (m *ConfigIstioConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ConfigIstioConfig) UnmarshalBinary(b []byte) error {
 	var res ConfigIstioConfig
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

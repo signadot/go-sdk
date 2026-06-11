@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewReleaseDevboxParams() *ReleaseDevboxParams {
-	return &ReleaseDevboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewReleaseDevboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewReleaseDevboxParamsWithTimeout creates a new ReleaseDevboxParams object
 // with the ability to set a timeout on a request.
 func NewReleaseDevboxParamsWithTimeout(timeout time.Duration) *ReleaseDevboxParams {
 	return &ReleaseDevboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewReleaseDevboxParamsWithContext creates a new ReleaseDevboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ReleaseDevboxParams].
 func NewReleaseDevboxParamsWithContext(ctx context.Context) *ReleaseDevboxParams {
 	return &ReleaseDevboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type ReleaseDevboxParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the release devbox params (not the query body).
@@ -90,65 +94,68 @@ func (o *ReleaseDevboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the release devbox params
+// WithTimeout adds the timeout to the release devbox params.
 func (o *ReleaseDevboxParams) WithTimeout(timeout time.Duration) *ReleaseDevboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the release devbox params
+// SetTimeout adds the timeout to the release devbox params.
 func (o *ReleaseDevboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the release devbox params
+// WithContext adds the context to the release devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ReleaseDevboxParams].
 func (o *ReleaseDevboxParams) WithContext(ctx context.Context) *ReleaseDevboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the release devbox params
+// SetContext adds the context to the release devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ReleaseDevboxParams].
 func (o *ReleaseDevboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the release devbox params
+// WithHTTPClient adds the HTTPClient to the release devbox params.
 func (o *ReleaseDevboxParams) WithHTTPClient(client *http.Client) *ReleaseDevboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the release devbox params
+// SetHTTPClient adds the HTTPClient to the release devbox params.
 func (o *ReleaseDevboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithDevboxID adds the devboxID to the release devbox params
+// WithDevboxID adds the devboxID to the release devbox params.
 func (o *ReleaseDevboxParams) WithDevboxID(devboxID string) *ReleaseDevboxParams {
 	o.SetDevboxID(devboxID)
 	return o
 }
 
-// SetDevboxID adds the devboxId to the release devbox params
+// SetDevboxID adds the devboxId to the release devbox params.
 func (o *ReleaseDevboxParams) SetDevboxID(devboxID string) {
 	o.DevboxID = devboxID
 }
 
-// WithOrgName adds the orgName to the release devbox params
+// WithOrgName adds the orgName to the release devbox params.
 func (o *ReleaseDevboxParams) WithOrgName(orgName string) *ReleaseDevboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the release devbox params
+// SetOrgName adds the orgName to the release devbox params.
 func (o *ReleaseDevboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ReleaseDevboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

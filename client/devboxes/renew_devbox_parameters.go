@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRenewDevboxParams() *RenewDevboxParams {
-	return &RenewDevboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewRenewDevboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewRenewDevboxParamsWithTimeout creates a new RenewDevboxParams object
 // with the ability to set a timeout on a request.
 func NewRenewDevboxParamsWithTimeout(timeout time.Duration) *RenewDevboxParams {
 	return &RenewDevboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewRenewDevboxParamsWithContext creates a new RenewDevboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RenewDevboxParams].
 func NewRenewDevboxParamsWithContext(ctx context.Context) *RenewDevboxParams {
 	return &RenewDevboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -76,9 +80,9 @@ type RenewDevboxParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the renew devbox params (not the query body).
@@ -96,76 +100,79 @@ func (o *RenewDevboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the renew devbox params
+// WithTimeout adds the timeout to the renew devbox params.
 func (o *RenewDevboxParams) WithTimeout(timeout time.Duration) *RenewDevboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the renew devbox params
+// SetTimeout adds the timeout to the renew devbox params.
 func (o *RenewDevboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the renew devbox params
+// WithContext adds the context to the renew devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RenewDevboxParams].
 func (o *RenewDevboxParams) WithContext(ctx context.Context) *RenewDevboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the renew devbox params
+// SetContext adds the context to the renew devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RenewDevboxParams].
 func (o *RenewDevboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the renew devbox params
+// WithHTTPClient adds the HTTPClient to the renew devbox params.
 func (o *RenewDevboxParams) WithHTTPClient(client *http.Client) *RenewDevboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the renew devbox params
+// SetHTTPClient adds the HTTPClient to the renew devbox params.
 func (o *RenewDevboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithDevboxID adds the devboxID to the renew devbox params
+// WithDevboxID adds the devboxID to the renew devbox params.
 func (o *RenewDevboxParams) WithDevboxID(devboxID string) *RenewDevboxParams {
 	o.SetDevboxID(devboxID)
 	return o
 }
 
-// SetDevboxID adds the devboxId to the renew devbox params
+// SetDevboxID adds the devboxId to the renew devbox params.
 func (o *RenewDevboxParams) SetDevboxID(devboxID string) {
 	o.DevboxID = devboxID
 }
 
-// WithDevboxSessionID adds the devboxSessionID to the renew devbox params
+// WithDevboxSessionID adds the devboxSessionID to the renew devbox params.
 func (o *RenewDevboxParams) WithDevboxSessionID(devboxSessionID string) *RenewDevboxParams {
 	o.SetDevboxSessionID(devboxSessionID)
 	return o
 }
 
-// SetDevboxSessionID adds the devboxSessionId to the renew devbox params
+// SetDevboxSessionID adds the devboxSessionId to the renew devbox params.
 func (o *RenewDevboxParams) SetDevboxSessionID(devboxSessionID string) {
 	o.DevboxSessionID = devboxSessionID
 }
 
-// WithOrgName adds the orgName to the renew devbox params
+// WithOrgName adds the orgName to the renew devbox params.
 func (o *RenewDevboxParams) WithOrgName(orgName string) *RenewDevboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the renew devbox params
+// SetOrgName adds the orgName to the renew devbox params.
 func (o *RenewDevboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *RenewDevboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

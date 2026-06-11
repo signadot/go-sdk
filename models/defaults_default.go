@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // DefaultsDefault defaults default
@@ -51,7 +52,7 @@ func (m *DefaultsDefault) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DefaultsDefault) validateClass(formats strfmt.Registry) error {
-	if swag.IsZero(m.Class) { // not required
+	if typeutils.IsZero(m.Class) { // not required
 		return nil
 	}
 
@@ -72,7 +73,7 @@ func (m *DefaultsDefault) validateClass(formats strfmt.Registry) error {
 }
 
 func (m *DefaultsDefault) validateResourceKind(formats strfmt.Registry) error {
-	if swag.IsZero(m.ResourceKind) { // not required
+	if typeutils.IsZero(m.ResourceKind) { // not required
 		return nil
 	}
 
@@ -112,7 +113,7 @@ func (m *DefaultsDefault) ContextValidate(ctx context.Context, formats strfmt.Re
 
 func (m *DefaultsDefault) contextValidateClass(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Class) { // not required
+	if typeutils.IsZero(m.Class) { // not required
 		return nil
 	}
 
@@ -134,7 +135,7 @@ func (m *DefaultsDefault) contextValidateClass(ctx context.Context, formats strf
 
 func (m *DefaultsDefault) contextValidateResourceKind(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.ResourceKind) { // not required
+	if typeutils.IsZero(m.ResourceKind) { // not required
 		return nil
 	}
 
@@ -159,13 +160,13 @@ func (m *DefaultsDefault) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *DefaultsDefault) UnmarshalBinary(b []byte) error {
 	var res DefaultsDefault
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxesMiddleware sandboxes middleware
@@ -47,12 +48,12 @@ func (m *SandboxesMiddleware) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxesMiddleware) validateArgs(formats strfmt.Registry) error {
-	if swag.IsZero(m.Args) { // not required
+	if typeutils.IsZero(m.Args) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Args); i++ {
-		if swag.IsZero(m.Args[i]) { // not required
+		if typeutils.IsZero(m.Args[i]) { // not required
 			continue
 		}
 
@@ -77,12 +78,12 @@ func (m *SandboxesMiddleware) validateArgs(formats strfmt.Registry) error {
 }
 
 func (m *SandboxesMiddleware) validateMatch(formats strfmt.Registry) error {
-	if swag.IsZero(m.Match) { // not required
+	if typeutils.IsZero(m.Match) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Match); i++ {
-		if swag.IsZero(m.Match[i]) { // not required
+		if typeutils.IsZero(m.Match[i]) { // not required
 			continue
 		}
 
@@ -130,7 +131,7 @@ func (m *SandboxesMiddleware) contextValidateArgs(ctx context.Context, formats s
 
 		if m.Args[i] != nil {
 
-			if swag.IsZero(m.Args[i]) { // not required
+			if typeutils.IsZero(m.Args[i]) { // not required
 				return nil
 			}
 
@@ -159,7 +160,7 @@ func (m *SandboxesMiddleware) contextValidateMatch(ctx context.Context, formats 
 
 		if m.Match[i] != nil {
 
-			if swag.IsZero(m.Match[i]) { // not required
+			if typeutils.IsZero(m.Match[i]) { // not required
 				return nil
 			}
 
@@ -187,13 +188,13 @@ func (m *SandboxesMiddleware) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxesMiddleware) UnmarshalBinary(b []byte) error {
 	var res SandboxesMiddleware
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

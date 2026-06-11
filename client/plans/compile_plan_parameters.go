@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCompilePlanParams() *CompilePlanParams {
-	return &CompilePlanParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewCompilePlanParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewCompilePlanParamsWithTimeout creates a new CompilePlanParams object
 // with the ability to set a timeout on a request.
 func NewCompilePlanParamsWithTimeout(timeout time.Duration) *CompilePlanParams {
 	return &CompilePlanParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewCompilePlanParamsWithContext creates a new CompilePlanParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CompilePlanParams].
 func NewCompilePlanParamsWithContext(ctx context.Context) *CompilePlanParams {
 	return &CompilePlanParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -78,9 +81,9 @@ type CompilePlanParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the compile plan params (not the query body).
@@ -98,76 +101,79 @@ func (o *CompilePlanParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the compile plan params
+// WithTimeout adds the timeout to the compile plan params.
 func (o *CompilePlanParams) WithTimeout(timeout time.Duration) *CompilePlanParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the compile plan params
+// SetTimeout adds the timeout to the compile plan params.
 func (o *CompilePlanParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the compile plan params
+// WithContext adds the context to the compile plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CompilePlanParams].
 func (o *CompilePlanParams) WithContext(ctx context.Context) *CompilePlanParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the compile plan params
+// SetContext adds the context to the compile plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CompilePlanParams].
 func (o *CompilePlanParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the compile plan params
+// WithHTTPClient adds the HTTPClient to the compile plan params.
 func (o *CompilePlanParams) WithHTTPClient(client *http.Client) *CompilePlanParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the compile plan params
+// SetHTTPClient adds the HTTPClient to the compile plan params.
 func (o *CompilePlanParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the compile plan params
+// WithData adds the data to the compile plan params.
 func (o *CompilePlanParams) WithData(data *models.PlanCompileInput) *CompilePlanParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the compile plan params
+// SetData adds the data to the compile plan params.
 func (o *CompilePlanParams) SetData(data *models.PlanCompileInput) {
 	o.Data = data
 }
 
-// WithExpand adds the expand to the compile plan params
+// WithExpand adds the expand to the compile plan params.
 func (o *CompilePlanParams) WithExpand(expand *string) *CompilePlanParams {
 	o.SetExpand(expand)
 	return o
 }
 
-// SetExpand adds the expand to the compile plan params
+// SetExpand adds the expand to the compile plan params.
 func (o *CompilePlanParams) SetExpand(expand *string) {
 	o.Expand = expand
 }
 
-// WithOrgName adds the orgName to the compile plan params
+// WithOrgName adds the orgName to the compile plan params.
 func (o *CompilePlanParams) WithOrgName(orgName string) *CompilePlanParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the compile plan params
+// SetOrgName adds the orgName to the compile plan params.
 func (o *CompilePlanParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *CompilePlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

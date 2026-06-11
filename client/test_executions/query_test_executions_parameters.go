@@ -11,7 +11,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
+	"github.com/go-openapi/swag/stringutils"
 )
 
 // NewQueryTestExecutionsParams creates a new QueryTestExecutionsParams object,
@@ -21,24 +22,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewQueryTestExecutionsParams() *QueryTestExecutionsParams {
-	return &QueryTestExecutionsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewQueryTestExecutionsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewQueryTestExecutionsParamsWithTimeout creates a new QueryTestExecutionsParams object
 // with the ability to set a timeout on a request.
 func NewQueryTestExecutionsParamsWithTimeout(timeout time.Duration) *QueryTestExecutionsParams {
 	return &QueryTestExecutionsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewQueryTestExecutionsParamsWithContext creates a new QueryTestExecutionsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [QueryTestExecutionsParams].
 func NewQueryTestExecutionsParamsWithContext(ctx context.Context) *QueryTestExecutionsParams {
 	return &QueryTestExecutionsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -209,9 +214,9 @@ type QueryTestExecutionsParams struct {
 	*/
 	TriggerWorkload *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the query test executions params (not the query body).
@@ -229,318 +234,321 @@ func (o *QueryTestExecutionsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the query test executions params
+// WithTimeout adds the timeout to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTimeout(timeout time.Duration) *QueryTestExecutionsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the query test executions params
+// SetTimeout adds the timeout to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the query test executions params
+// WithContext adds the context to the query test executions params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [QueryTestExecutionsParams].
 func (o *QueryTestExecutionsParams) WithContext(ctx context.Context) *QueryTestExecutionsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the query test executions params
+// SetContext adds the context to the query test executions params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [QueryTestExecutionsParams].
 func (o *QueryTestExecutionsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the query test executions params
+// WithHTTPClient adds the HTTPClient to the query test executions params.
 func (o *QueryTestExecutionsParams) WithHTTPClient(client *http.Client) *QueryTestExecutionsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the query test executions params
+// SetHTTPClient adds the HTTPClient to the query test executions params.
 func (o *QueryTestExecutionsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithCluster adds the cluster to the query test executions params
+// WithCluster adds the cluster to the query test executions params.
 func (o *QueryTestExecutionsParams) WithCluster(cluster *string) *QueryTestExecutionsParams {
 	o.SetCluster(cluster)
 	return o
 }
 
-// SetCluster adds the cluster to the query test executions params
+// SetCluster adds the cluster to the query test executions params.
 func (o *QueryTestExecutionsParams) SetCluster(cluster *string) {
 	o.Cluster = cluster
 }
 
-// WithCursor adds the cursor to the query test executions params
+// WithCursor adds the cursor to the query test executions params.
 func (o *QueryTestExecutionsParams) WithCursor(cursor *string) *QueryTestExecutionsParams {
 	o.SetCursor(cursor)
 	return o
 }
 
-// SetCursor adds the cursor to the query test executions params
+// SetCursor adds the cursor to the query test executions params.
 func (o *QueryTestExecutionsParams) SetCursor(cursor *string) {
 	o.Cursor = cursor
 }
 
-// WithExecutionPhase adds the executionPhase to the query test executions params
+// WithExecutionPhase adds the executionPhase to the query test executions params.
 func (o *QueryTestExecutionsParams) WithExecutionPhase(executionPhase *string) *QueryTestExecutionsParams {
 	o.SetExecutionPhase(executionPhase)
 	return o
 }
 
-// SetExecutionPhase adds the executionPhase to the query test executions params
+// SetExecutionPhase adds the executionPhase to the query test executions params.
 func (o *QueryTestExecutionsParams) SetExecutionPhase(executionPhase *string) {
 	o.ExecutionPhase = executionPhase
 }
 
-// WithFrom adds the from to the query test executions params
+// WithFrom adds the from to the query test executions params.
 func (o *QueryTestExecutionsParams) WithFrom(from *string) *QueryTestExecutionsParams {
 	o.SetFrom(from)
 	return o
 }
 
-// SetFrom adds the from to the query test executions params
+// SetFrom adds the from to the query test executions params.
 func (o *QueryTestExecutionsParams) SetFrom(from *string) {
 	o.From = from
 }
 
-// WithIsAutoDiff adds the isAutoDiff to the query test executions params
+// WithIsAutoDiff adds the isAutoDiff to the query test executions params.
 func (o *QueryTestExecutionsParams) WithIsAutoDiff(isAutoDiff *string) *QueryTestExecutionsParams {
 	o.SetIsAutoDiff(isAutoDiff)
 	return o
 }
 
-// SetIsAutoDiff adds the isAutoDiff to the query test executions params
+// SetIsAutoDiff adds the isAutoDiff to the query test executions params.
 func (o *QueryTestExecutionsParams) SetIsAutoDiff(isAutoDiff *string) {
 	o.IsAutoDiff = isAutoDiff
 }
 
-// WithLabel adds the label to the query test executions params
+// WithLabel adds the label to the query test executions params.
 func (o *QueryTestExecutionsParams) WithLabel(label []string) *QueryTestExecutionsParams {
 	o.SetLabel(label)
 	return o
 }
 
-// SetLabel adds the label to the query test executions params
+// SetLabel adds the label to the query test executions params.
 func (o *QueryTestExecutionsParams) SetLabel(label []string) {
 	o.Label = label
 }
 
-// WithOrderDir adds the orderDir to the query test executions params
+// WithOrderDir adds the orderDir to the query test executions params.
 func (o *QueryTestExecutionsParams) WithOrderDir(orderDir *string) *QueryTestExecutionsParams {
 	o.SetOrderDir(orderDir)
 	return o
 }
 
-// SetOrderDir adds the orderDir to the query test executions params
+// SetOrderDir adds the orderDir to the query test executions params.
 func (o *QueryTestExecutionsParams) SetOrderDir(orderDir *string) {
 	o.OrderDir = orderDir
 }
 
-// WithOrgName adds the orgName to the query test executions params
+// WithOrgName adds the orgName to the query test executions params.
 func (o *QueryTestExecutionsParams) WithOrgName(orgName string) *QueryTestExecutionsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the query test executions params
+// SetOrgName adds the orgName to the query test executions params.
 func (o *QueryTestExecutionsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPageSize adds the pageSize to the query test executions params
+// WithPageSize adds the pageSize to the query test executions params.
 func (o *QueryTestExecutionsParams) WithPageSize(pageSize *int64) *QueryTestExecutionsParams {
 	o.SetPageSize(pageSize)
 	return o
 }
 
-// SetPageSize adds the pageSize to the query test executions params
+// SetPageSize adds the pageSize to the query test executions params.
 func (o *QueryTestExecutionsParams) SetPageSize(pageSize *int64) {
 	o.PageSize = pageSize
 }
 
-// WithPublished adds the published to the query test executions params
+// WithPublished adds the published to the query test executions params.
 func (o *QueryTestExecutionsParams) WithPublished(published *bool) *QueryTestExecutionsParams {
 	o.SetPublished(published)
 	return o
 }
 
-// SetPublished adds the published to the query test executions params
+// SetPublished adds the published to the query test executions params.
 func (o *QueryTestExecutionsParams) SetPublished(published *bool) {
 	o.Published = published
 }
 
-// WithRepo adds the repo to the query test executions params
+// WithRepo adds the repo to the query test executions params.
 func (o *QueryTestExecutionsParams) WithRepo(repo *string) *QueryTestExecutionsParams {
 	o.SetRepo(repo)
 	return o
 }
 
-// SetRepo adds the repo to the query test executions params
+// SetRepo adds the repo to the query test executions params.
 func (o *QueryTestExecutionsParams) SetRepo(repo *string) {
 	o.Repo = repo
 }
 
-// WithRepoBranch adds the repoBranch to the query test executions params
+// WithRepoBranch adds the repoBranch to the query test executions params.
 func (o *QueryTestExecutionsParams) WithRepoBranch(repoBranch *string) *QueryTestExecutionsParams {
 	o.SetRepoBranch(repoBranch)
 	return o
 }
 
-// SetRepoBranch adds the repoBranch to the query test executions params
+// SetRepoBranch adds the repoBranch to the query test executions params.
 func (o *QueryTestExecutionsParams) SetRepoBranch(repoBranch *string) {
 	o.RepoBranch = repoBranch
 }
 
-// WithRepoCommitSHA adds the repoCommitSHA to the query test executions params
+// WithRepoCommitSHA adds the repoCommitSHA to the query test executions params.
 func (o *QueryTestExecutionsParams) WithRepoCommitSHA(repoCommitSHA *string) *QueryTestExecutionsParams {
 	o.SetRepoCommitSHA(repoCommitSHA)
 	return o
 }
 
-// SetRepoCommitSHA adds the repoCommitSHA to the query test executions params
+// SetRepoCommitSHA adds the repoCommitSHA to the query test executions params.
 func (o *QueryTestExecutionsParams) SetRepoCommitSHA(repoCommitSHA *string) {
 	o.RepoCommitSHA = repoCommitSHA
 }
 
-// WithRepoPath adds the repoPath to the query test executions params
+// WithRepoPath adds the repoPath to the query test executions params.
 func (o *QueryTestExecutionsParams) WithRepoPath(repoPath *string) *QueryTestExecutionsParams {
 	o.SetRepoPath(repoPath)
 	return o
 }
 
-// SetRepoPath adds the repoPath to the query test executions params
+// SetRepoPath adds the repoPath to the query test executions params.
 func (o *QueryTestExecutionsParams) SetRepoPath(repoPath *string) {
 	o.RepoPath = repoPath
 }
 
-// WithRunID adds the runID to the query test executions params
+// WithRunID adds the runID to the query test executions params.
 func (o *QueryTestExecutionsParams) WithRunID(runID *string) *QueryTestExecutionsParams {
 	o.SetRunID(runID)
 	return o
 }
 
-// SetRunID adds the runId to the query test executions params
+// SetRunID adds the runId to the query test executions params.
 func (o *QueryTestExecutionsParams) SetRunID(runID *string) {
 	o.RunID = runID
 }
 
-// WithSkipDeletedTests adds the skipDeletedTests to the query test executions params
+// WithSkipDeletedTests adds the skipDeletedTests to the query test executions params.
 func (o *QueryTestExecutionsParams) WithSkipDeletedTests(skipDeletedTests *string) *QueryTestExecutionsParams {
 	o.SetSkipDeletedTests(skipDeletedTests)
 	return o
 }
 
-// SetSkipDeletedTests adds the skipDeletedTests to the query test executions params
+// SetSkipDeletedTests adds the skipDeletedTests to the query test executions params.
 func (o *QueryTestExecutionsParams) SetSkipDeletedTests(skipDeletedTests *string) {
 	o.SkipDeletedTests = skipDeletedTests
 }
 
-// WithSource adds the source to the query test executions params
+// WithSource adds the source to the query test executions params.
 func (o *QueryTestExecutionsParams) WithSource(source *string) *QueryTestExecutionsParams {
 	o.SetSource(source)
 	return o
 }
 
-// SetSource adds the source to the query test executions params
+// SetSource adds the source to the query test executions params.
 func (o *QueryTestExecutionsParams) SetSource(source *string) {
 	o.Source = source
 }
 
-// WithTargetRevision adds the targetRevision to the query test executions params
+// WithTargetRevision adds the targetRevision to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTargetRevision(targetRevision *string) *QueryTestExecutionsParams {
 	o.SetTargetRevision(targetRevision)
 	return o
 }
 
-// SetTargetRevision adds the targetRevision to the query test executions params
+// SetTargetRevision adds the targetRevision to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTargetRevision(targetRevision *string) {
 	o.TargetRevision = targetRevision
 }
 
-// WithTargetRouteGroup adds the targetRouteGroup to the query test executions params
+// WithTargetRouteGroup adds the targetRouteGroup to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTargetRouteGroup(targetRouteGroup *string) *QueryTestExecutionsParams {
 	o.SetTargetRouteGroup(targetRouteGroup)
 	return o
 }
 
-// SetTargetRouteGroup adds the targetRouteGroup to the query test executions params
+// SetTargetRouteGroup adds the targetRouteGroup to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTargetRouteGroup(targetRouteGroup *string) {
 	o.TargetRouteGroup = targetRouteGroup
 }
 
-// WithTargetRoutingKey adds the targetRoutingKey to the query test executions params
+// WithTargetRoutingKey adds the targetRoutingKey to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTargetRoutingKey(targetRoutingKey *string) *QueryTestExecutionsParams {
 	o.SetTargetRoutingKey(targetRoutingKey)
 	return o
 }
 
-// SetTargetRoutingKey adds the targetRoutingKey to the query test executions params
+// SetTargetRoutingKey adds the targetRoutingKey to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTargetRoutingKey(targetRoutingKey *string) {
 	o.TargetRoutingKey = targetRoutingKey
 }
 
-// WithTargetSandbox adds the targetSandbox to the query test executions params
+// WithTargetSandbox adds the targetSandbox to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTargetSandbox(targetSandbox *string) *QueryTestExecutionsParams {
 	o.SetTargetSandbox(targetSandbox)
 	return o
 }
 
-// SetTargetSandbox adds the targetSandbox to the query test executions params
+// SetTargetSandbox adds the targetSandbox to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTargetSandbox(targetSandbox *string) {
 	o.TargetSandbox = targetSandbox
 }
 
-// WithTestName adds the testName to the query test executions params
+// WithTestName adds the testName to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTestName(testName *string) *QueryTestExecutionsParams {
 	o.SetTestName(testName)
 	return o
 }
 
-// SetTestName adds the testName to the query test executions params
+// SetTestName adds the testName to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTestName(testName *string) {
 	o.TestName = testName
 }
 
-// WithTo adds the to to the query test executions params
+// WithTo adds the to to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTo(to *string) *QueryTestExecutionsParams {
 	o.SetTo(to)
 	return o
 }
 
-// SetTo adds the to to the query test executions params
+// SetTo adds the to to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTo(to *string) {
 	o.To = to
 }
 
-// WithTriggerID adds the triggerID to the query test executions params
+// WithTriggerID adds the triggerID to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTriggerID(triggerID *string) *QueryTestExecutionsParams {
 	o.SetTriggerID(triggerID)
 	return o
 }
 
-// SetTriggerID adds the triggerId to the query test executions params
+// SetTriggerID adds the triggerId to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTriggerID(triggerID *string) {
 	o.TriggerID = triggerID
 }
 
-// WithTriggerWorkload adds the triggerWorkload to the query test executions params
+// WithTriggerWorkload adds the triggerWorkload to the query test executions params.
 func (o *QueryTestExecutionsParams) WithTriggerWorkload(triggerWorkload *string) *QueryTestExecutionsParams {
 	o.SetTriggerWorkload(triggerWorkload)
 	return o
 }
 
-// SetTriggerWorkload adds the triggerWorkload to the query test executions params
+// SetTriggerWorkload adds the triggerWorkload to the query test executions params.
 func (o *QueryTestExecutionsParams) SetTriggerWorkload(triggerWorkload *string) {
 	o.TriggerWorkload = triggerWorkload
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
@@ -671,7 +679,7 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if o.PageSize != nil {
 			qrPageSize = *o.PageSize
 		}
-		qPageSize := swag.FormatInt64(qrPageSize)
+		qPageSize := conv.FormatInteger(qrPageSize)
 		if qPageSize != "" {
 
 			if err := r.SetQueryParam("pageSize", qPageSize); err != nil {
@@ -688,7 +696,7 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if o.Published != nil {
 			qrPublished = *o.Published
 		}
-		qPublished := swag.FormatBool(qrPublished)
+		qPublished := conv.FormatBool(qrPublished)
 		if qPublished != "" {
 
 			if err := r.SetQueryParam("published", qPublished); err != nil {
@@ -958,7 +966,7 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 	return nil
 }
 
-// bindParamQueryTestExecutions binds the parameter label
+// bindParamQueryTestExecutions binds the parameter label.
 func (o *QueryTestExecutionsParams) bindParamLabel(formats strfmt.Registry) []string {
 	labelIR := o.Label
 
@@ -970,7 +978,7 @@ func (o *QueryTestExecutionsParams) bindParamLabel(formats strfmt.Registry) []st
 	}
 
 	// items.CollectionFormat: "multi"
-	labelIS := swag.JoinByFormat(labelIC, "multi")
+	labelIS := stringutils.JoinByFormat(labelIC, "multi")
 
 	return labelIS
 }

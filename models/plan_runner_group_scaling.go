@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanRunnerGroupScaling plan runner group scaling
@@ -35,7 +36,7 @@ func (m *PlanRunnerGroupScaling) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanRunnerGroupScaling) validateManual(formats strfmt.Registry) error {
-	if swag.IsZero(m.Manual) { // not required
+	if typeutils.IsZero(m.Manual) { // not required
 		return nil
 	}
 
@@ -75,7 +76,7 @@ func (m *PlanRunnerGroupScaling) contextValidateManual(ctx context.Context, form
 
 	if m.Manual != nil {
 
-		if swag.IsZero(m.Manual) { // not required
+		if typeutils.IsZero(m.Manual) { // not required
 			return nil
 		}
 
@@ -101,13 +102,13 @@ func (m *PlanRunnerGroupScaling) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanRunnerGroupScaling) UnmarshalBinary(b []byte) error {
 	var res PlanRunnerGroupScaling
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

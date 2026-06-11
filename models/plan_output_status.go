@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanOutputStatus plan output status
@@ -61,7 +62,7 @@ func (m *PlanOutputStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanOutputStatus) validateArtifact(formats strfmt.Registry) error {
-	if swag.IsZero(m.Artifact) { // not required
+	if typeutils.IsZero(m.Artifact) { // not required
 		return nil
 	}
 
@@ -84,7 +85,7 @@ func (m *PlanOutputStatus) validateArtifact(formats strfmt.Registry) error {
 }
 
 func (m *PlanOutputStatus) validateStepRef(formats strfmt.Registry) error {
-	if swag.IsZero(m.StepRef) { // not required
+	if typeutils.IsZero(m.StepRef) { // not required
 		return nil
 	}
 
@@ -128,7 +129,7 @@ func (m *PlanOutputStatus) contextValidateArtifact(ctx context.Context, formats 
 
 	if m.Artifact != nil {
 
-		if swag.IsZero(m.Artifact) { // not required
+		if typeutils.IsZero(m.Artifact) { // not required
 			return nil
 		}
 
@@ -153,7 +154,7 @@ func (m *PlanOutputStatus) contextValidateStepRef(ctx context.Context, formats s
 
 	if m.StepRef != nil {
 
-		if swag.IsZero(m.StepRef) { // not required
+		if typeutils.IsZero(m.StepRef) { // not required
 			return nil
 		}
 
@@ -179,13 +180,13 @@ func (m *PlanOutputStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanOutputStatus) UnmarshalBinary(b []byte) error {
 	var res PlanOutputStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewApplyTestParams() *ApplyTestParams {
-	return &ApplyTestParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewApplyTestParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewApplyTestParamsWithTimeout creates a new ApplyTestParams object
 // with the ability to set a timeout on a request.
 func NewApplyTestParamsWithTimeout(timeout time.Duration) *ApplyTestParams {
 	return &ApplyTestParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewApplyTestParamsWithContext creates a new ApplyTestParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplyTestParams].
 func NewApplyTestParamsWithContext(ctx context.Context) *ApplyTestParams {
 	return &ApplyTestParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -78,9 +81,9 @@ type ApplyTestParams struct {
 	*/
 	TestName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the apply test params (not the query body).
@@ -98,76 +101,79 @@ func (o *ApplyTestParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the apply test params
+// WithTimeout adds the timeout to the apply test params.
 func (o *ApplyTestParams) WithTimeout(timeout time.Duration) *ApplyTestParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the apply test params
+// SetTimeout adds the timeout to the apply test params.
 func (o *ApplyTestParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the apply test params
+// WithContext adds the context to the apply test params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplyTestParams].
 func (o *ApplyTestParams) WithContext(ctx context.Context) *ApplyTestParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the apply test params
+// SetContext adds the context to the apply test params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplyTestParams].
 func (o *ApplyTestParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the apply test params
+// WithHTTPClient adds the HTTPClient to the apply test params.
 func (o *ApplyTestParams) WithHTTPClient(client *http.Client) *ApplyTestParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the apply test params
+// SetHTTPClient adds the HTTPClient to the apply test params.
 func (o *ApplyTestParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the apply test params
+// WithData adds the data to the apply test params.
 func (o *ApplyTestParams) WithData(data *models.TestSpec) *ApplyTestParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the apply test params
+// SetData adds the data to the apply test params.
 func (o *ApplyTestParams) SetData(data *models.TestSpec) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the apply test params
+// WithOrgName adds the orgName to the apply test params.
 func (o *ApplyTestParams) WithOrgName(orgName string) *ApplyTestParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the apply test params
+// SetOrgName adds the orgName to the apply test params.
 func (o *ApplyTestParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTestName adds the testName to the apply test params
+// WithTestName adds the testName to the apply test params.
 func (o *ApplyTestParams) WithTestName(testName string) *ApplyTestParams {
 	o.SetTestName(testName)
 	return o
 }
 
-// SetTestName adds the testName to the apply test params
+// SetTestName adds the testName to the apply test params.
 func (o *ApplyTestParams) SetTestName(testName string) {
 	o.TestName = testName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ApplyTestParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

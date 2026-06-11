@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxFileSource sandbox file source
@@ -49,7 +50,7 @@ func (m *SandboxFileSource) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxFileSource) validateConfigMap(formats strfmt.Registry) error {
-	if swag.IsZero(m.ConfigMap) { // not required
+	if typeutils.IsZero(m.ConfigMap) { // not required
 		return nil
 	}
 
@@ -72,7 +73,7 @@ func (m *SandboxFileSource) validateConfigMap(formats strfmt.Registry) error {
 }
 
 func (m *SandboxFileSource) validateResource(formats strfmt.Registry) error {
-	if swag.IsZero(m.Resource) { // not required
+	if typeutils.IsZero(m.Resource) { // not required
 		return nil
 	}
 
@@ -95,7 +96,7 @@ func (m *SandboxFileSource) validateResource(formats strfmt.Registry) error {
 }
 
 func (m *SandboxFileSource) validateSecret(formats strfmt.Registry) error {
-	if swag.IsZero(m.Secret) { // not required
+	if typeutils.IsZero(m.Secret) { // not required
 		return nil
 	}
 
@@ -143,7 +144,7 @@ func (m *SandboxFileSource) contextValidateConfigMap(ctx context.Context, format
 
 	if m.ConfigMap != nil {
 
-		if swag.IsZero(m.ConfigMap) { // not required
+		if typeutils.IsZero(m.ConfigMap) { // not required
 			return nil
 		}
 
@@ -168,7 +169,7 @@ func (m *SandboxFileSource) contextValidateResource(ctx context.Context, formats
 
 	if m.Resource != nil {
 
-		if swag.IsZero(m.Resource) { // not required
+		if typeutils.IsZero(m.Resource) { // not required
 			return nil
 		}
 
@@ -193,7 +194,7 @@ func (m *SandboxFileSource) contextValidateSecret(ctx context.Context, formats s
 
 	if m.Secret != nil {
 
-		if swag.IsZero(m.Secret) { // not required
+		if typeutils.IsZero(m.Secret) { // not required
 			return nil
 		}
 
@@ -219,13 +220,13 @@ func (m *SandboxFileSource) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxFileSource) UnmarshalBinary(b []byte) error {
 	var res SandboxFileSource
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

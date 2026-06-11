@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRegisterDevboxParams() *RegisterDevboxParams {
-	return &RegisterDevboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewRegisterDevboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewRegisterDevboxParamsWithTimeout creates a new RegisterDevboxParams object
 // with the ability to set a timeout on a request.
 func NewRegisterDevboxParamsWithTimeout(timeout time.Duration) *RegisterDevboxParams {
 	return &RegisterDevboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewRegisterDevboxParamsWithContext creates a new RegisterDevboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RegisterDevboxParams].
 func NewRegisterDevboxParamsWithContext(ctx context.Context) *RegisterDevboxParams {
 	return &RegisterDevboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -72,9 +75,9 @@ type RegisterDevboxParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the register devbox params (not the query body).
@@ -92,65 +95,68 @@ func (o *RegisterDevboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the register devbox params
+// WithTimeout adds the timeout to the register devbox params.
 func (o *RegisterDevboxParams) WithTimeout(timeout time.Duration) *RegisterDevboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the register devbox params
+// SetTimeout adds the timeout to the register devbox params.
 func (o *RegisterDevboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the register devbox params
+// WithContext adds the context to the register devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RegisterDevboxParams].
 func (o *RegisterDevboxParams) WithContext(ctx context.Context) *RegisterDevboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the register devbox params
+// SetContext adds the context to the register devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RegisterDevboxParams].
 func (o *RegisterDevboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the register devbox params
+// WithHTTPClient adds the HTTPClient to the register devbox params.
 func (o *RegisterDevboxParams) WithHTTPClient(client *http.Client) *RegisterDevboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the register devbox params
+// SetHTTPClient adds the HTTPClient to the register devbox params.
 func (o *RegisterDevboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the register devbox params
+// WithData adds the data to the register devbox params.
 func (o *RegisterDevboxParams) WithData(data *models.DevboxRegistration) *RegisterDevboxParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the register devbox params
+// SetData adds the data to the register devbox params.
 func (o *RegisterDevboxParams) SetData(data *models.DevboxRegistration) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the register devbox params
+// WithOrgName adds the orgName to the register devbox params.
 func (o *RegisterDevboxParams) WithOrgName(orgName string) *RegisterDevboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the register devbox params
+// SetOrgName adds the orgName to the register devbox params.
 func (o *RegisterDevboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *RegisterDevboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

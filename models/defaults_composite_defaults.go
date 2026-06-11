@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // DefaultsCompositeDefaults defaults composite defaults
@@ -36,12 +37,12 @@ func (m *DefaultsCompositeDefaults) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DefaultsCompositeDefaults) validateCluster(formats strfmt.Registry) error {
-	if swag.IsZero(m.Cluster) { // not required
+	if typeutils.IsZero(m.Cluster) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Cluster); i++ {
-		if swag.IsZero(m.Cluster[i]) { // not required
+		if typeutils.IsZero(m.Cluster[i]) { // not required
 			continue
 		}
 
@@ -85,7 +86,7 @@ func (m *DefaultsCompositeDefaults) contextValidateCluster(ctx context.Context, 
 
 		if m.Cluster[i] != nil {
 
-			if swag.IsZero(m.Cluster[i]) { // not required
+			if typeutils.IsZero(m.Cluster[i]) { // not required
 				return nil
 			}
 
@@ -113,13 +114,13 @@ func (m *DefaultsCompositeDefaults) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *DefaultsCompositeDefaults) UnmarshalBinary(b []byte) error {
 	var res DefaultsCompositeDefaults
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

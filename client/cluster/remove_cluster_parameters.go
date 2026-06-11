@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRemoveClusterParams() *RemoveClusterParams {
-	return &RemoveClusterParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewRemoveClusterParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewRemoveClusterParamsWithTimeout creates a new RemoveClusterParams object
 // with the ability to set a timeout on a request.
 func NewRemoveClusterParamsWithTimeout(timeout time.Duration) *RemoveClusterParams {
 	return &RemoveClusterParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewRemoveClusterParamsWithContext creates a new RemoveClusterParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RemoveClusterParams].
 func NewRemoveClusterParamsWithContext(ctx context.Context) *RemoveClusterParams {
 	return &RemoveClusterParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type RemoveClusterParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the remove cluster params (not the query body).
@@ -90,65 +94,68 @@ func (o *RemoveClusterParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the remove cluster params
+// WithTimeout adds the timeout to the remove cluster params.
 func (o *RemoveClusterParams) WithTimeout(timeout time.Duration) *RemoveClusterParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the remove cluster params
+// SetTimeout adds the timeout to the remove cluster params.
 func (o *RemoveClusterParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the remove cluster params
+// WithContext adds the context to the remove cluster params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RemoveClusterParams].
 func (o *RemoveClusterParams) WithContext(ctx context.Context) *RemoveClusterParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the remove cluster params
+// SetContext adds the context to the remove cluster params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RemoveClusterParams].
 func (o *RemoveClusterParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the remove cluster params
+// WithHTTPClient adds the HTTPClient to the remove cluster params.
 func (o *RemoveClusterParams) WithHTTPClient(client *http.Client) *RemoveClusterParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the remove cluster params
+// SetHTTPClient adds the HTTPClient to the remove cluster params.
 func (o *RemoveClusterParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithClusterName adds the clusterName to the remove cluster params
+// WithClusterName adds the clusterName to the remove cluster params.
 func (o *RemoveClusterParams) WithClusterName(clusterName string) *RemoveClusterParams {
 	o.SetClusterName(clusterName)
 	return o
 }
 
-// SetClusterName adds the clusterName to the remove cluster params
+// SetClusterName adds the clusterName to the remove cluster params.
 func (o *RemoveClusterParams) SetClusterName(clusterName string) {
 	o.ClusterName = clusterName
 }
 
-// WithOrgName adds the orgName to the remove cluster params
+// WithOrgName adds the orgName to the remove cluster params.
 func (o *RemoveClusterParams) WithOrgName(orgName string) *RemoveClusterParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the remove cluster params
+// SetOrgName adds the orgName to the remove cluster params.
 func (o *RemoveClusterParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *RemoveClusterParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

@@ -3,7 +3,9 @@
 package jobs
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new jobs API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new jobs API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new jobs API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,41 +45,86 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for jobs API
+Client for jobs API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// CancelJob cancel a job.
 	CancelJob(params *CancelJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelJobOK, error)
 
+	// CancelJobContext cancel a job.
+	CancelJobContext(ctx context.Context, params *CancelJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelJobOK, error)
+
+	// CreateJob create a job.
 	CreateJob(params *CreateJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateJobOK, error)
 
+	// CreateJobContext create a job.
+	CreateJobContext(ctx context.Context, params *CreateJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateJobOK, error)
+
+	// DeleteJob delete a job.
 	DeleteJob(params *DeleteJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteJobOK, error)
 
+	// DeleteJobContext delete a job.
+	DeleteJobContext(ctx context.Context, params *DeleteJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteJobOK, error)
+
+	// GetJob get a job.
 	GetJob(params *GetJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetJobOK, error)
 
+	// GetJobContext get a job.
+	GetJobContext(ctx context.Context, params *GetJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetJobOK, error)
+
+	// ListJobs list jobs.
 	ListJobs(params *ListJobsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListJobsContext list jobs.
+	ListJobsContext(ctx context.Context, params *ListJobsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-CancelJob cancels a job
+CancelJobcancels a job.
 
-Cancel a given job.
+Cancel a given job..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CancelJobContext] instead.
 */
 func (a *Client) CancelJob(params *CancelJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelJobOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CancelJobContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CancelJobContextcancels a job.
+
+Cancel a given job..
+
+Do not use the deprecated [CancelJobParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CancelJobContext(ctx context.Context, params *CancelJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelJobOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCancelJobParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-job",
 		Method:             "PUT",
@@ -86,13 +135,14 @@ func (a *Client) CancelJob(params *CancelJobParams, authInfo runtime.ClientAuthI
 		Params:             params,
 		Reader:             &CancelJobReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -113,15 +163,39 @@ func (a *Client) CancelJob(params *CancelJobParams, authInfo runtime.ClientAuthI
 }
 
 /*
-CreateJob creates a job
+CreateJobcreates a job.
 
-Creates a job with the provided parameters.
+Creates a job with the provided parameters..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CreateJobContext] instead.
 */
 func (a *Client) CreateJob(params *CreateJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateJobOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CreateJobContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CreateJobContextcreates a job.
+
+Creates a job with the provided parameters..
+
+Do not use the deprecated [CreateJobParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CreateJobContext(ctx context.Context, params *CreateJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateJobOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateJobParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "create-job",
 		Method:             "POST",
@@ -132,13 +206,14 @@ func (a *Client) CreateJob(params *CreateJobParams, authInfo runtime.ClientAuthI
 		Params:             params,
 		Reader:             &CreateJobReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -159,15 +234,39 @@ func (a *Client) CreateJob(params *CreateJobParams, authInfo runtime.ClientAuthI
 }
 
 /*
-DeleteJob deletes a job
+DeleteJobdeletes a job.
 
-Delete a given job.
+Delete a given job..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteJobContext] instead.
 */
 func (a *Client) DeleteJob(params *DeleteJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteJobOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteJobContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteJobContextdeletes a job.
+
+Delete a given job..
+
+Do not use the deprecated [DeleteJobParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteJobContext(ctx context.Context, params *DeleteJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteJobOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteJobParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-job",
 		Method:             "DELETE",
@@ -178,13 +277,14 @@ func (a *Client) DeleteJob(params *DeleteJobParams, authInfo runtime.ClientAuthI
 		Params:             params,
 		Reader:             &DeleteJobReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -205,15 +305,39 @@ func (a *Client) DeleteJob(params *DeleteJobParams, authInfo runtime.ClientAuthI
 }
 
 /*
-GetJob gets a job
+GetJobgets a job.
 
-Fetch the details about a given job.
+Fetch the details about a given job..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetJobContext] instead.
 */
 func (a *Client) GetJob(params *GetJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetJobOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetJobContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetJobContextgets a job.
+
+Fetch the details about a given job..
+
+Do not use the deprecated [GetJobParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetJobContext(ctx context.Context, params *GetJobParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetJobOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetJobParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-job",
 		Method:             "GET",
@@ -224,13 +348,14 @@ func (a *Client) GetJob(params *GetJobParams, authInfo runtime.ClientAuthInfoWri
 		Params:             params,
 		Reader:             &GetJobReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -251,15 +376,39 @@ func (a *Client) GetJob(params *GetJobParams, authInfo runtime.ClientAuthInfoWri
 }
 
 /*
-ListJobs lists jobs
+ListJobslists jobs.
 
-List Jobs
+List Jobs.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListJobsContext] instead.
 */
 func (a *Client) ListJobs(params *ListJobsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListJobsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListJobsContextlists jobs.
+
+List Jobs.
+
+Do not use the deprecated [ListJobsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListJobsContext(ctx context.Context, params *ListJobsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListJobsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-jobs",
 		Method:             "GET",
@@ -270,13 +419,14 @@ func (a *Client) ListJobs(params *ListJobsParams, authInfo runtime.ClientAuthInf
 		Params:             params,
 		Reader:             &ListJobsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -297,6 +447,14 @@ func (a *Client) ListJobs(params *ListJobsParams, authInfo runtime.ClientAuthInf
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [JobsParams].
+	ctx context.Context
 }

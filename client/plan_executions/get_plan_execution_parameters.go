@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPlanExecutionParams() *GetPlanExecutionParams {
-	return &GetPlanExecutionParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetPlanExecutionParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetPlanExecutionParamsWithTimeout creates a new GetPlanExecutionParams object
 // with the ability to set a timeout on a request.
 func NewGetPlanExecutionParamsWithTimeout(timeout time.Duration) *GetPlanExecutionParams {
 	return &GetPlanExecutionParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetPlanExecutionParamsWithContext creates a new GetPlanExecutionParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanExecutionParams].
 func NewGetPlanExecutionParamsWithContext(ctx context.Context) *GetPlanExecutionParams {
 	return &GetPlanExecutionParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetPlanExecutionParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get plan execution params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetPlanExecutionParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get plan execution params
+// WithTimeout adds the timeout to the get plan execution params.
 func (o *GetPlanExecutionParams) WithTimeout(timeout time.Duration) *GetPlanExecutionParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get plan execution params
+// SetTimeout adds the timeout to the get plan execution params.
 func (o *GetPlanExecutionParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get plan execution params
+// WithContext adds the context to the get plan execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanExecutionParams].
 func (o *GetPlanExecutionParams) WithContext(ctx context.Context) *GetPlanExecutionParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get plan execution params
+// SetContext adds the context to the get plan execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanExecutionParams].
 func (o *GetPlanExecutionParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get plan execution params
+// WithHTTPClient adds the HTTPClient to the get plan execution params.
 func (o *GetPlanExecutionParams) WithHTTPClient(client *http.Client) *GetPlanExecutionParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get plan execution params
+// SetHTTPClient adds the HTTPClient to the get plan execution params.
 func (o *GetPlanExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionID adds the executionID to the get plan execution params
+// WithExecutionID adds the executionID to the get plan execution params.
 func (o *GetPlanExecutionParams) WithExecutionID(executionID string) *GetPlanExecutionParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the get plan execution params
+// SetExecutionID adds the executionId to the get plan execution params.
 func (o *GetPlanExecutionParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the get plan execution params
+// WithOrgName adds the orgName to the get plan execution params.
 func (o *GetPlanExecutionParams) WithOrgName(orgName string) *GetPlanExecutionParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get plan execution params
+// SetOrgName adds the orgName to the get plan execution params.
 func (o *GetPlanExecutionParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetPlanExecutionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

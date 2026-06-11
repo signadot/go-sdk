@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListTestExecutionsParams() *ListTestExecutionsParams {
-	return &ListTestExecutionsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListTestExecutionsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListTestExecutionsParamsWithTimeout creates a new ListTestExecutionsParams object
 // with the ability to set a timeout on a request.
 func NewListTestExecutionsParamsWithTimeout(timeout time.Duration) *ListTestExecutionsParams {
 	return &ListTestExecutionsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListTestExecutionsParamsWithContext creates a new ListTestExecutionsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListTestExecutionsParams].
 func NewListTestExecutionsParamsWithContext(ctx context.Context) *ListTestExecutionsParams {
 	return &ListTestExecutionsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type ListTestExecutionsParams struct {
 	*/
 	TestName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list test executions params (not the query body).
@@ -90,65 +94,68 @@ func (o *ListTestExecutionsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list test executions params
+// WithTimeout adds the timeout to the list test executions params.
 func (o *ListTestExecutionsParams) WithTimeout(timeout time.Duration) *ListTestExecutionsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list test executions params
+// SetTimeout adds the timeout to the list test executions params.
 func (o *ListTestExecutionsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list test executions params
+// WithContext adds the context to the list test executions params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListTestExecutionsParams].
 func (o *ListTestExecutionsParams) WithContext(ctx context.Context) *ListTestExecutionsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list test executions params
+// SetContext adds the context to the list test executions params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListTestExecutionsParams].
 func (o *ListTestExecutionsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list test executions params
+// WithHTTPClient adds the HTTPClient to the list test executions params.
 func (o *ListTestExecutionsParams) WithHTTPClient(client *http.Client) *ListTestExecutionsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list test executions params
+// SetHTTPClient adds the HTTPClient to the list test executions params.
 func (o *ListTestExecutionsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list test executions params
+// WithOrgName adds the orgName to the list test executions params.
 func (o *ListTestExecutionsParams) WithOrgName(orgName string) *ListTestExecutionsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list test executions params
+// SetOrgName adds the orgName to the list test executions params.
 func (o *ListTestExecutionsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTestName adds the testName to the list test executions params
+// WithTestName adds the testName to the list test executions params.
 func (o *ListTestExecutionsParams) WithTestName(testName string) *ListTestExecutionsParams {
 	o.SetTestName(testName)
 	return o
 }
 
-// SetTestName adds the testName to the list test executions params
+// SetTestName adds the testName to the list test executions params.
 func (o *ListTestExecutionsParams) SetTestName(testName string) {
 	o.TestName = testName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

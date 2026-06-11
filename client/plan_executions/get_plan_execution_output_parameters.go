@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPlanExecutionOutputParams() *GetPlanExecutionOutputParams {
-	return &GetPlanExecutionOutputParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetPlanExecutionOutputParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetPlanExecutionOutputParamsWithTimeout creates a new GetPlanExecutionOutputParams object
 // with the ability to set a timeout on a request.
 func NewGetPlanExecutionOutputParamsWithTimeout(timeout time.Duration) *GetPlanExecutionOutputParams {
 	return &GetPlanExecutionOutputParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetPlanExecutionOutputParamsWithContext creates a new GetPlanExecutionOutputParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanExecutionOutputParams].
 func NewGetPlanExecutionOutputParamsWithContext(ctx context.Context) *GetPlanExecutionOutputParams {
 	return &GetPlanExecutionOutputParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -76,9 +80,9 @@ type GetPlanExecutionOutputParams struct {
 	*/
 	OutputName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get plan execution output params (not the query body).
@@ -96,76 +100,79 @@ func (o *GetPlanExecutionOutputParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get plan execution output params
+// WithTimeout adds the timeout to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) WithTimeout(timeout time.Duration) *GetPlanExecutionOutputParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get plan execution output params
+// SetTimeout adds the timeout to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get plan execution output params
+// WithContext adds the context to the get plan execution output params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanExecutionOutputParams].
 func (o *GetPlanExecutionOutputParams) WithContext(ctx context.Context) *GetPlanExecutionOutputParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get plan execution output params
+// SetContext adds the context to the get plan execution output params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanExecutionOutputParams].
 func (o *GetPlanExecutionOutputParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get plan execution output params
+// WithHTTPClient adds the HTTPClient to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) WithHTTPClient(client *http.Client) *GetPlanExecutionOutputParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get plan execution output params
+// SetHTTPClient adds the HTTPClient to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionID adds the executionID to the get plan execution output params
+// WithExecutionID adds the executionID to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) WithExecutionID(executionID string) *GetPlanExecutionOutputParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the get plan execution output params
+// SetExecutionID adds the executionId to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the get plan execution output params
+// WithOrgName adds the orgName to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) WithOrgName(orgName string) *GetPlanExecutionOutputParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get plan execution output params
+// SetOrgName adds the orgName to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithOutputName adds the outputName to the get plan execution output params
+// WithOutputName adds the outputName to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) WithOutputName(outputName string) *GetPlanExecutionOutputParams {
 	o.SetOutputName(outputName)
 	return o
 }
 
-// SetOutputName adds the outputName to the get plan execution output params
+// SetOutputName adds the outputName to the get plan execution output params.
 func (o *GetPlanExecutionOutputParams) SetOutputName(outputName string) {
 	o.OutputName = outputName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetPlanExecutionOutputParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

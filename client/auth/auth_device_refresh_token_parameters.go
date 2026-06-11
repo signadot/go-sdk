@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAuthDeviceRefreshTokenParams() *AuthDeviceRefreshTokenParams {
-	return &AuthDeviceRefreshTokenParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewAuthDeviceRefreshTokenParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewAuthDeviceRefreshTokenParamsWithTimeout creates a new AuthDeviceRefreshTokenParams object
 // with the ability to set a timeout on a request.
 func NewAuthDeviceRefreshTokenParamsWithTimeout(timeout time.Duration) *AuthDeviceRefreshTokenParams {
 	return &AuthDeviceRefreshTokenParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewAuthDeviceRefreshTokenParamsWithContext creates a new AuthDeviceRefreshTokenParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceRefreshTokenParams].
 func NewAuthDeviceRefreshTokenParamsWithContext(ctx context.Context) *AuthDeviceRefreshTokenParams {
 	return &AuthDeviceRefreshTokenParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type AuthDeviceRefreshTokenParams struct {
 	*/
 	Data string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the auth device refresh token params (not the query body).
@@ -84,54 +88,57 @@ func (o *AuthDeviceRefreshTokenParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the auth device refresh token params
+// WithTimeout adds the timeout to the auth device refresh token params.
 func (o *AuthDeviceRefreshTokenParams) WithTimeout(timeout time.Duration) *AuthDeviceRefreshTokenParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the auth device refresh token params
+// SetTimeout adds the timeout to the auth device refresh token params.
 func (o *AuthDeviceRefreshTokenParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the auth device refresh token params
+// WithContext adds the context to the auth device refresh token params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceRefreshTokenParams].
 func (o *AuthDeviceRefreshTokenParams) WithContext(ctx context.Context) *AuthDeviceRefreshTokenParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the auth device refresh token params
+// SetContext adds the context to the auth device refresh token params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceRefreshTokenParams].
 func (o *AuthDeviceRefreshTokenParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the auth device refresh token params
+// WithHTTPClient adds the HTTPClient to the auth device refresh token params.
 func (o *AuthDeviceRefreshTokenParams) WithHTTPClient(client *http.Client) *AuthDeviceRefreshTokenParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the auth device refresh token params
+// SetHTTPClient adds the HTTPClient to the auth device refresh token params.
 func (o *AuthDeviceRefreshTokenParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the auth device refresh token params
+// WithData adds the data to the auth device refresh token params.
 func (o *AuthDeviceRefreshTokenParams) WithData(data string) *AuthDeviceRefreshTokenParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the auth device refresh token params
+// SetData adds the data to the auth device refresh token params.
 func (o *AuthDeviceRefreshTokenParams) SetData(data string) {
 	o.Data = data
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *AuthDeviceRefreshTokenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetTestParams() *GetTestParams {
-	return &GetTestParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetTestParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetTestParamsWithTimeout creates a new GetTestParams object
 // with the ability to set a timeout on a request.
 func NewGetTestParamsWithTimeout(timeout time.Duration) *GetTestParams {
 	return &GetTestParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetTestParamsWithContext creates a new GetTestParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetTestParams].
 func NewGetTestParamsWithContext(ctx context.Context) *GetTestParams {
 	return &GetTestParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetTestParams struct {
 	*/
 	TestName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get test params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetTestParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get test params
+// WithTimeout adds the timeout to the get test params.
 func (o *GetTestParams) WithTimeout(timeout time.Duration) *GetTestParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get test params
+// SetTimeout adds the timeout to the get test params.
 func (o *GetTestParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get test params
+// WithContext adds the context to the get test params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetTestParams].
 func (o *GetTestParams) WithContext(ctx context.Context) *GetTestParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get test params
+// SetContext adds the context to the get test params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetTestParams].
 func (o *GetTestParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get test params
+// WithHTTPClient adds the HTTPClient to the get test params.
 func (o *GetTestParams) WithHTTPClient(client *http.Client) *GetTestParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get test params
+// SetHTTPClient adds the HTTPClient to the get test params.
 func (o *GetTestParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get test params
+// WithOrgName adds the orgName to the get test params.
 func (o *GetTestParams) WithOrgName(orgName string) *GetTestParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get test params
+// SetOrgName adds the orgName to the get test params.
 func (o *GetTestParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTestName adds the testName to the get test params
+// WithTestName adds the testName to the get test params.
 func (o *GetTestParams) WithTestName(testName string) *GetTestParams {
 	o.SetTestName(testName)
 	return o
 }
 
-// SetTestName adds the testName to the get test params
+// SetTestName adds the testName to the get test params.
 func (o *GetTestParams) SetTestName(testName string) {
 	o.TestName = testName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetTestParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

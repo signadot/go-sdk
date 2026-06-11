@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetSandboxParams() *GetSandboxParams {
-	return &GetSandboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetSandboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetSandboxParamsWithTimeout creates a new GetSandboxParams object
 // with the ability to set a timeout on a request.
 func NewGetSandboxParamsWithTimeout(timeout time.Duration) *GetSandboxParams {
 	return &GetSandboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetSandboxParamsWithContext creates a new GetSandboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetSandboxParams].
 func NewGetSandboxParamsWithContext(ctx context.Context) *GetSandboxParams {
 	return &GetSandboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetSandboxParams struct {
 	*/
 	SandboxName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get sandbox params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetSandboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get sandbox params
+// WithTimeout adds the timeout to the get sandbox params.
 func (o *GetSandboxParams) WithTimeout(timeout time.Duration) *GetSandboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get sandbox params
+// SetTimeout adds the timeout to the get sandbox params.
 func (o *GetSandboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get sandbox params
+// WithContext adds the context to the get sandbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetSandboxParams].
 func (o *GetSandboxParams) WithContext(ctx context.Context) *GetSandboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get sandbox params
+// SetContext adds the context to the get sandbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetSandboxParams].
 func (o *GetSandboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get sandbox params
+// WithHTTPClient adds the HTTPClient to the get sandbox params.
 func (o *GetSandboxParams) WithHTTPClient(client *http.Client) *GetSandboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get sandbox params
+// SetHTTPClient adds the HTTPClient to the get sandbox params.
 func (o *GetSandboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get sandbox params
+// WithOrgName adds the orgName to the get sandbox params.
 func (o *GetSandboxParams) WithOrgName(orgName string) *GetSandboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get sandbox params
+// SetOrgName adds the orgName to the get sandbox params.
 func (o *GetSandboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSandboxName adds the sandboxName to the get sandbox params
+// WithSandboxName adds the sandboxName to the get sandbox params.
 func (o *GetSandboxParams) WithSandboxName(sandboxName string) *GetSandboxParams {
 	o.SetSandboxName(sandboxName)
 	return o
 }
 
-// SetSandboxName adds the sandboxName to the get sandbox params
+// SetSandboxName adds the sandboxName to the get sandbox params.
 func (o *GetSandboxParams) SetSandboxName(sandboxName string) {
 	o.SandboxName = sandboxName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetSandboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

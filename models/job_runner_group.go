@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // JobRunnerGroup job runner group
@@ -54,7 +55,7 @@ func (m *JobRunnerGroup) Validate(formats strfmt.Registry) error {
 }
 
 func (m *JobRunnerGroup) validateSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.Spec) { // not required
+	if typeutils.IsZero(m.Spec) { // not required
 		return nil
 	}
 
@@ -77,7 +78,7 @@ func (m *JobRunnerGroup) validateSpec(formats strfmt.Registry) error {
 }
 
 func (m *JobRunnerGroup) validateStatus(formats strfmt.Registry) error {
-	if swag.IsZero(m.Status) { // not required
+	if typeutils.IsZero(m.Status) { // not required
 		return nil
 	}
 
@@ -121,7 +122,7 @@ func (m *JobRunnerGroup) contextValidateSpec(ctx context.Context, formats strfmt
 
 	if m.Spec != nil {
 
-		if swag.IsZero(m.Spec) { // not required
+		if typeutils.IsZero(m.Spec) { // not required
 			return nil
 		}
 
@@ -146,7 +147,7 @@ func (m *JobRunnerGroup) contextValidateStatus(ctx context.Context, formats strf
 
 	if m.Status != nil {
 
-		if swag.IsZero(m.Status) { // not required
+		if typeutils.IsZero(m.Status) { // not required
 			return nil
 		}
 
@@ -172,13 +173,13 @@ func (m *JobRunnerGroup) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *JobRunnerGroup) UnmarshalBinary(b []byte) error {
 	var res JobRunnerGroup
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListRoutegroupsParams() *ListRoutegroupsParams {
-	return &ListRoutegroupsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListRoutegroupsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListRoutegroupsParamsWithTimeout creates a new ListRoutegroupsParams object
 // with the ability to set a timeout on a request.
 func NewListRoutegroupsParamsWithTimeout(timeout time.Duration) *ListRoutegroupsParams {
 	return &ListRoutegroupsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListRoutegroupsParamsWithContext creates a new ListRoutegroupsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListRoutegroupsParams].
 func NewListRoutegroupsParamsWithContext(ctx context.Context) *ListRoutegroupsParams {
 	return &ListRoutegroupsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type ListRoutegroupsParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list routegroups params (not the query body).
@@ -84,54 +88,57 @@ func (o *ListRoutegroupsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list routegroups params
+// WithTimeout adds the timeout to the list routegroups params.
 func (o *ListRoutegroupsParams) WithTimeout(timeout time.Duration) *ListRoutegroupsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list routegroups params
+// SetTimeout adds the timeout to the list routegroups params.
 func (o *ListRoutegroupsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list routegroups params
+// WithContext adds the context to the list routegroups params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListRoutegroupsParams].
 func (o *ListRoutegroupsParams) WithContext(ctx context.Context) *ListRoutegroupsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list routegroups params
+// SetContext adds the context to the list routegroups params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListRoutegroupsParams].
 func (o *ListRoutegroupsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list routegroups params
+// WithHTTPClient adds the HTTPClient to the list routegroups params.
 func (o *ListRoutegroupsParams) WithHTTPClient(client *http.Client) *ListRoutegroupsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list routegroups params
+// SetHTTPClient adds the HTTPClient to the list routegroups params.
 func (o *ListRoutegroupsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list routegroups params
+// WithOrgName adds the orgName to the list routegroups params.
 func (o *ListRoutegroupsParams) WithOrgName(orgName string) *ListRoutegroupsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list routegroups params
+// SetOrgName adds the orgName to the list routegroups params.
 func (o *ListRoutegroupsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListRoutegroupsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

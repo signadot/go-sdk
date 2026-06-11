@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetRunnergroupParams() *GetRunnergroupParams {
-	return &GetRunnergroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetRunnergroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetRunnergroupParamsWithTimeout creates a new GetRunnergroupParams object
 // with the ability to set a timeout on a request.
 func NewGetRunnergroupParamsWithTimeout(timeout time.Duration) *GetRunnergroupParams {
 	return &GetRunnergroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetRunnergroupParamsWithContext creates a new GetRunnergroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetRunnergroupParams].
 func NewGetRunnergroupParamsWithContext(ctx context.Context) *GetRunnergroupParams {
 	return &GetRunnergroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetRunnergroupParams struct {
 	*/
 	RunnergroupName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get runnergroup params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetRunnergroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get runnergroup params
+// WithTimeout adds the timeout to the get runnergroup params.
 func (o *GetRunnergroupParams) WithTimeout(timeout time.Duration) *GetRunnergroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get runnergroup params
+// SetTimeout adds the timeout to the get runnergroup params.
 func (o *GetRunnergroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get runnergroup params
+// WithContext adds the context to the get runnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetRunnergroupParams].
 func (o *GetRunnergroupParams) WithContext(ctx context.Context) *GetRunnergroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get runnergroup params
+// SetContext adds the context to the get runnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetRunnergroupParams].
 func (o *GetRunnergroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get runnergroup params
+// WithHTTPClient adds the HTTPClient to the get runnergroup params.
 func (o *GetRunnergroupParams) WithHTTPClient(client *http.Client) *GetRunnergroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get runnergroup params
+// SetHTTPClient adds the HTTPClient to the get runnergroup params.
 func (o *GetRunnergroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get runnergroup params
+// WithOrgName adds the orgName to the get runnergroup params.
 func (o *GetRunnergroupParams) WithOrgName(orgName string) *GetRunnergroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get runnergroup params
+// SetOrgName adds the orgName to the get runnergroup params.
 func (o *GetRunnergroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithRunnergroupName adds the runnergroupName to the get runnergroup params
+// WithRunnergroupName adds the runnergroupName to the get runnergroup params.
 func (o *GetRunnergroupParams) WithRunnergroupName(runnergroupName string) *GetRunnergroupParams {
 	o.SetRunnergroupName(runnergroupName)
 	return o
 }
 
-// SetRunnergroupName adds the runnergroupName to the get runnergroup params
+// SetRunnergroupName adds the runnergroupName to the get runnergroup params.
 func (o *GetRunnergroupParams) SetRunnergroupName(runnergroupName string) {
 	o.RunnergroupName = runnergroupName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetRunnergroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

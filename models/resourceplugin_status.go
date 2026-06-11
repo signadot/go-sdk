@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // ResourcepluginStatus resourceplugin status
@@ -36,12 +37,12 @@ func (m *ResourcepluginStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ResourcepluginStatus) validateResources(formats strfmt.Registry) error {
-	if swag.IsZero(m.Resources) { // not required
+	if typeutils.IsZero(m.Resources) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Resources); i++ {
-		if swag.IsZero(m.Resources[i]) { // not required
+		if typeutils.IsZero(m.Resources[i]) { // not required
 			continue
 		}
 
@@ -85,7 +86,7 @@ func (m *ResourcepluginStatus) contextValidateResources(ctx context.Context, for
 
 		if m.Resources[i] != nil {
 
-			if swag.IsZero(m.Resources[i]) { // not required
+			if typeutils.IsZero(m.Resources[i]) { // not required
 				return nil
 			}
 
@@ -113,13 +114,13 @@ func (m *ResourcepluginStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ResourcepluginStatus) UnmarshalBinary(b []byte) error {
 	var res ResourcepluginStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

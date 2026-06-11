@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // JobsStatus jobs status
@@ -42,12 +43,12 @@ func (m *JobsStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *JobsStatus) validateAttempts(formats strfmt.Registry) error {
-	if swag.IsZero(m.Attempts) { // not required
+	if typeutils.IsZero(m.Attempts) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Attempts); i++ {
-		if swag.IsZero(m.Attempts[i]) { // not required
+		if typeutils.IsZero(m.Attempts[i]) { // not required
 			continue
 		}
 
@@ -91,7 +92,7 @@ func (m *JobsStatus) contextValidateAttempts(ctx context.Context, formats strfmt
 
 		if m.Attempts[i] != nil {
 
-			if swag.IsZero(m.Attempts[i]) { // not required
+			if typeutils.IsZero(m.Attempts[i]) { // not required
 				return nil
 			}
 
@@ -119,13 +120,13 @@ func (m *JobsStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *JobsStatus) UnmarshalBinary(b []byte) error {
 	var res JobsStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

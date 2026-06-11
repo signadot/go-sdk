@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteRunnergroupParams() *DeleteRunnergroupParams {
-	return &DeleteRunnergroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteRunnergroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteRunnergroupParamsWithTimeout creates a new DeleteRunnergroupParams object
 // with the ability to set a timeout on a request.
 func NewDeleteRunnergroupParamsWithTimeout(timeout time.Duration) *DeleteRunnergroupParams {
 	return &DeleteRunnergroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteRunnergroupParamsWithContext creates a new DeleteRunnergroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteRunnergroupParams].
 func NewDeleteRunnergroupParamsWithContext(ctx context.Context) *DeleteRunnergroupParams {
 	return &DeleteRunnergroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeleteRunnergroupParams struct {
 	*/
 	RunnergroupName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete runnergroup params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeleteRunnergroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete runnergroup params
+// WithTimeout adds the timeout to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) WithTimeout(timeout time.Duration) *DeleteRunnergroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete runnergroup params
+// SetTimeout adds the timeout to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete runnergroup params
+// WithContext adds the context to the delete runnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteRunnergroupParams].
 func (o *DeleteRunnergroupParams) WithContext(ctx context.Context) *DeleteRunnergroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete runnergroup params
+// SetContext adds the context to the delete runnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteRunnergroupParams].
 func (o *DeleteRunnergroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete runnergroup params
+// WithHTTPClient adds the HTTPClient to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) WithHTTPClient(client *http.Client) *DeleteRunnergroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete runnergroup params
+// SetHTTPClient adds the HTTPClient to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete runnergroup params
+// WithOrgName adds the orgName to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) WithOrgName(orgName string) *DeleteRunnergroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete runnergroup params
+// SetOrgName adds the orgName to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithRunnergroupName adds the runnergroupName to the delete runnergroup params
+// WithRunnergroupName adds the runnergroupName to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) WithRunnergroupName(runnergroupName string) *DeleteRunnergroupParams {
 	o.SetRunnergroupName(runnergroupName)
 	return o
 }
 
-// SetRunnergroupName adds the runnergroupName to the delete runnergroup params
+// SetRunnergroupName adds the runnergroupName to the delete runnergroup params.
 func (o *DeleteRunnergroupParams) SetRunnergroupName(runnergroupName string) {
 	o.RunnergroupName = runnergroupName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteRunnergroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

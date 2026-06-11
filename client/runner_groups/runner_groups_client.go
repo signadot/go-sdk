@@ -3,7 +3,9 @@
 package runner_groups
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new runner groups API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new runner groups API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new runner groups API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,39 +45,80 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for runner groups API
+Client for runner groups API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// ApplyRunnergroup create or update a runnergroup.
 	ApplyRunnergroup(params *ApplyRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRunnergroupOK, error)
 
+	// ApplyRunnergroupContext create or update a runnergroup.
+	ApplyRunnergroupContext(ctx context.Context, params *ApplyRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRunnergroupOK, error)
+
+	// DeleteRunnergroup delete a runnergroup.
 	DeleteRunnergroup(params *DeleteRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRunnergroupOK, error)
 
+	// DeleteRunnergroupContext delete a runnergroup.
+	DeleteRunnergroupContext(ctx context.Context, params *DeleteRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRunnergroupOK, error)
+
+	// GetRunnergroup get a runnergroup.
 	GetRunnergroup(params *GetRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRunnergroupOK, error)
 
+	// GetRunnergroupContext get a runnergroup.
+	GetRunnergroupContext(ctx context.Context, params *GetRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRunnergroupOK, error)
+
+	// ListRunnergroup list runner groups.
 	ListRunnergroup(params *ListRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRunnergroupOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListRunnergroupContext list runner groups.
+	ListRunnergroupContext(ctx context.Context, params *ListRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRunnergroupOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-ApplyRunnergroup creates or update a runnergroup
+ApplyRunnergroupcreates or update a runnergroup.
 
-Creates or updates a runnergroup with the provided parameters.
+Creates or updates a runnergroup with the provided parameters..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ApplyRunnergroupContext] instead.
 */
 func (a *Client) ApplyRunnergroup(params *ApplyRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ApplyRunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ApplyRunnergroupContextcreates or update a runnergroup.
+
+Creates or updates a runnergroup with the provided parameters..
+
+Do not use the deprecated [ApplyRunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ApplyRunnergroupContext(ctx context.Context, params *ApplyRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewApplyRunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "apply-runnergroup",
 		Method:             "PUT",
@@ -84,13 +129,14 @@ func (a *Client) ApplyRunnergroup(params *ApplyRunnergroupParams, authInfo runti
 		Params:             params,
 		Reader:             &ApplyRunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -111,15 +157,39 @@ func (a *Client) ApplyRunnergroup(params *ApplyRunnergroupParams, authInfo runti
 }
 
 /*
-DeleteRunnergroup deletes a runnergroup
+DeleteRunnergroupdeletes a runnergroup.
 
-Delete a given jobrunnergroup.
+Delete a given jobrunnergroup..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteRunnergroupContext] instead.
 */
 func (a *Client) DeleteRunnergroup(params *DeleteRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteRunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteRunnergroupContextdeletes a runnergroup.
+
+Delete a given jobrunnergroup..
+
+Do not use the deprecated [DeleteRunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteRunnergroupContext(ctx context.Context, params *DeleteRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteRunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-runnergroup",
 		Method:             "DELETE",
@@ -130,13 +200,14 @@ func (a *Client) DeleteRunnergroup(params *DeleteRunnergroupParams, authInfo run
 		Params:             params,
 		Reader:             &DeleteRunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -157,15 +228,39 @@ func (a *Client) DeleteRunnergroup(params *DeleteRunnergroupParams, authInfo run
 }
 
 /*
-GetRunnergroup gets a runnergroup
+GetRunnergroupgets a runnergroup.
 
-Fetch the details about a given jobrunnergroup.
+Fetch the details about a given jobrunnergroup..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetRunnergroupContext] instead.
 */
 func (a *Client) GetRunnergroup(params *GetRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetRunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetRunnergroupContextgets a runnergroup.
+
+Fetch the details about a given jobrunnergroup..
+
+Do not use the deprecated [GetRunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetRunnergroupContext(ctx context.Context, params *GetRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetRunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-runnergroup",
 		Method:             "GET",
@@ -176,13 +271,14 @@ func (a *Client) GetRunnergroup(params *GetRunnergroupParams, authInfo runtime.C
 		Params:             params,
 		Reader:             &GetRunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -203,15 +299,39 @@ func (a *Client) GetRunnergroup(params *GetRunnergroupParams, authInfo runtime.C
 }
 
 /*
-ListRunnergroup lists runner groups
+ListRunnergrouplists runner groups.
 
-List RunnerGroups
+List RunnerGroups.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListRunnergroupContext] instead.
 */
 func (a *Client) ListRunnergroup(params *ListRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListRunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListRunnergroupContextlists runner groups.
+
+List RunnerGroups.
+
+Do not use the deprecated [ListRunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListRunnergroupContext(ctx context.Context, params *ListRunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListRunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-runnergroup",
 		Method:             "GET",
@@ -222,13 +342,14 @@ func (a *Client) ListRunnergroup(params *ListRunnergroupParams, authInfo runtime
 		Params:             params,
 		Reader:             &ListRunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -249,6 +370,14 @@ func (a *Client) ListRunnergroup(params *ListRunnergroupParams, authInfo runtime
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [RunnerGroupsParams].
+	ctx context.Context
 }

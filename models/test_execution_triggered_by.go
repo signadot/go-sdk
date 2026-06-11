@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TestExecutionTriggeredBy test execution triggered by
@@ -38,7 +39,7 @@ func (m *TestExecutionTriggeredBy) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionTriggeredBy) validateTrigger(formats strfmt.Registry) error {
-	if swag.IsZero(m.Trigger) { // not required
+	if typeutils.IsZero(m.Trigger) { // not required
 		return nil
 	}
 
@@ -78,7 +79,7 @@ func (m *TestExecutionTriggeredBy) contextValidateTrigger(ctx context.Context, f
 
 	if m.Trigger != nil {
 
-		if swag.IsZero(m.Trigger) { // not required
+		if typeutils.IsZero(m.Trigger) { // not required
 			return nil
 		}
 
@@ -104,13 +105,13 @@ func (m *TestExecutionTriggeredBy) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TestExecutionTriggeredBy) UnmarshalBinary(b []byte) error {
 	var res TestExecutionTriggeredBy
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

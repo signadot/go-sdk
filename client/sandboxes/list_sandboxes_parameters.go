@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListSandboxesParams() *ListSandboxesParams {
-	return &ListSandboxesParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListSandboxesParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListSandboxesParamsWithTimeout creates a new ListSandboxesParams object
 // with the ability to set a timeout on a request.
 func NewListSandboxesParamsWithTimeout(timeout time.Duration) *ListSandboxesParams {
 	return &ListSandboxesParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListSandboxesParamsWithContext creates a new ListSandboxesParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListSandboxesParams].
 func NewListSandboxesParamsWithContext(ctx context.Context) *ListSandboxesParams {
 	return &ListSandboxesParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type ListSandboxesParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list sandboxes params (not the query body).
@@ -84,54 +88,57 @@ func (o *ListSandboxesParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list sandboxes params
+// WithTimeout adds the timeout to the list sandboxes params.
 func (o *ListSandboxesParams) WithTimeout(timeout time.Duration) *ListSandboxesParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list sandboxes params
+// SetTimeout adds the timeout to the list sandboxes params.
 func (o *ListSandboxesParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list sandboxes params
+// WithContext adds the context to the list sandboxes params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListSandboxesParams].
 func (o *ListSandboxesParams) WithContext(ctx context.Context) *ListSandboxesParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list sandboxes params
+// SetContext adds the context to the list sandboxes params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListSandboxesParams].
 func (o *ListSandboxesParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list sandboxes params
+// WithHTTPClient adds the HTTPClient to the list sandboxes params.
 func (o *ListSandboxesParams) WithHTTPClient(client *http.Client) *ListSandboxesParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list sandboxes params
+// SetHTTPClient adds the HTTPClient to the list sandboxes params.
 func (o *ListSandboxesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list sandboxes params
+// WithOrgName adds the orgName to the list sandboxes params.
 func (o *ListSandboxesParams) WithOrgName(orgName string) *ListSandboxesParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list sandboxes params
+// SetOrgName adds the orgName to the list sandboxes params.
 func (o *ListSandboxesParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListSandboxesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

@@ -3,7 +3,9 @@
 package devboxes
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new devboxes API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new devboxes API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new devboxes API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,45 +45,98 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for devboxes API
+Client for devboxes API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// ClaimDevbox claim a devbox.
 	ClaimDevbox(params *ClaimDevboxParams, opts ...ClientOption) (*ClaimDevboxOK, error)
 
+	// ClaimDevboxContext claim a devbox.
+	ClaimDevboxContext(ctx context.Context, params *ClaimDevboxParams, opts ...ClientOption) (*ClaimDevboxOK, error)
+
+	// DeleteDevbox delete a devbox.
 	DeleteDevbox(params *DeleteDevboxParams, opts ...ClientOption) (*DeleteDevboxOK, error)
 
+	// DeleteDevboxContext delete a devbox.
+	DeleteDevboxContext(ctx context.Context, params *DeleteDevboxParams, opts ...ClientOption) (*DeleteDevboxOK, error)
+
+	// GetDevbox get a devbox by ID.
 	GetDevbox(params *GetDevboxParams, opts ...ClientOption) (*GetDevboxOK, error)
 
+	// GetDevboxContext get a devbox by ID.
+	GetDevboxContext(ctx context.Context, params *GetDevboxParams, opts ...ClientOption) (*GetDevboxOK, error)
+
+	// GetDevboxes list devboxes.
 	GetDevboxes(params *GetDevboxesParams, opts ...ClientOption) (*GetDevboxesOK, error)
 
+	// GetDevboxesContext list devboxes.
+	GetDevboxesContext(ctx context.Context, params *GetDevboxesParams, opts ...ClientOption) (*GetDevboxesOK, error)
+
+	// RegisterDevbox register a devbox idempotent p o s t.
 	RegisterDevbox(params *RegisterDevboxParams, opts ...ClientOption) (*RegisterDevboxOK, *RegisterDevboxCreated, error)
 
+	// RegisterDevboxContext register a devbox idempotent p o s t.
+	RegisterDevboxContext(ctx context.Context, params *RegisterDevboxParams, opts ...ClientOption) (*RegisterDevboxOK, *RegisterDevboxCreated, error)
+
+	// ReleaseDevbox release a devbox s connection.
 	ReleaseDevbox(params *ReleaseDevboxParams, opts ...ClientOption) (*ReleaseDevboxOK, error)
 
+	// ReleaseDevboxContext release a devbox s connection.
+	ReleaseDevboxContext(ctx context.Context, params *ReleaseDevboxParams, opts ...ClientOption) (*ReleaseDevboxOK, error)
+
+	// RenewDevbox renew a devbox s connection.
 	RenewDevbox(params *RenewDevboxParams, opts ...ClientOption) (*RenewDevboxOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// RenewDevboxContext renew a devbox s connection.
+	RenewDevboxContext(ctx context.Context, params *RenewDevboxParams, opts ...ClientOption) (*RenewDevboxOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-ClaimDevbox claims a devbox
+ClaimDevboxclaims a devbox.
 
-Claim a devbox for a signadot local connect session
+Claim a devbox for a signadot local connect session.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ClaimDevboxContext] instead.
 */
 func (a *Client) ClaimDevbox(params *ClaimDevboxParams, opts ...ClientOption) (*ClaimDevboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ClaimDevboxContext(ctx, params, opts...)
+}
+
+/*
+ClaimDevboxContextclaims a devbox.
+
+Claim a devbox for a signadot local connect session.
+
+Do not use the deprecated [ClaimDevboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ClaimDevboxContext(ctx context.Context, params *ClaimDevboxParams, opts ...ClientOption) (*ClaimDevboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewClaimDevboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "claim-devbox",
 		Method:             "GET",
@@ -89,13 +146,14 @@ func (a *Client) ClaimDevbox(params *ClaimDevboxParams, opts ...ClientOption) (*
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ClaimDevboxReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -116,15 +174,39 @@ func (a *Client) ClaimDevbox(params *ClaimDevboxParams, opts ...ClientOption) (*
 }
 
 /*
-DeleteDevbox deletes a devbox
+DeleteDevboxdeletes a devbox.
 
-Delete a devbox by its deterministic ID
+Delete a devbox by its deterministic ID.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteDevboxContext] instead.
 */
 func (a *Client) DeleteDevbox(params *DeleteDevboxParams, opts ...ClientOption) (*DeleteDevboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteDevboxContext(ctx, params, opts...)
+}
+
+/*
+DeleteDevboxContextdeletes a devbox.
+
+Delete a devbox by its deterministic ID.
+
+Do not use the deprecated [DeleteDevboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteDevboxContext(ctx context.Context, params *DeleteDevboxParams, opts ...ClientOption) (*DeleteDevboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteDevboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-devbox",
 		Method:             "DELETE",
@@ -134,13 +216,14 @@ func (a *Client) DeleteDevbox(params *DeleteDevboxParams, opts ...ClientOption) 
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &DeleteDevboxReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -161,15 +244,39 @@ func (a *Client) DeleteDevbox(params *DeleteDevboxParams, opts ...ClientOption) 
 }
 
 /*
-GetDevbox gets a devbox by ID
+GetDevboxgets a devbox by ID.
 
-Get a devbox by its deterministic ID
+Get a devbox by its deterministic ID.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetDevboxContext] instead.
 */
 func (a *Client) GetDevbox(params *GetDevboxParams, opts ...ClientOption) (*GetDevboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetDevboxContext(ctx, params, opts...)
+}
+
+/*
+GetDevboxContextgets a devbox by ID.
+
+Get a devbox by its deterministic ID.
+
+Do not use the deprecated [GetDevboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetDevboxContext(ctx context.Context, params *GetDevboxParams, opts ...ClientOption) (*GetDevboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetDevboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-devbox",
 		Method:             "GET",
@@ -179,13 +286,14 @@ func (a *Client) GetDevbox(params *GetDevboxParams, opts ...ClientOption) (*GetD
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetDevboxReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -206,15 +314,39 @@ func (a *Client) GetDevbox(params *GetDevboxParams, opts ...ClientOption) (*GetD
 }
 
 /*
-GetDevboxes lists devboxes
+GetDevboxeslists devboxes.
 
-List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes. API key authentication returns org-scoped devboxes.
+List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes. API key authentication returns org-scoped devboxes..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetDevboxesContext] instead.
 */
 func (a *Client) GetDevboxes(params *GetDevboxesParams, opts ...ClientOption) (*GetDevboxesOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetDevboxesContext(ctx, params, opts...)
+}
+
+/*
+GetDevboxesContextlists devboxes.
+
+List devboxes. Use query param all=true to list all devboxes in org, otherwise returns user's devboxes. API key authentication returns org-scoped devboxes..
+
+Do not use the deprecated [GetDevboxesParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetDevboxesContext(ctx context.Context, params *GetDevboxesParams, opts ...ClientOption) (*GetDevboxesOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetDevboxesParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-devboxes",
 		Method:             "GET",
@@ -224,13 +356,14 @@ func (a *Client) GetDevboxes(params *GetDevboxesParams, opts ...ClientOption) (*
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &GetDevboxesReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -251,15 +384,39 @@ func (a *Client) GetDevboxes(params *GetDevboxesParams, opts ...ClientOption) (*
 }
 
 /*
-RegisterDevbox registers a devbox idempotent p o s t
+RegisterDevboxregisters a devbox idempotent p o s t.
 
-Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists. When authenticated via API key, creates org-scoped devboxes shared across all API keys in the org.
+Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists. When authenticated via API key, creates org-scoped devboxes shared across all API keys in the org..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.RegisterDevboxContext] instead.
 */
 func (a *Client) RegisterDevbox(params *RegisterDevboxParams, opts ...ClientOption) (*RegisterDevboxOK, *RegisterDevboxCreated, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.RegisterDevboxContext(ctx, params, opts...)
+}
+
+/*
+RegisterDevboxContextregisters a devbox idempotent p o s t.
+
+Register a devbox with metadata. Returns 201 Created for new devbox, 200 OK if already exists. When authenticated via API key, creates org-scoped devboxes shared across all API keys in the org..
+
+Do not use the deprecated [RegisterDevboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) RegisterDevboxContext(ctx context.Context, params *RegisterDevboxParams, opts ...ClientOption) (*RegisterDevboxOK, *RegisterDevboxCreated, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewRegisterDevboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "register-devbox",
 		Method:             "POST",
@@ -269,13 +426,14 @@ func (a *Client) RegisterDevbox(params *RegisterDevboxParams, opts ...ClientOpti
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &RegisterDevboxReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -296,15 +454,39 @@ func (a *Client) RegisterDevbox(params *RegisterDevboxParams, opts ...ClientOpti
 }
 
 /*
-ReleaseDevbox releases a devbox s connection
+ReleaseDevboxreleases a devbox s connection.
 
-Release a devbox from a signadot local connect session lease
+Release a devbox from a signadot local connect session lease.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ReleaseDevboxContext] instead.
 */
 func (a *Client) ReleaseDevbox(params *ReleaseDevboxParams, opts ...ClientOption) (*ReleaseDevboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ReleaseDevboxContext(ctx, params, opts...)
+}
+
+/*
+ReleaseDevboxContextreleases a devbox s connection.
+
+Release a devbox from a signadot local connect session lease.
+
+Do not use the deprecated [ReleaseDevboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ReleaseDevboxContext(ctx context.Context, params *ReleaseDevboxParams, opts ...ClientOption) (*ReleaseDevboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewReleaseDevboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "release-devbox",
 		Method:             "GET",
@@ -314,13 +496,14 @@ func (a *Client) ReleaseDevbox(params *ReleaseDevboxParams, opts ...ClientOption
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &ReleaseDevboxReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -341,15 +524,39 @@ func (a *Client) ReleaseDevbox(params *ReleaseDevboxParams, opts ...ClientOption
 }
 
 /*
-RenewDevbox renews a devbox s connection
+RenewDevboxrenews a devbox s connection.
 
-Renew a devbox for a signadot local connect session lease
+Renew a devbox for a signadot local connect session lease.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.RenewDevboxContext] instead.
 */
 func (a *Client) RenewDevbox(params *RenewDevboxParams, opts ...ClientOption) (*RenewDevboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.RenewDevboxContext(ctx, params, opts...)
+}
+
+/*
+RenewDevboxContextrenews a devbox s connection.
+
+Renew a devbox for a signadot local connect session lease.
+
+Do not use the deprecated [RenewDevboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) RenewDevboxContext(ctx context.Context, params *RenewDevboxParams, opts ...ClientOption) (*RenewDevboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewRenewDevboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "renew-devbox",
 		Method:             "GET",
@@ -359,13 +566,14 @@ func (a *Client) RenewDevbox(params *RenewDevboxParams, opts ...ClientOption) (*
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &RenewDevboxReader{formats: a.formats},
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -386,6 +594,14 @@ func (a *Client) RenewDevbox(params *RenewDevboxParams, opts ...ClientOption) (*
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [DevboxesParams].
+	ctx context.Context
 }

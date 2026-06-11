@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanRunnerGroupSpec plan runner group spec
@@ -57,7 +58,7 @@ func (m *PlanRunnerGroupSpec) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanRunnerGroupSpec) validateCache(formats strfmt.Registry) error {
-	if swag.IsZero(m.Cache) { // not required
+	if typeutils.IsZero(m.Cache) { // not required
 		return nil
 	}
 
@@ -80,7 +81,7 @@ func (m *PlanRunnerGroupSpec) validateCache(formats strfmt.Registry) error {
 }
 
 func (m *PlanRunnerGroupSpec) validateScaling(formats strfmt.Registry) error {
-	if swag.IsZero(m.Scaling) { // not required
+	if typeutils.IsZero(m.Scaling) { // not required
 		return nil
 	}
 
@@ -124,7 +125,7 @@ func (m *PlanRunnerGroupSpec) contextValidateCache(ctx context.Context, formats 
 
 	if m.Cache != nil {
 
-		if swag.IsZero(m.Cache) { // not required
+		if typeutils.IsZero(m.Cache) { // not required
 			return nil
 		}
 
@@ -149,7 +150,7 @@ func (m *PlanRunnerGroupSpec) contextValidateScaling(ctx context.Context, format
 
 	if m.Scaling != nil {
 
-		if swag.IsZero(m.Scaling) { // not required
+		if typeutils.IsZero(m.Scaling) { // not required
 			return nil
 		}
 
@@ -175,13 +176,13 @@ func (m *PlanRunnerGroupSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanRunnerGroupSpec) UnmarshalBinary(b []byte) error {
 	var res PlanRunnerGroupSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

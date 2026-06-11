@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewDeleteSandboxParams creates a new DeleteSandboxParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteSandboxParams() *DeleteSandboxParams {
-	return &DeleteSandboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteSandboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteSandboxParamsWithTimeout creates a new DeleteSandboxParams object
 // with the ability to set a timeout on a request.
 func NewDeleteSandboxParamsWithTimeout(timeout time.Duration) *DeleteSandboxParams {
 	return &DeleteSandboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteSandboxParamsWithContext creates a new DeleteSandboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteSandboxParams].
 func NewDeleteSandboxParamsWithContext(ctx context.Context) *DeleteSandboxParams {
 	return &DeleteSandboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -77,9 +81,9 @@ type DeleteSandboxParams struct {
 	*/
 	SandboxName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete sandbox params (not the query body).
@@ -97,76 +101,79 @@ func (o *DeleteSandboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete sandbox params
+// WithTimeout adds the timeout to the delete sandbox params.
 func (o *DeleteSandboxParams) WithTimeout(timeout time.Duration) *DeleteSandboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete sandbox params
+// SetTimeout adds the timeout to the delete sandbox params.
 func (o *DeleteSandboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete sandbox params
+// WithContext adds the context to the delete sandbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteSandboxParams].
 func (o *DeleteSandboxParams) WithContext(ctx context.Context) *DeleteSandboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete sandbox params
+// SetContext adds the context to the delete sandbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteSandboxParams].
 func (o *DeleteSandboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete sandbox params
+// WithHTTPClient adds the HTTPClient to the delete sandbox params.
 func (o *DeleteSandboxParams) WithHTTPClient(client *http.Client) *DeleteSandboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete sandbox params
+// SetHTTPClient adds the HTTPClient to the delete sandbox params.
 func (o *DeleteSandboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithForce adds the force to the delete sandbox params
+// WithForce adds the force to the delete sandbox params.
 func (o *DeleteSandboxParams) WithForce(force *bool) *DeleteSandboxParams {
 	o.SetForce(force)
 	return o
 }
 
-// SetForce adds the force to the delete sandbox params
+// SetForce adds the force to the delete sandbox params.
 func (o *DeleteSandboxParams) SetForce(force *bool) {
 	o.Force = force
 }
 
-// WithOrgName adds the orgName to the delete sandbox params
+// WithOrgName adds the orgName to the delete sandbox params.
 func (o *DeleteSandboxParams) WithOrgName(orgName string) *DeleteSandboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete sandbox params
+// SetOrgName adds the orgName to the delete sandbox params.
 func (o *DeleteSandboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSandboxName adds the sandboxName to the delete sandbox params
+// WithSandboxName adds the sandboxName to the delete sandbox params.
 func (o *DeleteSandboxParams) WithSandboxName(sandboxName string) *DeleteSandboxParams {
 	o.SetSandboxName(sandboxName)
 	return o
 }
 
-// SetSandboxName adds the sandboxName to the delete sandbox params
+// SetSandboxName adds the sandboxName to the delete sandbox params.
 func (o *DeleteSandboxParams) SetSandboxName(sandboxName string) {
 	o.SandboxName = sandboxName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteSandboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
@@ -179,7 +186,7 @@ func (o *DeleteSandboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		if o.Force != nil {
 			qrForce = *o.Force
 		}
-		qForce := swag.FormatBool(qrForce)
+		qForce := conv.FormatBool(qrForce)
 		if qForce != "" {
 
 			if err := r.SetQueryParam("force", qForce); err != nil {

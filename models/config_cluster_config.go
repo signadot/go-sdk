@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // ConfigClusterConfig config cluster config
@@ -69,7 +70,7 @@ func (m *ConfigClusterConfig) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConfigClusterConfig) validateControlPlane(formats strfmt.Registry) error {
-	if swag.IsZero(m.ControlPlane) { // not required
+	if typeutils.IsZero(m.ControlPlane) { // not required
 		return nil
 	}
 
@@ -92,7 +93,7 @@ func (m *ConfigClusterConfig) validateControlPlane(formats strfmt.Registry) erro
 }
 
 func (m *ConfigClusterConfig) validateRouting(formats strfmt.Registry) error {
-	if swag.IsZero(m.Routing) { // not required
+	if typeutils.IsZero(m.Routing) { // not required
 		return nil
 	}
 
@@ -115,7 +116,7 @@ func (m *ConfigClusterConfig) validateRouting(formats strfmt.Registry) error {
 }
 
 func (m *ConfigClusterConfig) validateSandboxTrafficManager(formats strfmt.Registry) error {
-	if swag.IsZero(m.SandboxTrafficManager) { // not required
+	if typeutils.IsZero(m.SandboxTrafficManager) { // not required
 		return nil
 	}
 
@@ -138,7 +139,7 @@ func (m *ConfigClusterConfig) validateSandboxTrafficManager(formats strfmt.Regis
 }
 
 func (m *ConfigClusterConfig) validateTrafficCapture(formats strfmt.Registry) error {
-	if swag.IsZero(m.TrafficCapture) { // not required
+	if typeutils.IsZero(m.TrafficCapture) { // not required
 		return nil
 	}
 
@@ -161,7 +162,7 @@ func (m *ConfigClusterConfig) validateTrafficCapture(formats strfmt.Registry) er
 }
 
 func (m *ConfigClusterConfig) validateTrafficManager(formats strfmt.Registry) error {
-	if swag.IsZero(m.TrafficManager) { // not required
+	if typeutils.IsZero(m.TrafficManager) { // not required
 		return nil
 	}
 
@@ -217,7 +218,7 @@ func (m *ConfigClusterConfig) contextValidateControlPlane(ctx context.Context, f
 
 	if m.ControlPlane != nil {
 
-		if swag.IsZero(m.ControlPlane) { // not required
+		if typeutils.IsZero(m.ControlPlane) { // not required
 			return nil
 		}
 
@@ -242,7 +243,7 @@ func (m *ConfigClusterConfig) contextValidateRouting(ctx context.Context, format
 
 	if m.Routing != nil {
 
-		if swag.IsZero(m.Routing) { // not required
+		if typeutils.IsZero(m.Routing) { // not required
 			return nil
 		}
 
@@ -267,7 +268,7 @@ func (m *ConfigClusterConfig) contextValidateSandboxTrafficManager(ctx context.C
 
 	if m.SandboxTrafficManager != nil {
 
-		if swag.IsZero(m.SandboxTrafficManager) { // not required
+		if typeutils.IsZero(m.SandboxTrafficManager) { // not required
 			return nil
 		}
 
@@ -292,7 +293,7 @@ func (m *ConfigClusterConfig) contextValidateTrafficCapture(ctx context.Context,
 
 	if m.TrafficCapture != nil {
 
-		if swag.IsZero(m.TrafficCapture) { // not required
+		if typeutils.IsZero(m.TrafficCapture) { // not required
 			return nil
 		}
 
@@ -317,7 +318,7 @@ func (m *ConfigClusterConfig) contextValidateTrafficManager(ctx context.Context,
 
 	if m.TrafficManager != nil {
 
-		if swag.IsZero(m.TrafficManager) { // not required
+		if typeutils.IsZero(m.TrafficManager) { // not required
 			return nil
 		}
 
@@ -343,13 +344,13 @@ func (m *ConfigClusterConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ConfigClusterConfig) UnmarshalBinary(b []byte) error {
 	var res ConfigClusterConfig
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

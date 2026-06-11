@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteTestParams() *DeleteTestParams {
-	return &DeleteTestParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteTestParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteTestParamsWithTimeout creates a new DeleteTestParams object
 // with the ability to set a timeout on a request.
 func NewDeleteTestParamsWithTimeout(timeout time.Duration) *DeleteTestParams {
 	return &DeleteTestParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteTestParamsWithContext creates a new DeleteTestParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteTestParams].
 func NewDeleteTestParamsWithContext(ctx context.Context) *DeleteTestParams {
 	return &DeleteTestParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeleteTestParams struct {
 	*/
 	TestName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete test params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeleteTestParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete test params
+// WithTimeout adds the timeout to the delete test params.
 func (o *DeleteTestParams) WithTimeout(timeout time.Duration) *DeleteTestParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete test params
+// SetTimeout adds the timeout to the delete test params.
 func (o *DeleteTestParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete test params
+// WithContext adds the context to the delete test params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteTestParams].
 func (o *DeleteTestParams) WithContext(ctx context.Context) *DeleteTestParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete test params
+// SetContext adds the context to the delete test params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteTestParams].
 func (o *DeleteTestParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete test params
+// WithHTTPClient adds the HTTPClient to the delete test params.
 func (o *DeleteTestParams) WithHTTPClient(client *http.Client) *DeleteTestParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete test params
+// SetHTTPClient adds the HTTPClient to the delete test params.
 func (o *DeleteTestParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete test params
+// WithOrgName adds the orgName to the delete test params.
 func (o *DeleteTestParams) WithOrgName(orgName string) *DeleteTestParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete test params
+// SetOrgName adds the orgName to the delete test params.
 func (o *DeleteTestParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTestName adds the testName to the delete test params
+// WithTestName adds the testName to the delete test params.
 func (o *DeleteTestParams) WithTestName(testName string) *DeleteTestParams {
 	o.SetTestName(testName)
 	return o
 }
 
-// SetTestName adds the testName to the delete test params
+// SetTestName adds the testName to the delete test params.
 func (o *DeleteTestParams) SetTestName(testName string) {
 	o.TestName = testName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteTestParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

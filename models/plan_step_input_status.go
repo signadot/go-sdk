@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanStepInputStatus plan step input status
@@ -42,7 +43,7 @@ func (m *PlanStepInputStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanStepInputStatus) validateResolvedVia(formats strfmt.Registry) error {
-	if swag.IsZero(m.ResolvedVia) { // not required
+	if typeutils.IsZero(m.ResolvedVia) { // not required
 		return nil
 	}
 
@@ -78,7 +79,7 @@ func (m *PlanStepInputStatus) ContextValidate(ctx context.Context, formats strfm
 
 func (m *PlanStepInputStatus) contextValidateResolvedVia(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.ResolvedVia) { // not required
+	if typeutils.IsZero(m.ResolvedVia) { // not required
 		return nil
 	}
 
@@ -103,13 +104,13 @@ func (m *PlanStepInputStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanStepInputStatus) UnmarshalBinary(b []byte) error {
 	var res PlanStepInputStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res
