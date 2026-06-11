@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewDownloadJobAttemptArtifactParams creates a new DownloadJobAttemptArtifactParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDownloadJobAttemptArtifactParams() *DownloadJobAttemptArtifactParams {
-	return &DownloadJobAttemptArtifactParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDownloadJobAttemptArtifactParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDownloadJobAttemptArtifactParamsWithTimeout creates a new DownloadJobAttemptArtifactParams object
 // with the ability to set a timeout on a request.
 func NewDownloadJobAttemptArtifactParamsWithTimeout(timeout time.Duration) *DownloadJobAttemptArtifactParams {
 	return &DownloadJobAttemptArtifactParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDownloadJobAttemptArtifactParamsWithContext creates a new DownloadJobAttemptArtifactParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DownloadJobAttemptArtifactParams].
 func NewDownloadJobAttemptArtifactParamsWithContext(ctx context.Context) *DownloadJobAttemptArtifactParams {
 	return &DownloadJobAttemptArtifactParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -95,9 +99,9 @@ type DownloadJobAttemptArtifactParams struct {
 	*/
 	Space *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the download job attempt artifact params (not the query body).
@@ -115,109 +119,112 @@ func (o *DownloadJobAttemptArtifactParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the download job attempt artifact params
+// WithTimeout adds the timeout to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithTimeout(timeout time.Duration) *DownloadJobAttemptArtifactParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the download job attempt artifact params
+// SetTimeout adds the timeout to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the download job attempt artifact params
+// WithContext adds the context to the download job attempt artifact params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DownloadJobAttemptArtifactParams].
 func (o *DownloadJobAttemptArtifactParams) WithContext(ctx context.Context) *DownloadJobAttemptArtifactParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the download job attempt artifact params
+// SetContext adds the context to the download job attempt artifact params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DownloadJobAttemptArtifactParams].
 func (o *DownloadJobAttemptArtifactParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the download job attempt artifact params
+// WithHTTPClient adds the HTTPClient to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithHTTPClient(client *http.Client) *DownloadJobAttemptArtifactParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the download job attempt artifact params
+// SetHTTPClient adds the HTTPClient to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithRange adds the rangeVar to the download job attempt artifact params
+// WithRange adds the rangeVar to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithRange(rangeVar *string) *DownloadJobAttemptArtifactParams {
 	o.SetRange(rangeVar)
 	return o
 }
 
-// SetRange adds the range to the download job attempt artifact params
+// SetRange adds the range to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetRange(rangeVar *string) {
 	o.Range = rangeVar
 }
 
-// WithJobAttempt adds the jobAttempt to the download job attempt artifact params
+// WithJobAttempt adds the jobAttempt to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithJobAttempt(jobAttempt int64) *DownloadJobAttemptArtifactParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
-// SetJobAttempt adds the jobAttempt to the download job attempt artifact params
+// SetJobAttempt adds the jobAttempt to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
-// WithJobName adds the jobName to the download job attempt artifact params
+// WithJobName adds the jobName to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithJobName(jobName string) *DownloadJobAttemptArtifactParams {
 	o.SetJobName(jobName)
 	return o
 }
 
-// SetJobName adds the jobName to the download job attempt artifact params
+// SetJobName adds the jobName to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetJobName(jobName string) {
 	o.JobName = jobName
 }
 
-// WithOrgName adds the orgName to the download job attempt artifact params
+// WithOrgName adds the orgName to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithOrgName(orgName string) *DownloadJobAttemptArtifactParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the download job attempt artifact params
+// SetOrgName adds the orgName to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPath adds the path to the download job attempt artifact params
+// WithPath adds the path to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithPath(path string) *DownloadJobAttemptArtifactParams {
 	o.SetPath(path)
 	return o
 }
 
-// SetPath adds the path to the download job attempt artifact params
+// SetPath adds the path to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
-// WithSpace adds the space to the download job attempt artifact params
+// WithSpace adds the space to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) WithSpace(space *string) *DownloadJobAttemptArtifactParams {
 	o.SetSpace(space)
 	return o
 }
 
-// SetSpace adds the space to the download job attempt artifact params
+// SetSpace adds the space to the download job attempt artifact params.
 func (o *DownloadJobAttemptArtifactParams) SetSpace(space *string) {
 	o.Space = space
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DownloadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
@@ -231,7 +238,7 @@ func (o *DownloadJobAttemptArtifactParams) WriteToRequest(r runtime.ClientReques
 	}
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
+	if err := r.SetPathParam("jobAttempt", conv.FormatInteger(o.JobAttempt)); err != nil {
 		return err
 	}
 

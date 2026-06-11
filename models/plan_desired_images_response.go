@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanDesiredImagesResponse plan desired images response
@@ -36,12 +37,12 @@ func (m *PlanDesiredImagesResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanDesiredImagesResponse) validateImages(formats strfmt.Registry) error {
-	if swag.IsZero(m.Images) { // not required
+	if typeutils.IsZero(m.Images) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Images); i++ {
-		if swag.IsZero(m.Images[i]) { // not required
+		if typeutils.IsZero(m.Images[i]) { // not required
 			continue
 		}
 
@@ -85,7 +86,7 @@ func (m *PlanDesiredImagesResponse) contextValidateImages(ctx context.Context, f
 
 		if m.Images[i] != nil {
 
-			if swag.IsZero(m.Images[i]) { // not required
+			if typeutils.IsZero(m.Images[i]) { // not required
 				return nil
 			}
 
@@ -113,13 +114,13 @@ func (m *PlanDesiredImagesResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanDesiredImagesResponse) UnmarshalBinary(b []byte) error {
 	var res PlanDesiredImagesResponse
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

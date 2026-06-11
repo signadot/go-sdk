@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxEnvVar sandbox env var
@@ -51,7 +52,7 @@ func (m *SandboxEnvVar) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxEnvVar) validateOperation(formats strfmt.Registry) error {
-	if swag.IsZero(m.Operation) { // not required
+	if typeutils.IsZero(m.Operation) { // not required
 		return nil
 	}
 
@@ -72,7 +73,7 @@ func (m *SandboxEnvVar) validateOperation(formats strfmt.Registry) error {
 }
 
 func (m *SandboxEnvVar) validateValueFrom(formats strfmt.Registry) error {
-	if swag.IsZero(m.ValueFrom) { // not required
+	if typeutils.IsZero(m.ValueFrom) { // not required
 		return nil
 	}
 
@@ -114,7 +115,7 @@ func (m *SandboxEnvVar) ContextValidate(ctx context.Context, formats strfmt.Regi
 
 func (m *SandboxEnvVar) contextValidateOperation(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Operation) { // not required
+	if typeutils.IsZero(m.Operation) { // not required
 		return nil
 	}
 
@@ -138,7 +139,7 @@ func (m *SandboxEnvVar) contextValidateValueFrom(ctx context.Context, formats st
 
 	if m.ValueFrom != nil {
 
-		if swag.IsZero(m.ValueFrom) { // not required
+		if typeutils.IsZero(m.ValueFrom) { // not required
 			return nil
 		}
 
@@ -164,13 +165,13 @@ func (m *SandboxEnvVar) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxEnvVar) UnmarshalBinary(b []byte) error {
 	var res SandboxEnvVar
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewExplainSandboxStatusParams() *ExplainSandboxStatusParams {
-	return &ExplainSandboxStatusParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewExplainSandboxStatusParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewExplainSandboxStatusParamsWithTimeout creates a new ExplainSandboxStatusParams object
 // with the ability to set a timeout on a request.
 func NewExplainSandboxStatusParamsWithTimeout(timeout time.Duration) *ExplainSandboxStatusParams {
 	return &ExplainSandboxStatusParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewExplainSandboxStatusParamsWithContext creates a new ExplainSandboxStatusParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ExplainSandboxStatusParams].
 func NewExplainSandboxStatusParamsWithContext(ctx context.Context) *ExplainSandboxStatusParams {
 	return &ExplainSandboxStatusParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -76,9 +80,9 @@ type ExplainSandboxStatusParams struct {
 	*/
 	SandboxName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the explain sandbox status params (not the query body).
@@ -96,76 +100,79 @@ func (o *ExplainSandboxStatusParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the explain sandbox status params
+// WithTimeout adds the timeout to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) WithTimeout(timeout time.Duration) *ExplainSandboxStatusParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the explain sandbox status params
+// SetTimeout adds the timeout to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the explain sandbox status params
+// WithContext adds the context to the explain sandbox status params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ExplainSandboxStatusParams].
 func (o *ExplainSandboxStatusParams) WithContext(ctx context.Context) *ExplainSandboxStatusParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the explain sandbox status params
+// SetContext adds the context to the explain sandbox status params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ExplainSandboxStatusParams].
 func (o *ExplainSandboxStatusParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the explain sandbox status params
+// WithHTTPClient adds the HTTPClient to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) WithHTTPClient(client *http.Client) *ExplainSandboxStatusParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the explain sandbox status params
+// SetHTTPClient adds the HTTPClient to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithMode adds the mode to the explain sandbox status params
+// WithMode adds the mode to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) WithMode(mode *string) *ExplainSandboxStatusParams {
 	o.SetMode(mode)
 	return o
 }
 
-// SetMode adds the mode to the explain sandbox status params
+// SetMode adds the mode to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) SetMode(mode *string) {
 	o.Mode = mode
 }
 
-// WithOrgName adds the orgName to the explain sandbox status params
+// WithOrgName adds the orgName to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) WithOrgName(orgName string) *ExplainSandboxStatusParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the explain sandbox status params
+// SetOrgName adds the orgName to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSandboxName adds the sandboxName to the explain sandbox status params
+// WithSandboxName adds the sandboxName to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) WithSandboxName(sandboxName string) *ExplainSandboxStatusParams {
 	o.SetSandboxName(sandboxName)
 	return o
 }
 
-// SetSandboxName adds the sandboxName to the explain sandbox status params
+// SetSandboxName adds the sandboxName to the explain sandbox status params.
 func (o *ExplainSandboxStatusParams) SetSandboxName(sandboxName string) {
 	o.SandboxName = sandboxName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ExplainSandboxStatusParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

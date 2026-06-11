@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TestExecutionCanceledState test execution canceled state
@@ -41,7 +42,7 @@ func (m *TestExecutionCanceledState) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionCanceledState) validateCanceledBy(formats strfmt.Registry) error {
-	if swag.IsZero(m.CanceledBy) { // not required
+	if typeutils.IsZero(m.CanceledBy) { // not required
 		return nil
 	}
 
@@ -77,7 +78,7 @@ func (m *TestExecutionCanceledState) ContextValidate(ctx context.Context, format
 
 func (m *TestExecutionCanceledState) contextValidateCanceledBy(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.CanceledBy) { // not required
+	if typeutils.IsZero(m.CanceledBy) { // not required
 		return nil
 	}
 
@@ -102,13 +103,13 @@ func (m *TestExecutionCanceledState) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TestExecutionCanceledState) UnmarshalBinary(b []byte) error {
 	var res TestExecutionCanceledState
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

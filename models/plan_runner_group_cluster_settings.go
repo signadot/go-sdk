@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanRunnerGroupClusterSettings plan runner group cluster settings
@@ -45,12 +46,12 @@ func (m *PlanRunnerGroupClusterSettings) Validate(formats strfmt.Registry) error
 }
 
 func (m *PlanRunnerGroupClusterSettings) validateRunnerGroups(formats strfmt.Registry) error {
-	if swag.IsZero(m.RunnerGroups) { // not required
+	if typeutils.IsZero(m.RunnerGroups) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.RunnerGroups); i++ {
-		if swag.IsZero(m.RunnerGroups[i]) { // not required
+		if typeutils.IsZero(m.RunnerGroups[i]) { // not required
 			continue
 		}
 
@@ -94,7 +95,7 @@ func (m *PlanRunnerGroupClusterSettings) contextValidateRunnerGroups(ctx context
 
 		if m.RunnerGroups[i] != nil {
 
-			if swag.IsZero(m.RunnerGroups[i]) { // not required
+			if typeutils.IsZero(m.RunnerGroups[i]) { // not required
 				return nil
 			}
 
@@ -122,13 +123,13 @@ func (m *PlanRunnerGroupClusterSettings) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanRunnerGroupClusterSettings) UnmarshalBinary(b []byte) error {
 	var res PlanRunnerGroupClusterSettings
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

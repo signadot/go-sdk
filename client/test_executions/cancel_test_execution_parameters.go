@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCancelTestExecutionParams() *CancelTestExecutionParams {
-	return &CancelTestExecutionParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewCancelTestExecutionParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewCancelTestExecutionParamsWithTimeout creates a new CancelTestExecutionParams object
 // with the ability to set a timeout on a request.
 func NewCancelTestExecutionParamsWithTimeout(timeout time.Duration) *CancelTestExecutionParams {
 	return &CancelTestExecutionParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewCancelTestExecutionParamsWithContext creates a new CancelTestExecutionParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CancelTestExecutionParams].
 func NewCancelTestExecutionParamsWithContext(ctx context.Context) *CancelTestExecutionParams {
 	return &CancelTestExecutionParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type CancelTestExecutionParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the cancel test execution params (not the query body).
@@ -90,65 +94,68 @@ func (o *CancelTestExecutionParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the cancel test execution params
+// WithTimeout adds the timeout to the cancel test execution params.
 func (o *CancelTestExecutionParams) WithTimeout(timeout time.Duration) *CancelTestExecutionParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the cancel test execution params
+// SetTimeout adds the timeout to the cancel test execution params.
 func (o *CancelTestExecutionParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the cancel test execution params
+// WithContext adds the context to the cancel test execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CancelTestExecutionParams].
 func (o *CancelTestExecutionParams) WithContext(ctx context.Context) *CancelTestExecutionParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the cancel test execution params
+// SetContext adds the context to the cancel test execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CancelTestExecutionParams].
 func (o *CancelTestExecutionParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the cancel test execution params
+// WithHTTPClient adds the HTTPClient to the cancel test execution params.
 func (o *CancelTestExecutionParams) WithHTTPClient(client *http.Client) *CancelTestExecutionParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the cancel test execution params
+// SetHTTPClient adds the HTTPClient to the cancel test execution params.
 func (o *CancelTestExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionID adds the executionID to the cancel test execution params
+// WithExecutionID adds the executionID to the cancel test execution params.
 func (o *CancelTestExecutionParams) WithExecutionID(executionID string) *CancelTestExecutionParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the cancel test execution params
+// SetExecutionID adds the executionId to the cancel test execution params.
 func (o *CancelTestExecutionParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the cancel test execution params
+// WithOrgName adds the orgName to the cancel test execution params.
 func (o *CancelTestExecutionParams) WithOrgName(orgName string) *CancelTestExecutionParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the cancel test execution params
+// SetOrgName adds the orgName to the cancel test execution params.
 func (o *CancelTestExecutionParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *CancelTestExecutionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

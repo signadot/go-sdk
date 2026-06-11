@@ -3,7 +3,9 @@
 package resource_plugins
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new resource plugins API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new resource plugins API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new resource plugins API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,39 +45,80 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for resource plugins API
+Client for resource plugins API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// ApplyResourcePlugin apply a resource plugin.
 	ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyResourcePluginOK, error)
 
+	// ApplyResourcePluginContext apply a resource plugin.
+	ApplyResourcePluginContext(ctx context.Context, params *ApplyResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyResourcePluginOK, error)
+
+	// DeleteResourcePlugin delete a resource plugin.
 	DeleteResourcePlugin(params *DeleteResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteResourcePluginOK, error)
 
+	// DeleteResourcePluginContext delete a resource plugin.
+	DeleteResourcePluginContext(ctx context.Context, params *DeleteResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteResourcePluginOK, error)
+
+	// GetResourcePlugin get the requested resource plugin.
 	GetResourcePlugin(params *GetResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourcePluginOK, error)
 
+	// GetResourcePluginContext get the requested resource plugin.
+	GetResourcePluginContext(ctx context.Context, params *GetResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourcePluginOK, error)
+
+	// ListResourcePlugins list resource plugins.
 	ListResourcePlugins(params *ListResourcePluginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListResourcePluginsContext list resource plugins.
+	ListResourcePluginsContext(ctx context.Context, params *ListResourcePluginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-ApplyResourcePlugin applies a resource plugin
+ApplyResourcePluginapplies a resource plugin.
 
-Apply a resource plugin. Updates are not supported at this time.
+Apply a resource plugin. Updates are not supported at this time..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ApplyResourcePluginContext] instead.
 */
 func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyResourcePluginOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ApplyResourcePluginContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ApplyResourcePluginContextapplies a resource plugin.
+
+Apply a resource plugin. Updates are not supported at this time..
+
+Do not use the deprecated [ApplyResourcePluginParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ApplyResourcePluginContext(ctx context.Context, params *ApplyResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyResourcePluginOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewApplyResourcePluginParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "apply-resource-plugin",
 		Method:             "PUT",
@@ -84,13 +129,14 @@ func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo
 		Params:             params,
 		Reader:             &ApplyResourcePluginReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -111,15 +157,39 @@ func (a *Client) ApplyResourcePlugin(params *ApplyResourcePluginParams, authInfo
 }
 
 /*
-DeleteResourcePlugin deletes a resource plugin
+DeleteResourcePlugindeletes a resource plugin.
 
-Delete the resource plugin by name
+Delete the resource plugin by name.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteResourcePluginContext] instead.
 */
 func (a *Client) DeleteResourcePlugin(params *DeleteResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteResourcePluginOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteResourcePluginContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteResourcePluginContextdeletes a resource plugin.
+
+Delete the resource plugin by name.
+
+Do not use the deprecated [DeleteResourcePluginParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteResourcePluginContext(ctx context.Context, params *DeleteResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteResourcePluginOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteResourcePluginParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-resource-plugin",
 		Method:             "DELETE",
@@ -130,13 +200,14 @@ func (a *Client) DeleteResourcePlugin(params *DeleteResourcePluginParams, authIn
 		Params:             params,
 		Reader:             &DeleteResourcePluginReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -157,15 +228,39 @@ func (a *Client) DeleteResourcePlugin(params *DeleteResourcePluginParams, authIn
 }
 
 /*
-GetResourcePlugin gets the requested resource plugin
+GetResourcePlugingets the requested resource plugin.
 
-Get the specified resource plugin by name
+Get the specified resource plugin by name.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetResourcePluginContext] instead.
 */
 func (a *Client) GetResourcePlugin(params *GetResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourcePluginOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetResourcePluginContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetResourcePluginContextgets the requested resource plugin.
+
+Get the specified resource plugin by name.
+
+Do not use the deprecated [GetResourcePluginParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetResourcePluginContext(ctx context.Context, params *GetResourcePluginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourcePluginOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetResourcePluginParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-resource-plugin",
 		Method:             "GET",
@@ -176,13 +271,14 @@ func (a *Client) GetResourcePlugin(params *GetResourcePluginParams, authInfo run
 		Params:             params,
 		Reader:             &GetResourcePluginReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -203,15 +299,39 @@ func (a *Client) GetResourcePlugin(params *GetResourcePluginParams, authInfo run
 }
 
 /*
-ListResourcePlugins lists resource plugins
+ListResourcePluginslists resource plugins.
 
-List all resource plugins under the specified Signadot org.
+List all resource plugins under the specified Signadot org..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListResourcePluginsContext] instead.
 */
 func (a *Client) ListResourcePlugins(params *ListResourcePluginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListResourcePluginsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListResourcePluginsContextlists resource plugins.
+
+List all resource plugins under the specified Signadot org..
+
+Do not use the deprecated [ListResourcePluginsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListResourcePluginsContext(ctx context.Context, params *ListResourcePluginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourcePluginsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListResourcePluginsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-resource-plugins",
 		Method:             "GET",
@@ -222,13 +342,14 @@ func (a *Client) ListResourcePlugins(params *ListResourcePluginsParams, authInfo
 		Params:             params,
 		Reader:             &ListResourcePluginsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -249,6 +370,14 @@ func (a *Client) ListResourcePlugins(params *ListResourcePluginsParams, authInfo
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [ResourcePluginsParams].
+	ctx context.Context
 }

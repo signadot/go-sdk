@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // JobRunnerGroupScaling job runner group scaling
@@ -42,7 +43,7 @@ func (m *JobRunnerGroupScaling) Validate(formats strfmt.Registry) error {
 }
 
 func (m *JobRunnerGroupScaling) validateAuto(formats strfmt.Registry) error {
-	if swag.IsZero(m.Auto) { // not required
+	if typeutils.IsZero(m.Auto) { // not required
 		return nil
 	}
 
@@ -65,7 +66,7 @@ func (m *JobRunnerGroupScaling) validateAuto(formats strfmt.Registry) error {
 }
 
 func (m *JobRunnerGroupScaling) validateManual(formats strfmt.Registry) error {
-	if swag.IsZero(m.Manual) { // not required
+	if typeutils.IsZero(m.Manual) { // not required
 		return nil
 	}
 
@@ -109,7 +110,7 @@ func (m *JobRunnerGroupScaling) contextValidateAuto(ctx context.Context, formats
 
 	if m.Auto != nil {
 
-		if swag.IsZero(m.Auto) { // not required
+		if typeutils.IsZero(m.Auto) { // not required
 			return nil
 		}
 
@@ -134,7 +135,7 @@ func (m *JobRunnerGroupScaling) contextValidateManual(ctx context.Context, forma
 
 	if m.Manual != nil {
 
-		if swag.IsZero(m.Manual) { // not required
+		if typeutils.IsZero(m.Manual) { // not required
 			return nil
 		}
 
@@ -160,13 +161,13 @@ func (m *JobRunnerGroupScaling) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *JobRunnerGroupScaling) UnmarshalBinary(b []byte) error {
 	var res JobRunnerGroupScaling
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

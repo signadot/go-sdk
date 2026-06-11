@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TestSpec test spec
@@ -50,12 +51,12 @@ func (m *TestSpec) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TestSpec) validateTriggers(formats strfmt.Registry) error {
-	if swag.IsZero(m.Triggers) { // not required
+	if typeutils.IsZero(m.Triggers) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Triggers); i++ {
-		if swag.IsZero(m.Triggers[i]) { // not required
+		if typeutils.IsZero(m.Triggers[i]) { // not required
 			continue
 		}
 
@@ -99,7 +100,7 @@ func (m *TestSpec) contextValidateTriggers(ctx context.Context, formats strfmt.R
 
 		if m.Triggers[i] != nil {
 
-			if swag.IsZero(m.Triggers[i]) { // not required
+			if typeutils.IsZero(m.Triggers[i]) { // not required
 				return nil
 			}
 
@@ -127,13 +128,13 @@ func (m *TestSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TestSpec) UnmarshalBinary(b []byte) error {
 	var res TestSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

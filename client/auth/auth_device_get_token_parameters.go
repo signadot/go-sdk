@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAuthDeviceGetTokenParams() *AuthDeviceGetTokenParams {
-	return &AuthDeviceGetTokenParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewAuthDeviceGetTokenParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewAuthDeviceGetTokenParamsWithTimeout creates a new AuthDeviceGetTokenParams object
 // with the ability to set a timeout on a request.
 func NewAuthDeviceGetTokenParamsWithTimeout(timeout time.Duration) *AuthDeviceGetTokenParams {
 	return &AuthDeviceGetTokenParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewAuthDeviceGetTokenParamsWithContext creates a new AuthDeviceGetTokenParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceGetTokenParams].
 func NewAuthDeviceGetTokenParamsWithContext(ctx context.Context) *AuthDeviceGetTokenParams {
 	return &AuthDeviceGetTokenParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -66,9 +69,9 @@ type AuthDeviceGetTokenParams struct {
 	*/
 	Data *models.AuthdevicesTokenInput
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the auth device get token params (not the query body).
@@ -86,54 +89,57 @@ func (o *AuthDeviceGetTokenParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the auth device get token params
+// WithTimeout adds the timeout to the auth device get token params.
 func (o *AuthDeviceGetTokenParams) WithTimeout(timeout time.Duration) *AuthDeviceGetTokenParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the auth device get token params
+// SetTimeout adds the timeout to the auth device get token params.
 func (o *AuthDeviceGetTokenParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the auth device get token params
+// WithContext adds the context to the auth device get token params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceGetTokenParams].
 func (o *AuthDeviceGetTokenParams) WithContext(ctx context.Context) *AuthDeviceGetTokenParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the auth device get token params
+// SetContext adds the context to the auth device get token params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [AuthDeviceGetTokenParams].
 func (o *AuthDeviceGetTokenParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the auth device get token params
+// WithHTTPClient adds the HTTPClient to the auth device get token params.
 func (o *AuthDeviceGetTokenParams) WithHTTPClient(client *http.Client) *AuthDeviceGetTokenParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the auth device get token params
+// SetHTTPClient adds the HTTPClient to the auth device get token params.
 func (o *AuthDeviceGetTokenParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the auth device get token params
+// WithData adds the data to the auth device get token params.
 func (o *AuthDeviceGetTokenParams) WithData(data *models.AuthdevicesTokenInput) *AuthDeviceGetTokenParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the auth device get token params
+// SetData adds the data to the auth device get token params.
 func (o *AuthDeviceGetTokenParams) SetData(data *models.AuthdevicesTokenInput) {
 	o.Data = data
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *AuthDeviceGetTokenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

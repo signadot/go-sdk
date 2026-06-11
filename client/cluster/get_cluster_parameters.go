@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetClusterParams() *GetClusterParams {
-	return &GetClusterParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetClusterParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetClusterParamsWithTimeout creates a new GetClusterParams object
 // with the ability to set a timeout on a request.
 func NewGetClusterParamsWithTimeout(timeout time.Duration) *GetClusterParams {
 	return &GetClusterParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetClusterParamsWithContext creates a new GetClusterParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetClusterParams].
 func NewGetClusterParamsWithContext(ctx context.Context) *GetClusterParams {
 	return &GetClusterParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetClusterParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get cluster params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetClusterParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get cluster params
+// WithTimeout adds the timeout to the get cluster params.
 func (o *GetClusterParams) WithTimeout(timeout time.Duration) *GetClusterParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get cluster params
+// SetTimeout adds the timeout to the get cluster params.
 func (o *GetClusterParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get cluster params
+// WithContext adds the context to the get cluster params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetClusterParams].
 func (o *GetClusterParams) WithContext(ctx context.Context) *GetClusterParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get cluster params
+// SetContext adds the context to the get cluster params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetClusterParams].
 func (o *GetClusterParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get cluster params
+// WithHTTPClient adds the HTTPClient to the get cluster params.
 func (o *GetClusterParams) WithHTTPClient(client *http.Client) *GetClusterParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get cluster params
+// SetHTTPClient adds the HTTPClient to the get cluster params.
 func (o *GetClusterParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithClusterName adds the clusterName to the get cluster params
+// WithClusterName adds the clusterName to the get cluster params.
 func (o *GetClusterParams) WithClusterName(clusterName string) *GetClusterParams {
 	o.SetClusterName(clusterName)
 	return o
 }
 
-// SetClusterName adds the clusterName to the get cluster params
+// SetClusterName adds the clusterName to the get cluster params.
 func (o *GetClusterParams) SetClusterName(clusterName string) {
 	o.ClusterName = clusterName
 }
 
-// WithOrgName adds the orgName to the get cluster params
+// WithOrgName adds the orgName to the get cluster params.
 func (o *GetClusterParams) WithOrgName(orgName string) *GetClusterParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get cluster params
+// SetOrgName adds the orgName to the get cluster params.
 func (o *GetClusterParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetClusterParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

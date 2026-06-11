@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxTestExecutionsSummary sandbox test executions summary
@@ -50,7 +51,7 @@ func (m *SandboxTestExecutionsSummary) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxTestExecutionsSummary) validateChecks(formats strfmt.Registry) error {
-	if swag.IsZero(m.Checks) { // not required
+	if typeutils.IsZero(m.Checks) { // not required
 		return nil
 	}
 
@@ -73,12 +74,12 @@ func (m *SandboxTestExecutionsSummary) validateChecks(formats strfmt.Registry) e
 }
 
 func (m *SandboxTestExecutionsSummary) validatePhaseCounts(formats strfmt.Registry) error {
-	if swag.IsZero(m.PhaseCounts) { // not required
+	if typeutils.IsZero(m.PhaseCounts) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.PhaseCounts); i++ {
-		if swag.IsZero(m.PhaseCounts[i]) { // not required
+		if typeutils.IsZero(m.PhaseCounts[i]) { // not required
 			continue
 		}
 
@@ -103,7 +104,7 @@ func (m *SandboxTestExecutionsSummary) validatePhaseCounts(formats strfmt.Regist
 }
 
 func (m *SandboxTestExecutionsSummary) validateTrafficDiffs(formats strfmt.Registry) error {
-	if swag.IsZero(m.TrafficDiffs) { // not required
+	if typeutils.IsZero(m.TrafficDiffs) { // not required
 		return nil
 	}
 
@@ -151,7 +152,7 @@ func (m *SandboxTestExecutionsSummary) contextValidateChecks(ctx context.Context
 
 	if m.Checks != nil {
 
-		if swag.IsZero(m.Checks) { // not required
+		if typeutils.IsZero(m.Checks) { // not required
 			return nil
 		}
 
@@ -178,7 +179,7 @@ func (m *SandboxTestExecutionsSummary) contextValidatePhaseCounts(ctx context.Co
 
 		if m.PhaseCounts[i] != nil {
 
-			if swag.IsZero(m.PhaseCounts[i]) { // not required
+			if typeutils.IsZero(m.PhaseCounts[i]) { // not required
 				return nil
 			}
 
@@ -205,7 +206,7 @@ func (m *SandboxTestExecutionsSummary) contextValidateTrafficDiffs(ctx context.C
 
 	if m.TrafficDiffs != nil {
 
-		if swag.IsZero(m.TrafficDiffs) { // not required
+		if typeutils.IsZero(m.TrafficDiffs) { // not required
 			return nil
 		}
 
@@ -231,13 +232,13 @@ func (m *SandboxTestExecutionsSummary) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxTestExecutionsSummary) UnmarshalBinary(b []byte) error {
 	var res SandboxTestExecutionsSummary
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

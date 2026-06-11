@@ -3,8 +3,10 @@
 package artifacts
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -12,11 +14,12 @@ import (
 )
 
 // New creates a new artifacts API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new artifacts API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -30,6 +33,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new artifacts API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -42,10 +46,10 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for artifacts API
+Client for artifacts API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
@@ -96,29 +100,70 @@ func WithAcceptApplicationJSON(r *runtime.ClientOperation) {
 	r.ProducesMediaTypes = []string{"application/json"}
 }
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// DownloadJobAttemptArtifact download job attempt artifact.
 	DownloadJobAttemptArtifact(params *DownloadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadJobAttemptArtifactOK, *DownloadJobAttemptArtifactPartialContent, error)
 
+	// DownloadJobAttemptArtifactContext download job attempt artifact.
+	DownloadJobAttemptArtifactContext(ctx context.Context, params *DownloadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadJobAttemptArtifactOK, *DownloadJobAttemptArtifactPartialContent, error)
+
+	// InfoJobAttemptArtifact job attempt artifact info.
 	InfoJobAttemptArtifact(params *InfoJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InfoJobAttemptArtifactOK, error)
 
+	// InfoJobAttemptArtifactContext job attempt artifact info.
+	InfoJobAttemptArtifactContext(ctx context.Context, params *InfoJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InfoJobAttemptArtifactOK, error)
+
+	// ListJobAttemptArtifacts list job attempt artifacts.
 	ListJobAttemptArtifacts(params *ListJobAttemptArtifactsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobAttemptArtifactsOK, error)
 
+	// ListJobAttemptArtifactsContext list job attempt artifacts.
+	ListJobAttemptArtifactsContext(ctx context.Context, params *ListJobAttemptArtifactsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobAttemptArtifactsOK, error)
+
+	// UploadJobAttemptArtifact upload job attempt artifact.
 	UploadJobAttemptArtifact(params *UploadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UploadJobAttemptArtifactOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// UploadJobAttemptArtifactContext upload job attempt artifact.
+	UploadJobAttemptArtifactContext(ctx context.Context, params *UploadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UploadJobAttemptArtifactOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-DownloadJobAttemptArtifact downloads job attempt artifact
+DownloadJobAttemptArtifactdownloads job attempt artifact.
 
-Downloads an artifact for a given job attempt.
+Downloads an artifact for a given job attempt..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DownloadJobAttemptArtifactContext] instead.
 */
 func (a *Client) DownloadJobAttemptArtifact(params *DownloadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadJobAttemptArtifactOK, *DownloadJobAttemptArtifactPartialContent, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DownloadJobAttemptArtifactContext(ctx, params, authInfo, writer, opts...)
+}
+
+/*
+DownloadJobAttemptArtifactContextdownloads job attempt artifact.
+
+Downloads an artifact for a given job attempt..
+
+Do not use the deprecated [DownloadJobAttemptArtifactParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DownloadJobAttemptArtifactContext(ctx context.Context, params *DownloadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*DownloadJobAttemptArtifactOK, *DownloadJobAttemptArtifactPartialContent, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDownloadJobAttemptArtifactParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "download-job-attempt-artifact",
 		Method:             "GET",
@@ -129,13 +174,14 @@ func (a *Client) DownloadJobAttemptArtifact(params *DownloadJobAttemptArtifactPa
 		Params:             params,
 		Reader:             &DownloadJobAttemptArtifactReader{formats: a.formats, writer: writer},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -156,15 +202,39 @@ func (a *Client) DownloadJobAttemptArtifact(params *DownloadJobAttemptArtifactPa
 }
 
 /*
-InfoJobAttemptArtifact jobs attempt artifact info
+InfoJobAttemptArtifactjobs attempt artifact info.
 
-Get info about a job attempt artifact
+Get info about a job attempt artifact.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.InfoJobAttemptArtifactContext] instead.
 */
 func (a *Client) InfoJobAttemptArtifact(params *InfoJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InfoJobAttemptArtifactOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.InfoJobAttemptArtifactContext(ctx, params, authInfo, opts...)
+}
+
+/*
+InfoJobAttemptArtifactContextjobs attempt artifact info.
+
+Get info about a job attempt artifact.
+
+Do not use the deprecated [InfoJobAttemptArtifactParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) InfoJobAttemptArtifactContext(ctx context.Context, params *InfoJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InfoJobAttemptArtifactOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewInfoJobAttemptArtifactParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "info-job-attempt-artifact",
 		Method:             "GET",
@@ -175,13 +245,14 @@ func (a *Client) InfoJobAttemptArtifact(params *InfoJobAttemptArtifactParams, au
 		Params:             params,
 		Reader:             &InfoJobAttemptArtifactReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -202,15 +273,39 @@ func (a *Client) InfoJobAttemptArtifact(params *InfoJobAttemptArtifactParams, au
 }
 
 /*
-ListJobAttemptArtifacts lists job attempt artifacts
+ListJobAttemptArtifactslists job attempt artifacts.
 
-List all artifacts for a given job attempt.
+List all artifacts for a given job attempt..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListJobAttemptArtifactsContext] instead.
 */
 func (a *Client) ListJobAttemptArtifacts(params *ListJobAttemptArtifactsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobAttemptArtifactsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListJobAttemptArtifactsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListJobAttemptArtifactsContextlists job attempt artifacts.
+
+List all artifacts for a given job attempt..
+
+Do not use the deprecated [ListJobAttemptArtifactsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListJobAttemptArtifactsContext(ctx context.Context, params *ListJobAttemptArtifactsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobAttemptArtifactsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListJobAttemptArtifactsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-job-attempt-artifacts",
 		Method:             "GET",
@@ -221,13 +316,14 @@ func (a *Client) ListJobAttemptArtifacts(params *ListJobAttemptArtifactsParams, 
 		Params:             params,
 		Reader:             &ListJobAttemptArtifactsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -248,15 +344,39 @@ func (a *Client) ListJobAttemptArtifacts(params *ListJobAttemptArtifactsParams, 
 }
 
 /*
-UploadJobAttemptArtifact uploads job attempt artifact
+UploadJobAttemptArtifactuploads job attempt artifact.
 
-Uploads an artifact for a given job attempt.
+Uploads an artifact for a given job attempt..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.UploadJobAttemptArtifactContext] instead.
 */
 func (a *Client) UploadJobAttemptArtifact(params *UploadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UploadJobAttemptArtifactOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.UploadJobAttemptArtifactContext(ctx, params, authInfo, opts...)
+}
+
+/*
+UploadJobAttemptArtifactContextuploads job attempt artifact.
+
+Uploads an artifact for a given job attempt..
+
+Do not use the deprecated [UploadJobAttemptArtifactParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) UploadJobAttemptArtifactContext(ctx context.Context, params *UploadJobAttemptArtifactParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UploadJobAttemptArtifactOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewUploadJobAttemptArtifactParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "upload-job-attempt-artifact",
 		Method:             "POST",
@@ -267,13 +387,14 @@ func (a *Client) UploadJobAttemptArtifact(params *UploadJobAttemptArtifactParams
 		Params:             params,
 		Reader:             &UploadJobAttemptArtifactReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -294,6 +415,14 @@ func (a *Client) UploadJobAttemptArtifact(params *UploadJobAttemptArtifactParams
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [ArtifactsParams].
+	ctx context.Context
 }

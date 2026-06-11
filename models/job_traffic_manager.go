@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
@@ -73,7 +74,7 @@ func (m *JobTrafficManager) validateInjectRoutingKeyEnum(path, location string, 
 }
 
 func (m *JobTrafficManager) validateInjectRoutingKey(formats strfmt.Registry) error {
-	if swag.IsZero(m.InjectRoutingKey) { // not required
+	if typeutils.IsZero(m.InjectRoutingKey) { // not required
 		return nil
 	}
 
@@ -95,13 +96,13 @@ func (m *JobTrafficManager) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *JobTrafficManager) UnmarshalBinary(b []byte) error {
 	var res JobTrafficManager
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

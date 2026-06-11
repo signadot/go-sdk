@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteClusterTokenParams() *DeleteClusterTokenParams {
-	return &DeleteClusterTokenParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteClusterTokenParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteClusterTokenParamsWithTimeout creates a new DeleteClusterTokenParams object
 // with the ability to set a timeout on a request.
 func NewDeleteClusterTokenParamsWithTimeout(timeout time.Duration) *DeleteClusterTokenParams {
 	return &DeleteClusterTokenParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteClusterTokenParamsWithContext creates a new DeleteClusterTokenParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteClusterTokenParams].
 func NewDeleteClusterTokenParamsWithContext(ctx context.Context) *DeleteClusterTokenParams {
 	return &DeleteClusterTokenParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -76,9 +80,9 @@ type DeleteClusterTokenParams struct {
 	*/
 	TokenID string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete cluster token params (not the query body).
@@ -96,76 +100,79 @@ func (o *DeleteClusterTokenParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete cluster token params
+// WithTimeout adds the timeout to the delete cluster token params.
 func (o *DeleteClusterTokenParams) WithTimeout(timeout time.Duration) *DeleteClusterTokenParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete cluster token params
+// SetTimeout adds the timeout to the delete cluster token params.
 func (o *DeleteClusterTokenParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete cluster token params
+// WithContext adds the context to the delete cluster token params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteClusterTokenParams].
 func (o *DeleteClusterTokenParams) WithContext(ctx context.Context) *DeleteClusterTokenParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete cluster token params
+// SetContext adds the context to the delete cluster token params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteClusterTokenParams].
 func (o *DeleteClusterTokenParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete cluster token params
+// WithHTTPClient adds the HTTPClient to the delete cluster token params.
 func (o *DeleteClusterTokenParams) WithHTTPClient(client *http.Client) *DeleteClusterTokenParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete cluster token params
+// SetHTTPClient adds the HTTPClient to the delete cluster token params.
 func (o *DeleteClusterTokenParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithClusterName adds the clusterName to the delete cluster token params
+// WithClusterName adds the clusterName to the delete cluster token params.
 func (o *DeleteClusterTokenParams) WithClusterName(clusterName string) *DeleteClusterTokenParams {
 	o.SetClusterName(clusterName)
 	return o
 }
 
-// SetClusterName adds the clusterName to the delete cluster token params
+// SetClusterName adds the clusterName to the delete cluster token params.
 func (o *DeleteClusterTokenParams) SetClusterName(clusterName string) {
 	o.ClusterName = clusterName
 }
 
-// WithOrgName adds the orgName to the delete cluster token params
+// WithOrgName adds the orgName to the delete cluster token params.
 func (o *DeleteClusterTokenParams) WithOrgName(orgName string) *DeleteClusterTokenParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete cluster token params
+// SetOrgName adds the orgName to the delete cluster token params.
 func (o *DeleteClusterTokenParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTokenID adds the tokenID to the delete cluster token params
+// WithTokenID adds the tokenID to the delete cluster token params.
 func (o *DeleteClusterTokenParams) WithTokenID(tokenID string) *DeleteClusterTokenParams {
 	o.SetTokenID(tokenID)
 	return o
 }
 
-// SetTokenID adds the tokenId to the delete cluster token params
+// SetTokenID adds the tokenId to the delete cluster token params.
 func (o *DeleteClusterTokenParams) SetTokenID(tokenID string) {
 	o.TokenID = tokenID
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteClusterTokenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewStreamJobAttemptLogsParams creates a new StreamJobAttemptLogsParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewStreamJobAttemptLogsParams() *StreamJobAttemptLogsParams {
-	return &StreamJobAttemptLogsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewStreamJobAttemptLogsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewStreamJobAttemptLogsParamsWithTimeout creates a new StreamJobAttemptLogsParams object
 // with the ability to set a timeout on a request.
 func NewStreamJobAttemptLogsParamsWithTimeout(timeout time.Duration) *StreamJobAttemptLogsParams {
 	return &StreamJobAttemptLogsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewStreamJobAttemptLogsParamsWithContext creates a new StreamJobAttemptLogsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [StreamJobAttemptLogsParams].
 func NewStreamJobAttemptLogsParamsWithContext(ctx context.Context) *StreamJobAttemptLogsParams {
 	return &StreamJobAttemptLogsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -95,9 +99,9 @@ type StreamJobAttemptLogsParams struct {
 	*/
 	Type *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the stream job attempt logs params (not the query body).
@@ -115,109 +119,112 @@ func (o *StreamJobAttemptLogsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the stream job attempt logs params
+// WithTimeout adds the timeout to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithTimeout(timeout time.Duration) *StreamJobAttemptLogsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the stream job attempt logs params
+// SetTimeout adds the timeout to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the stream job attempt logs params
+// WithContext adds the context to the stream job attempt logs params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [StreamJobAttemptLogsParams].
 func (o *StreamJobAttemptLogsParams) WithContext(ctx context.Context) *StreamJobAttemptLogsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the stream job attempt logs params
+// SetContext adds the context to the stream job attempt logs params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [StreamJobAttemptLogsParams].
 func (o *StreamJobAttemptLogsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the stream job attempt logs params
+// WithHTTPClient adds the HTTPClient to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithHTTPClient(client *http.Client) *StreamJobAttemptLogsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the stream job attempt logs params
+// SetHTTPClient adds the HTTPClient to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithCursor adds the cursor to the stream job attempt logs params
+// WithCursor adds the cursor to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithCursor(cursor *string) *StreamJobAttemptLogsParams {
 	o.SetCursor(cursor)
 	return o
 }
 
-// SetCursor adds the cursor to the stream job attempt logs params
+// SetCursor adds the cursor to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetCursor(cursor *string) {
 	o.Cursor = cursor
 }
 
-// WithJobAttempt adds the jobAttempt to the stream job attempt logs params
+// WithJobAttempt adds the jobAttempt to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithJobAttempt(jobAttempt int64) *StreamJobAttemptLogsParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
-// SetJobAttempt adds the jobAttempt to the stream job attempt logs params
+// SetJobAttempt adds the jobAttempt to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
-// WithJobName adds the jobName to the stream job attempt logs params
+// WithJobName adds the jobName to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithJobName(jobName string) *StreamJobAttemptLogsParams {
 	o.SetJobName(jobName)
 	return o
 }
 
-// SetJobName adds the jobName to the stream job attempt logs params
+// SetJobName adds the jobName to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetJobName(jobName string) {
 	o.JobName = jobName
 }
 
-// WithOrgName adds the orgName to the stream job attempt logs params
+// WithOrgName adds the orgName to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithOrgName(orgName string) *StreamJobAttemptLogsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the stream job attempt logs params
+// SetOrgName adds the orgName to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTailLines adds the tailLines to the stream job attempt logs params
+// WithTailLines adds the tailLines to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithTailLines(tailLines *int64) *StreamJobAttemptLogsParams {
 	o.SetTailLines(tailLines)
 	return o
 }
 
-// SetTailLines adds the tailLines to the stream job attempt logs params
+// SetTailLines adds the tailLines to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetTailLines(tailLines *int64) {
 	o.TailLines = tailLines
 }
 
-// WithType adds the typeVar to the stream job attempt logs params
+// WithType adds the typeVar to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) WithType(typeVar *string) *StreamJobAttemptLogsParams {
 	o.SetType(typeVar)
 	return o
 }
 
-// SetType adds the type to the stream job attempt logs params
+// SetType adds the type to the stream job attempt logs params.
 func (o *StreamJobAttemptLogsParams) SetType(typeVar *string) {
 	o.Type = typeVar
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *StreamJobAttemptLogsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
@@ -240,7 +247,7 @@ func (o *StreamJobAttemptLogsParams) WriteToRequest(r runtime.ClientRequest, reg
 	}
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
+	if err := r.SetPathParam("jobAttempt", conv.FormatInteger(o.JobAttempt)); err != nil {
 		return err
 	}
 
@@ -262,7 +269,7 @@ func (o *StreamJobAttemptLogsParams) WriteToRequest(r runtime.ClientRequest, reg
 		if o.TailLines != nil {
 			qrTailLines = *o.TailLines
 		}
-		qTailLines := swag.FormatInt64(qrTailLines)
+		qTailLines := conv.FormatInteger(qrTailLines)
 		if qTailLines != "" {
 
 			if err := r.SetQueryParam("tailLines", qTailLines); err != nil {

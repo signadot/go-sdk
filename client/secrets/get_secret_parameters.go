@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetSecretParams() *GetSecretParams {
-	return &GetSecretParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetSecretParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetSecretParamsWithTimeout creates a new GetSecretParams object
 // with the ability to set a timeout on a request.
 func NewGetSecretParamsWithTimeout(timeout time.Duration) *GetSecretParams {
 	return &GetSecretParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetSecretParamsWithContext creates a new GetSecretParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetSecretParams].
 func NewGetSecretParamsWithContext(ctx context.Context) *GetSecretParams {
 	return &GetSecretParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetSecretParams struct {
 	*/
 	SecretName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get secret params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetSecretParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get secret params
+// WithTimeout adds the timeout to the get secret params.
 func (o *GetSecretParams) WithTimeout(timeout time.Duration) *GetSecretParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get secret params
+// SetTimeout adds the timeout to the get secret params.
 func (o *GetSecretParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get secret params
+// WithContext adds the context to the get secret params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetSecretParams].
 func (o *GetSecretParams) WithContext(ctx context.Context) *GetSecretParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get secret params
+// SetContext adds the context to the get secret params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetSecretParams].
 func (o *GetSecretParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get secret params
+// WithHTTPClient adds the HTTPClient to the get secret params.
 func (o *GetSecretParams) WithHTTPClient(client *http.Client) *GetSecretParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get secret params
+// SetHTTPClient adds the HTTPClient to the get secret params.
 func (o *GetSecretParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get secret params
+// WithOrgName adds the orgName to the get secret params.
 func (o *GetSecretParams) WithOrgName(orgName string) *GetSecretParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get secret params
+// SetOrgName adds the orgName to the get secret params.
 func (o *GetSecretParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSecretName adds the secretName to the get secret params
+// WithSecretName adds the secretName to the get secret params.
 func (o *GetSecretParams) WithSecretName(secretName string) *GetSecretParams {
 	o.SetSecretName(secretName)
 	return o
 }
 
-// SetSecretName adds the secretName to the get secret params
+// SetSecretName adds the secretName to the get secret params.
 func (o *GetSecretParams) SetSecretName(secretName string) {
 	o.SecretName = secretName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetSecretParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

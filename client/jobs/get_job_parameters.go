@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetJobParams() *GetJobParams {
-	return &GetJobParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetJobParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetJobParamsWithTimeout creates a new GetJobParams object
 // with the ability to set a timeout on a request.
 func NewGetJobParamsWithTimeout(timeout time.Duration) *GetJobParams {
 	return &GetJobParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetJobParamsWithContext creates a new GetJobParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetJobParams].
 func NewGetJobParamsWithContext(ctx context.Context) *GetJobParams {
 	return &GetJobParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetJobParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get job params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetJobParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get job params
+// WithTimeout adds the timeout to the get job params.
 func (o *GetJobParams) WithTimeout(timeout time.Duration) *GetJobParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get job params
+// SetTimeout adds the timeout to the get job params.
 func (o *GetJobParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get job params
+// WithContext adds the context to the get job params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetJobParams].
 func (o *GetJobParams) WithContext(ctx context.Context) *GetJobParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get job params
+// SetContext adds the context to the get job params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetJobParams].
 func (o *GetJobParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get job params
+// WithHTTPClient adds the HTTPClient to the get job params.
 func (o *GetJobParams) WithHTTPClient(client *http.Client) *GetJobParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get job params
+// SetHTTPClient adds the HTTPClient to the get job params.
 func (o *GetJobParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithJobName adds the jobName to the get job params
+// WithJobName adds the jobName to the get job params.
 func (o *GetJobParams) WithJobName(jobName string) *GetJobParams {
 	o.SetJobName(jobName)
 	return o
 }
 
-// SetJobName adds the jobName to the get job params
+// SetJobName adds the jobName to the get job params.
 func (o *GetJobParams) SetJobName(jobName string) {
 	o.JobName = jobName
 }
 
-// WithOrgName adds the orgName to the get job params
+// WithOrgName adds the orgName to the get job params.
 func (o *GetJobParams) WithOrgName(orgName string) *GetJobParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get job params
+// SetOrgName adds the orgName to the get job params.
 func (o *GetJobParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetJobParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

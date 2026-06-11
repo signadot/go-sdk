@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDownloadStepLogParams() *DownloadStepLogParams {
-	return &DownloadStepLogParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDownloadStepLogParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDownloadStepLogParamsWithTimeout creates a new DownloadStepLogParams object
 // with the ability to set a timeout on a request.
 func NewDownloadStepLogParamsWithTimeout(timeout time.Duration) *DownloadStepLogParams {
 	return &DownloadStepLogParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDownloadStepLogParamsWithContext creates a new DownloadStepLogParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DownloadStepLogParams].
 func NewDownloadStepLogParamsWithContext(ctx context.Context) *DownloadStepLogParams {
 	return &DownloadStepLogParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -82,9 +86,9 @@ type DownloadStepLogParams struct {
 	*/
 	Stream string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the download step log params (not the query body).
@@ -102,87 +106,90 @@ func (o *DownloadStepLogParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the download step log params
+// WithTimeout adds the timeout to the download step log params.
 func (o *DownloadStepLogParams) WithTimeout(timeout time.Duration) *DownloadStepLogParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the download step log params
+// SetTimeout adds the timeout to the download step log params.
 func (o *DownloadStepLogParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the download step log params
+// WithContext adds the context to the download step log params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DownloadStepLogParams].
 func (o *DownloadStepLogParams) WithContext(ctx context.Context) *DownloadStepLogParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the download step log params
+// SetContext adds the context to the download step log params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DownloadStepLogParams].
 func (o *DownloadStepLogParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the download step log params
+// WithHTTPClient adds the HTTPClient to the download step log params.
 func (o *DownloadStepLogParams) WithHTTPClient(client *http.Client) *DownloadStepLogParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the download step log params
+// SetHTTPClient adds the HTTPClient to the download step log params.
 func (o *DownloadStepLogParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionID adds the executionID to the download step log params
+// WithExecutionID adds the executionID to the download step log params.
 func (o *DownloadStepLogParams) WithExecutionID(executionID string) *DownloadStepLogParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the download step log params
+// SetExecutionID adds the executionId to the download step log params.
 func (o *DownloadStepLogParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the download step log params
+// WithOrgName adds the orgName to the download step log params.
 func (o *DownloadStepLogParams) WithOrgName(orgName string) *DownloadStepLogParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the download step log params
+// SetOrgName adds the orgName to the download step log params.
 func (o *DownloadStepLogParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithStepID adds the stepID to the download step log params
+// WithStepID adds the stepID to the download step log params.
 func (o *DownloadStepLogParams) WithStepID(stepID string) *DownloadStepLogParams {
 	o.SetStepID(stepID)
 	return o
 }
 
-// SetStepID adds the stepId to the download step log params
+// SetStepID adds the stepId to the download step log params.
 func (o *DownloadStepLogParams) SetStepID(stepID string) {
 	o.StepID = stepID
 }
 
-// WithStream adds the stream to the download step log params
+// WithStream adds the stream to the download step log params.
 func (o *DownloadStepLogParams) WithStream(stream string) *DownloadStepLogParams {
 	o.SetStream(stream)
 	return o
 }
 
-// SetStream adds the stream to the download step log params
+// SetStream adds the stream to the download step log params.
 func (o *DownloadStepLogParams) SetStream(stream string) {
 	o.Stream = stream
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DownloadStepLogParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

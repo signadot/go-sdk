@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanExecutionStatus plan execution status
@@ -82,12 +83,12 @@ func (m *PlanExecutionStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanExecutionStatus) validateInputs(formats strfmt.Registry) error {
-	if swag.IsZero(m.Inputs) { // not required
+	if typeutils.IsZero(m.Inputs) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Inputs); i++ {
-		if swag.IsZero(m.Inputs[i]) { // not required
+		if typeutils.IsZero(m.Inputs[i]) { // not required
 			continue
 		}
 
@@ -112,12 +113,12 @@ func (m *PlanExecutionStatus) validateInputs(formats strfmt.Registry) error {
 }
 
 func (m *PlanExecutionStatus) validateOutputs(formats strfmt.Registry) error {
-	if swag.IsZero(m.Outputs) { // not required
+	if typeutils.IsZero(m.Outputs) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Outputs); i++ {
-		if swag.IsZero(m.Outputs[i]) { // not required
+		if typeutils.IsZero(m.Outputs[i]) { // not required
 			continue
 		}
 
@@ -142,7 +143,7 @@ func (m *PlanExecutionStatus) validateOutputs(formats strfmt.Registry) error {
 }
 
 func (m *PlanExecutionStatus) validatePhase(formats strfmt.Registry) error {
-	if swag.IsZero(m.Phase) { // not required
+	if typeutils.IsZero(m.Phase) { // not required
 		return nil
 	}
 
@@ -163,7 +164,7 @@ func (m *PlanExecutionStatus) validatePhase(formats strfmt.Registry) error {
 }
 
 func (m *PlanExecutionStatus) validateStepCounts(formats strfmt.Registry) error {
-	if swag.IsZero(m.StepCounts) { // not required
+	if typeutils.IsZero(m.StepCounts) { // not required
 		return nil
 	}
 
@@ -186,12 +187,12 @@ func (m *PlanExecutionStatus) validateStepCounts(formats strfmt.Registry) error 
 }
 
 func (m *PlanExecutionStatus) validateSteps(formats strfmt.Registry) error {
-	if swag.IsZero(m.Steps) { // not required
+	if typeutils.IsZero(m.Steps) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Steps); i++ {
-		if swag.IsZero(m.Steps[i]) { // not required
+		if typeutils.IsZero(m.Steps[i]) { // not required
 			continue
 		}
 
@@ -251,7 +252,7 @@ func (m *PlanExecutionStatus) contextValidateInputs(ctx context.Context, formats
 
 		if m.Inputs[i] != nil {
 
-			if swag.IsZero(m.Inputs[i]) { // not required
+			if typeutils.IsZero(m.Inputs[i]) { // not required
 				return nil
 			}
 
@@ -280,7 +281,7 @@ func (m *PlanExecutionStatus) contextValidateOutputs(ctx context.Context, format
 
 		if m.Outputs[i] != nil {
 
-			if swag.IsZero(m.Outputs[i]) { // not required
+			if typeutils.IsZero(m.Outputs[i]) { // not required
 				return nil
 			}
 
@@ -305,7 +306,7 @@ func (m *PlanExecutionStatus) contextValidateOutputs(ctx context.Context, format
 
 func (m *PlanExecutionStatus) contextValidatePhase(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Phase) { // not required
+	if typeutils.IsZero(m.Phase) { // not required
 		return nil
 	}
 
@@ -329,7 +330,7 @@ func (m *PlanExecutionStatus) contextValidateStepCounts(ctx context.Context, for
 
 	if m.StepCounts != nil {
 
-		if swag.IsZero(m.StepCounts) { // not required
+		if typeutils.IsZero(m.StepCounts) { // not required
 			return nil
 		}
 
@@ -356,7 +357,7 @@ func (m *PlanExecutionStatus) contextValidateSteps(ctx context.Context, formats 
 
 		if m.Steps[i] != nil {
 
-			if swag.IsZero(m.Steps[i]) { // not required
+			if typeutils.IsZero(m.Steps[i]) { // not required
 				return nil
 			}
 
@@ -384,13 +385,13 @@ func (m *PlanExecutionStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanExecutionStatus) UnmarshalBinary(b []byte) error {
 	var res PlanExecutionStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

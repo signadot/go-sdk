@@ -3,8 +3,10 @@
 package job_logs
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -12,11 +14,12 @@ import (
 )
 
 // New creates a new job logs API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new job logs API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -30,6 +33,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new job logs API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -42,10 +46,10 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for job logs API
+Client for job logs API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
@@ -76,23 +80,52 @@ func WithAcceptTextEventStream(r *runtime.ClientOperation) {
 	r.ProducesMediaTypes = []string{"text/event-stream"}
 }
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// StreamJobAttemptLogs stream job attempt logs.
 	StreamJobAttemptLogs(params *StreamJobAttemptLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamJobAttemptLogsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// StreamJobAttemptLogsContext stream job attempt logs.
+	StreamJobAttemptLogsContext(ctx context.Context, params *StreamJobAttemptLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamJobAttemptLogsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-StreamJobAttemptLogs streams job attempt logs
+StreamJobAttemptLogsstreams job attempt logs.
 
-Stream logs for a given job attempt.
+Stream logs for a given job attempt..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.StreamJobAttemptLogsContext] instead.
 */
 func (a *Client) StreamJobAttemptLogs(params *StreamJobAttemptLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamJobAttemptLogsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.StreamJobAttemptLogsContext(ctx, params, authInfo, writer, opts...)
+}
+
+/*
+StreamJobAttemptLogsContextstreams job attempt logs.
+
+Stream logs for a given job attempt..
+
+Do not use the deprecated [StreamJobAttemptLogsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) StreamJobAttemptLogsContext(ctx context.Context, params *StreamJobAttemptLogsParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*StreamJobAttemptLogsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewStreamJobAttemptLogsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "stream-job-attempt-logs",
 		Method:             "GET",
@@ -103,13 +136,14 @@ func (a *Client) StreamJobAttemptLogs(params *StreamJobAttemptLogsParams, authIn
 		Params:             params,
 		Reader:             &StreamJobAttemptLogsReader{formats: a.formats, writer: writer},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -130,6 +164,14 @@ func (a *Client) StreamJobAttemptLogs(params *StreamJobAttemptLogsParams, authIn
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [JobLogsParams].
+	ctx context.Context
 }

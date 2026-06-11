@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // ResourcepluginStepInput resourceplugin step input
@@ -51,7 +52,7 @@ func (m *ResourcepluginStepInput) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ResourcepluginStepInput) validateAs(formats strfmt.Registry) error {
-	if swag.IsZero(m.As) { // not required
+	if typeutils.IsZero(m.As) { // not required
 		return nil
 	}
 
@@ -74,7 +75,7 @@ func (m *ResourcepluginStepInput) validateAs(formats strfmt.Registry) error {
 }
 
 func (m *ResourcepluginStepInput) validateValueFromStep(formats strfmt.Registry) error {
-	if swag.IsZero(m.ValueFromStep) { // not required
+	if typeutils.IsZero(m.ValueFromStep) { // not required
 		return nil
 	}
 
@@ -118,7 +119,7 @@ func (m *ResourcepluginStepInput) contextValidateAs(ctx context.Context, formats
 
 	if m.As != nil {
 
-		if swag.IsZero(m.As) { // not required
+		if typeutils.IsZero(m.As) { // not required
 			return nil
 		}
 
@@ -143,7 +144,7 @@ func (m *ResourcepluginStepInput) contextValidateValueFromStep(ctx context.Conte
 
 	if m.ValueFromStep != nil {
 
-		if swag.IsZero(m.ValueFromStep) { // not required
+		if typeutils.IsZero(m.ValueFromStep) { // not required
 			return nil
 		}
 
@@ -169,13 +170,13 @@ func (m *ResourcepluginStepInput) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ResourcepluginStepInput) UnmarshalBinary(b []byte) error {
 	var res ResourcepluginStepInput
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

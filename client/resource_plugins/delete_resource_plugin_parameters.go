@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteResourcePluginParams() *DeleteResourcePluginParams {
-	return &DeleteResourcePluginParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteResourcePluginParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteResourcePluginParamsWithTimeout creates a new DeleteResourcePluginParams object
 // with the ability to set a timeout on a request.
 func NewDeleteResourcePluginParamsWithTimeout(timeout time.Duration) *DeleteResourcePluginParams {
 	return &DeleteResourcePluginParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteResourcePluginParamsWithContext creates a new DeleteResourcePluginParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteResourcePluginParams].
 func NewDeleteResourcePluginParamsWithContext(ctx context.Context) *DeleteResourcePluginParams {
 	return &DeleteResourcePluginParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeleteResourcePluginParams struct {
 	*/
 	PluginName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete resource plugin params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeleteResourcePluginParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete resource plugin params
+// WithTimeout adds the timeout to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) WithTimeout(timeout time.Duration) *DeleteResourcePluginParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete resource plugin params
+// SetTimeout adds the timeout to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete resource plugin params
+// WithContext adds the context to the delete resource plugin params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteResourcePluginParams].
 func (o *DeleteResourcePluginParams) WithContext(ctx context.Context) *DeleteResourcePluginParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete resource plugin params
+// SetContext adds the context to the delete resource plugin params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteResourcePluginParams].
 func (o *DeleteResourcePluginParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete resource plugin params
+// WithHTTPClient adds the HTTPClient to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) WithHTTPClient(client *http.Client) *DeleteResourcePluginParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete resource plugin params
+// SetHTTPClient adds the HTTPClient to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete resource plugin params
+// WithOrgName adds the orgName to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) WithOrgName(orgName string) *DeleteResourcePluginParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete resource plugin params
+// SetOrgName adds the orgName to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPluginName adds the pluginName to the delete resource plugin params
+// WithPluginName adds the pluginName to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) WithPluginName(pluginName string) *DeleteResourcePluginParams {
 	o.SetPluginName(pluginName)
 	return o
 }
 
-// SetPluginName adds the pluginName to the delete resource plugin params
+// SetPluginName adds the pluginName to the delete resource plugin params.
 func (o *DeleteResourcePluginParams) SetPluginName(pluginName string) {
 	o.PluginName = pluginName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteResourcePluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

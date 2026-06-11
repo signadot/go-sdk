@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // DiffOp diff op
@@ -51,7 +52,7 @@ func (m *DiffOp) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DiffOp) validateClassification(formats strfmt.Registry) error {
-	if swag.IsZero(m.Classification) { // not required
+	if typeutils.IsZero(m.Classification) { // not required
 		return nil
 	}
 
@@ -74,7 +75,7 @@ func (m *DiffOp) validateClassification(formats strfmt.Registry) error {
 }
 
 func (m *DiffOp) validateOp(formats strfmt.Registry) error {
-	if swag.IsZero(m.Op) { // not required
+	if typeutils.IsZero(m.Op) { // not required
 		return nil
 	}
 
@@ -116,7 +117,7 @@ func (m *DiffOp) contextValidateClassification(ctx context.Context, formats strf
 
 	if m.Classification != nil {
 
-		if swag.IsZero(m.Classification) { // not required
+		if typeutils.IsZero(m.Classification) { // not required
 			return nil
 		}
 
@@ -139,7 +140,7 @@ func (m *DiffOp) contextValidateClassification(ctx context.Context, formats strf
 
 func (m *DiffOp) contextValidateOp(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Op) { // not required
+	if typeutils.IsZero(m.Op) { // not required
 		return nil
 	}
 
@@ -164,13 +165,13 @@ func (m *DiffOp) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *DiffOp) UnmarshalBinary(b []byte) error {
 	var res DiffOp
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

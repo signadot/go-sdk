@@ -3,7 +3,9 @@
 package plan_tags
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new plan tags API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new plan tags API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new plan tags API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,39 +45,80 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for plan tags API
+Client for plan tags API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// DeletePlanTag delete a plan tag.
 	DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagOK, error)
 
+	// DeletePlanTagContext delete a plan tag.
+	DeletePlanTagContext(ctx context.Context, params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagOK, error)
+
+	// GetPlanTag get a plan tag.
 	GetPlanTag(params *GetPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanTagOK, error)
 
+	// GetPlanTagContext get a plan tag.
+	GetPlanTagContext(ctx context.Context, params *GetPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanTagOK, error)
+
+	// ListPlanTags list plan tags.
 	ListPlanTags(params *ListPlanTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanTagsOK, error)
 
+	// ListPlanTagsContext list plan tags.
+	ListPlanTagsContext(ctx context.Context, params *ListPlanTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanTagsOK, error)
+
+	// PutPlanTag create or update a plan tag.
 	PutPlanTag(params *PutPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutPlanTagOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// PutPlanTagContext create or update a plan tag.
+	PutPlanTagContext(ctx context.Context, params *PutPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutPlanTagOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-DeletePlanTag deletes a plan tag
+DeletePlanTagdeletes a plan tag.
 
-Delete a plan tag (the plan itself is not deleted)
+Delete a plan tag (the plan itself is not deleted).
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeletePlanTagContext] instead.
 */
 func (a *Client) DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeletePlanTagContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeletePlanTagContextdeletes a plan tag.
+
+Delete a plan tag (the plan itself is not deleted).
+
+Do not use the deprecated [DeletePlanTagParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeletePlanTagContext(ctx context.Context, params *DeletePlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanTagOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeletePlanTagParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-plan-tag",
 		Method:             "DELETE",
@@ -84,13 +129,14 @@ func (a *Client) DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.Cli
 		Params:             params,
 		Reader:             &DeletePlanTagReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -111,15 +157,39 @@ func (a *Client) DeletePlanTag(params *DeletePlanTagParams, authInfo runtime.Cli
 }
 
 /*
-GetPlanTag gets a plan tag
+GetPlanTaggets a plan tag.
 
-Get a single plan tag by name with its associated plan
+Get a single plan tag by name with its associated plan.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetPlanTagContext] instead.
 */
 func (a *Client) GetPlanTag(params *GetPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanTagOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetPlanTagContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetPlanTagContextgets a plan tag.
+
+Get a single plan tag by name with its associated plan.
+
+Do not use the deprecated [GetPlanTagParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetPlanTagContext(ctx context.Context, params *GetPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanTagOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetPlanTagParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-plan-tag",
 		Method:             "GET",
@@ -130,13 +200,14 @@ func (a *Client) GetPlanTag(params *GetPlanTagParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &GetPlanTagReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -157,15 +228,39 @@ func (a *Client) GetPlanTag(params *GetPlanTagParams, authInfo runtime.ClientAut
 }
 
 /*
-ListPlanTags lists plan tags
+ListPlanTagslists plan tags.
 
-List all plan tags for the org
+List all plan tags for the org.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListPlanTagsContext] instead.
 */
 func (a *Client) ListPlanTags(params *ListPlanTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanTagsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListPlanTagsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListPlanTagsContextlists plan tags.
+
+List all plan tags for the org.
+
+Do not use the deprecated [ListPlanTagsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListPlanTagsContext(ctx context.Context, params *ListPlanTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanTagsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListPlanTagsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-plan-tags",
 		Method:             "GET",
@@ -176,13 +271,14 @@ func (a *Client) ListPlanTags(params *ListPlanTagsParams, authInfo runtime.Clien
 		Params:             params,
 		Reader:             &ListPlanTagsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -203,15 +299,39 @@ func (a *Client) ListPlanTags(params *ListPlanTagsParams, authInfo runtime.Clien
 }
 
 /*
-PutPlanTag creates or update a plan tag
+PutPlanTagcreates or update a plan tag.
 
-Creates the tag if it doesn't exist, or moves it to a different plan if it does
+Creates the tag if it doesn't exist, or moves it to a different plan if it does.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.PutPlanTagContext] instead.
 */
 func (a *Client) PutPlanTag(params *PutPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutPlanTagOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.PutPlanTagContext(ctx, params, authInfo, opts...)
+}
+
+/*
+PutPlanTagContextcreates or update a plan tag.
+
+Creates the tag if it doesn't exist, or moves it to a different plan if it does.
+
+Do not use the deprecated [PutPlanTagParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) PutPlanTagContext(ctx context.Context, params *PutPlanTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutPlanTagOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewPutPlanTagParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "put-plan-tag",
 		Method:             "PUT",
@@ -222,13 +342,14 @@ func (a *Client) PutPlanTag(params *PutPlanTagParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &PutPlanTagReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -249,6 +370,14 @@ func (a *Client) PutPlanTag(params *PutPlanTagParams, authInfo runtime.ClientAut
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [PlanTagsParams].
+	ctx context.Context
 }

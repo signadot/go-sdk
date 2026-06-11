@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TestExecutionResults test execution results
@@ -42,7 +43,7 @@ func (m *TestExecutionResults) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionResults) validateChecks(formats strfmt.Registry) error {
-	if swag.IsZero(m.Checks) { // not required
+	if typeutils.IsZero(m.Checks) { // not required
 		return nil
 	}
 
@@ -65,7 +66,7 @@ func (m *TestExecutionResults) validateChecks(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionResults) validateTrafficDiff(formats strfmt.Registry) error {
-	if swag.IsZero(m.TrafficDiff) { // not required
+	if typeutils.IsZero(m.TrafficDiff) { // not required
 		return nil
 	}
 
@@ -109,7 +110,7 @@ func (m *TestExecutionResults) contextValidateChecks(ctx context.Context, format
 
 	if m.Checks != nil {
 
-		if swag.IsZero(m.Checks) { // not required
+		if typeutils.IsZero(m.Checks) { // not required
 			return nil
 		}
 
@@ -134,7 +135,7 @@ func (m *TestExecutionResults) contextValidateTrafficDiff(ctx context.Context, f
 
 	if m.TrafficDiff != nil {
 
-		if swag.IsZero(m.TrafficDiff) { // not required
+		if typeutils.IsZero(m.TrafficDiff) { // not required
 			return nil
 		}
 
@@ -160,13 +161,13 @@ func (m *TestExecutionResults) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TestExecutionResults) UnmarshalBinary(b []byte) error {
 	var res TestExecutionResults
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

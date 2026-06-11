@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // Local local
@@ -60,12 +61,12 @@ func (m *Local) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Local) validateEnv(formats strfmt.Registry) error {
-	if swag.IsZero(m.Env) { // not required
+	if typeutils.IsZero(m.Env) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Env); i++ {
-		if swag.IsZero(m.Env[i]) { // not required
+		if typeutils.IsZero(m.Env[i]) { // not required
 			continue
 		}
 
@@ -90,12 +91,12 @@ func (m *Local) validateEnv(formats strfmt.Registry) error {
 }
 
 func (m *Local) validateFiles(formats strfmt.Registry) error {
-	if swag.IsZero(m.Files) { // not required
+	if typeutils.IsZero(m.Files) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Files); i++ {
-		if swag.IsZero(m.Files[i]) { // not required
+		if typeutils.IsZero(m.Files[i]) { // not required
 			continue
 		}
 
@@ -120,7 +121,7 @@ func (m *Local) validateFiles(formats strfmt.Registry) error {
 }
 
 func (m *Local) validateFrom(formats strfmt.Registry) error {
-	if swag.IsZero(m.From) { // not required
+	if typeutils.IsZero(m.From) { // not required
 		return nil
 	}
 
@@ -143,12 +144,12 @@ func (m *Local) validateFrom(formats strfmt.Registry) error {
 }
 
 func (m *Local) validateMappings(formats strfmt.Registry) error {
-	if swag.IsZero(m.Mappings) { // not required
+	if typeutils.IsZero(m.Mappings) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Mappings); i++ {
-		if swag.IsZero(m.Mappings[i]) { // not required
+		if typeutils.IsZero(m.Mappings[i]) { // not required
 			continue
 		}
 
@@ -204,7 +205,7 @@ func (m *Local) contextValidateEnv(ctx context.Context, formats strfmt.Registry)
 
 		if m.Env[i] != nil {
 
-			if swag.IsZero(m.Env[i]) { // not required
+			if typeutils.IsZero(m.Env[i]) { // not required
 				return nil
 			}
 
@@ -233,7 +234,7 @@ func (m *Local) contextValidateFiles(ctx context.Context, formats strfmt.Registr
 
 		if m.Files[i] != nil {
 
-			if swag.IsZero(m.Files[i]) { // not required
+			if typeutils.IsZero(m.Files[i]) { // not required
 				return nil
 			}
 
@@ -260,7 +261,7 @@ func (m *Local) contextValidateFrom(ctx context.Context, formats strfmt.Registry
 
 	if m.From != nil {
 
-		if swag.IsZero(m.From) { // not required
+		if typeutils.IsZero(m.From) { // not required
 			return nil
 		}
 
@@ -287,7 +288,7 @@ func (m *Local) contextValidateMappings(ctx context.Context, formats strfmt.Regi
 
 		if m.Mappings[i] != nil {
 
-			if swag.IsZero(m.Mappings[i]) { // not required
+			if typeutils.IsZero(m.Mappings[i]) { // not required
 				return nil
 			}
 
@@ -315,13 +316,13 @@ func (m *Local) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *Local) UnmarshalBinary(b []byte) error {
 	var res Local
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

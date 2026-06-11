@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPlanrunnergroupSettingsParams() *GetPlanrunnergroupSettingsParams {
-	return &GetPlanrunnergroupSettingsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetPlanrunnergroupSettingsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetPlanrunnergroupSettingsParamsWithTimeout creates a new GetPlanrunnergroupSettingsParams object
 // with the ability to set a timeout on a request.
 func NewGetPlanrunnergroupSettingsParamsWithTimeout(timeout time.Duration) *GetPlanrunnergroupSettingsParams {
 	return &GetPlanrunnergroupSettingsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetPlanrunnergroupSettingsParamsWithContext creates a new GetPlanrunnergroupSettingsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanrunnergroupSettingsParams].
 func NewGetPlanrunnergroupSettingsParamsWithContext(ctx context.Context) *GetPlanrunnergroupSettingsParams {
 	return &GetPlanrunnergroupSettingsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type GetPlanrunnergroupSettingsParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get planrunnergroup settings params (not the query body).
@@ -84,54 +88,57 @@ func (o *GetPlanrunnergroupSettingsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get planrunnergroup settings params
+// WithTimeout adds the timeout to the get planrunnergroup settings params.
 func (o *GetPlanrunnergroupSettingsParams) WithTimeout(timeout time.Duration) *GetPlanrunnergroupSettingsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get planrunnergroup settings params
+// SetTimeout adds the timeout to the get planrunnergroup settings params.
 func (o *GetPlanrunnergroupSettingsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get planrunnergroup settings params
+// WithContext adds the context to the get planrunnergroup settings params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanrunnergroupSettingsParams].
 func (o *GetPlanrunnergroupSettingsParams) WithContext(ctx context.Context) *GetPlanrunnergroupSettingsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get planrunnergroup settings params
+// SetContext adds the context to the get planrunnergroup settings params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPlanrunnergroupSettingsParams].
 func (o *GetPlanrunnergroupSettingsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get planrunnergroup settings params
+// WithHTTPClient adds the HTTPClient to the get planrunnergroup settings params.
 func (o *GetPlanrunnergroupSettingsParams) WithHTTPClient(client *http.Client) *GetPlanrunnergroupSettingsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get planrunnergroup settings params
+// SetHTTPClient adds the HTTPClient to the get planrunnergroup settings params.
 func (o *GetPlanrunnergroupSettingsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get planrunnergroup settings params
+// WithOrgName adds the orgName to the get planrunnergroup settings params.
 func (o *GetPlanrunnergroupSettingsParams) WithOrgName(orgName string) *GetPlanrunnergroupSettingsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get planrunnergroup settings params
+// SetOrgName adds the orgName to the get planrunnergroup settings params.
 func (o *GetPlanrunnergroupSettingsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetPlanrunnergroupSettingsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

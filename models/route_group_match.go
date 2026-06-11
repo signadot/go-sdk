@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // RouteGroupMatch route group match
@@ -52,12 +53,12 @@ func (m *RouteGroupMatch) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroupMatch) validateAll(formats strfmt.Registry) error {
-	if swag.IsZero(m.All) { // not required
+	if typeutils.IsZero(m.All) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.All); i++ {
-		if swag.IsZero(m.All[i]) { // not required
+		if typeutils.IsZero(m.All[i]) { // not required
 			continue
 		}
 
@@ -82,12 +83,12 @@ func (m *RouteGroupMatch) validateAll(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroupMatch) validateAny(formats strfmt.Registry) error {
-	if swag.IsZero(m.Any) { // not required
+	if typeutils.IsZero(m.Any) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Any); i++ {
-		if swag.IsZero(m.Any[i]) { // not required
+		if typeutils.IsZero(m.Any[i]) { // not required
 			continue
 		}
 
@@ -112,7 +113,7 @@ func (m *RouteGroupMatch) validateAny(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroupMatch) validateLabel(formats strfmt.Registry) error {
-	if swag.IsZero(m.Label) { // not required
+	if typeutils.IsZero(m.Label) { // not required
 		return nil
 	}
 
@@ -162,7 +163,7 @@ func (m *RouteGroupMatch) contextValidateAll(ctx context.Context, formats strfmt
 
 		if m.All[i] != nil {
 
-			if swag.IsZero(m.All[i]) { // not required
+			if typeutils.IsZero(m.All[i]) { // not required
 				return nil
 			}
 
@@ -191,7 +192,7 @@ func (m *RouteGroupMatch) contextValidateAny(ctx context.Context, formats strfmt
 
 		if m.Any[i] != nil {
 
-			if swag.IsZero(m.Any[i]) { // not required
+			if typeutils.IsZero(m.Any[i]) { // not required
 				return nil
 			}
 
@@ -218,7 +219,7 @@ func (m *RouteGroupMatch) contextValidateLabel(ctx context.Context, formats strf
 
 	if m.Label != nil {
 
-		if swag.IsZero(m.Label) { // not required
+		if typeutils.IsZero(m.Label) { // not required
 			return nil
 		}
 
@@ -244,13 +245,13 @@ func (m *RouteGroupMatch) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *RouteGroupMatch) UnmarshalBinary(b []byte) error {
 	var res RouteGroupMatch
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

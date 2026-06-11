@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRecompilePlanParams() *RecompilePlanParams {
-	return &RecompilePlanParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewRecompilePlanParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewRecompilePlanParamsWithTimeout creates a new RecompilePlanParams object
 // with the ability to set a timeout on a request.
 func NewRecompilePlanParamsWithTimeout(timeout time.Duration) *RecompilePlanParams {
 	return &RecompilePlanParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewRecompilePlanParamsWithContext creates a new RecompilePlanParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RecompilePlanParams].
 func NewRecompilePlanParamsWithContext(ctx context.Context) *RecompilePlanParams {
 	return &RecompilePlanParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -76,9 +80,9 @@ type RecompilePlanParams struct {
 	*/
 	PlanID string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the recompile plan params (not the query body).
@@ -96,76 +100,79 @@ func (o *RecompilePlanParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the recompile plan params
+// WithTimeout adds the timeout to the recompile plan params.
 func (o *RecompilePlanParams) WithTimeout(timeout time.Duration) *RecompilePlanParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the recompile plan params
+// SetTimeout adds the timeout to the recompile plan params.
 func (o *RecompilePlanParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the recompile plan params
+// WithContext adds the context to the recompile plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RecompilePlanParams].
 func (o *RecompilePlanParams) WithContext(ctx context.Context) *RecompilePlanParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the recompile plan params
+// SetContext adds the context to the recompile plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [RecompilePlanParams].
 func (o *RecompilePlanParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the recompile plan params
+// WithHTTPClient adds the HTTPClient to the recompile plan params.
 func (o *RecompilePlanParams) WithHTTPClient(client *http.Client) *RecompilePlanParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the recompile plan params
+// SetHTTPClient adds the HTTPClient to the recompile plan params.
 func (o *RecompilePlanParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExpand adds the expand to the recompile plan params
+// WithExpand adds the expand to the recompile plan params.
 func (o *RecompilePlanParams) WithExpand(expand *string) *RecompilePlanParams {
 	o.SetExpand(expand)
 	return o
 }
 
-// SetExpand adds the expand to the recompile plan params
+// SetExpand adds the expand to the recompile plan params.
 func (o *RecompilePlanParams) SetExpand(expand *string) {
 	o.Expand = expand
 }
 
-// WithOrgName adds the orgName to the recompile plan params
+// WithOrgName adds the orgName to the recompile plan params.
 func (o *RecompilePlanParams) WithOrgName(orgName string) *RecompilePlanParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the recompile plan params
+// SetOrgName adds the orgName to the recompile plan params.
 func (o *RecompilePlanParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanID adds the planID to the recompile plan params
+// WithPlanID adds the planID to the recompile plan params.
 func (o *RecompilePlanParams) WithPlanID(planID string) *RecompilePlanParams {
 	o.SetPlanID(planID)
 	return o
 }
 
-// SetPlanID adds the planId to the recompile plan params
+// SetPlanID adds the planId to the recompile plan params.
 func (o *RecompilePlanParams) SetPlanID(planID string) {
 	o.PlanID = planID
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *RecompilePlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

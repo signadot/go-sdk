@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // RequestDiff request diff
@@ -50,7 +51,7 @@ func (m *RequestDiff) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RequestDiff) validateBaseline(formats strfmt.Registry) error {
-	if swag.IsZero(m.Baseline) { // not required
+	if typeutils.IsZero(m.Baseline) { // not required
 		return nil
 	}
 
@@ -73,12 +74,12 @@ func (m *RequestDiff) validateBaseline(formats strfmt.Registry) error {
 }
 
 func (m *RequestDiff) validateDiffOps(formats strfmt.Registry) error {
-	if swag.IsZero(m.DiffOps) { // not required
+	if typeutils.IsZero(m.DiffOps) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.DiffOps); i++ {
-		if swag.IsZero(m.DiffOps[i]) { // not required
+		if typeutils.IsZero(m.DiffOps[i]) { // not required
 			continue
 		}
 
@@ -103,7 +104,7 @@ func (m *RequestDiff) validateDiffOps(formats strfmt.Registry) error {
 }
 
 func (m *RequestDiff) validateTarget(formats strfmt.Registry) error {
-	if swag.IsZero(m.Target) { // not required
+	if typeutils.IsZero(m.Target) { // not required
 		return nil
 	}
 
@@ -151,7 +152,7 @@ func (m *RequestDiff) contextValidateBaseline(ctx context.Context, formats strfm
 
 	if m.Baseline != nil {
 
-		if swag.IsZero(m.Baseline) { // not required
+		if typeutils.IsZero(m.Baseline) { // not required
 			return nil
 		}
 
@@ -178,7 +179,7 @@ func (m *RequestDiff) contextValidateDiffOps(ctx context.Context, formats strfmt
 
 		if m.DiffOps[i] != nil {
 
-			if swag.IsZero(m.DiffOps[i]) { // not required
+			if typeutils.IsZero(m.DiffOps[i]) { // not required
 				return nil
 			}
 
@@ -205,7 +206,7 @@ func (m *RequestDiff) contextValidateTarget(ctx context.Context, formats strfmt.
 
 	if m.Target != nil {
 
-		if swag.IsZero(m.Target) { // not required
+		if typeutils.IsZero(m.Target) { // not required
 			return nil
 		}
 
@@ -231,13 +232,13 @@ func (m *RequestDiff) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *RequestDiff) UnmarshalBinary(b []byte) error {
 	var res RequestDiff
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

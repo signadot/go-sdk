@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewInfoJobAttemptArtifactParams creates a new InfoJobAttemptArtifactParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewInfoJobAttemptArtifactParams() *InfoJobAttemptArtifactParams {
-	return &InfoJobAttemptArtifactParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewInfoJobAttemptArtifactParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewInfoJobAttemptArtifactParamsWithTimeout creates a new InfoJobAttemptArtifactParams object
 // with the ability to set a timeout on a request.
 func NewInfoJobAttemptArtifactParamsWithTimeout(timeout time.Duration) *InfoJobAttemptArtifactParams {
 	return &InfoJobAttemptArtifactParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewInfoJobAttemptArtifactParamsWithContext creates a new InfoJobAttemptArtifactParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [InfoJobAttemptArtifactParams].
 func NewInfoJobAttemptArtifactParamsWithContext(ctx context.Context) *InfoJobAttemptArtifactParams {
 	return &InfoJobAttemptArtifactParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -89,9 +93,9 @@ type InfoJobAttemptArtifactParams struct {
 	*/
 	Space *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the info job attempt artifact params (not the query body).
@@ -109,104 +113,107 @@ func (o *InfoJobAttemptArtifactParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the info job attempt artifact params
+// WithTimeout adds the timeout to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) WithTimeout(timeout time.Duration) *InfoJobAttemptArtifactParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the info job attempt artifact params
+// SetTimeout adds the timeout to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the info job attempt artifact params
+// WithContext adds the context to the info job attempt artifact params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [InfoJobAttemptArtifactParams].
 func (o *InfoJobAttemptArtifactParams) WithContext(ctx context.Context) *InfoJobAttemptArtifactParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the info job attempt artifact params
+// SetContext adds the context to the info job attempt artifact params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [InfoJobAttemptArtifactParams].
 func (o *InfoJobAttemptArtifactParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the info job attempt artifact params
+// WithHTTPClient adds the HTTPClient to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) WithHTTPClient(client *http.Client) *InfoJobAttemptArtifactParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the info job attempt artifact params
+// SetHTTPClient adds the HTTPClient to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithJobAttempt adds the jobAttempt to the info job attempt artifact params
+// WithJobAttempt adds the jobAttempt to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) WithJobAttempt(jobAttempt int64) *InfoJobAttemptArtifactParams {
 	o.SetJobAttempt(jobAttempt)
 	return o
 }
 
-// SetJobAttempt adds the jobAttempt to the info job attempt artifact params
+// SetJobAttempt adds the jobAttempt to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) SetJobAttempt(jobAttempt int64) {
 	o.JobAttempt = jobAttempt
 }
 
-// WithJobName adds the jobName to the info job attempt artifact params
+// WithJobName adds the jobName to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) WithJobName(jobName string) *InfoJobAttemptArtifactParams {
 	o.SetJobName(jobName)
 	return o
 }
 
-// SetJobName adds the jobName to the info job attempt artifact params
+// SetJobName adds the jobName to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) SetJobName(jobName string) {
 	o.JobName = jobName
 }
 
-// WithOrgName adds the orgName to the info job attempt artifact params
+// WithOrgName adds the orgName to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) WithOrgName(orgName string) *InfoJobAttemptArtifactParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the info job attempt artifact params
+// SetOrgName adds the orgName to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPath adds the path to the info job attempt artifact params
+// WithPath adds the path to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) WithPath(path string) *InfoJobAttemptArtifactParams {
 	o.SetPath(path)
 	return o
 }
 
-// SetPath adds the path to the info job attempt artifact params
+// SetPath adds the path to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) SetPath(path string) {
 	o.Path = path
 }
 
-// WithSpace adds the space to the info job attempt artifact params
+// WithSpace adds the space to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) WithSpace(space *string) *InfoJobAttemptArtifactParams {
 	o.SetSpace(space)
 	return o
 }
 
-// SetSpace adds the space to the info job attempt artifact params
+// SetSpace adds the space to the info job attempt artifact params.
 func (o *InfoJobAttemptArtifactParams) SetSpace(space *string) {
 	o.Space = space
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *InfoJobAttemptArtifactParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
 
 	// path param jobAttempt
-	if err := r.SetPathParam("jobAttempt", swag.FormatInt64(o.JobAttempt)); err != nil {
+	if err := r.SetPathParam("jobAttempt", conv.FormatInteger(o.JobAttempt)); err != nil {
 		return err
 	}
 

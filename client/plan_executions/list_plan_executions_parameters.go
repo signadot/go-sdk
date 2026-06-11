@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewListPlanExecutionsParams creates a new ListPlanExecutionsParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListPlanExecutionsParams() *ListPlanExecutionsParams {
-	return &ListPlanExecutionsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListPlanExecutionsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListPlanExecutionsParamsWithTimeout creates a new ListPlanExecutionsParams object
 // with the ability to set a timeout on a request.
 func NewListPlanExecutionsParamsWithTimeout(timeout time.Duration) *ListPlanExecutionsParams {
 	return &ListPlanExecutionsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListPlanExecutionsParamsWithContext creates a new ListPlanExecutionsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanExecutionsParams].
 func NewListPlanExecutionsParamsWithContext(ctx context.Context) *ListPlanExecutionsParams {
 	return &ListPlanExecutionsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -95,9 +99,9 @@ type ListPlanExecutionsParams struct {
 	*/
 	Tag *string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list plan executions params (not the query body).
@@ -115,109 +119,112 @@ func (o *ListPlanExecutionsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list plan executions params
+// WithTimeout adds the timeout to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithTimeout(timeout time.Duration) *ListPlanExecutionsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list plan executions params
+// SetTimeout adds the timeout to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list plan executions params
+// WithContext adds the context to the list plan executions params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanExecutionsParams].
 func (o *ListPlanExecutionsParams) WithContext(ctx context.Context) *ListPlanExecutionsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list plan executions params
+// SetContext adds the context to the list plan executions params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanExecutionsParams].
 func (o *ListPlanExecutionsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list plan executions params
+// WithHTTPClient adds the HTTPClient to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithHTTPClient(client *http.Client) *ListPlanExecutionsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list plan executions params
+// SetHTTPClient adds the HTTPClient to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithCursor adds the cursor to the list plan executions params
+// WithCursor adds the cursor to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithCursor(cursor *string) *ListPlanExecutionsParams {
 	o.SetCursor(cursor)
 	return o
 }
 
-// SetCursor adds the cursor to the list plan executions params
+// SetCursor adds the cursor to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetCursor(cursor *string) {
 	o.Cursor = cursor
 }
 
-// WithOrgName adds the orgName to the list plan executions params
+// WithOrgName adds the orgName to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithOrgName(orgName string) *ListPlanExecutionsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list plan executions params
+// SetOrgName adds the orgName to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPageSize adds the pageSize to the list plan executions params
+// WithPageSize adds the pageSize to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithPageSize(pageSize *int64) *ListPlanExecutionsParams {
 	o.SetPageSize(pageSize)
 	return o
 }
 
-// SetPageSize adds the pageSize to the list plan executions params
+// SetPageSize adds the pageSize to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetPageSize(pageSize *int64) {
 	o.PageSize = pageSize
 }
 
-// WithPhase adds the phase to the list plan executions params
+// WithPhase adds the phase to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithPhase(phase *string) *ListPlanExecutionsParams {
 	o.SetPhase(phase)
 	return o
 }
 
-// SetPhase adds the phase to the list plan executions params
+// SetPhase adds the phase to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetPhase(phase *string) {
 	o.Phase = phase
 }
 
-// WithPlanID adds the planID to the list plan executions params
+// WithPlanID adds the planID to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithPlanID(planID *string) *ListPlanExecutionsParams {
 	o.SetPlanID(planID)
 	return o
 }
 
-// SetPlanID adds the planId to the list plan executions params
+// SetPlanID adds the planId to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetPlanID(planID *string) {
 	o.PlanID = planID
 }
 
-// WithTag adds the tag to the list plan executions params
+// WithTag adds the tag to the list plan executions params.
 func (o *ListPlanExecutionsParams) WithTag(tag *string) *ListPlanExecutionsParams {
 	o.SetTag(tag)
 	return o
 }
 
-// SetTag adds the tag to the list plan executions params
+// SetTag adds the tag to the list plan executions params.
 func (o *ListPlanExecutionsParams) SetTag(tag *string) {
 	o.Tag = tag
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListPlanExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
@@ -252,7 +259,7 @@ func (o *ListPlanExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg s
 		if o.PageSize != nil {
 			qrPageSize = *o.PageSize
 		}
-		qPageSize := swag.FormatInt64(qrPageSize)
+		qPageSize := conv.FormatInteger(qrPageSize)
 		if qPageSize != "" {
 
 			if err := r.SetQueryParam("pageSize", qPageSize); err != nil {

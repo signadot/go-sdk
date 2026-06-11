@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateExternalTestExecutionParams() *CreateExternalTestExecutionParams {
-	return &CreateExternalTestExecutionParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewCreateExternalTestExecutionParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewCreateExternalTestExecutionParamsWithTimeout creates a new CreateExternalTestExecutionParams object
 // with the ability to set a timeout on a request.
 func NewCreateExternalTestExecutionParamsWithTimeout(timeout time.Duration) *CreateExternalTestExecutionParams {
 	return &CreateExternalTestExecutionParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewCreateExternalTestExecutionParamsWithContext creates a new CreateExternalTestExecutionParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateExternalTestExecutionParams].
 func NewCreateExternalTestExecutionParamsWithContext(ctx context.Context) *CreateExternalTestExecutionParams {
 	return &CreateExternalTestExecutionParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -72,9 +75,9 @@ type CreateExternalTestExecutionParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the create external test execution params (not the query body).
@@ -92,65 +95,68 @@ func (o *CreateExternalTestExecutionParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the create external test execution params
+// WithTimeout adds the timeout to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) WithTimeout(timeout time.Duration) *CreateExternalTestExecutionParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the create external test execution params
+// SetTimeout adds the timeout to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the create external test execution params
+// WithContext adds the context to the create external test execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateExternalTestExecutionParams].
 func (o *CreateExternalTestExecutionParams) WithContext(ctx context.Context) *CreateExternalTestExecutionParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the create external test execution params
+// SetContext adds the context to the create external test execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreateExternalTestExecutionParams].
 func (o *CreateExternalTestExecutionParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the create external test execution params
+// WithHTTPClient adds the HTTPClient to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) WithHTTPClient(client *http.Client) *CreateExternalTestExecutionParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the create external test execution params
+// SetHTTPClient adds the HTTPClient to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the create external test execution params
+// WithData adds the data to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) WithData(data *models.TestExecution) *CreateExternalTestExecutionParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the create external test execution params
+// SetData adds the data to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) SetData(data *models.TestExecution) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the create external test execution params
+// WithOrgName adds the orgName to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) WithOrgName(orgName string) *CreateExternalTestExecutionParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the create external test execution params
+// SetOrgName adds the orgName to the create external test execution params.
 func (o *CreateExternalTestExecutionParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *CreateExternalTestExecutionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

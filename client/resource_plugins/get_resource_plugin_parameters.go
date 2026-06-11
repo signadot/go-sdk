@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetResourcePluginParams() *GetResourcePluginParams {
-	return &GetResourcePluginParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetResourcePluginParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetResourcePluginParamsWithTimeout creates a new GetResourcePluginParams object
 // with the ability to set a timeout on a request.
 func NewGetResourcePluginParamsWithTimeout(timeout time.Duration) *GetResourcePluginParams {
 	return &GetResourcePluginParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetResourcePluginParamsWithContext creates a new GetResourcePluginParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetResourcePluginParams].
 func NewGetResourcePluginParamsWithContext(ctx context.Context) *GetResourcePluginParams {
 	return &GetResourcePluginParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetResourcePluginParams struct {
 	*/
 	PluginName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get resource plugin params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetResourcePluginParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get resource plugin params
+// WithTimeout adds the timeout to the get resource plugin params.
 func (o *GetResourcePluginParams) WithTimeout(timeout time.Duration) *GetResourcePluginParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get resource plugin params
+// SetTimeout adds the timeout to the get resource plugin params.
 func (o *GetResourcePluginParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get resource plugin params
+// WithContext adds the context to the get resource plugin params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetResourcePluginParams].
 func (o *GetResourcePluginParams) WithContext(ctx context.Context) *GetResourcePluginParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get resource plugin params
+// SetContext adds the context to the get resource plugin params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetResourcePluginParams].
 func (o *GetResourcePluginParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get resource plugin params
+// WithHTTPClient adds the HTTPClient to the get resource plugin params.
 func (o *GetResourcePluginParams) WithHTTPClient(client *http.Client) *GetResourcePluginParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get resource plugin params
+// SetHTTPClient adds the HTTPClient to the get resource plugin params.
 func (o *GetResourcePluginParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get resource plugin params
+// WithOrgName adds the orgName to the get resource plugin params.
 func (o *GetResourcePluginParams) WithOrgName(orgName string) *GetResourcePluginParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get resource plugin params
+// SetOrgName adds the orgName to the get resource plugin params.
 func (o *GetResourcePluginParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPluginName adds the pluginName to the get resource plugin params
+// WithPluginName adds the pluginName to the get resource plugin params.
 func (o *GetResourcePluginParams) WithPluginName(pluginName string) *GetResourcePluginParams {
 	o.SetPluginName(pluginName)
 	return o
 }
 
-// SetPluginName adds the pluginName to the get resource plugin params
+// SetPluginName adds the pluginName to the get resource plugin params.
 func (o *GetResourcePluginParams) SetPluginName(pluginName string) {
 	o.PluginName = pluginName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetResourcePluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

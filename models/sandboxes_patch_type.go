@@ -36,11 +36,11 @@ const (
 	// SandboxesPatchTypeJSON captures enum value "json"
 	SandboxesPatchTypeJSON SandboxesPatchType = "json"
 
-	// SandboxesPatchTypeSignadotEnv captures enum value "signadot/env"
-	SandboxesPatchTypeSignadotEnv SandboxesPatchType = "signadot/env"
+	// SandboxesPatchTypeSignadotSlashEnv captures enum value "signadot/env"
+	SandboxesPatchTypeSignadotSlashEnv SandboxesPatchType = "signadot/env"
 
-	// SandboxesPatchTypeSignadotImage captures enum value "signadot/image"
-	SandboxesPatchTypeSignadotImage SandboxesPatchType = "signadot/image"
+	// SandboxesPatchTypeSignadotSlashImage captures enum value "signadot/image"
+	SandboxesPatchTypeSignadotSlashImage SandboxesPatchType = "signadot/image"
 )
 
 // for schema

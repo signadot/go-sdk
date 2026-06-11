@@ -3,7 +3,9 @@
 package cluster
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new cluster API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new cluster API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new cluster API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,49 +45,110 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for cluster API
+Client for cluster API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// AddCluster add a cluster.
 	AddCluster(params *AddClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterOK, error)
 
+	// AddClusterContext add a cluster.
+	AddClusterContext(ctx context.Context, params *AddClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterOK, error)
+
+	// ClusterDevmeshAnalyze cluster dev mesh analyze.
 	ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ClusterDevmeshAnalyzeOK, error)
 
+	// ClusterDevmeshAnalyzeContext cluster dev mesh analyze.
+	ClusterDevmeshAnalyzeContext(ctx context.Context, params *ClusterDevmeshAnalyzeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ClusterDevmeshAnalyzeOK, error)
+
+	// CreateClusterToken create cluster token.
 	CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error)
 
+	// CreateClusterTokenContext create cluster token.
+	CreateClusterTokenContext(ctx context.Context, params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error)
+
+	// DeleteClusterToken delete cluster token.
 	DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error)
 
+	// DeleteClusterTokenContext delete cluster token.
+	DeleteClusterTokenContext(ctx context.Context, params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error)
+
+	// GetCluster get a cluster.
 	GetCluster(params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error)
 
+	// GetClusterContext get a cluster.
+	GetClusterContext(ctx context.Context, params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error)
+
+	// GetClusterToken get a cluster token.
 	GetClusterToken(params *GetClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTokenOK, error)
 
+	// GetClusterTokenContext get a cluster token.
+	GetClusterTokenContext(ctx context.Context, params *GetClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTokenOK, error)
+
+	// ListClusterTokens list cluster tokens.
 	ListClusterTokens(params *ListClusterTokensParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterTokensOK, error)
 
+	// ListClusterTokensContext list cluster tokens.
+	ListClusterTokensContext(ctx context.Context, params *ListClusterTokensParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterTokensOK, error)
+
+	// ListClusters list clusters.
 	ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error)
 
+	// ListClustersContext list clusters.
+	ListClustersContext(ctx context.Context, params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error)
+
+	// RemoveCluster remove a cluster.
 	RemoveCluster(params *RemoveClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveClusterOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// RemoveClusterContext remove a cluster.
+	RemoveClusterContext(ctx context.Context, params *RemoveClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveClusterOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-AddCluster adds a cluster
+AddClusteradds a cluster.
 
-Add a Kubernetes cluster to Signadot.
+Add a Kubernetes cluster to Signadot..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.AddClusterContext] instead.
 */
 func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.AddClusterContext(ctx, params, authInfo, opts...)
+}
+
+/*
+AddClusterContextadds a cluster.
+
+Add a Kubernetes cluster to Signadot..
+
+Do not use the deprecated [AddClusterParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) AddClusterContext(ctx context.Context, params *AddClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewAddClusterParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "add-cluster",
 		Method:             "PUT",
@@ -94,13 +159,14 @@ func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &AddClusterReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -121,15 +187,39 @@ func (a *Client) AddCluster(params *AddClusterParams, authInfo runtime.ClientAut
 }
 
 /*
-ClusterDevmeshAnalyze clusters dev mesh analyze
+ClusterDevmeshAnalyzeclusters dev mesh analyze.
 
-Analyze DevMesh status for a given cluster
+Analyze DevMesh status for a given cluster.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ClusterDevmeshAnalyzeContext] instead.
 */
 func (a *Client) ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ClusterDevmeshAnalyzeOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ClusterDevmeshAnalyzeContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ClusterDevmeshAnalyzeContextclusters dev mesh analyze.
+
+Analyze DevMesh status for a given cluster.
+
+Do not use the deprecated [ClusterDevmeshAnalyzeParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ClusterDevmeshAnalyzeContext(ctx context.Context, params *ClusterDevmeshAnalyzeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ClusterDevmeshAnalyzeOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewClusterDevmeshAnalyzeParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "cluster-devmesh-analyze",
 		Method:             "GET",
@@ -140,13 +230,14 @@ func (a *Client) ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, auth
 		Params:             params,
 		Reader:             &ClusterDevmeshAnalyzeReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -167,15 +258,39 @@ func (a *Client) ClusterDevmeshAnalyze(params *ClusterDevmeshAnalyzeParams, auth
 }
 
 /*
-CreateClusterToken creates cluster token
+CreateClusterTokencreates cluster token.
 
-Create a new token for connecting a cluster.
+Create a new token for connecting a cluster..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CreateClusterTokenContext] instead.
 */
 func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CreateClusterTokenContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CreateClusterTokenContextcreates cluster token.
+
+Create a new token for connecting a cluster..
+
+Do not use the deprecated [CreateClusterTokenParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CreateClusterTokenContext(ctx context.Context, params *CreateClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterTokenOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateClusterTokenParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "create-cluster-token",
 		Method:             "POST",
@@ -186,13 +301,14 @@ func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo r
 		Params:             params,
 		Reader:             &CreateClusterTokenReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -213,15 +329,39 @@ func (a *Client) CreateClusterToken(params *CreateClusterTokenParams, authInfo r
 }
 
 /*
-DeleteClusterToken deletes cluster token
+DeleteClusterTokendeletes cluster token.
 
-Delete a cluster token associated with a cluster.
+Delete a cluster token associated with a cluster..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteClusterTokenContext] instead.
 */
 func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteClusterTokenContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteClusterTokenContextdeletes cluster token.
+
+Delete a cluster token associated with a cluster..
+
+Do not use the deprecated [DeleteClusterTokenParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteClusterTokenContext(ctx context.Context, params *DeleteClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterTokenOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteClusterTokenParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-cluster-token",
 		Method:             "DELETE",
@@ -232,13 +372,14 @@ func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo r
 		Params:             params,
 		Reader:             &DeleteClusterTokenReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -259,15 +400,39 @@ func (a *Client) DeleteClusterToken(params *DeleteClusterTokenParams, authInfo r
 }
 
 /*
-GetCluster gets a cluster
+GetClustergets a cluster.
 
-Get a cluster.
+Get a cluster..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetClusterContext] instead.
 */
 func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetClusterContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetClusterContextgets a cluster.
+
+Get a cluster..
+
+Do not use the deprecated [GetClusterParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetClusterContext(ctx context.Context, params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetClusterParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-cluster",
 		Method:             "GET",
@@ -278,13 +443,14 @@ func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &GetClusterReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -305,15 +471,39 @@ func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAut
 }
 
 /*
-GetClusterToken gets a cluster token
+GetClusterTokengets a cluster token.
 
-Get a cluster token associated with a cluster.
+Get a cluster token associated with a cluster..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetClusterTokenContext] instead.
 */
 func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTokenOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetClusterTokenContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetClusterTokenContextgets a cluster token.
+
+Get a cluster token associated with a cluster..
+
+Do not use the deprecated [GetClusterTokenParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetClusterTokenContext(ctx context.Context, params *GetClusterTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTokenOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetClusterTokenParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-cluster-token",
 		Method:             "GET",
@@ -324,13 +514,14 @@ func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime
 		Params:             params,
 		Reader:             &GetClusterTokenReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -351,15 +542,39 @@ func (a *Client) GetClusterToken(params *GetClusterTokenParams, authInfo runtime
 }
 
 /*
-ListClusterTokens lists cluster tokens
+ListClusterTokenslists cluster tokens.
 
-List the cluster tokens associated with a cluster.
+List the cluster tokens associated with a cluster..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListClusterTokensContext] instead.
 */
 func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterTokensOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListClusterTokensContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListClusterTokensContextlists cluster tokens.
+
+List the cluster tokens associated with a cluster..
+
+Do not use the deprecated [ListClusterTokensParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListClusterTokensContext(ctx context.Context, params *ListClusterTokensParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterTokensOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListClusterTokensParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-cluster-tokens",
 		Method:             "GET",
@@ -370,13 +585,14 @@ func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo run
 		Params:             params,
 		Reader:             &ListClusterTokensReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -397,15 +613,39 @@ func (a *Client) ListClusterTokens(params *ListClusterTokensParams, authInfo run
 }
 
 /*
-ListClusters lists clusters
+ListClusterslists clusters.
 
-List clusters.
+List clusters..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListClustersContext] instead.
 */
 func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListClustersContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListClustersContextlists clusters.
+
+List clusters..
+
+Do not use the deprecated [ListClustersParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListClustersContext(ctx context.Context, params *ListClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClustersOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListClustersParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-clusters",
 		Method:             "GET",
@@ -416,13 +656,14 @@ func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.Clien
 		Params:             params,
 		Reader:             &ListClustersReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -443,15 +684,39 @@ func (a *Client) ListClusters(params *ListClustersParams, authInfo runtime.Clien
 }
 
 /*
-RemoveCluster removes a cluster
+RemoveClusterremoves a cluster.
 
-Remove a Kubernetes cluster from Signadot.
+Remove a Kubernetes cluster from Signadot..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.RemoveClusterContext] instead.
 */
 func (a *Client) RemoveCluster(params *RemoveClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveClusterOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.RemoveClusterContext(ctx, params, authInfo, opts...)
+}
+
+/*
+RemoveClusterContextremoves a cluster.
+
+Remove a Kubernetes cluster from Signadot..
+
+Do not use the deprecated [RemoveClusterParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) RemoveClusterContext(ctx context.Context, params *RemoveClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveClusterOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewRemoveClusterParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "remove-cluster",
 		Method:             "DELETE",
@@ -462,13 +727,14 @@ func (a *Client) RemoveCluster(params *RemoveClusterParams, authInfo runtime.Cli
 		Params:             params,
 		Reader:             &RemoveClusterReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -489,6 +755,14 @@ func (a *Client) RemoveCluster(params *RemoveClusterParams, authInfo runtime.Cli
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [ClusterParams].
+	ctx context.Context
 }

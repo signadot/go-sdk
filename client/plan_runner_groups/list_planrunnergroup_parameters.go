@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListPlanrunnergroupParams() *ListPlanrunnergroupParams {
-	return &ListPlanrunnergroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListPlanrunnergroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListPlanrunnergroupParamsWithTimeout creates a new ListPlanrunnergroupParams object
 // with the ability to set a timeout on a request.
 func NewListPlanrunnergroupParamsWithTimeout(timeout time.Duration) *ListPlanrunnergroupParams {
 	return &ListPlanrunnergroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListPlanrunnergroupParamsWithContext creates a new ListPlanrunnergroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanrunnergroupParams].
 func NewListPlanrunnergroupParamsWithContext(ctx context.Context) *ListPlanrunnergroupParams {
 	return &ListPlanrunnergroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type ListPlanrunnergroupParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list planrunnergroup params (not the query body).
@@ -84,54 +88,57 @@ func (o *ListPlanrunnergroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list planrunnergroup params
+// WithTimeout adds the timeout to the list planrunnergroup params.
 func (o *ListPlanrunnergroupParams) WithTimeout(timeout time.Duration) *ListPlanrunnergroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list planrunnergroup params
+// SetTimeout adds the timeout to the list planrunnergroup params.
 func (o *ListPlanrunnergroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list planrunnergroup params
+// WithContext adds the context to the list planrunnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanrunnergroupParams].
 func (o *ListPlanrunnergroupParams) WithContext(ctx context.Context) *ListPlanrunnergroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list planrunnergroup params
+// SetContext adds the context to the list planrunnergroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanrunnergroupParams].
 func (o *ListPlanrunnergroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list planrunnergroup params
+// WithHTTPClient adds the HTTPClient to the list planrunnergroup params.
 func (o *ListPlanrunnergroupParams) WithHTTPClient(client *http.Client) *ListPlanrunnergroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list planrunnergroup params
+// SetHTTPClient adds the HTTPClient to the list planrunnergroup params.
 func (o *ListPlanrunnergroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list planrunnergroup params
+// WithOrgName adds the orgName to the list planrunnergroup params.
 func (o *ListPlanrunnergroupParams) WithOrgName(orgName string) *ListPlanrunnergroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list planrunnergroup params
+// SetOrgName adds the orgName to the list planrunnergroup params.
 func (o *ListPlanrunnergroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListPlanrunnergroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

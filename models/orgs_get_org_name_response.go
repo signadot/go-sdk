@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // OrgsGetOrgNameResponse orgs get org name response
@@ -56,12 +57,12 @@ func (m *OrgsGetOrgNameResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrgsGetOrgNameResponse) validateOrgs(formats strfmt.Registry) error {
-	if swag.IsZero(m.Orgs) { // not required
+	if typeutils.IsZero(m.Orgs) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Orgs); i++ {
-		if swag.IsZero(m.Orgs[i]) { // not required
+		if typeutils.IsZero(m.Orgs[i]) { // not required
 			continue
 		}
 
@@ -86,7 +87,7 @@ func (m *OrgsGetOrgNameResponse) validateOrgs(formats strfmt.Registry) error {
 }
 
 func (m *OrgsGetOrgNameResponse) validateUser(formats strfmt.Registry) error {
-	if swag.IsZero(m.User) { // not required
+	if typeutils.IsZero(m.User) { // not required
 		return nil
 	}
 
@@ -109,7 +110,7 @@ func (m *OrgsGetOrgNameResponse) validateUser(formats strfmt.Registry) error {
 }
 
 func (m *OrgsGetOrgNameResponse) validateUserFlags(formats strfmt.Registry) error {
-	if swag.IsZero(m.UserFlags) { // not required
+	if typeutils.IsZero(m.UserFlags) { // not required
 		return nil
 	}
 
@@ -159,7 +160,7 @@ func (m *OrgsGetOrgNameResponse) contextValidateOrgs(ctx context.Context, format
 
 		if m.Orgs[i] != nil {
 
-			if swag.IsZero(m.Orgs[i]) { // not required
+			if typeutils.IsZero(m.Orgs[i]) { // not required
 				return nil
 			}
 
@@ -186,7 +187,7 @@ func (m *OrgsGetOrgNameResponse) contextValidateUser(ctx context.Context, format
 
 	if m.User != nil {
 
-		if swag.IsZero(m.User) { // not required
+		if typeutils.IsZero(m.User) { // not required
 			return nil
 		}
 
@@ -209,7 +210,7 @@ func (m *OrgsGetOrgNameResponse) contextValidateUser(ctx context.Context, format
 
 func (m *OrgsGetOrgNameResponse) contextValidateUserFlags(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.UserFlags) { // not required
+	if typeutils.IsZero(m.UserFlags) { // not required
 		return nil
 	}
 
@@ -234,13 +235,13 @@ func (m *OrgsGetOrgNameResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *OrgsGetOrgNameResponse) UnmarshalBinary(b []byte) error {
 	var res OrgsGetOrgNameResponse
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

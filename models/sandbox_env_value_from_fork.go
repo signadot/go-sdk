@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxEnvValueFromFork sandbox env value from fork
@@ -38,7 +39,7 @@ func (m *SandboxEnvValueFromFork) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxEnvValueFromFork) validateForkOf(formats strfmt.Registry) error {
-	if swag.IsZero(m.ForkOf) { // not required
+	if typeutils.IsZero(m.ForkOf) { // not required
 		return nil
 	}
 
@@ -78,7 +79,7 @@ func (m *SandboxEnvValueFromFork) contextValidateForkOf(ctx context.Context, for
 
 	if m.ForkOf != nil {
 
-		if swag.IsZero(m.ForkOf) { // not required
+		if typeutils.IsZero(m.ForkOf) { // not required
 			return nil
 		}
 
@@ -104,13 +105,13 @@ func (m *SandboxEnvValueFromFork) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxEnvValueFromFork) UnmarshalBinary(b []byte) error {
 	var res SandboxEnvValueFromFork
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

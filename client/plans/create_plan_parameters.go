@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreatePlanParams() *CreatePlanParams {
-	return &CreatePlanParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewCreatePlanParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewCreatePlanParamsWithTimeout creates a new CreatePlanParams object
 // with the ability to set a timeout on a request.
 func NewCreatePlanParamsWithTimeout(timeout time.Duration) *CreatePlanParams {
 	return &CreatePlanParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewCreatePlanParamsWithContext creates a new CreatePlanParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreatePlanParams].
 func NewCreatePlanParamsWithContext(ctx context.Context) *CreatePlanParams {
 	return &CreatePlanParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -78,9 +81,9 @@ type CreatePlanParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the create plan params (not the query body).
@@ -98,76 +101,79 @@ func (o *CreatePlanParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the create plan params
+// WithTimeout adds the timeout to the create plan params.
 func (o *CreatePlanParams) WithTimeout(timeout time.Duration) *CreatePlanParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the create plan params
+// SetTimeout adds the timeout to the create plan params.
 func (o *CreatePlanParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the create plan params
+// WithContext adds the context to the create plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreatePlanParams].
 func (o *CreatePlanParams) WithContext(ctx context.Context) *CreatePlanParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the create plan params
+// SetContext adds the context to the create plan params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CreatePlanParams].
 func (o *CreatePlanParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the create plan params
+// WithHTTPClient adds the HTTPClient to the create plan params.
 func (o *CreatePlanParams) WithHTTPClient(client *http.Client) *CreatePlanParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the create plan params
+// SetHTTPClient adds the HTTPClient to the create plan params.
 func (o *CreatePlanParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the create plan params
+// WithData adds the data to the create plan params.
 func (o *CreatePlanParams) WithData(data *models.PlanSpec) *CreatePlanParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the create plan params
+// SetData adds the data to the create plan params.
 func (o *CreatePlanParams) SetData(data *models.PlanSpec) {
 	o.Data = data
 }
 
-// WithExpand adds the expand to the create plan params
+// WithExpand adds the expand to the create plan params.
 func (o *CreatePlanParams) WithExpand(expand *string) *CreatePlanParams {
 	o.SetExpand(expand)
 	return o
 }
 
-// SetExpand adds the expand to the create plan params
+// SetExpand adds the expand to the create plan params.
 func (o *CreatePlanParams) SetExpand(expand *string) {
 	o.Expand = expand
 }
 
-// WithOrgName adds the orgName to the create plan params
+// WithOrgName adds the orgName to the create plan params.
 func (o *CreatePlanParams) WithOrgName(orgName string) *CreatePlanParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the create plan params
+// SetOrgName adds the orgName to the create plan params.
 func (o *CreatePlanParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *CreatePlanParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

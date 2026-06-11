@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPrgDesiredImagesParams() *GetPrgDesiredImagesParams {
-	return &GetPrgDesiredImagesParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewGetPrgDesiredImagesParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewGetPrgDesiredImagesParamsWithTimeout creates a new GetPrgDesiredImagesParams object
 // with the ability to set a timeout on a request.
 func NewGetPrgDesiredImagesParamsWithTimeout(timeout time.Duration) *GetPrgDesiredImagesParams {
 	return &GetPrgDesiredImagesParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewGetPrgDesiredImagesParamsWithContext creates a new GetPrgDesiredImagesParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPrgDesiredImagesParams].
 func NewGetPrgDesiredImagesParamsWithContext(ctx context.Context) *GetPrgDesiredImagesParams {
 	return &GetPrgDesiredImagesParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type GetPrgDesiredImagesParams struct {
 	*/
 	PlanRunnerGroupName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the get prg desired images params (not the query body).
@@ -90,65 +94,68 @@ func (o *GetPrgDesiredImagesParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the get prg desired images params
+// WithTimeout adds the timeout to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) WithTimeout(timeout time.Duration) *GetPrgDesiredImagesParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the get prg desired images params
+// SetTimeout adds the timeout to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the get prg desired images params
+// WithContext adds the context to the get prg desired images params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPrgDesiredImagesParams].
 func (o *GetPrgDesiredImagesParams) WithContext(ctx context.Context) *GetPrgDesiredImagesParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the get prg desired images params
+// SetContext adds the context to the get prg desired images params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [GetPrgDesiredImagesParams].
 func (o *GetPrgDesiredImagesParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the get prg desired images params
+// WithHTTPClient adds the HTTPClient to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) WithHTTPClient(client *http.Client) *GetPrgDesiredImagesParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the get prg desired images params
+// SetHTTPClient adds the HTTPClient to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the get prg desired images params
+// WithOrgName adds the orgName to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) WithOrgName(orgName string) *GetPrgDesiredImagesParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the get prg desired images params
+// SetOrgName adds the orgName to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanRunnerGroupName adds the planRunnerGroupName to the get prg desired images params
+// WithPlanRunnerGroupName adds the planRunnerGroupName to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) WithPlanRunnerGroupName(planRunnerGroupName string) *GetPrgDesiredImagesParams {
 	o.SetPlanRunnerGroupName(planRunnerGroupName)
 	return o
 }
 
-// SetPlanRunnerGroupName adds the planRunnerGroupName to the get prg desired images params
+// SetPlanRunnerGroupName adds the planRunnerGroupName to the get prg desired images params.
 func (o *GetPrgDesiredImagesParams) SetPlanRunnerGroupName(planRunnerGroupName string) {
 	o.PlanRunnerGroupName = planRunnerGroupName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *GetPrgDesiredImagesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

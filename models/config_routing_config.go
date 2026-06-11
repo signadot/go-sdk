@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // ConfigRoutingConfig config routing config
@@ -62,7 +63,7 @@ func (m *ConfigRoutingConfig) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ConfigRoutingConfig) validateGatewayAPI(formats strfmt.Registry) error {
-	if swag.IsZero(m.GatewayAPI) { // not required
+	if typeutils.IsZero(m.GatewayAPI) { // not required
 		return nil
 	}
 
@@ -85,7 +86,7 @@ func (m *ConfigRoutingConfig) validateGatewayAPI(formats strfmt.Registry) error 
 }
 
 func (m *ConfigRoutingConfig) validateIstio(formats strfmt.Registry) error {
-	if swag.IsZero(m.Istio) { // not required
+	if typeutils.IsZero(m.Istio) { // not required
 		return nil
 	}
 
@@ -108,7 +109,7 @@ func (m *ConfigRoutingConfig) validateIstio(formats strfmt.Registry) error {
 }
 
 func (m *ConfigRoutingConfig) validateLinkerd(formats strfmt.Registry) error {
-	if swag.IsZero(m.Linkerd) { // not required
+	if typeutils.IsZero(m.Linkerd) { // not required
 		return nil
 	}
 
@@ -131,7 +132,7 @@ func (m *ConfigRoutingConfig) validateLinkerd(formats strfmt.Registry) error {
 }
 
 func (m *ConfigRoutingConfig) validateQueryParamRouting(formats strfmt.Registry) error {
-	if swag.IsZero(m.QueryParamRouting) { // not required
+	if typeutils.IsZero(m.QueryParamRouting) { // not required
 		return nil
 	}
 
@@ -183,7 +184,7 @@ func (m *ConfigRoutingConfig) contextValidateGatewayAPI(ctx context.Context, for
 
 	if m.GatewayAPI != nil {
 
-		if swag.IsZero(m.GatewayAPI) { // not required
+		if typeutils.IsZero(m.GatewayAPI) { // not required
 			return nil
 		}
 
@@ -208,7 +209,7 @@ func (m *ConfigRoutingConfig) contextValidateIstio(ctx context.Context, formats 
 
 	if m.Istio != nil {
 
-		if swag.IsZero(m.Istio) { // not required
+		if typeutils.IsZero(m.Istio) { // not required
 			return nil
 		}
 
@@ -233,7 +234,7 @@ func (m *ConfigRoutingConfig) contextValidateLinkerd(ctx context.Context, format
 
 	if m.Linkerd != nil {
 
-		if swag.IsZero(m.Linkerd) { // not required
+		if typeutils.IsZero(m.Linkerd) { // not required
 			return nil
 		}
 
@@ -258,7 +259,7 @@ func (m *ConfigRoutingConfig) contextValidateQueryParamRouting(ctx context.Conte
 
 	if m.QueryParamRouting != nil {
 
-		if swag.IsZero(m.QueryParamRouting) { // not required
+		if typeutils.IsZero(m.QueryParamRouting) { // not required
 			return nil
 		}
 
@@ -284,13 +285,13 @@ func (m *ConfigRoutingConfig) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ConfigRoutingConfig) UnmarshalBinary(b []byte) error {
 	var res ConfigRoutingConfig
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

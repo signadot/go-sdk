@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewApplySandboxParams() *ApplySandboxParams {
-	return &ApplySandboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewApplySandboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewApplySandboxParamsWithTimeout creates a new ApplySandboxParams object
 // with the ability to set a timeout on a request.
 func NewApplySandboxParamsWithTimeout(timeout time.Duration) *ApplySandboxParams {
 	return &ApplySandboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewApplySandboxParamsWithContext creates a new ApplySandboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplySandboxParams].
 func NewApplySandboxParamsWithContext(ctx context.Context) *ApplySandboxParams {
 	return &ApplySandboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -78,9 +81,9 @@ type ApplySandboxParams struct {
 	*/
 	SandboxName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the apply sandbox params (not the query body).
@@ -98,76 +101,79 @@ func (o *ApplySandboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the apply sandbox params
+// WithTimeout adds the timeout to the apply sandbox params.
 func (o *ApplySandboxParams) WithTimeout(timeout time.Duration) *ApplySandboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the apply sandbox params
+// SetTimeout adds the timeout to the apply sandbox params.
 func (o *ApplySandboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the apply sandbox params
+// WithContext adds the context to the apply sandbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplySandboxParams].
 func (o *ApplySandboxParams) WithContext(ctx context.Context) *ApplySandboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the apply sandbox params
+// SetContext adds the context to the apply sandbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplySandboxParams].
 func (o *ApplySandboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the apply sandbox params
+// WithHTTPClient adds the HTTPClient to the apply sandbox params.
 func (o *ApplySandboxParams) WithHTTPClient(client *http.Client) *ApplySandboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the apply sandbox params
+// SetHTTPClient adds the HTTPClient to the apply sandbox params.
 func (o *ApplySandboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the apply sandbox params
+// WithData adds the data to the apply sandbox params.
 func (o *ApplySandboxParams) WithData(data *models.Sandbox) *ApplySandboxParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the apply sandbox params
+// SetData adds the data to the apply sandbox params.
 func (o *ApplySandboxParams) SetData(data *models.Sandbox) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the apply sandbox params
+// WithOrgName adds the orgName to the apply sandbox params.
 func (o *ApplySandboxParams) WithOrgName(orgName string) *ApplySandboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the apply sandbox params
+// SetOrgName adds the orgName to the apply sandbox params.
 func (o *ApplySandboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithSandboxName adds the sandboxName to the apply sandbox params
+// WithSandboxName adds the sandboxName to the apply sandbox params.
 func (o *ApplySandboxParams) WithSandboxName(sandboxName string) *ApplySandboxParams {
 	o.SetSandboxName(sandboxName)
 	return o
 }
 
-// SetSandboxName adds the sandboxName to the apply sandbox params
+// SetSandboxName adds the sandboxName to the apply sandbox params.
 func (o *ApplySandboxParams) SetSandboxName(sandboxName string) {
 	o.SandboxName = sandboxName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ApplySandboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TrafficDiff traffic diff
@@ -85,12 +86,12 @@ func (m *TrafficDiff) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiff) validateCapturePoints(formats strfmt.Registry) error {
-	if swag.IsZero(m.CapturePoints) { // not required
+	if typeutils.IsZero(m.CapturePoints) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.CapturePoints); i++ {
-		if swag.IsZero(m.CapturePoints[i]) { // not required
+		if typeutils.IsZero(m.CapturePoints[i]) { // not required
 			continue
 		}
 
@@ -115,7 +116,7 @@ func (m *TrafficDiff) validateCapturePoints(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiff) validateGreen(formats strfmt.Registry) error {
-	if swag.IsZero(m.Green) { // not required
+	if typeutils.IsZero(m.Green) { // not required
 		return nil
 	}
 
@@ -138,7 +139,7 @@ func (m *TrafficDiff) validateGreen(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiff) validateRed(formats strfmt.Registry) error {
-	if swag.IsZero(m.Red) { // not required
+	if typeutils.IsZero(m.Red) { // not required
 		return nil
 	}
 
@@ -161,12 +162,12 @@ func (m *TrafficDiff) validateRed(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiff) validateUnpairedCaptures(formats strfmt.Registry) error {
-	if swag.IsZero(m.UnpairedCaptures) { // not required
+	if typeutils.IsZero(m.UnpairedCaptures) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.UnpairedCaptures); i++ {
-		if swag.IsZero(m.UnpairedCaptures[i]) { // not required
+		if typeutils.IsZero(m.UnpairedCaptures[i]) { // not required
 			continue
 		}
 
@@ -191,7 +192,7 @@ func (m *TrafficDiff) validateUnpairedCaptures(formats strfmt.Registry) error {
 }
 
 func (m *TrafficDiff) validateYellow(formats strfmt.Registry) error {
-	if swag.IsZero(m.Yellow) { // not required
+	if typeutils.IsZero(m.Yellow) { // not required
 		return nil
 	}
 
@@ -249,7 +250,7 @@ func (m *TrafficDiff) contextValidateCapturePoints(ctx context.Context, formats 
 
 		if m.CapturePoints[i] != nil {
 
-			if swag.IsZero(m.CapturePoints[i]) { // not required
+			if typeutils.IsZero(m.CapturePoints[i]) { // not required
 				return nil
 			}
 
@@ -276,7 +277,7 @@ func (m *TrafficDiff) contextValidateGreen(ctx context.Context, formats strfmt.R
 
 	if m.Green != nil {
 
-		if swag.IsZero(m.Green) { // not required
+		if typeutils.IsZero(m.Green) { // not required
 			return nil
 		}
 
@@ -301,7 +302,7 @@ func (m *TrafficDiff) contextValidateRed(ctx context.Context, formats strfmt.Reg
 
 	if m.Red != nil {
 
-		if swag.IsZero(m.Red) { // not required
+		if typeutils.IsZero(m.Red) { // not required
 			return nil
 		}
 
@@ -328,7 +329,7 @@ func (m *TrafficDiff) contextValidateUnpairedCaptures(ctx context.Context, forma
 
 		if m.UnpairedCaptures[i] != nil {
 
-			if swag.IsZero(m.UnpairedCaptures[i]) { // not required
+			if typeutils.IsZero(m.UnpairedCaptures[i]) { // not required
 				return nil
 			}
 
@@ -355,7 +356,7 @@ func (m *TrafficDiff) contextValidateYellow(ctx context.Context, formats strfmt.
 
 	if m.Yellow != nil {
 
-		if swag.IsZero(m.Yellow) { // not required
+		if typeutils.IsZero(m.Yellow) { // not required
 			return nil
 		}
 
@@ -381,13 +382,13 @@ func (m *TrafficDiff) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TrafficDiff) UnmarshalBinary(b []byte) error {
 	var res TrafficDiff
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

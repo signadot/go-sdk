@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListPlanTagsParams() *ListPlanTagsParams {
-	return &ListPlanTagsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewListPlanTagsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewListPlanTagsParamsWithTimeout creates a new ListPlanTagsParams object
 // with the ability to set a timeout on a request.
 func NewListPlanTagsParamsWithTimeout(timeout time.Duration) *ListPlanTagsParams {
 	return &ListPlanTagsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewListPlanTagsParamsWithContext creates a new ListPlanTagsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanTagsParams].
 func NewListPlanTagsParamsWithContext(ctx context.Context) *ListPlanTagsParams {
 	return &ListPlanTagsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -64,9 +68,9 @@ type ListPlanTagsParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the list plan tags params (not the query body).
@@ -84,54 +88,57 @@ func (o *ListPlanTagsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the list plan tags params
+// WithTimeout adds the timeout to the list plan tags params.
 func (o *ListPlanTagsParams) WithTimeout(timeout time.Duration) *ListPlanTagsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the list plan tags params
+// SetTimeout adds the timeout to the list plan tags params.
 func (o *ListPlanTagsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the list plan tags params
+// WithContext adds the context to the list plan tags params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanTagsParams].
 func (o *ListPlanTagsParams) WithContext(ctx context.Context) *ListPlanTagsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the list plan tags params
+// SetContext adds the context to the list plan tags params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ListPlanTagsParams].
 func (o *ListPlanTagsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the list plan tags params
+// WithHTTPClient adds the HTTPClient to the list plan tags params.
 func (o *ListPlanTagsParams) WithHTTPClient(client *http.Client) *ListPlanTagsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the list plan tags params
+// SetHTTPClient adds the HTTPClient to the list plan tags params.
 func (o *ListPlanTagsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the list plan tags params
+// WithOrgName adds the orgName to the list plan tags params.
 func (o *ListPlanTagsParams) WithOrgName(orgName string) *ListPlanTagsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the list plan tags params
+// SetOrgName adds the orgName to the list plan tags params.
 func (o *ListPlanTagsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ListPlanTagsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

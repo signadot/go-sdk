@@ -3,8 +3,10 @@
 package plan_executions
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -12,11 +14,12 @@ import (
 )
 
 // New creates a new plan executions API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new plan executions API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -30,6 +33,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new plan executions API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -42,10 +46,10 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for plan executions API
+Client for plan executions API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
@@ -76,33 +80,82 @@ func WithAcceptApplicationOctetStream(r *runtime.ClientOperation) {
 	r.ProducesMediaTypes = []string{"application/octet-stream"}
 }
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// CancelPlanExecution cancel a plan execution.
 	CancelPlanExecution(params *CancelPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPlanExecutionOK, error)
 
+	// CancelPlanExecutionContext cancel a plan execution.
+	CancelPlanExecutionContext(ctx context.Context, params *CancelPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPlanExecutionOK, error)
+
+	// CreatePlanExecution create a plan execution.
 	CreatePlanExecution(params *CreatePlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanExecutionOK, error)
 
+	// CreatePlanExecutionContext create a plan execution.
+	CreatePlanExecutionContext(ctx context.Context, params *CreatePlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanExecutionOK, error)
+
+	// GetPlanExecution get a plan execution.
 	GetPlanExecution(params *GetPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanExecutionOK, error)
 
+	// GetPlanExecutionContext get a plan execution.
+	GetPlanExecutionContext(ctx context.Context, params *GetPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanExecutionOK, error)
+
+	// GetPlanExecutionOutput download a plan level output.
 	GetPlanExecutionOutput(params *GetPlanExecutionOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetPlanExecutionOutputOK, *GetPlanExecutionOutputPartialContent, error)
 
+	// GetPlanExecutionOutputContext download a plan level output.
+	GetPlanExecutionOutputContext(ctx context.Context, params *GetPlanExecutionOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetPlanExecutionOutputOK, *GetPlanExecutionOutputPartialContent, error)
+
+	// GetStepOutput download a step output.
 	GetStepOutput(params *GetStepOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetStepOutputOK, *GetStepOutputPartialContent, error)
 
+	// GetStepOutputContext download a step output.
+	GetStepOutputContext(ctx context.Context, params *GetStepOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetStepOutputOK, *GetStepOutputPartialContent, error)
+
+	// ListPlanExecutions list plan executions.
 	ListPlanExecutions(params *ListPlanExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanExecutionsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListPlanExecutionsContext list plan executions.
+	ListPlanExecutionsContext(ctx context.Context, params *ListPlanExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanExecutionsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-CancelPlanExecution cancels a plan execution
+CancelPlanExecutioncancels a plan execution.
 
-Cancel a running plan execution. Returns 409 if already terminal.
+Cancel a running plan execution. Returns 409 if already terminal..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CancelPlanExecutionContext] instead.
 */
 func (a *Client) CancelPlanExecution(params *CancelPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPlanExecutionOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CancelPlanExecutionContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CancelPlanExecutionContextcancels a plan execution.
+
+Cancel a running plan execution. Returns 409 if already terminal..
+
+Do not use the deprecated [CancelPlanExecutionParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CancelPlanExecutionContext(ctx context.Context, params *CancelPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPlanExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCancelPlanExecutionParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-plan-execution",
 		Method:             "PUT",
@@ -113,13 +166,14 @@ func (a *Client) CancelPlanExecution(params *CancelPlanExecutionParams, authInfo
 		Params:             params,
 		Reader:             &CancelPlanExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -140,15 +194,39 @@ func (a *Client) CancelPlanExecution(params *CancelPlanExecutionParams, authInfo
 }
 
 /*
-CreatePlanExecution creates a plan execution
+CreatePlanExecutioncreates a plan execution.
 
-Creates a new execution of a compiled plan
+Creates a new execution of a compiled plan.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CreatePlanExecutionContext] instead.
 */
 func (a *Client) CreatePlanExecution(params *CreatePlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanExecutionOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CreatePlanExecutionContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CreatePlanExecutionContextcreates a plan execution.
+
+Creates a new execution of a compiled plan.
+
+Do not use the deprecated [CreatePlanExecutionParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CreatePlanExecutionContext(ctx context.Context, params *CreatePlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreatePlanExecutionParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "create-plan-execution",
 		Method:             "POST",
@@ -159,13 +237,14 @@ func (a *Client) CreatePlanExecution(params *CreatePlanExecutionParams, authInfo
 		Params:             params,
 		Reader:             &CreatePlanExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -186,15 +265,39 @@ func (a *Client) CreatePlanExecution(params *CreatePlanExecutionParams, authInfo
 }
 
 /*
-GetPlanExecution gets a plan execution
+GetPlanExecutiongets a plan execution.
 
-Get the current state of a plan execution by ID
+Get the current state of a plan execution by ID.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetPlanExecutionContext] instead.
 */
 func (a *Client) GetPlanExecution(params *GetPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanExecutionOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetPlanExecutionContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetPlanExecutionContextgets a plan execution.
+
+Get the current state of a plan execution by ID.
+
+Do not use the deprecated [GetPlanExecutionParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetPlanExecutionContext(ctx context.Context, params *GetPlanExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetPlanExecutionParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-plan-execution",
 		Method:             "GET",
@@ -205,13 +308,14 @@ func (a *Client) GetPlanExecution(params *GetPlanExecutionParams, authInfo runti
 		Params:             params,
 		Reader:             &GetPlanExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -232,15 +336,39 @@ func (a *Client) GetPlanExecution(params *GetPlanExecutionParams, authInfo runti
 }
 
 /*
-GetPlanExecutionOutput downloads a plan level output
+GetPlanExecutionOutputdownloads a plan level output.
 
-Returns the output content for a plan-level output. Resolves the step reference and serves the value or proxies the artifact.
+Returns the output content for a plan-level output. Resolves the step reference and serves the value or proxies the artifact..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetPlanExecutionOutputContext] instead.
 */
 func (a *Client) GetPlanExecutionOutput(params *GetPlanExecutionOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetPlanExecutionOutputOK, *GetPlanExecutionOutputPartialContent, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetPlanExecutionOutputContext(ctx, params, authInfo, writer, opts...)
+}
+
+/*
+GetPlanExecutionOutputContextdownloads a plan level output.
+
+Returns the output content for a plan-level output. Resolves the step reference and serves the value or proxies the artifact..
+
+Do not use the deprecated [GetPlanExecutionOutputParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetPlanExecutionOutputContext(ctx context.Context, params *GetPlanExecutionOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetPlanExecutionOutputOK, *GetPlanExecutionOutputPartialContent, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetPlanExecutionOutputParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-plan-execution-output",
 		Method:             "GET",
@@ -251,13 +379,14 @@ func (a *Client) GetPlanExecutionOutput(params *GetPlanExecutionOutputParams, au
 		Params:             params,
 		Reader:             &GetPlanExecutionOutputReader{formats: a.formats, writer: writer},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -278,15 +407,39 @@ func (a *Client) GetPlanExecutionOutput(params *GetPlanExecutionOutputParams, au
 }
 
 /*
-GetStepOutput downloads a step output
+GetStepOutputdownloads a step output.
 
-Returns the output content for a specific step. Inlined values are served directly; artifact outputs are proxied from S3.
+Returns the output content for a specific step. Inlined values are served directly; artifact outputs are proxied from S3..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetStepOutputContext] instead.
 */
 func (a *Client) GetStepOutput(params *GetStepOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetStepOutputOK, *GetStepOutputPartialContent, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetStepOutputContext(ctx, params, authInfo, writer, opts...)
+}
+
+/*
+GetStepOutputContextdownloads a step output.
+
+Returns the output content for a specific step. Inlined values are served directly; artifact outputs are proxied from S3..
+
+Do not use the deprecated [GetStepOutputParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetStepOutputContext(ctx context.Context, params *GetStepOutputParams, authInfo runtime.ClientAuthInfoWriter, writer io.Writer, opts ...ClientOption) (*GetStepOutputOK, *GetStepOutputPartialContent, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetStepOutputParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-step-output",
 		Method:             "GET",
@@ -297,13 +450,14 @@ func (a *Client) GetStepOutput(params *GetStepOutputParams, authInfo runtime.Cli
 		Params:             params,
 		Reader:             &GetStepOutputReader{formats: a.formats, writer: writer},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -324,15 +478,39 @@ func (a *Client) GetStepOutput(params *GetStepOutputParams, authInfo runtime.Cli
 }
 
 /*
-ListPlanExecutions lists plan executions
+ListPlanExecutionslists plan executions.
 
-List executions for the org with optional filters and cursor-based pagination
+List executions for the org with optional filters and cursor-based pagination.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListPlanExecutionsContext] instead.
 */
 func (a *Client) ListPlanExecutions(params *ListPlanExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanExecutionsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListPlanExecutionsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListPlanExecutionsContextlists plan executions.
+
+List executions for the org with optional filters and cursor-based pagination.
+
+Do not use the deprecated [ListPlanExecutionsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListPlanExecutionsContext(ctx context.Context, params *ListPlanExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanExecutionsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListPlanExecutionsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-plan-executions",
 		Method:             "GET",
@@ -343,13 +521,14 @@ func (a *Client) ListPlanExecutions(params *ListPlanExecutionsParams, authInfo r
 		Params:             params,
 		Reader:             &ListPlanExecutionsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -370,6 +549,14 @@ func (a *Client) ListPlanExecutions(params *ListPlanExecutionsParams, authInfo r
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [PlanExecutionsParams].
+	ctx context.Context
 }

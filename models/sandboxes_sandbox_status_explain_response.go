@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxesSandboxStatusExplainResponse sandboxes sandbox status explain response
@@ -54,7 +55,7 @@ func (m *SandboxesSandboxStatusExplainResponse) Validate(formats strfmt.Registry
 }
 
 func (m *SandboxesSandboxStatusExplainResponse) validateContext(formats strfmt.Registry) error {
-	if swag.IsZero(m.Context) { // not required
+	if typeutils.IsZero(m.Context) { // not required
 		return nil
 	}
 
@@ -77,7 +78,7 @@ func (m *SandboxesSandboxStatusExplainResponse) validateContext(formats strfmt.R
 }
 
 func (m *SandboxesSandboxStatusExplainResponse) validateMode(formats strfmt.Registry) error {
-	if swag.IsZero(m.Mode) { // not required
+	if typeutils.IsZero(m.Mode) { // not required
 		return nil
 	}
 
@@ -98,7 +99,7 @@ func (m *SandboxesSandboxStatusExplainResponse) validateMode(formats strfmt.Regi
 }
 
 func (m *SandboxesSandboxStatusExplainResponse) validateStatus(formats strfmt.Registry) error {
-	if swag.IsZero(m.Status) { // not required
+	if typeutils.IsZero(m.Status) { // not required
 		return nil
 	}
 
@@ -146,7 +147,7 @@ func (m *SandboxesSandboxStatusExplainResponse) contextValidateContext(ctx conte
 
 	if m.Context != nil {
 
-		if swag.IsZero(m.Context) { // not required
+		if typeutils.IsZero(m.Context) { // not required
 			return nil
 		}
 
@@ -169,7 +170,7 @@ func (m *SandboxesSandboxStatusExplainResponse) contextValidateContext(ctx conte
 
 func (m *SandboxesSandboxStatusExplainResponse) contextValidateMode(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Mode) { // not required
+	if typeutils.IsZero(m.Mode) { // not required
 		return nil
 	}
 
@@ -193,7 +194,7 @@ func (m *SandboxesSandboxStatusExplainResponse) contextValidateStatus(ctx contex
 
 	if m.Status != nil {
 
-		if swag.IsZero(m.Status) { // not required
+		if typeutils.IsZero(m.Status) { // not required
 			return nil
 		}
 
@@ -219,13 +220,13 @@ func (m *SandboxesSandboxStatusExplainResponse) MarshalBinary() ([]byte, error) 
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxesSandboxStatusExplainResponse) UnmarshalBinary(b []byte) error {
 	var res SandboxesSandboxStatusExplainResponse
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

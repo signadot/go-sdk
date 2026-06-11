@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewClaimDevboxParams() *ClaimDevboxParams {
-	return &ClaimDevboxParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewClaimDevboxParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewClaimDevboxParamsWithTimeout creates a new ClaimDevboxParams object
 // with the ability to set a timeout on a request.
 func NewClaimDevboxParamsWithTimeout(timeout time.Duration) *ClaimDevboxParams {
 	return &ClaimDevboxParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewClaimDevboxParamsWithContext creates a new ClaimDevboxParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ClaimDevboxParams].
 func NewClaimDevboxParamsWithContext(ctx context.Context) *ClaimDevboxParams {
 	return &ClaimDevboxParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type ClaimDevboxParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the claim devbox params (not the query body).
@@ -90,65 +94,68 @@ func (o *ClaimDevboxParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the claim devbox params
+// WithTimeout adds the timeout to the claim devbox params.
 func (o *ClaimDevboxParams) WithTimeout(timeout time.Duration) *ClaimDevboxParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the claim devbox params
+// SetTimeout adds the timeout to the claim devbox params.
 func (o *ClaimDevboxParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the claim devbox params
+// WithContext adds the context to the claim devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ClaimDevboxParams].
 func (o *ClaimDevboxParams) WithContext(ctx context.Context) *ClaimDevboxParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the claim devbox params
+// SetContext adds the context to the claim devbox params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ClaimDevboxParams].
 func (o *ClaimDevboxParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the claim devbox params
+// WithHTTPClient adds the HTTPClient to the claim devbox params.
 func (o *ClaimDevboxParams) WithHTTPClient(client *http.Client) *ClaimDevboxParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the claim devbox params
+// SetHTTPClient adds the HTTPClient to the claim devbox params.
 func (o *ClaimDevboxParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithDevboxID adds the devboxID to the claim devbox params
+// WithDevboxID adds the devboxID to the claim devbox params.
 func (o *ClaimDevboxParams) WithDevboxID(devboxID string) *ClaimDevboxParams {
 	o.SetDevboxID(devboxID)
 	return o
 }
 
-// SetDevboxID adds the devboxId to the claim devbox params
+// SetDevboxID adds the devboxId to the claim devbox params.
 func (o *ClaimDevboxParams) SetDevboxID(devboxID string) {
 	o.DevboxID = devboxID
 }
 
-// WithOrgName adds the orgName to the claim devbox params
+// WithOrgName adds the orgName to the claim devbox params.
 func (o *ClaimDevboxParams) WithOrgName(orgName string) *ClaimDevboxParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the claim devbox params
+// SetOrgName adds the orgName to the claim devbox params.
 func (o *ClaimDevboxParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ClaimDevboxParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

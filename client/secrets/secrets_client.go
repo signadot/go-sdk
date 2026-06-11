@@ -3,7 +3,9 @@
 package secrets
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new secrets API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new secrets API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new secrets API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,41 +45,86 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for secrets API
+Client for secrets API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// CreateSecret create a secret.
 	CreateSecret(params *CreateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSecretOK, error)
 
+	// CreateSecretContext create a secret.
+	CreateSecretContext(ctx context.Context, params *CreateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSecretOK, error)
+
+	// DeleteSecret delete a secret.
 	DeleteSecret(params *DeleteSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSecretOK, error)
 
+	// DeleteSecretContext delete a secret.
+	DeleteSecretContext(ctx context.Context, params *DeleteSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSecretOK, error)
+
+	// GetSecret get a secret.
 	GetSecret(params *GetSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSecretOK, error)
 
+	// GetSecretContext get a secret.
+	GetSecretContext(ctx context.Context, params *GetSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSecretOK, error)
+
+	// ListSecrets list secrets.
 	ListSecrets(params *ListSecretsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSecretsOK, error)
 
+	// ListSecretsContext list secrets.
+	ListSecretsContext(ctx context.Context, params *ListSecretsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSecretsOK, error)
+
+	// UpdateSecret update a secret.
 	UpdateSecret(params *UpdateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateSecretOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// UpdateSecretContext update a secret.
+	UpdateSecretContext(ctx context.Context, params *UpdateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateSecretOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-CreateSecret creates a secret
+CreateSecretcreates a secret.
 
-Create a new encrypted secret for the org.
+Create a new encrypted secret for the org..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CreateSecretContext] instead.
 */
 func (a *Client) CreateSecret(params *CreateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSecretOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CreateSecretContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CreateSecretContextcreates a secret.
+
+Create a new encrypted secret for the org..
+
+Do not use the deprecated [CreateSecretParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CreateSecretContext(ctx context.Context, params *CreateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSecretOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateSecretParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "create-secret",
 		Method:             "POST",
@@ -86,13 +135,14 @@ func (a *Client) CreateSecret(params *CreateSecretParams, authInfo runtime.Clien
 		Params:             params,
 		Reader:             &CreateSecretReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -113,15 +163,39 @@ func (a *Client) CreateSecret(params *CreateSecretParams, authInfo runtime.Clien
 }
 
 /*
-DeleteSecret deletes a secret
+DeleteSecretdeletes a secret.
 
-Delete a secret from the org.
+Delete a secret from the org..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteSecretContext] instead.
 */
 func (a *Client) DeleteSecret(params *DeleteSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSecretOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteSecretContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteSecretContextdeletes a secret.
+
+Delete a secret from the org..
+
+Do not use the deprecated [DeleteSecretParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteSecretContext(ctx context.Context, params *DeleteSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSecretOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteSecretParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-secret",
 		Method:             "DELETE",
@@ -132,13 +206,14 @@ func (a *Client) DeleteSecret(params *DeleteSecretParams, authInfo runtime.Clien
 		Params:             params,
 		Reader:             &DeleteSecretReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -159,15 +234,39 @@ func (a *Client) DeleteSecret(params *DeleteSecretParams, authInfo runtime.Clien
 }
 
 /*
-GetSecret gets a secret
+GetSecretgets a secret.
 
-Get secret metadata (no value).
+Get secret metadata (no value)..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetSecretContext] instead.
 */
 func (a *Client) GetSecret(params *GetSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSecretOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetSecretContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetSecretContextgets a secret.
+
+Get secret metadata (no value)..
+
+Do not use the deprecated [GetSecretParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetSecretContext(ctx context.Context, params *GetSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSecretOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetSecretParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-secret",
 		Method:             "GET",
@@ -178,13 +277,14 @@ func (a *Client) GetSecret(params *GetSecretParams, authInfo runtime.ClientAuthI
 		Params:             params,
 		Reader:             &GetSecretReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -205,15 +305,39 @@ func (a *Client) GetSecret(params *GetSecretParams, authInfo runtime.ClientAuthI
 }
 
 /*
-ListSecrets lists secrets
+ListSecretslists secrets.
 
-List all secrets for the org (metadata only, no values).
+List all secrets for the org (metadata only, no values)..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListSecretsContext] instead.
 */
 func (a *Client) ListSecrets(params *ListSecretsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSecretsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListSecretsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListSecretsContextlists secrets.
+
+List all secrets for the org (metadata only, no values)..
+
+Do not use the deprecated [ListSecretsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListSecretsContext(ctx context.Context, params *ListSecretsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSecretsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListSecretsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-secrets",
 		Method:             "GET",
@@ -224,13 +348,14 @@ func (a *Client) ListSecrets(params *ListSecretsParams, authInfo runtime.ClientA
 		Params:             params,
 		Reader:             &ListSecretsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -251,15 +376,39 @@ func (a *Client) ListSecrets(params *ListSecretsParams, authInfo runtime.ClientA
 }
 
 /*
-UpdateSecret updates a secret
+UpdateSecretupdates a secret.
 
-Update the value (and optionally description) of an existing secret.
+Update the value (and optionally description) of an existing secret..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.UpdateSecretContext] instead.
 */
 func (a *Client) UpdateSecret(params *UpdateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateSecretOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.UpdateSecretContext(ctx, params, authInfo, opts...)
+}
+
+/*
+UpdateSecretContextupdates a secret.
+
+Update the value (and optionally description) of an existing secret..
+
+Do not use the deprecated [UpdateSecretParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) UpdateSecretContext(ctx context.Context, params *UpdateSecretParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateSecretOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewUpdateSecretParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "update-secret",
 		Method:             "PUT",
@@ -270,13 +419,14 @@ func (a *Client) UpdateSecret(params *UpdateSecretParams, authInfo runtime.Clien
 		Params:             params,
 		Reader:             &UpdateSecretReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -297,6 +447,14 @@ func (a *Client) UpdateSecret(params *UpdateSecretParams, authInfo runtime.Clien
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [SecretsParams].
+	ctx context.Context
 }

@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // RouteGroupSpec route group spec
@@ -58,12 +59,12 @@ func (m *RouteGroupSpec) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroupSpec) validateEndpoints(formats strfmt.Registry) error {
-	if swag.IsZero(m.Endpoints) { // not required
+	if typeutils.IsZero(m.Endpoints) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Endpoints); i++ {
-		if swag.IsZero(m.Endpoints[i]) { // not required
+		if typeutils.IsZero(m.Endpoints[i]) { // not required
 			continue
 		}
 
@@ -88,7 +89,7 @@ func (m *RouteGroupSpec) validateEndpoints(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroupSpec) validateMatch(formats strfmt.Registry) error {
-	if swag.IsZero(m.Match) { // not required
+	if typeutils.IsZero(m.Match) { // not required
 		return nil
 	}
 
@@ -111,7 +112,7 @@ func (m *RouteGroupSpec) validateMatch(formats strfmt.Registry) error {
 }
 
 func (m *RouteGroupSpec) validateTTL(formats strfmt.Registry) error {
-	if swag.IsZero(m.TTL) { // not required
+	if typeutils.IsZero(m.TTL) { // not required
 		return nil
 	}
 
@@ -161,7 +162,7 @@ func (m *RouteGroupSpec) contextValidateEndpoints(ctx context.Context, formats s
 
 		if m.Endpoints[i] != nil {
 
-			if swag.IsZero(m.Endpoints[i]) { // not required
+			if typeutils.IsZero(m.Endpoints[i]) { // not required
 				return nil
 			}
 
@@ -188,7 +189,7 @@ func (m *RouteGroupSpec) contextValidateMatch(ctx context.Context, formats strfm
 
 	if m.Match != nil {
 
-		if swag.IsZero(m.Match) { // not required
+		if typeutils.IsZero(m.Match) { // not required
 			return nil
 		}
 
@@ -213,7 +214,7 @@ func (m *RouteGroupSpec) contextValidateTTL(ctx context.Context, formats strfmt.
 
 	if m.TTL != nil {
 
-		if swag.IsZero(m.TTL) { // not required
+		if typeutils.IsZero(m.TTL) { // not required
 			return nil
 		}
 
@@ -239,13 +240,13 @@ func (m *RouteGroupSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *RouteGroupSpec) UnmarshalBinary(b []byte) error {
 	var res RouteGroupSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

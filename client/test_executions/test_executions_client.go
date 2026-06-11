@@ -3,7 +3,9 @@
 package test_executions
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new test executions API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new test executions API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new test executions API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,47 +45,104 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for test executions API
+Client for test executions API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// CancelTestExecution cancel a test execution.
 	CancelTestExecution(params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error)
 
+	// CancelTestExecutionContext cancel a test execution.
+	CancelTestExecutionContext(ctx context.Context, params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error)
+
+	// CreateExternalTestExecution create external test execution.
 	CreateExternalTestExecution(params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error)
 
+	// CreateExternalTestExecutionContext create external test execution.
+	CreateExternalTestExecutionContext(ctx context.Context, params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error)
+
+	// CreateHostedTestExecution create hosted test execution.
 	CreateHostedTestExecution(params *CreateHostedTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateHostedTestExecutionOK, error)
 
+	// CreateHostedTestExecutionContext create hosted test execution.
+	CreateHostedTestExecutionContext(ctx context.Context, params *CreateHostedTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateHostedTestExecutionOK, error)
+
+	// GetTestExecution get a test execution.
 	GetTestExecution(params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error)
 
+	// GetTestExecutionContext get a test execution.
+	GetTestExecutionContext(ctx context.Context, params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error)
+
+	// ListTestExecutions list test executions.
 	ListTestExecutions(params *ListTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestExecutionsOK, error)
 
+	// ListTestExecutionsContext list test executions.
+	ListTestExecutionsContext(ctx context.Context, params *ListTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestExecutionsOK, error)
+
+	// QueryTestExecutions query test executions.
 	QueryTestExecutions(params *QueryTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*QueryTestExecutionsOK, error)
 
+	// QueryTestExecutionsContext query test executions.
+	QueryTestExecutionsContext(ctx context.Context, params *QueryTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*QueryTestExecutionsOK, error)
+
+	// TestExecutionTrafficDiff get the full traffic diff of a test execution.
 	TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffOK, error)
 
+	// TestExecutionTrafficDiffContext get the full traffic diff of a test execution.
+	TestExecutionTrafficDiffContext(ctx context.Context, params *TestExecutionTrafficDiffParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffOK, error)
+
+	// TestExecutionTrafficDiffFindings get the findings view of the traffic diff of a test execution.
 	TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// TestExecutionTrafficDiffFindingsContext get the findings view of the traffic diff of a test execution.
+	TestExecutionTrafficDiffFindingsContext(ctx context.Context, params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-CancelTestExecution cancels a test execution
+CancelTestExecutioncancels a test execution.
 
-Cancel a given test execution.
+Cancel a given test execution..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CancelTestExecutionContext] instead.
 */
 func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CancelTestExecutionContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CancelTestExecutionContextcancels a test execution.
+
+Cancel a given test execution..
+
+Do not use the deprecated [CancelTestExecutionParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CancelTestExecutionContext(ctx context.Context, params *CancelTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTestExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCancelTestExecutionParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "cancel-test-execution",
 		Method:             "PUT",
@@ -92,13 +153,14 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 		Params:             params,
 		Reader:             &CancelTestExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -119,15 +181,39 @@ func (a *Client) CancelTestExecution(params *CancelTestExecutionParams, authInfo
 }
 
 /*
-CreateExternalTestExecution creates external test execution
+CreateExternalTestExecutioncreates external test execution.
 
-Create an external test execution
+Create an external test execution.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CreateExternalTestExecutionContext] instead.
 */
 func (a *Client) CreateExternalTestExecution(params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CreateExternalTestExecutionContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CreateExternalTestExecutionContextcreates external test execution.
+
+Create an external test execution.
+
+Do not use the deprecated [CreateExternalTestExecutionParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CreateExternalTestExecutionContext(ctx context.Context, params *CreateExternalTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateExternalTestExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateExternalTestExecutionParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "create-external-test-execution",
 		Method:             "POST",
@@ -138,13 +224,14 @@ func (a *Client) CreateExternalTestExecution(params *CreateExternalTestExecution
 		Params:             params,
 		Reader:             &CreateExternalTestExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -165,15 +252,39 @@ func (a *Client) CreateExternalTestExecution(params *CreateExternalTestExecution
 }
 
 /*
-CreateHostedTestExecution creates hosted test execution
+CreateHostedTestExecutioncreates hosted test execution.
 
-Creates a hosted test execution
+Creates a hosted test execution.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CreateHostedTestExecutionContext] instead.
 */
 func (a *Client) CreateHostedTestExecution(params *CreateHostedTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateHostedTestExecutionOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CreateHostedTestExecutionContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CreateHostedTestExecutionContextcreates hosted test execution.
+
+Creates a hosted test execution.
+
+Do not use the deprecated [CreateHostedTestExecutionParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CreateHostedTestExecutionContext(ctx context.Context, params *CreateHostedTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateHostedTestExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreateHostedTestExecutionParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "create-hosted-test-execution",
 		Method:             "POST",
@@ -184,13 +295,14 @@ func (a *Client) CreateHostedTestExecution(params *CreateHostedTestExecutionPara
 		Params:             params,
 		Reader:             &CreateHostedTestExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -211,15 +323,39 @@ func (a *Client) CreateHostedTestExecution(params *CreateHostedTestExecutionPara
 }
 
 /*
-GetTestExecution gets a test execution
+GetTestExecutiongets a test execution.
 
-Fetch the details about a given test execution.
+Fetch the details about a given test execution..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetTestExecutionContext] instead.
 */
 func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetTestExecutionContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetTestExecutionContextgets a test execution.
+
+Fetch the details about a given test execution..
+
+Do not use the deprecated [GetTestExecutionParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetTestExecutionContext(ctx context.Context, params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetTestExecutionParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-test-execution",
 		Method:             "GET",
@@ -230,13 +366,14 @@ func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runti
 		Params:             params,
 		Reader:             &GetTestExecutionReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -257,15 +394,39 @@ func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runti
 }
 
 /*
-ListTestExecutions lists test executions
+ListTestExecutionslists test executions.
 
-List test executions for a given test
+List test executions for a given test.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListTestExecutionsContext] instead.
 */
 func (a *Client) ListTestExecutions(params *ListTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestExecutionsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListTestExecutionsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListTestExecutionsContextlists test executions.
+
+List test executions for a given test.
+
+Do not use the deprecated [ListTestExecutionsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListTestExecutionsContext(ctx context.Context, params *ListTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTestExecutionsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListTestExecutionsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-test-executions",
 		Method:             "GET",
@@ -276,13 +437,14 @@ func (a *Client) ListTestExecutions(params *ListTestExecutionsParams, authInfo r
 		Params:             params,
 		Reader:             &ListTestExecutionsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -303,15 +465,39 @@ func (a *Client) ListTestExecutions(params *ListTestExecutionsParams, authInfo r
 }
 
 /*
-QueryTestExecutions queries test executions
+QueryTestExecutionsqueries test executions.
 
-Query test executions based on different criteria
+Query test executions based on different criteria.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.QueryTestExecutionsContext] instead.
 */
 func (a *Client) QueryTestExecutions(params *QueryTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*QueryTestExecutionsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.QueryTestExecutionsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+QueryTestExecutionsContextqueries test executions.
+
+Query test executions based on different criteria.
+
+Do not use the deprecated [QueryTestExecutionsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) QueryTestExecutionsContext(ctx context.Context, params *QueryTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*QueryTestExecutionsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewQueryTestExecutionsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "query-test-executions",
 		Method:             "GET",
@@ -322,13 +508,14 @@ func (a *Client) QueryTestExecutions(params *QueryTestExecutionsParams, authInfo
 		Params:             params,
 		Reader:             &QueryTestExecutionsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -349,15 +536,39 @@ func (a *Client) QueryTestExecutions(params *QueryTestExecutionsParams, authInfo
 }
 
 /*
-TestExecutionTrafficDiff gets the full traffic diff of a test execution
+TestExecutionTrafficDiffgets the full traffic diff of a test execution.
 
-Get the full traffic diff of a test execution
+Get the full traffic diff of a test execution.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.TestExecutionTrafficDiffContext] instead.
 */
 func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.TestExecutionTrafficDiffContext(ctx, params, authInfo, opts...)
+}
+
+/*
+TestExecutionTrafficDiffContextgets the full traffic diff of a test execution.
+
+Get the full traffic diff of a test execution.
+
+Do not use the deprecated [TestExecutionTrafficDiffParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) TestExecutionTrafficDiffContext(ctx context.Context, params *TestExecutionTrafficDiffParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewTestExecutionTrafficDiffParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "test-execution-traffic-diff",
 		Method:             "GET",
@@ -368,13 +579,14 @@ func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams
 		Params:             params,
 		Reader:             &TestExecutionTrafficDiffReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -395,15 +607,39 @@ func (a *Client) TestExecutionTrafficDiff(params *TestExecutionTrafficDiffParams
 }
 
 /*
-TestExecutionTrafficDiffFindings gets the findings view of the traffic diff of a test execution
+TestExecutionTrafficDiffFindingsgets the findings view of the traffic diff of a test execution.
 
-Get the findings view of the traffic diff of a test execution
+Get the findings view of the traffic diff of a test execution.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.TestExecutionTrafficDiffFindingsContext] instead.
 */
 func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.TestExecutionTrafficDiffFindingsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+TestExecutionTrafficDiffFindingsContextgets the findings view of the traffic diff of a test execution.
+
+Get the findings view of the traffic diff of a test execution.
+
+Do not use the deprecated [TestExecutionTrafficDiffFindingsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) TestExecutionTrafficDiffFindingsContext(ctx context.Context, params *TestExecutionTrafficDiffFindingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*TestExecutionTrafficDiffFindingsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewTestExecutionTrafficDiffFindingsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "test-execution-traffic-diff-findings",
 		Method:             "GET",
@@ -414,13 +650,14 @@ func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDi
 		Params:             params,
 		Reader:             &TestExecutionTrafficDiffFindingsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -441,6 +678,14 @@ func (a *Client) TestExecutionTrafficDiffFindings(params *TestExecutionTrafficDi
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [TestExecutionsParams].
+	ctx context.Context
 }

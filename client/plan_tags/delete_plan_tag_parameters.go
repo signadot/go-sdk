@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeletePlanTagParams() *DeletePlanTagParams {
-	return &DeletePlanTagParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeletePlanTagParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeletePlanTagParamsWithTimeout creates a new DeletePlanTagParams object
 // with the ability to set a timeout on a request.
 func NewDeletePlanTagParamsWithTimeout(timeout time.Duration) *DeletePlanTagParams {
 	return &DeletePlanTagParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeletePlanTagParamsWithContext creates a new DeletePlanTagParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanTagParams].
 func NewDeletePlanTagParamsWithContext(ctx context.Context) *DeletePlanTagParams {
 	return &DeletePlanTagParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeletePlanTagParams struct {
 	*/
 	PlanTagName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete plan tag params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeletePlanTagParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete plan tag params
+// WithTimeout adds the timeout to the delete plan tag params.
 func (o *DeletePlanTagParams) WithTimeout(timeout time.Duration) *DeletePlanTagParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete plan tag params
+// SetTimeout adds the timeout to the delete plan tag params.
 func (o *DeletePlanTagParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete plan tag params
+// WithContext adds the context to the delete plan tag params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanTagParams].
 func (o *DeletePlanTagParams) WithContext(ctx context.Context) *DeletePlanTagParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete plan tag params
+// SetContext adds the context to the delete plan tag params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeletePlanTagParams].
 func (o *DeletePlanTagParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete plan tag params
+// WithHTTPClient adds the HTTPClient to the delete plan tag params.
 func (o *DeletePlanTagParams) WithHTTPClient(client *http.Client) *DeletePlanTagParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete plan tag params
+// SetHTTPClient adds the HTTPClient to the delete plan tag params.
 func (o *DeletePlanTagParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete plan tag params
+// WithOrgName adds the orgName to the delete plan tag params.
 func (o *DeletePlanTagParams) WithOrgName(orgName string) *DeletePlanTagParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete plan tag params
+// SetOrgName adds the orgName to the delete plan tag params.
 func (o *DeletePlanTagParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPlanTagName adds the planTagName to the delete plan tag params
+// WithPlanTagName adds the planTagName to the delete plan tag params.
 func (o *DeletePlanTagParams) WithPlanTagName(planTagName string) *DeletePlanTagParams {
 	o.SetPlanTagName(planTagName)
 	return o
 }
 
-// SetPlanTagName adds the planTagName to the delete plan tag params
+// SetPlanTagName adds the planTagName to the delete plan tag params.
 func (o *DeletePlanTagParams) SetPlanTagName(planTagName string) {
 	o.PlanTagName = planTagName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeletePlanTagParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

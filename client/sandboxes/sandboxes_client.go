@@ -3,7 +3,9 @@
 package sandboxes
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new sandboxes API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new sandboxes API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new sandboxes API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,41 +45,86 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for sandboxes API
+Client for sandboxes API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// ApplySandbox create or update a sandbox.
 	ApplySandbox(params *ApplySandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplySandboxOK, error)
 
+	// ApplySandboxContext create or update a sandbox.
+	ApplySandboxContext(ctx context.Context, params *ApplySandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplySandboxOK, error)
+
+	// DeleteSandbox delete a sandbox.
 	DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSandboxOK, error)
 
+	// DeleteSandboxContext delete a sandbox.
+	DeleteSandboxContext(ctx context.Context, params *DeleteSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSandboxOK, error)
+
+	// ExplainSandboxStatus explain sandbox status.
 	ExplainSandboxStatus(params *ExplainSandboxStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusOK, error)
 
+	// ExplainSandboxStatusContext explain sandbox status.
+	ExplainSandboxStatusContext(ctx context.Context, params *ExplainSandboxStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusOK, error)
+
+	// GetSandbox get a sandbox.
 	GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxOK, error)
 
+	// GetSandboxContext get a sandbox.
+	GetSandboxContext(ctx context.Context, params *GetSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxOK, error)
+
+	// ListSandboxes list sandboxes.
 	ListSandboxes(params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListSandboxesContext list sandboxes.
+	ListSandboxesContext(ctx context.Context, params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-ApplySandbox creates or update a sandbox
+ApplySandboxcreates or update a sandbox.
 
-Creates or updates a sandbox with the provided parameters.
+Creates or updates a sandbox with the provided parameters..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ApplySandboxContext] instead.
 */
 func (a *Client) ApplySandbox(params *ApplySandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplySandboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ApplySandboxContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ApplySandboxContextcreates or update a sandbox.
+
+Creates or updates a sandbox with the provided parameters..
+
+Do not use the deprecated [ApplySandboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ApplySandboxContext(ctx context.Context, params *ApplySandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplySandboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewApplySandboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "apply-sandbox",
 		Method:             "PUT",
@@ -86,13 +135,14 @@ func (a *Client) ApplySandbox(params *ApplySandboxParams, authInfo runtime.Clien
 		Params:             params,
 		Reader:             &ApplySandboxReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -113,15 +163,39 @@ func (a *Client) ApplySandbox(params *ApplySandboxParams, authInfo runtime.Clien
 }
 
 /*
-DeleteSandbox deletes a sandbox
+DeleteSandboxdeletes a sandbox.
 
-Delete a given sandbox.
+Delete a given sandbox..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteSandboxContext] instead.
 */
 func (a *Client) DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSandboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteSandboxContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteSandboxContextdeletes a sandbox.
+
+Delete a given sandbox..
+
+Do not use the deprecated [DeleteSandboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteSandboxContext(ctx context.Context, params *DeleteSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSandboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteSandboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-sandbox",
 		Method:             "DELETE",
@@ -132,13 +206,14 @@ func (a *Client) DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.Cli
 		Params:             params,
 		Reader:             &DeleteSandboxReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -159,15 +234,39 @@ func (a *Client) DeleteSandbox(params *DeleteSandboxParams, authInfo runtime.Cli
 }
 
 /*
-ExplainSandboxStatus explains sandbox status
+ExplainSandboxStatusexplains sandbox status.
 
-Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM.
+Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ExplainSandboxStatusContext] instead.
 */
 func (a *Client) ExplainSandboxStatus(params *ExplainSandboxStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ExplainSandboxStatusContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ExplainSandboxStatusContextexplains sandbox status.
+
+Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM..
+
+Do not use the deprecated [ExplainSandboxStatusParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ExplainSandboxStatusContext(ctx context.Context, params *ExplainSandboxStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExplainSandboxStatusOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewExplainSandboxStatusParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "explain-sandbox-status",
 		Method:             "GET",
@@ -178,13 +277,14 @@ func (a *Client) ExplainSandboxStatus(params *ExplainSandboxStatusParams, authIn
 		Params:             params,
 		Reader:             &ExplainSandboxStatusReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -205,15 +305,39 @@ func (a *Client) ExplainSandboxStatus(params *ExplainSandboxStatusParams, authIn
 }
 
 /*
-GetSandbox gets a sandbox
+GetSandboxgets a sandbox.
 
-Fetch the details about a given sandbox.
+Fetch the details about a given sandbox..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetSandboxContext] instead.
 */
 func (a *Client) GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetSandboxContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetSandboxContextgets a sandbox.
+
+Fetch the details about a given sandbox..
+
+Do not use the deprecated [GetSandboxParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetSandboxContext(ctx context.Context, params *GetSandboxParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetSandboxParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-sandbox",
 		Method:             "GET",
@@ -224,13 +348,14 @@ func (a *Client) GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &GetSandboxReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -251,15 +376,39 @@ func (a *Client) GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAut
 }
 
 /*
-ListSandboxes lists sandboxes
+ListSandboxeslists sandboxes.
 
-List all sandboxes under the specified Signadot org.
+List all sandboxes under the specified Signadot org..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListSandboxesContext] instead.
 */
 func (a *Client) ListSandboxes(params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListSandboxesContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListSandboxesContextlists sandboxes.
+
+List all sandboxes under the specified Signadot org..
+
+Do not use the deprecated [ListSandboxesParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListSandboxesContext(ctx context.Context, params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListSandboxesParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-sandboxes",
 		Method:             "GET",
@@ -270,13 +419,14 @@ func (a *Client) ListSandboxes(params *ListSandboxesParams, authInfo runtime.Cli
 		Params:             params,
 		Reader:             &ListSandboxesReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -297,6 +447,14 @@ func (a *Client) ListSandboxes(params *ListSandboxesParams, authInfo runtime.Cli
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [SandboxesParams].
+	ctx context.Context
 }

@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteRoutegroupParams() *DeleteRoutegroupParams {
-	return &DeleteRoutegroupParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteRoutegroupParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteRoutegroupParamsWithTimeout creates a new DeleteRoutegroupParams object
 // with the ability to set a timeout on a request.
 func NewDeleteRoutegroupParamsWithTimeout(timeout time.Duration) *DeleteRoutegroupParams {
 	return &DeleteRoutegroupParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteRoutegroupParamsWithContext creates a new DeleteRoutegroupParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteRoutegroupParams].
 func NewDeleteRoutegroupParamsWithContext(ctx context.Context) *DeleteRoutegroupParams {
 	return &DeleteRoutegroupParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeleteRoutegroupParams struct {
 	*/
 	RoutegroupName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete routegroup params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeleteRoutegroupParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete routegroup params
+// WithTimeout adds the timeout to the delete routegroup params.
 func (o *DeleteRoutegroupParams) WithTimeout(timeout time.Duration) *DeleteRoutegroupParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete routegroup params
+// SetTimeout adds the timeout to the delete routegroup params.
 func (o *DeleteRoutegroupParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete routegroup params
+// WithContext adds the context to the delete routegroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteRoutegroupParams].
 func (o *DeleteRoutegroupParams) WithContext(ctx context.Context) *DeleteRoutegroupParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete routegroup params
+// SetContext adds the context to the delete routegroup params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteRoutegroupParams].
 func (o *DeleteRoutegroupParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete routegroup params
+// WithHTTPClient adds the HTTPClient to the delete routegroup params.
 func (o *DeleteRoutegroupParams) WithHTTPClient(client *http.Client) *DeleteRoutegroupParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete routegroup params
+// SetHTTPClient adds the HTTPClient to the delete routegroup params.
 func (o *DeleteRoutegroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithOrgName adds the orgName to the delete routegroup params
+// WithOrgName adds the orgName to the delete routegroup params.
 func (o *DeleteRoutegroupParams) WithOrgName(orgName string) *DeleteRoutegroupParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete routegroup params
+// SetOrgName adds the orgName to the delete routegroup params.
 func (o *DeleteRoutegroupParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithRoutegroupName adds the routegroupName to the delete routegroup params
+// WithRoutegroupName adds the routegroupName to the delete routegroup params.
 func (o *DeleteRoutegroupParams) WithRoutegroupName(routegroupName string) *DeleteRoutegroupParams {
 	o.SetRoutegroupName(routegroupName)
 	return o
 }
 
-// SetRoutegroupName adds the routegroupName to the delete routegroup params
+// SetRoutegroupName adds the routegroupName to the delete routegroup params.
 func (o *DeleteRoutegroupParams) SetRoutegroupName(routegroupName string) {
 	o.RoutegroupName = routegroupName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteRoutegroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

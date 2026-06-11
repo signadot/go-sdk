@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanSpec plan spec
@@ -69,7 +70,7 @@ func (m *PlanSpec) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanSpec) validateCluster(formats strfmt.Registry) error {
-	if swag.IsZero(m.Cluster) { // not required
+	if typeutils.IsZero(m.Cluster) { // not required
 		return nil
 	}
 
@@ -92,12 +93,12 @@ func (m *PlanSpec) validateCluster(formats strfmt.Registry) error {
 }
 
 func (m *PlanSpec) validateParams(formats strfmt.Registry) error {
-	if swag.IsZero(m.Params) { // not required
+	if typeutils.IsZero(m.Params) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Params); i++ {
-		if swag.IsZero(m.Params[i]) { // not required
+		if typeutils.IsZero(m.Params[i]) { // not required
 			continue
 		}
 
@@ -122,12 +123,12 @@ func (m *PlanSpec) validateParams(formats strfmt.Registry) error {
 }
 
 func (m *PlanSpec) validateSteps(formats strfmt.Registry) error {
-	if swag.IsZero(m.Steps) { // not required
+	if typeutils.IsZero(m.Steps) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Steps); i++ {
-		if swag.IsZero(m.Steps[i]) { // not required
+		if typeutils.IsZero(m.Steps[i]) { // not required
 			continue
 		}
 
@@ -177,7 +178,7 @@ func (m *PlanSpec) contextValidateCluster(ctx context.Context, formats strfmt.Re
 
 	if m.Cluster != nil {
 
-		if swag.IsZero(m.Cluster) { // not required
+		if typeutils.IsZero(m.Cluster) { // not required
 			return nil
 		}
 
@@ -204,7 +205,7 @@ func (m *PlanSpec) contextValidateParams(ctx context.Context, formats strfmt.Reg
 
 		if m.Params[i] != nil {
 
-			if swag.IsZero(m.Params[i]) { // not required
+			if typeutils.IsZero(m.Params[i]) { // not required
 				return nil
 			}
 
@@ -233,7 +234,7 @@ func (m *PlanSpec) contextValidateSteps(ctx context.Context, formats strfmt.Regi
 
 		if m.Steps[i] != nil {
 
-			if swag.IsZero(m.Steps[i]) { // not required
+			if typeutils.IsZero(m.Steps[i]) { // not required
 				return nil
 			}
 
@@ -261,13 +262,13 @@ func (m *PlanSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanSpec) UnmarshalBinary(b []byte) error {
 	var res PlanSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

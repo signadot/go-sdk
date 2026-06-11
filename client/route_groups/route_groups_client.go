@@ -3,7 +3,9 @@
 package route_groups
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new route groups API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new route groups API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new route groups API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,39 +45,80 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for route groups API
+Client for route groups API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// ApplyRoutegroup create or update a routegroup.
 	ApplyRoutegroup(params *ApplyRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRoutegroupOK, error)
 
+	// ApplyRoutegroupContext create or update a routegroup.
+	ApplyRoutegroupContext(ctx context.Context, params *ApplyRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRoutegroupOK, error)
+
+	// DeleteRoutegroup delete a routegroup.
 	DeleteRoutegroup(params *DeleteRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRoutegroupOK, error)
 
+	// DeleteRoutegroupContext delete a routegroup.
+	DeleteRoutegroupContext(ctx context.Context, params *DeleteRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRoutegroupOK, error)
+
+	// GetRoutegroup get a routegroup.
 	GetRoutegroup(params *GetRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRoutegroupOK, error)
 
+	// GetRoutegroupContext get a routegroup.
+	GetRoutegroupContext(ctx context.Context, params *GetRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRoutegroupOK, error)
+
+	// ListRoutegroups list routegroups.
 	ListRoutegroups(params *ListRoutegroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRoutegroupsOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListRoutegroupsContext list routegroups.
+	ListRoutegroupsContext(ctx context.Context, params *ListRoutegroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRoutegroupsOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-ApplyRoutegroup creates or update a routegroup
+ApplyRoutegroupcreates or update a routegroup.
 
-Creates or updates a routegroup with the provided parameters.
+Creates or updates a routegroup with the provided parameters..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ApplyRoutegroupContext] instead.
 */
 func (a *Client) ApplyRoutegroup(params *ApplyRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRoutegroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ApplyRoutegroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ApplyRoutegroupContextcreates or update a routegroup.
+
+Creates or updates a routegroup with the provided parameters..
+
+Do not use the deprecated [ApplyRoutegroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ApplyRoutegroupContext(ctx context.Context, params *ApplyRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyRoutegroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewApplyRoutegroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "apply-routegroup",
 		Method:             "PUT",
@@ -84,13 +129,14 @@ func (a *Client) ApplyRoutegroup(params *ApplyRoutegroupParams, authInfo runtime
 		Params:             params,
 		Reader:             &ApplyRoutegroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -111,15 +157,39 @@ func (a *Client) ApplyRoutegroup(params *ApplyRoutegroupParams, authInfo runtime
 }
 
 /*
-DeleteRoutegroup deletes a routegroup
+DeleteRoutegroupdeletes a routegroup.
 
-Delete a given routegroup.
+Delete a given routegroup..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeleteRoutegroupContext] instead.
 */
 func (a *Client) DeleteRoutegroup(params *DeleteRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRoutegroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeleteRoutegroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeleteRoutegroupContextdeletes a routegroup.
+
+Delete a given routegroup..
+
+Do not use the deprecated [DeleteRoutegroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeleteRoutegroupContext(ctx context.Context, params *DeleteRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRoutegroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeleteRoutegroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-routegroup",
 		Method:             "DELETE",
@@ -130,13 +200,14 @@ func (a *Client) DeleteRoutegroup(params *DeleteRoutegroupParams, authInfo runti
 		Params:             params,
 		Reader:             &DeleteRoutegroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -157,15 +228,39 @@ func (a *Client) DeleteRoutegroup(params *DeleteRoutegroupParams, authInfo runti
 }
 
 /*
-GetRoutegroup gets a routegroup
+GetRoutegroupgets a routegroup.
 
-Fetch the details about a given routegroup.
+Fetch the details about a given routegroup..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetRoutegroupContext] instead.
 */
 func (a *Client) GetRoutegroup(params *GetRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRoutegroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetRoutegroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetRoutegroupContextgets a routegroup.
+
+Fetch the details about a given routegroup..
+
+Do not use the deprecated [GetRoutegroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetRoutegroupContext(ctx context.Context, params *GetRoutegroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetRoutegroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetRoutegroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-routegroup",
 		Method:             "GET",
@@ -176,13 +271,14 @@ func (a *Client) GetRoutegroup(params *GetRoutegroupParams, authInfo runtime.Cli
 		Params:             params,
 		Reader:             &GetRoutegroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -203,15 +299,39 @@ func (a *Client) GetRoutegroup(params *GetRoutegroupParams, authInfo runtime.Cli
 }
 
 /*
-ListRoutegroups lists routegroups
+ListRoutegroupslists routegroups.
 
-List all routegroups under the specified Signadot org.
+List all routegroups under the specified Signadot org..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListRoutegroupsContext] instead.
 */
 func (a *Client) ListRoutegroups(params *ListRoutegroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRoutegroupsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListRoutegroupsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListRoutegroupsContextlists routegroups.
+
+List all routegroups under the specified Signadot org..
+
+Do not use the deprecated [ListRoutegroupsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListRoutegroupsContext(ctx context.Context, params *ListRoutegroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRoutegroupsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListRoutegroupsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-routegroups",
 		Method:             "GET",
@@ -222,13 +342,14 @@ func (a *Client) ListRoutegroups(params *ListRoutegroupsParams, authInfo runtime
 		Params:             params,
 		Reader:             &ListRoutegroupsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -249,6 +370,14 @@ func (a *Client) ListRoutegroups(params *ListRoutegroupsParams, authInfo runtime
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [RouteGroupsParams].
+	ctx context.Context
 }

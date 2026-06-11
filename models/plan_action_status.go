@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanActionStatus plan action status
@@ -75,7 +76,7 @@ func (m *PlanActionStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanActionStatus) validateBodyImage(formats strfmt.Registry) error {
-	if swag.IsZero(m.BodyImage) { // not required
+	if typeutils.IsZero(m.BodyImage) { // not required
 		return nil
 	}
 
@@ -98,12 +99,12 @@ func (m *PlanActionStatus) validateBodyImage(formats strfmt.Registry) error {
 }
 
 func (m *PlanActionStatus) validateBodyOutputs(formats strfmt.Registry) error {
-	if swag.IsZero(m.BodyOutputs) { // not required
+	if typeutils.IsZero(m.BodyOutputs) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.BodyOutputs); i++ {
-		if swag.IsZero(m.BodyOutputs[i]) { // not required
+		if typeutils.IsZero(m.BodyOutputs[i]) { // not required
 			continue
 		}
 
@@ -128,12 +129,12 @@ func (m *PlanActionStatus) validateBodyOutputs(formats strfmt.Registry) error {
 }
 
 func (m *PlanActionStatus) validateBodyParams(formats strfmt.Registry) error {
-	if swag.IsZero(m.BodyParams) { // not required
+	if typeutils.IsZero(m.BodyParams) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.BodyParams); i++ {
-		if swag.IsZero(m.BodyParams[i]) { // not required
+		if typeutils.IsZero(m.BodyParams[i]) { // not required
 			continue
 		}
 
@@ -158,7 +159,7 @@ func (m *PlanActionStatus) validateBodyParams(formats strfmt.Registry) error {
 }
 
 func (m *PlanActionStatus) validateExtraInputsSchemaPolicy(formats strfmt.Registry) error {
-	if swag.IsZero(m.ExtraInputsSchemaPolicy) { // not required
+	if typeutils.IsZero(m.ExtraInputsSchemaPolicy) { // not required
 		return nil
 	}
 
@@ -210,7 +211,7 @@ func (m *PlanActionStatus) contextValidateBodyImage(ctx context.Context, formats
 
 	if m.BodyImage != nil {
 
-		if swag.IsZero(m.BodyImage) { // not required
+		if typeutils.IsZero(m.BodyImage) { // not required
 			return nil
 		}
 
@@ -237,7 +238,7 @@ func (m *PlanActionStatus) contextValidateBodyOutputs(ctx context.Context, forma
 
 		if m.BodyOutputs[i] != nil {
 
-			if swag.IsZero(m.BodyOutputs[i]) { // not required
+			if typeutils.IsZero(m.BodyOutputs[i]) { // not required
 				return nil
 			}
 
@@ -266,7 +267,7 @@ func (m *PlanActionStatus) contextValidateBodyParams(ctx context.Context, format
 
 		if m.BodyParams[i] != nil {
 
-			if swag.IsZero(m.BodyParams[i]) { // not required
+			if typeutils.IsZero(m.BodyParams[i]) { // not required
 				return nil
 			}
 
@@ -293,7 +294,7 @@ func (m *PlanActionStatus) contextValidateExtraInputsSchemaPolicy(ctx context.Co
 
 	if m.ExtraInputsSchemaPolicy != nil {
 
-		if swag.IsZero(m.ExtraInputsSchemaPolicy) { // not required
+		if typeutils.IsZero(m.ExtraInputsSchemaPolicy) { // not required
 			return nil
 		}
 
@@ -319,13 +320,13 @@ func (m *PlanActionStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanActionStatus) UnmarshalBinary(b []byte) error {
 	var res PlanActionStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

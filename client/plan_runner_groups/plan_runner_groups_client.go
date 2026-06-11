@@ -3,7 +3,9 @@
 package plan_runner_groups
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new plan runner groups API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new plan runner groups API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new plan runner groups API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,43 +45,92 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for plan runner groups API
+Client for plan runner groups API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// ApplyPlanrunnergroup create or update a plan runner group.
 	ApplyPlanrunnergroup(params *ApplyPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyPlanrunnergroupOK, error)
 
+	// ApplyPlanrunnergroupContext create or update a plan runner group.
+	ApplyPlanrunnergroupContext(ctx context.Context, params *ApplyPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyPlanrunnergroupOK, error)
+
+	// DeletePlanrunnergroup delete a plan runner group.
 	DeletePlanrunnergroup(params *DeletePlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanrunnergroupOK, error)
 
+	// DeletePlanrunnergroupContext delete a plan runner group.
+	DeletePlanrunnergroupContext(ctx context.Context, params *DeletePlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanrunnergroupOK, error)
+
+	// GetPlanrunnergroup get a plan runner group.
 	GetPlanrunnergroup(params *GetPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupOK, error)
 
+	// GetPlanrunnergroupContext get a plan runner group.
+	GetPlanrunnergroupContext(ctx context.Context, params *GetPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupOK, error)
+
+	// GetPlanrunnergroupSettings get plan runner group settings.
 	GetPlanrunnergroupSettings(params *GetPlanrunnergroupSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupSettingsOK, error)
 
+	// GetPlanrunnergroupSettingsContext get plan runner group settings.
+	GetPlanrunnergroupSettingsContext(ctx context.Context, params *GetPlanrunnergroupSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupSettingsOK, error)
+
+	// GetPrgDesiredImages desired image set for a plan runner group.
 	GetPrgDesiredImages(params *GetPrgDesiredImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrgDesiredImagesOK, error)
 
+	// GetPrgDesiredImagesContext desired image set for a plan runner group.
+	GetPrgDesiredImagesContext(ctx context.Context, params *GetPrgDesiredImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrgDesiredImagesOK, error)
+
+	// ListPlanrunnergroup list plan runner groups.
 	ListPlanrunnergroup(params *ListPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanrunnergroupOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// ListPlanrunnergroupContext list plan runner groups.
+	ListPlanrunnergroupContext(ctx context.Context, params *ListPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanrunnergroupOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-ApplyPlanrunnergroup creates or update a plan runner group
+ApplyPlanrunnergroupcreates or update a plan runner group.
 
-Creates or updates a plan runner group with the provided parameters.
+Creates or updates a plan runner group with the provided parameters..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ApplyPlanrunnergroupContext] instead.
 */
 func (a *Client) ApplyPlanrunnergroup(params *ApplyPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyPlanrunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ApplyPlanrunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ApplyPlanrunnergroupContextcreates or update a plan runner group.
+
+Creates or updates a plan runner group with the provided parameters..
+
+Do not use the deprecated [ApplyPlanrunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ApplyPlanrunnergroupContext(ctx context.Context, params *ApplyPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApplyPlanrunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewApplyPlanrunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "apply-planrunnergroup",
 		Method:             "PUT",
@@ -88,13 +141,14 @@ func (a *Client) ApplyPlanrunnergroup(params *ApplyPlanrunnergroupParams, authIn
 		Params:             params,
 		Reader:             &ApplyPlanrunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -115,15 +169,39 @@ func (a *Client) ApplyPlanrunnergroup(params *ApplyPlanrunnergroupParams, authIn
 }
 
 /*
-DeletePlanrunnergroup deletes a plan runner group
+DeletePlanrunnergroupdeletes a plan runner group.
 
-Delete a given plan runner group.
+Delete a given plan runner group..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeletePlanrunnergroupContext] instead.
 */
 func (a *Client) DeletePlanrunnergroup(params *DeletePlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanrunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeletePlanrunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeletePlanrunnergroupContextdeletes a plan runner group.
+
+Delete a given plan runner group..
+
+Do not use the deprecated [DeletePlanrunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeletePlanrunnergroupContext(ctx context.Context, params *DeletePlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanrunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeletePlanrunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-planrunnergroup",
 		Method:             "DELETE",
@@ -134,13 +212,14 @@ func (a *Client) DeletePlanrunnergroup(params *DeletePlanrunnergroupParams, auth
 		Params:             params,
 		Reader:             &DeletePlanrunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -161,15 +240,39 @@ func (a *Client) DeletePlanrunnergroup(params *DeletePlanrunnergroupParams, auth
 }
 
 /*
-GetPlanrunnergroup gets a plan runner group
+GetPlanrunnergroupgets a plan runner group.
 
-Fetch the details about a given plan runner group.
+Fetch the details about a given plan runner group..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetPlanrunnergroupContext] instead.
 */
 func (a *Client) GetPlanrunnergroup(params *GetPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetPlanrunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetPlanrunnergroupContextgets a plan runner group.
+
+Fetch the details about a given plan runner group..
+
+Do not use the deprecated [GetPlanrunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetPlanrunnergroupContext(ctx context.Context, params *GetPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetPlanrunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-planrunnergroup",
 		Method:             "GET",
@@ -180,13 +283,14 @@ func (a *Client) GetPlanrunnergroup(params *GetPlanrunnergroupParams, authInfo r
 		Params:             params,
 		Reader:             &GetPlanrunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -207,15 +311,39 @@ func (a *Client) GetPlanrunnergroup(params *GetPlanrunnergroupParams, authInfo r
 }
 
 /*
-GetPlanrunnergroupSettings gets plan runner group settings
+GetPlanrunnergroupSettingsgets plan runner group settings.
 
-Returns cluster eligibility information with nested plan runner group data.
+Returns cluster eligibility information with nested plan runner group data..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetPlanrunnergroupSettingsContext] instead.
 */
 func (a *Client) GetPlanrunnergroupSettings(params *GetPlanrunnergroupSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupSettingsOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetPlanrunnergroupSettingsContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetPlanrunnergroupSettingsContextgets plan runner group settings.
+
+Returns cluster eligibility information with nested plan runner group data..
+
+Do not use the deprecated [GetPlanrunnergroupSettingsParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetPlanrunnergroupSettingsContext(ctx context.Context, params *GetPlanrunnergroupSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanrunnergroupSettingsOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetPlanrunnergroupSettingsParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-planrunnergroup-settings",
 		Method:             "GET",
@@ -226,13 +354,14 @@ func (a *Client) GetPlanrunnergroupSettings(params *GetPlanrunnergroupSettingsPa
 		Params:             params,
 		Reader:             &GetPlanrunnergroupSettingsReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -253,15 +382,39 @@ func (a *Client) GetPlanrunnergroupSettings(params *GetPlanrunnergroupSettingsPa
 }
 
 /*
-GetPrgDesiredImages desireds image set for a plan runner group
+GetPrgDesiredImagesdesireds image set for a plan runner group.
 
-Returns the set of literal \image refs declared by
+Returns the set of literal \image refs declared by.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetPrgDesiredImagesContext] instead.
 */
 func (a *Client) GetPrgDesiredImages(params *GetPrgDesiredImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrgDesiredImagesOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetPrgDesiredImagesContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetPrgDesiredImagesContextdesireds image set for a plan runner group.
+
+Returns the set of literal \image refs declared by.
+
+Do not use the deprecated [GetPrgDesiredImagesParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetPrgDesiredImagesContext(ctx context.Context, params *GetPrgDesiredImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrgDesiredImagesOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetPrgDesiredImagesParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-prg-desired-images",
 		Method:             "GET",
@@ -272,13 +425,14 @@ func (a *Client) GetPrgDesiredImages(params *GetPrgDesiredImagesParams, authInfo
 		Params:             params,
 		Reader:             &GetPrgDesiredImagesReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -299,15 +453,39 @@ func (a *Client) GetPrgDesiredImages(params *GetPrgDesiredImagesParams, authInfo
 }
 
 /*
-ListPlanrunnergroup lists plan runner groups
+ListPlanrunnergrouplists plan runner groups.
 
-List PlanRunnerGroups.
+List PlanRunnerGroups..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.ListPlanrunnergroupContext] instead.
 */
 func (a *Client) ListPlanrunnergroup(params *ListPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanrunnergroupOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.ListPlanrunnergroupContext(ctx, params, authInfo, opts...)
+}
+
+/*
+ListPlanrunnergroupContextlists plan runner groups.
+
+List PlanRunnerGroups..
+
+Do not use the deprecated [ListPlanrunnergroupParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) ListPlanrunnergroupContext(ctx context.Context, params *ListPlanrunnergroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPlanrunnergroupOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewListPlanrunnergroupParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "list-planrunnergroup",
 		Method:             "GET",
@@ -318,13 +496,14 @@ func (a *Client) ListPlanrunnergroup(params *ListPlanrunnergroupParams, authInfo
 		Params:             params,
 		Reader:             &ListPlanrunnergroupReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -345,6 +524,14 @@ func (a *Client) ListPlanrunnergroup(params *ListPlanrunnergroupParams, authInfo
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [PlanRunnerGroupsParams].
+	ctx context.Context
 }

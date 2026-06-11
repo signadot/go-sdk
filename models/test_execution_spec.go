@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TestExecutionSpec test execution spec
@@ -52,7 +53,7 @@ func (m *TestExecutionSpec) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionSpec) validateExecutionContext(formats strfmt.Registry) error {
-	if swag.IsZero(m.ExecutionContext) { // not required
+	if typeutils.IsZero(m.ExecutionContext) { // not required
 		return nil
 	}
 
@@ -75,7 +76,7 @@ func (m *TestExecutionSpec) validateExecutionContext(formats strfmt.Registry) er
 }
 
 func (m *TestExecutionSpec) validateExternal(formats strfmt.Registry) error {
-	if swag.IsZero(m.External) { // not required
+	if typeutils.IsZero(m.External) { // not required
 		return nil
 	}
 
@@ -98,7 +99,7 @@ func (m *TestExecutionSpec) validateExternal(formats strfmt.Registry) error {
 }
 
 func (m *TestExecutionSpec) validateHosted(formats strfmt.Registry) error {
-	if swag.IsZero(m.Hosted) { // not required
+	if typeutils.IsZero(m.Hosted) { // not required
 		return nil
 	}
 
@@ -146,7 +147,7 @@ func (m *TestExecutionSpec) contextValidateExecutionContext(ctx context.Context,
 
 	if m.ExecutionContext != nil {
 
-		if swag.IsZero(m.ExecutionContext) { // not required
+		if typeutils.IsZero(m.ExecutionContext) { // not required
 			return nil
 		}
 
@@ -171,7 +172,7 @@ func (m *TestExecutionSpec) contextValidateExternal(ctx context.Context, formats
 
 	if m.External != nil {
 
-		if swag.IsZero(m.External) { // not required
+		if typeutils.IsZero(m.External) { // not required
 			return nil
 		}
 
@@ -196,7 +197,7 @@ func (m *TestExecutionSpec) contextValidateHosted(ctx context.Context, formats s
 
 	if m.Hosted != nil {
 
-		if swag.IsZero(m.Hosted) { // not required
+		if typeutils.IsZero(m.Hosted) { // not required
 			return nil
 		}
 
@@ -222,13 +223,13 @@ func (m *TestExecutionSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TestExecutionSpec) UnmarshalBinary(b []byte) error {
 	var res TestExecutionSpec
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

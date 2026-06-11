@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCancelPlanExecutionParams() *CancelPlanExecutionParams {
-	return &CancelPlanExecutionParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewCancelPlanExecutionParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewCancelPlanExecutionParamsWithTimeout creates a new CancelPlanExecutionParams object
 // with the ability to set a timeout on a request.
 func NewCancelPlanExecutionParamsWithTimeout(timeout time.Duration) *CancelPlanExecutionParams {
 	return &CancelPlanExecutionParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewCancelPlanExecutionParamsWithContext creates a new CancelPlanExecutionParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CancelPlanExecutionParams].
 func NewCancelPlanExecutionParamsWithContext(ctx context.Context) *CancelPlanExecutionParams {
 	return &CancelPlanExecutionParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type CancelPlanExecutionParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the cancel plan execution params (not the query body).
@@ -90,65 +94,68 @@ func (o *CancelPlanExecutionParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the cancel plan execution params
+// WithTimeout adds the timeout to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) WithTimeout(timeout time.Duration) *CancelPlanExecutionParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the cancel plan execution params
+// SetTimeout adds the timeout to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the cancel plan execution params
+// WithContext adds the context to the cancel plan execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CancelPlanExecutionParams].
 func (o *CancelPlanExecutionParams) WithContext(ctx context.Context) *CancelPlanExecutionParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the cancel plan execution params
+// SetContext adds the context to the cancel plan execution params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [CancelPlanExecutionParams].
 func (o *CancelPlanExecutionParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the cancel plan execution params
+// WithHTTPClient adds the HTTPClient to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) WithHTTPClient(client *http.Client) *CancelPlanExecutionParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the cancel plan execution params
+// SetHTTPClient adds the HTTPClient to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithExecutionID adds the executionID to the cancel plan execution params
+// WithExecutionID adds the executionID to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) WithExecutionID(executionID string) *CancelPlanExecutionParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the cancel plan execution params
+// SetExecutionID adds the executionId to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the cancel plan execution params
+// WithOrgName adds the orgName to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) WithOrgName(orgName string) *CancelPlanExecutionParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the cancel plan execution params
+// SetOrgName adds the orgName to the cancel plan execution params.
 func (o *CancelPlanExecutionParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *CancelPlanExecutionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

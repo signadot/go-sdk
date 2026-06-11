@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // TrafficmodelsBy trafficmodels by
@@ -48,7 +49,7 @@ func (m *TrafficmodelsBy) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TrafficmodelsBy) validateDirection(formats strfmt.Registry) error {
-	if swag.IsZero(m.Direction) { // not required
+	if typeutils.IsZero(m.Direction) { // not required
 		return nil
 	}
 
@@ -69,7 +70,7 @@ func (m *TrafficmodelsBy) validateDirection(formats strfmt.Registry) error {
 }
 
 func (m *TrafficmodelsBy) validateKind(formats strfmt.Registry) error {
-	if swag.IsZero(m.Kind) { // not required
+	if typeutils.IsZero(m.Kind) { // not required
 		return nil
 	}
 
@@ -109,7 +110,7 @@ func (m *TrafficmodelsBy) ContextValidate(ctx context.Context, formats strfmt.Re
 
 func (m *TrafficmodelsBy) contextValidateDirection(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Direction) { // not required
+	if typeutils.IsZero(m.Direction) { // not required
 		return nil
 	}
 
@@ -131,7 +132,7 @@ func (m *TrafficmodelsBy) contextValidateDirection(ctx context.Context, formats 
 
 func (m *TrafficmodelsBy) contextValidateKind(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Kind) { // not required
+	if typeutils.IsZero(m.Kind) { // not required
 		return nil
 	}
 
@@ -156,13 +157,13 @@ func (m *TrafficmodelsBy) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TrafficmodelsBy) UnmarshalBinary(b []byte) error {
 	var res TrafficmodelsBy
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

@@ -3,7 +3,9 @@
 package plans
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,11 +13,12 @@ import (
 )
 
 // New creates a new plans API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
+func New(transport runtime.ContextualTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
 // New creates a new plans API client with basic auth credentials.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -29,6 +32,7 @@ func NewClientWithBasicAuth(host, basePath, scheme, user, password string) Clien
 }
 
 // New creates a new plans API client with a bearer token for authentication.
+//
 // It takes the following parameters:
 // - host: http host (github.com).
 // - basePath: any base path for the API client ("/v1", "/v3").
@@ -41,41 +45,86 @@ func NewClientWithBearerToken(host, basePath, scheme, bearerToken string) Client
 }
 
 /*
-Client for plans API
+Client for plans API.
 */
 type Client struct {
-	transport runtime.ClientTransport
+	transport runtime.ContextualTransport
 	formats   strfmt.Registry
 }
 
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
-// ClientService is the interface for Client methods
+// ClientService is the interface for Client methods.
 type ClientService interface {
+
+	// CompilePlan compile a plan from a prompt.
 	CompilePlan(params *CompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CompilePlanOK, error)
 
+	// CompilePlanContext compile a plan from a prompt.
+	CompilePlanContext(ctx context.Context, params *CompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CompilePlanOK, error)
+
+	// CreatePlan create a plan.
 	CreatePlan(params *CreatePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanOK, error)
 
+	// CreatePlanContext create a plan.
+	CreatePlanContext(ctx context.Context, params *CreatePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanOK, error)
+
+	// DeletePlan delete a plan.
 	DeletePlan(params *DeletePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanOK, error)
 
+	// DeletePlanContext delete a plan.
+	DeletePlanContext(ctx context.Context, params *DeletePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanOK, error)
+
+	// GetPlan get a plan.
 	GetPlan(params *GetPlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanOK, error)
 
+	// GetPlanContext get a plan.
+	GetPlanContext(ctx context.Context, params *GetPlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanOK, error)
+
+	// RecompilePlan recompile a plan.
 	RecompilePlan(params *RecompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecompilePlanOK, error)
 
-	SetTransport(transport runtime.ClientTransport)
+	// RecompilePlanContext recompile a plan.
+	RecompilePlanContext(ctx context.Context, params *RecompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecompilePlanOK, error)
+
+	SetTransport(transport runtime.ContextualTransport)
 }
 
 /*
-CompilePlan compiles a plan from a prompt
+CompilePlancompiles a plan from a prompt.
 
-Compiles a natural-language prompt into a runnable plan
+Compiles a natural-language prompt into a runnable plan.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CompilePlanContext] instead.
 */
 func (a *Client) CompilePlan(params *CompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CompilePlanOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CompilePlanContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CompilePlanContextcompiles a plan from a prompt.
+
+Compiles a natural-language prompt into a runnable plan.
+
+Do not use the deprecated [CompilePlanParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CompilePlanContext(ctx context.Context, params *CompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CompilePlanOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCompilePlanParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "compile-plan",
 		Method:             "POST",
@@ -86,13 +135,14 @@ func (a *Client) CompilePlan(params *CompilePlanParams, authInfo runtime.ClientA
 		Params:             params,
 		Reader:             &CompilePlanReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -113,15 +163,39 @@ func (a *Client) CompilePlan(params *CompilePlanParams, authInfo runtime.ClientA
 }
 
 /*
-CreatePlan creates a plan
+CreatePlancreates a plan.
 
-Create a plan from a raw spec. Each step's action may be supplied either fully embedded (body, params, outputs, etc. inline) or by reference — set only `action.actionID` and the server hydrates the contents from the registered action.
+Create a plan from a raw spec. Each step's action may be supplied either fully embedded (body, params, outputs, etc. inline) or by reference — set only `action.actionID` and the server hydrates the contents from the registered action..
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.CreatePlanContext] instead.
 */
 func (a *Client) CreatePlan(params *CreatePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.CreatePlanContext(ctx, params, authInfo, opts...)
+}
+
+/*
+CreatePlanContextcreates a plan.
+
+Create a plan from a raw spec. Each step's action may be supplied either fully embedded (body, params, outputs, etc. inline) or by reference — set only `action.actionID` and the server hydrates the contents from the registered action..
+
+Do not use the deprecated [CreatePlanParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) CreatePlanContext(ctx context.Context, params *CreatePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePlanOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewCreatePlanParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "create-plan",
 		Method:             "POST",
@@ -132,13 +206,14 @@ func (a *Client) CreatePlan(params *CreatePlanParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &CreatePlanReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -159,15 +234,39 @@ func (a *Client) CreatePlan(params *CreatePlanParams, authInfo runtime.ClientAut
 }
 
 /*
-DeletePlan deletes a plan
+DeletePlandeletes a plan.
 
-Delete a plan by ID
+Delete a plan by ID.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.DeletePlanContext] instead.
 */
 func (a *Client) DeletePlan(params *DeletePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.DeletePlanContext(ctx, params, authInfo, opts...)
+}
+
+/*
+DeletePlanContextdeletes a plan.
+
+Delete a plan by ID.
+
+Do not use the deprecated [DeletePlanParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) DeletePlanContext(ctx context.Context, params *DeletePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePlanOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewDeletePlanParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "delete-plan",
 		Method:             "DELETE",
@@ -178,13 +277,14 @@ func (a *Client) DeletePlan(params *DeletePlanParams, authInfo runtime.ClientAut
 		Params:             params,
 		Reader:             &DeletePlanReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -205,15 +305,39 @@ func (a *Client) DeletePlan(params *DeletePlanParams, authInfo runtime.ClientAut
 }
 
 /*
-GetPlan gets a plan
+GetPlangets a plan.
 
-Get a single plan by ID
+Get a single plan by ID.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.GetPlanContext] instead.
 */
 func (a *Client) GetPlan(params *GetPlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.GetPlanContext(ctx, params, authInfo, opts...)
+}
+
+/*
+GetPlanContextgets a plan.
+
+Get a single plan by ID.
+
+Do not use the deprecated [GetPlanParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) GetPlanContext(ctx context.Context, params *GetPlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPlanOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewGetPlanParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "get-plan",
 		Method:             "GET",
@@ -224,13 +348,14 @@ func (a *Client) GetPlan(params *GetPlanParams, authInfo runtime.ClientAuthInfoW
 		Params:             params,
 		Reader:             &GetPlanReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -251,15 +376,39 @@ func (a *Client) GetPlan(params *GetPlanParams, authInfo runtime.ClientAuthInfoW
 }
 
 /*
-RecompilePlan recompiles a plan
+RecompilePlanrecompiles a plan.
 
-Re-runs LLM compilation using the source plan's prompt, creating a new plan linked to the original
+Re-runs LLM compilation using the source plan's prompt, creating a new plan linked to the original.
+
+This method does not support injected context.
+However, timeout and opentracing contexts are honored whenever enabled.
+
+If you need to pass a specific context, use [Client.RecompilePlanContext] instead.
 */
 func (a *Client) RecompilePlan(params *RecompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecompilePlanOK, error) {
+	var ctx context.Context
+	if params.inner.ctx != nil {
+		ctx = params.inner.ctx
+	} else {
+		ctx = context.Background()
+	}
+
+	return a.RecompilePlanContext(ctx, params, authInfo, opts...)
+}
+
+/*
+RecompilePlanContextrecompiles a plan.
+
+Re-runs LLM compilation using the source plan's prompt, creating a new plan linked to the original.
+
+Do not use the deprecated [RecompilePlanParams.Context] with this method: it would be ignored.
+*/
+func (a *Client) RecompilePlanContext(ctx context.Context, params *RecompilePlanParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecompilePlanOK, error) {
 	// NOTE: parameters are not validated before sending
 	if params == nil {
 		params = NewRecompilePlanParams()
 	}
+
 	op := &runtime.ClientOperation{
 		ID:                 "recompile-plan",
 		Method:             "POST",
@@ -270,13 +419,14 @@ func (a *Client) RecompilePlan(params *RecompilePlanParams, authInfo runtime.Cli
 		Params:             params,
 		Reader:             &RecompilePlanReader{formats: a.formats},
 		AuthInfo:           authInfo,
-		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
+
 	for _, opt := range opts {
 		opt(op)
 	}
-	result, err := a.transport.Submit(op)
+
+	result, err := a.transport.SubmitContext(ctx, op)
 	if err != nil {
 		return nil, err
 	}
@@ -297,6 +447,14 @@ func (a *Client) RecompilePlan(params *RecompilePlanParams, authInfo runtime.Cli
 }
 
 // SetTransport changes the transport on the client
-func (a *Client) SetTransport(transport runtime.ClientTransport) {
+func (a *Client) SetTransport(transport runtime.ContextualTransport) {
 	a.transport = transport
+}
+
+// innerParams captures internal fields so they don't conflict with user-supplied parameters.
+type innerParams struct {
+	timeout time.Duration
+
+	// Deprecated: use the operation call with context to pass the context instead of [PlansParams].
+	ctx context.Context
 }

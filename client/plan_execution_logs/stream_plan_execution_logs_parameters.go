@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/conv"
 )
 
 // NewStreamPlanExecutionLogsParams creates a new StreamPlanExecutionLogsParams object,
@@ -21,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewStreamPlanExecutionLogsParams() *StreamPlanExecutionLogsParams {
-	return &StreamPlanExecutionLogsParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewStreamPlanExecutionLogsParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewStreamPlanExecutionLogsParamsWithTimeout creates a new StreamPlanExecutionLogsParams object
 // with the ability to set a timeout on a request.
 func NewStreamPlanExecutionLogsParamsWithTimeout(timeout time.Duration) *StreamPlanExecutionLogsParams {
 	return &StreamPlanExecutionLogsParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewStreamPlanExecutionLogsParamsWithContext creates a new StreamPlanExecutionLogsParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [StreamPlanExecutionLogsParams].
 func NewStreamPlanExecutionLogsParamsWithContext(ctx context.Context) *StreamPlanExecutionLogsParams {
 	return &StreamPlanExecutionLogsParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -83,9 +87,9 @@ type StreamPlanExecutionLogsParams struct {
 	*/
 	TailLines *int64
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the stream plan execution logs params (not the query body).
@@ -103,87 +107,90 @@ func (o *StreamPlanExecutionLogsParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the stream plan execution logs params
+// WithTimeout adds the timeout to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) WithTimeout(timeout time.Duration) *StreamPlanExecutionLogsParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the stream plan execution logs params
+// SetTimeout adds the timeout to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the stream plan execution logs params
+// WithContext adds the context to the stream plan execution logs params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [StreamPlanExecutionLogsParams].
 func (o *StreamPlanExecutionLogsParams) WithContext(ctx context.Context) *StreamPlanExecutionLogsParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the stream plan execution logs params
+// SetContext adds the context to the stream plan execution logs params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [StreamPlanExecutionLogsParams].
 func (o *StreamPlanExecutionLogsParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the stream plan execution logs params
+// WithHTTPClient adds the HTTPClient to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) WithHTTPClient(client *http.Client) *StreamPlanExecutionLogsParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the stream plan execution logs params
+// SetHTTPClient adds the HTTPClient to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithCursor adds the cursor to the stream plan execution logs params
+// WithCursor adds the cursor to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) WithCursor(cursor *string) *StreamPlanExecutionLogsParams {
 	o.SetCursor(cursor)
 	return o
 }
 
-// SetCursor adds the cursor to the stream plan execution logs params
+// SetCursor adds the cursor to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) SetCursor(cursor *string) {
 	o.Cursor = cursor
 }
 
-// WithExecutionID adds the executionID to the stream plan execution logs params
+// WithExecutionID adds the executionID to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) WithExecutionID(executionID string) *StreamPlanExecutionLogsParams {
 	o.SetExecutionID(executionID)
 	return o
 }
 
-// SetExecutionID adds the executionId to the stream plan execution logs params
+// SetExecutionID adds the executionId to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) SetExecutionID(executionID string) {
 	o.ExecutionID = executionID
 }
 
-// WithOrgName adds the orgName to the stream plan execution logs params
+// WithOrgName adds the orgName to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) WithOrgName(orgName string) *StreamPlanExecutionLogsParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the stream plan execution logs params
+// SetOrgName adds the orgName to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithTailLines adds the tailLines to the stream plan execution logs params
+// WithTailLines adds the tailLines to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) WithTailLines(tailLines *int64) *StreamPlanExecutionLogsParams {
 	o.SetTailLines(tailLines)
 	return o
 }
 
-// SetTailLines adds the tailLines to the stream plan execution logs params
+// SetTailLines adds the tailLines to the stream plan execution logs params.
 func (o *StreamPlanExecutionLogsParams) SetTailLines(tailLines *int64) {
 	o.TailLines = tailLines
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *StreamPlanExecutionLogsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error
@@ -223,7 +230,7 @@ func (o *StreamPlanExecutionLogsParams) WriteToRequest(r runtime.ClientRequest, 
 		if o.TailLines != nil {
 			qrTailLines = *o.TailLines
 		}
-		qTailLines := swag.FormatInt64(qrTailLines)
+		qTailLines := conv.FormatInteger(qrTailLines)
 		if qTailLines != "" {
 
 			if err := r.SetQueryParam("tailLines", qTailLines); err != nil {

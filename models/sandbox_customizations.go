@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxCustomizations sandbox customizations
@@ -50,12 +51,12 @@ func (m *SandboxCustomizations) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxCustomizations) validateEnv(formats strfmt.Registry) error {
-	if swag.IsZero(m.Env) { // not required
+	if typeutils.IsZero(m.Env) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Env); i++ {
-		if swag.IsZero(m.Env[i]) { // not required
+		if typeutils.IsZero(m.Env[i]) { // not required
 			continue
 		}
 
@@ -80,12 +81,12 @@ func (m *SandboxCustomizations) validateEnv(formats strfmt.Registry) error {
 }
 
 func (m *SandboxCustomizations) validateImages(formats strfmt.Registry) error {
-	if swag.IsZero(m.Images) { // not required
+	if typeutils.IsZero(m.Images) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.Images); i++ {
-		if swag.IsZero(m.Images[i]) { // not required
+		if typeutils.IsZero(m.Images[i]) { // not required
 			continue
 		}
 
@@ -110,7 +111,7 @@ func (m *SandboxCustomizations) validateImages(formats strfmt.Registry) error {
 }
 
 func (m *SandboxCustomizations) validatePatch(formats strfmt.Registry) error {
-	if swag.IsZero(m.Patch) { // not required
+	if typeutils.IsZero(m.Patch) { // not required
 		return nil
 	}
 
@@ -160,7 +161,7 @@ func (m *SandboxCustomizations) contextValidateEnv(ctx context.Context, formats 
 
 		if m.Env[i] != nil {
 
-			if swag.IsZero(m.Env[i]) { // not required
+			if typeutils.IsZero(m.Env[i]) { // not required
 				return nil
 			}
 
@@ -189,7 +190,7 @@ func (m *SandboxCustomizations) contextValidateImages(ctx context.Context, forma
 
 		if m.Images[i] != nil {
 
-			if swag.IsZero(m.Images[i]) { // not required
+			if typeutils.IsZero(m.Images[i]) { // not required
 				return nil
 			}
 
@@ -216,7 +217,7 @@ func (m *SandboxCustomizations) contextValidatePatch(ctx context.Context, format
 
 	if m.Patch != nil {
 
-		if swag.IsZero(m.Patch) { // not required
+		if typeutils.IsZero(m.Patch) { // not required
 			return nil
 		}
 
@@ -242,13 +243,13 @@ func (m *SandboxCustomizations) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxCustomizations) UnmarshalBinary(b []byte) error {
 	var res SandboxCustomizations
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

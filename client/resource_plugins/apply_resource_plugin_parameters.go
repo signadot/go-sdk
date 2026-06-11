@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
 	"github.com/signadot/go-sdk/models"
 )
 
@@ -22,24 +21,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewApplyResourcePluginParams() *ApplyResourcePluginParams {
-	return &ApplyResourcePluginParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewApplyResourcePluginParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewApplyResourcePluginParamsWithTimeout creates a new ApplyResourcePluginParams object
 // with the ability to set a timeout on a request.
 func NewApplyResourcePluginParamsWithTimeout(timeout time.Duration) *ApplyResourcePluginParams {
 	return &ApplyResourcePluginParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewApplyResourcePluginParamsWithContext creates a new ApplyResourcePluginParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplyResourcePluginParams].
 func NewApplyResourcePluginParamsWithContext(ctx context.Context) *ApplyResourcePluginParams {
 	return &ApplyResourcePluginParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -78,9 +81,9 @@ type ApplyResourcePluginParams struct {
 	*/
 	PluginName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the apply resource plugin params (not the query body).
@@ -98,76 +101,79 @@ func (o *ApplyResourcePluginParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the apply resource plugin params
+// WithTimeout adds the timeout to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) WithTimeout(timeout time.Duration) *ApplyResourcePluginParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the apply resource plugin params
+// SetTimeout adds the timeout to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the apply resource plugin params
+// WithContext adds the context to the apply resource plugin params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplyResourcePluginParams].
 func (o *ApplyResourcePluginParams) WithContext(ctx context.Context) *ApplyResourcePluginParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the apply resource plugin params
+// SetContext adds the context to the apply resource plugin params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [ApplyResourcePluginParams].
 func (o *ApplyResourcePluginParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the apply resource plugin params
+// WithHTTPClient adds the HTTPClient to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) WithHTTPClient(client *http.Client) *ApplyResourcePluginParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the apply resource plugin params
+// SetHTTPClient adds the HTTPClient to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithData adds the data to the apply resource plugin params
+// WithData adds the data to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) WithData(data *models.ResourcePlugin) *ApplyResourcePluginParams {
 	o.SetData(data)
 	return o
 }
 
-// SetData adds the data to the apply resource plugin params
+// SetData adds the data to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) SetData(data *models.ResourcePlugin) {
 	o.Data = data
 }
 
-// WithOrgName adds the orgName to the apply resource plugin params
+// WithOrgName adds the orgName to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) WithOrgName(orgName string) *ApplyResourcePluginParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the apply resource plugin params
+// SetOrgName adds the orgName to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WithPluginName adds the pluginName to the apply resource plugin params
+// WithPluginName adds the pluginName to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) WithPluginName(pluginName string) *ApplyResourcePluginParams {
 	o.SetPluginName(pluginName)
 	return o
 }
 
-// SetPluginName adds the pluginName to the apply resource plugin params
+// SetPluginName adds the pluginName to the apply resource plugin params.
 func (o *ApplyResourcePluginParams) SetPluginName(pluginName string) {
 	o.PluginName = pluginName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *ApplyResourcePluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

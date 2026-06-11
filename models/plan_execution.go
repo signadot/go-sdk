@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanExecution plan execution
@@ -45,7 +46,7 @@ func (m *PlanExecution) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanExecution) validateSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.Spec) { // not required
+	if typeutils.IsZero(m.Spec) { // not required
 		return nil
 	}
 
@@ -68,7 +69,7 @@ func (m *PlanExecution) validateSpec(formats strfmt.Registry) error {
 }
 
 func (m *PlanExecution) validateStatus(formats strfmt.Registry) error {
-	if swag.IsZero(m.Status) { // not required
+	if typeutils.IsZero(m.Status) { // not required
 		return nil
 	}
 
@@ -112,7 +113,7 @@ func (m *PlanExecution) contextValidateSpec(ctx context.Context, formats strfmt.
 
 	if m.Spec != nil {
 
-		if swag.IsZero(m.Spec) { // not required
+		if typeutils.IsZero(m.Spec) { // not required
 			return nil
 		}
 
@@ -137,7 +138,7 @@ func (m *PlanExecution) contextValidateStatus(ctx context.Context, formats strfm
 
 	if m.Status != nil {
 
-		if swag.IsZero(m.Status) { // not required
+		if typeutils.IsZero(m.Status) { // not required
 			return nil
 		}
 
@@ -163,13 +164,13 @@ func (m *PlanExecution) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanExecution) UnmarshalBinary(b []byte) error {
 	var res PlanExecution
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

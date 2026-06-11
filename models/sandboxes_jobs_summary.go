@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxesJobsSummary sandboxes jobs summary
@@ -36,12 +37,12 @@ func (m *SandboxesJobsSummary) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxesJobsSummary) validatePhaseCounts(formats strfmt.Registry) error {
-	if swag.IsZero(m.PhaseCounts) { // not required
+	if typeutils.IsZero(m.PhaseCounts) { // not required
 		return nil
 	}
 
 	for i := 0; i < len(m.PhaseCounts); i++ {
-		if swag.IsZero(m.PhaseCounts[i]) { // not required
+		if typeutils.IsZero(m.PhaseCounts[i]) { // not required
 			continue
 		}
 
@@ -85,7 +86,7 @@ func (m *SandboxesJobsSummary) contextValidatePhaseCounts(ctx context.Context, f
 
 		if m.PhaseCounts[i] != nil {
 
-			if swag.IsZero(m.PhaseCounts[i]) { // not required
+			if typeutils.IsZero(m.PhaseCounts[i]) { // not required
 				return nil
 			}
 
@@ -113,13 +114,13 @@ func (m *SandboxesJobsSummary) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxesJobsSummary) UnmarshalBinary(b []byte) error {
 	var res SandboxesJobsSummary
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // PlanRunnerGroupStatus plan runner group status
@@ -35,7 +36,7 @@ func (m *PlanRunnerGroupStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PlanRunnerGroupStatus) validatePods(formats strfmt.Registry) error {
-	if swag.IsZero(m.Pods) { // not required
+	if typeutils.IsZero(m.Pods) { // not required
 		return nil
 	}
 
@@ -75,7 +76,7 @@ func (m *PlanRunnerGroupStatus) contextValidatePods(ctx context.Context, formats
 
 	if m.Pods != nil {
 
-		if swag.IsZero(m.Pods) { // not required
+		if typeutils.IsZero(m.Pods) { // not required
 			return nil
 		}
 
@@ -101,13 +102,13 @@ func (m *PlanRunnerGroupStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PlanRunnerGroupStatus) UnmarshalBinary(b []byte) error {
 	var res PlanRunnerGroupStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res

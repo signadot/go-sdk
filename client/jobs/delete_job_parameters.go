@@ -20,24 +20,28 @@ import (
 //
 // To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteJobParams() *DeleteJobParams {
-	return &DeleteJobParams{
-		timeout: cr.DefaultTimeout,
-	}
+	return NewDeleteJobParamsWithTimeout(cr.DefaultTimeout)
 }
 
 // NewDeleteJobParamsWithTimeout creates a new DeleteJobParams object
 // with the ability to set a timeout on a request.
 func NewDeleteJobParamsWithTimeout(timeout time.Duration) *DeleteJobParams {
 	return &DeleteJobParams{
-		timeout: timeout,
+		inner: innerParams{
+			timeout: timeout,
+		},
 	}
 }
 
 // NewDeleteJobParamsWithContext creates a new DeleteJobParams object
 // with the ability to set a context for a request.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteJobParams].
 func NewDeleteJobParamsWithContext(ctx context.Context) *DeleteJobParams {
 	return &DeleteJobParams{
-		Context: ctx,
+		inner: innerParams{
+			ctx: ctx,
+		},
 	}
 }
 
@@ -70,9 +74,9 @@ type DeleteJobParams struct {
 	*/
 	OrgName string
 
-	timeout    time.Duration
-	Context    context.Context
 	HTTPClient *http.Client
+
+	inner innerParams
 }
 
 // WithDefaults hydrates default values in the delete job params (not the query body).
@@ -90,65 +94,68 @@ func (o *DeleteJobParams) SetDefaults() {
 	// no default values defined for this parameter
 }
 
-// WithTimeout adds the timeout to the delete job params
+// WithTimeout adds the timeout to the delete job params.
 func (o *DeleteJobParams) WithTimeout(timeout time.Duration) *DeleteJobParams {
 	o.SetTimeout(timeout)
 	return o
 }
 
-// SetTimeout adds the timeout to the delete job params
+// SetTimeout adds the timeout to the delete job params.
 func (o *DeleteJobParams) SetTimeout(timeout time.Duration) {
-	o.timeout = timeout
+	o.inner.timeout = timeout
 }
 
-// WithContext adds the context to the delete job params
+// WithContext adds the context to the delete job params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteJobParams].
 func (o *DeleteJobParams) WithContext(ctx context.Context) *DeleteJobParams {
 	o.SetContext(ctx)
 	return o
 }
 
-// SetContext adds the context to the delete job params
+// SetContext adds the context to the delete job params.
+//
+// Deprecated: use the operation call with context to pass the context instead of [DeleteJobParams].
 func (o *DeleteJobParams) SetContext(ctx context.Context) {
-	o.Context = ctx
+	o.inner.ctx = ctx
 }
 
-// WithHTTPClient adds the HTTPClient to the delete job params
+// WithHTTPClient adds the HTTPClient to the delete job params.
 func (o *DeleteJobParams) WithHTTPClient(client *http.Client) *DeleteJobParams {
 	o.SetHTTPClient(client)
 	return o
 }
 
-// SetHTTPClient adds the HTTPClient to the delete job params
+// SetHTTPClient adds the HTTPClient to the delete job params.
 func (o *DeleteJobParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithJobName adds the jobName to the delete job params
+// WithJobName adds the jobName to the delete job params.
 func (o *DeleteJobParams) WithJobName(jobName string) *DeleteJobParams {
 	o.SetJobName(jobName)
 	return o
 }
 
-// SetJobName adds the jobName to the delete job params
+// SetJobName adds the jobName to the delete job params.
 func (o *DeleteJobParams) SetJobName(jobName string) {
 	o.JobName = jobName
 }
 
-// WithOrgName adds the orgName to the delete job params
+// WithOrgName adds the orgName to the delete job params.
 func (o *DeleteJobParams) WithOrgName(orgName string) *DeleteJobParams {
 	o.SetOrgName(orgName)
 	return o
 }
 
-// SetOrgName adds the orgName to the delete job params
+// SetOrgName adds the orgName to the delete job params.
 func (o *DeleteJobParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
-// WriteToRequest writes these params to a swagger request
+// WriteToRequest writes these params to a [runtime.ClientRequest].
 func (o *DeleteJobParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
-
-	if err := r.SetTimeout(o.timeout); err != nil {
+	if err := r.SetTimeout(o.inner.timeout); err != nil {
 		return err
 	}
 	var res []error

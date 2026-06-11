@@ -8,7 +8,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/typeutils"
 )
 
 // SandboxesForwardStatus sandboxes forward status
@@ -38,7 +39,7 @@ func (m *SandboxesForwardStatus) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SandboxesForwardStatus) validateTunnel(formats strfmt.Registry) error {
-	if swag.IsZero(m.Tunnel) { // not required
+	if typeutils.IsZero(m.Tunnel) { // not required
 		return nil
 	}
 
@@ -78,7 +79,7 @@ func (m *SandboxesForwardStatus) contextValidateTunnel(ctx context.Context, form
 
 	if m.Tunnel != nil {
 
-		if swag.IsZero(m.Tunnel) { // not required
+		if typeutils.IsZero(m.Tunnel) { // not required
 			return nil
 		}
 
@@ -104,13 +105,13 @@ func (m *SandboxesForwardStatus) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
-	return swag.WriteJSON(m)
+	return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *SandboxesForwardStatus) UnmarshalBinary(b []byte) error {
 	var res SandboxesForwardStatus
-	if err := swag.ReadJSON(b, &res); err != nil {
+	if err := jsonutils.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res
