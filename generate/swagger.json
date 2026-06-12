@@ -145,6 +145,53 @@
                 }
             }
         },
+        "/auth/providers": {
+            "post": {
+                "description": "Returns the ordered list of providers (email/password, social, SSO) the client should offer for this email's domain, plus an enforceSSO flag for direct redirect.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "List sign-in providers for an email",
+                "operationId": "auth-providers",
+                "parameters": [
+                    {
+                        "description": "Email to look up",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authproviders.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/authproviders.Response"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/meta/plans": {
             "get": {
                 "description": "Returns the JSON Schema for plans.PlanSpec, with descriptions",
@@ -3885,7 +3932,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "List all resource plugins under the specified Signadot org.",
+                "description": "List resource plugins under the specified Signadot org. By default returns only the highest-semver version of each plugin. Pass `?version=all` to expand the response into one row per published (name, version), sorted by name then semver-descending. `?version=latest` is accepted as an explicit alias for the default.",
                 "consumes": [
                     "application/json"
                 ],
@@ -3905,6 +3952,16 @@
                         "name": "orgName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "latest",
+                            "all"
+                        ],
+                        "type": "string",
+                        "description": "'latest' (default) returns only the highest-semver version of each plugin; 'all' returns every published version",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -3945,7 +4002,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get the specified resource plugin by name",
+                "description": "Get the specified resource plugin. Omit the version query parameter to get the latest version.",
                 "consumes": [
                     "application/json"
                 ],
@@ -3973,6 +4030,13 @@
                         "name": "pluginName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "1.2.0",
+                        "description": "Resource plugin version (semver); omit for latest",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -4008,7 +4072,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Apply a resource plugin. Updates are not supported at this time.",
+                "description": "Creates a new version of a resource plugin. The body's `name` field carries the wire form `bareName[@semver]` (e.g. `my-plugin@1.2.0`); its bare part must match the URL path name. A bare-name form (no `@`) publishes the default version `0.0.0`. Versions are immutable; PUTting an existing (name, version) pair returns 409. The version suffix must be a concrete semver; \"latest\" is only accepted on the read and delete query parameters.",
                 "consumes": [
                     "application/json"
                 ],
@@ -4038,13 +4102,89 @@
                         "required": true
                     },
                     {
-                        "description": "Request to create or update a resource plugin",
+                        "description": "Request to create a resource plugin version",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/ResourcePlugin"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a resource plugin version. Omit the version query parameter to delete the latest version. Deletion is blocked when any sandbox references the specific version being deleted.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ResourcePlugins"
+                ],
+                "summary": "Delete a resource plugin",
+                "operationId": "delete-resource-plugin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "mariadb-plugin",
+                        "description": "Resource plugin name",
+                        "name": "pluginName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-example": "1.2.0",
+                        "description": "Resource plugin version (semver); omit for latest",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -4073,14 +4213,16 @@
                         }
                     }
                 }
-            },
-            "delete": {
+            }
+        },
+        "/orgs/{orgName}/resource-plugins/{pluginName}/versions": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete the resource plugin by name",
+                "description": "List every published version of the named resource plugin.",
                 "consumes": [
                     "application/json"
                 ],
@@ -4090,8 +4232,8 @@
                 "tags": [
                     "ResourcePlugins"
                 ],
-                "summary": "Delete a resource plugin",
-                "operationId": "delete-resource-plugin",
+                "summary": "List versions of a resource plugin",
+                "operationId": "list-resource-plugin-versions",
                 "parameters": [
                     {
                         "type": "string",
@@ -4114,7 +4256,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/EmptyResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ResourcePlugin"
+                            }
                         }
                     },
                     "400": {
@@ -4931,7 +5076,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM.",
+                "description": "Returns a sandbox status explanation. In the default mode (mode=explain), generates a natural-language explanation using an LLM fed with cluster context. When mode=context, returns the assembled LLM messages (system prompt + user context) without calling the LLM. Both modes require the sandbox explain AI feature to be enabled, otherwise they return 403 (the assembled context contains sandbox metadata and is itself sensitive).",
                 "consumes": [
                     "application/json"
                 ],
@@ -4986,6 +5131,12 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -5257,6 +5408,611 @@
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/service-accounts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all service accounts for the org.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ServiceAccounts"
+                ],
+                "summary": "List service accounts",
+                "operationId": "list-service-accounts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ServiceAccount"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create a new service account (non-human principal) for the org.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ServiceAccounts"
+                ],
+                "summary": "Create a service account",
+                "operationId": "create-service-account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Service account (name + role required)",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ServiceAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ServiceAccount"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/service-accounts/{serviceAccountName}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a single service account by name.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ServiceAccounts"
+                ],
+                "summary": "Get a service account",
+                "operationId": "get-service-account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Service Account Name",
+                        "name": "serviceAccountName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ServiceAccount"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update the role and/or description of an existing service account. Name is immutable.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ServiceAccounts"
+                ],
+                "summary": "Update a service account",
+                "operationId": "update-service-account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Service Account Name",
+                        "name": "serviceAccountName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Service account (role required)",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ServiceAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ServiceAccount"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Hard-delete a service account. No cascade: API keys, devboxes, and other rows bound to this principal are left intact for an admin to clean up.",
+                "tags": [
+                    "ServiceAccounts"
+                ],
+                "summary": "Delete a service account",
+                "operationId": "delete-service-account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Service Account Name",
+                        "name": "serviceAccountName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/service-accounts/{serviceAccountName}/api-keys": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List the API keys bound to a service account (admin only).",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ApiKeys"
+                ],
+                "summary": "List a service account's API keys",
+                "operationId": "list-service-account-api-keys",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Service Account Name",
+                        "name": "serviceAccountName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ListApiKeysResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create an API key bound to a service account (admin only). The token is returned once.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ApiKeys"
+                ],
+                "summary": "Create a service-account API key",
+                "operationId": "create-service-account-api-key",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Service Account Name",
+                        "name": "serviceAccountName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Optional description",
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CreateApiKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ApiKey"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/service-accounts/{serviceAccountName}/api-keys/{apiKeyId}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a service-account-bound API key (admin only). The key must belong to the SA in the path.",
+                "tags": [
+                    "ApiKeys"
+                ],
+                "summary": "Delete a service-account API key",
+                "operationId": "delete-service-account-api-key",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Service Account Name",
+                        "name": "serviceAccountName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "API key public ID",
+                        "name": "apiKeyId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/settings/ai": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Returns the org-level configuration that gates AI-powered features.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Get AI feature settings",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/settings.AISettings"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/settings/ai/enabled": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Enables or disables AI-powered features org-wide. Per-feature flags are preserved but only take effect while this master switch is on.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Toggle the AI features master switch for the org",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Toggle",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/settings.SettingFlag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/settings/ai/features/sandbox-explain": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Enables or disables the sandbox status explain feature. Changing the value requires the master AI switch to be on; otherwise a change attempt returns 409. No-op writes (the value already equals the target) always succeed. The feature is effective only when both this flag and the master switch are on.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Toggle the sandbox status explain AI feature",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "my-company",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Toggle",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/settings.SettingFlag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -6209,9 +6965,201 @@
                     }
                 }
             }
+        },
+        "/orgs/{orgName}/users/{userId}/api-keys": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List the API keys bound to a user. Members may list only their own; admins any user's.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ApiKeys"
+                ],
+                "summary": "List a user's API keys",
+                "operationId": "list-user-api-keys",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User public ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ListApiKeysResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create an API key bound to a user. Members may create keys only for themselves; admins for any user. The token is returned once.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ApiKeys"
+                ],
+                "summary": "Create a user API key",
+                "operationId": "create-user-api-key",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User public ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Optional description",
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CreateApiKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ApiKey"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orgs/{orgName}/users/{userId}/api-keys/{apiKeyId}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete a user-bound API key. The key must belong to the user in the path.",
+                "tags": [
+                    "ApiKeys"
+                ],
+                "summary": "Delete a user API key",
+                "operationId": "delete-user-api-key",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Signadot Org Name",
+                        "name": "orgName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User public ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "API key public ID",
+                        "name": "apiKeyId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EmptyResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "ApiKey": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastUsedAt": {
+                    "type": "string"
+                },
+                "maskedValue": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "Cluster": {
             "type": "object",
             "properties": {
@@ -6305,6 +7253,15 @@
             "properties": {
                 "devboxId": {
                     "description": "Required: deterministic ID from user+metadata hash",
+                    "type": "string"
+                }
+            }
+        },
+        "CreateApiKeyRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Description is an optional human-readable description.",
                     "type": "string"
                 }
             }
@@ -6533,6 +7490,17 @@
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "ListApiKeysResponse": {
+            "type": "object",
+            "properties": {
+                "apiKeys": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ApiKey"
+                    }
                 }
             }
         },
@@ -7488,8 +8456,9 @@
                     "type": "string"
                 },
                 "name": {
-                    "description": "Name of the resource plugin",
-                    "type": "string"
+                    "description": "Plugin identity of the form `bareName[@semver]`. The bare-name\nform (no `@`) means the default version (0.0.0); responses\nfor plugins at the default version use this bare form for\nbackward compatibility with pre-versioning clients.",
+                    "type": "string",
+                    "example": "my-plugin@1.2.0"
                 },
                 "spec": {
                     "description": "Specification for the resource plugin",
@@ -7674,6 +8643,31 @@
                 },
                 "value": {
                     "description": "Value is the secret plaintext. Write-only: accepted on create/update,\nnever returned in any API response.",
+                    "type": "string"
+                }
+            }
+        },
+        "ServiceAccount": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "CreatedAt is when the service account was created. Read-only.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description is an optional human-readable description.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name is the unique identifier within the org.",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "Role is the authorization role for the service account: \"admin\" or\n\"member\".",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "UpdatedAt is when the service account was last updated. Read-only.",
                     "type": "string"
                 }
             }
@@ -8163,6 +9157,61 @@
                 }
             }
         },
+        "authproviders.Kind": {
+            "type": "string",
+            "enum": [
+                "email-password",
+                "google",
+                "github",
+                "sso"
+            ],
+            "x-enum-varnames": [
+                "KindEmailPassword",
+                "KindGoogle",
+                "KindGithub",
+                "KindSSO"
+            ]
+        },
+        "authproviders.Provider": {
+            "type": "object",
+            "properties": {
+                "connection": {
+                    "description": "Connection is the Auth0 connection name passed to loginWithRedirect.",
+                    "type": "string"
+                },
+                "kind": {
+                    "$ref": "#/definitions/authproviders.Kind"
+                },
+                "label": {
+                    "description": "Label is the default display label; the client may override.",
+                    "type": "string"
+                }
+            }
+        },
+        "authproviders.Request": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "authproviders.Response": {
+            "type": "object",
+            "properties": {
+                "enforceSSO": {
+                    "description": "EnforceSSO means the org requires SSO for this domain. When true,\nProviders contains only the SSO entry and the client should\nredirect immediately instead of showing the chooser.",
+                    "type": "boolean"
+                },
+                "providers": {
+                    "description": "Providers is the methods to render, in recommended display order.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/authproviders.Provider"
+                    }
+                }
+            }
+        },
         "capture.Message": {
             "type": "object",
             "properties": {
@@ -8348,6 +9397,17 @@
                 }
             }
         },
+        "config.DefaultHeaderClass": {
+            "type": "string",
+            "enum": [
+                "baggage",
+                "tracestate"
+            ],
+            "x-enum-varnames": [
+                "DefaultHeaderBaggage",
+                "DefaultHeaderTraceState"
+            ]
+        },
         "config.GatewayAPIConfig": {
             "type": "object",
             "properties": {
@@ -8434,6 +9494,12 @@
                     "type": "array",
                     "items": {
                         "type": "string"
+                    }
+                },
+                "defaultHeaders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/config.DefaultHeaderClass"
                     }
                 },
                 "gatewayAPI": {
@@ -9174,7 +10240,8 @@
                 "finalizing",
                 "completed",
                 "failed",
-                "cancelled"
+                "cancelled",
+                "redispatch-needed"
             ],
             "x-enum-varnames": [
                 "ExecutionPending",
@@ -9183,7 +10250,8 @@
                 "ExecutionFinalizing",
                 "ExecutionCompleted",
                 "ExecutionFailed",
-                "ExecutionCancelled"
+                "ExecutionCancelled",
+                "ExecutionRedispatchNeeded"
             ]
         },
         "plans.InputResolvedVia": {
@@ -9950,15 +11018,18 @@
             "type": "object",
             "properties": {
                 "name": {
+                    "description": "Unique name for this resource (used to reference it in env vars and files)",
                     "type": "string"
                 },
                 "params": {
+                    "description": "Plugin-specific parameters as key-value pairs",
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"
                     }
                 },
                 "plugin": {
+                    "description": "Plugin name, optionally suffixed with @version (e.g. my-plugin@1.2.0)",
                     "type": "string"
                 }
             }
@@ -10353,6 +11424,39 @@
                             "$ref": "#/definitions/sandbox.Readiness"
                         }
                     ]
+                }
+            }
+        },
+        "settings.AIFeatureFlags": {
+            "type": "object",
+            "properties": {
+                "sandboxExplain": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "settings.AISettings": {
+            "type": "object",
+            "properties": {
+                "aiEnabled": {
+                    "description": "AIEnabled is the master switch. While false, the per-feature flags are\npreserved but cannot be changed and never take effect.",
+                    "type": "boolean"
+                },
+                "features": {
+                    "description": "Features holds the per-feature toggles.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/settings.AIFeatureFlags"
+                        }
+                    ]
+                }
+            }
+        },
+        "settings.SettingFlag": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "type": "boolean"
                 }
             }
         },
