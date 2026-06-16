@@ -64,6 +64,12 @@ type ListResourcePluginsParams struct {
 	*/
 	OrgName string
 
+	/* Version.
+
+	   'latest' (default) returns only the highest-semver version of each plugin; 'all' returns every published version
+	*/
+	Version *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -128,6 +134,17 @@ func (o *ListResourcePluginsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
+// WithVersion adds the version to the list resource plugins params
+func (o *ListResourcePluginsParams) WithVersion(version *string) *ListResourcePluginsParams {
+	o.SetVersion(version)
+	return o
+}
+
+// SetVersion adds the version to the list resource plugins params
+func (o *ListResourcePluginsParams) SetVersion(version *string) {
+	o.Version = version
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListResourcePluginsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -139,6 +156,23 @@ func (o *ListResourcePluginsParams) WriteToRequest(r runtime.ClientRequest, reg 
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
 		return err
+	}
+
+	if o.Version != nil {
+
+		// query param version
+		var qrVersion string
+
+		if o.Version != nil {
+			qrVersion = *o.Version
+		}
+		qVersion := qrVersion
+		if qVersion != "" {
+
+			if err := r.SetQueryParam("version", qVersion); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {
