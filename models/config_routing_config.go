@@ -5,6 +5,7 @@ package models
 import (
 	"context"
 	stderrors "errors"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -18,6 +19,9 @@ type ConfigRoutingConfig struct {
 
 	// custom headers
 	CustomHeaders []string `json:"customHeaders"`
+
+	// default headers
+	DefaultHeaders []ConfigDefaultHeaderClass `json:"defaultHeaders"`
 
 	// gateway API
 	GatewayAPI *ConfigGatewayAPIConfig `json:"gatewayAPI,omitempty"`
@@ -39,6 +43,10 @@ type ConfigRoutingConfig struct {
 func (m *ConfigRoutingConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateDefaultHeaders(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateGatewayAPI(formats); err != nil {
 		res = append(res, err)
 	}
@@ -58,6 +66,31 @@ func (m *ConfigRoutingConfig) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ConfigRoutingConfig) validateDefaultHeaders(formats strfmt.Registry) error {
+	if swag.IsZero(m.DefaultHeaders) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.DefaultHeaders); i++ {
+
+		if err := m.DefaultHeaders[i].Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("defaultHeaders" + "." + strconv.Itoa(i))
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("defaultHeaders" + "." + strconv.Itoa(i))
+			}
+
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -157,6 +190,10 @@ func (m *ConfigRoutingConfig) validateQueryParamRouting(formats strfmt.Registry)
 func (m *ConfigRoutingConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateDefaultHeaders(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateGatewayAPI(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -176,6 +213,32 @@ func (m *ConfigRoutingConfig) ContextValidate(ctx context.Context, formats strfm
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ConfigRoutingConfig) contextValidateDefaultHeaders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.DefaultHeaders); i++ {
+
+		if swag.IsZero(m.DefaultHeaders[i]) { // not required
+			return nil
+		}
+
+		if err := m.DefaultHeaders[i].ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("defaultHeaders" + "." + strconv.Itoa(i))
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("defaultHeaders" + "." + strconv.Itoa(i))
+			}
+
+			return err
+		}
+
+	}
+
 	return nil
 }
 
