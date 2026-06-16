@@ -7,10 +7,12 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
+	"github.com/signadot/go-sdk/client/api_keys"
 	"github.com/signadot/go-sdk/client/artifacts"
 	"github.com/signadot/go-sdk/client/auth"
 	"github.com/signadot/go-sdk/client/cluster"
 	"github.com/signadot/go-sdk/client/devboxes"
+	"github.com/signadot/go-sdk/client/events"
 	"github.com/signadot/go-sdk/client/job_logs"
 	"github.com/signadot/go-sdk/client/jobs"
 	"github.com/signadot/go-sdk/client/meta"
@@ -26,6 +28,7 @@ import (
 	"github.com/signadot/go-sdk/client/runner_groups"
 	"github.com/signadot/go-sdk/client/sandboxes"
 	"github.com/signadot/go-sdk/client/secrets"
+	"github.com/signadot/go-sdk/client/service_accounts"
 	"github.com/signadot/go-sdk/client/test_executions"
 	"github.com/signadot/go-sdk/client/tests"
 )
@@ -72,10 +75,12 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 
 	cli := new(SignadotAPI)
 	cli.Transport = transport
+	cli.APIKeys = api_keys.New(transport, formats)
 	cli.Artifacts = artifacts.New(transport, formats)
 	cli.Auth = auth.New(transport, formats)
 	cli.Cluster = cluster.New(transport, formats)
 	cli.Devboxes = devboxes.New(transport, formats)
+	cli.Events = events.New(transport, formats)
 	cli.JobLogs = job_logs.New(transport, formats)
 	cli.Jobs = jobs.New(transport, formats)
 	cli.Meta = meta.New(transport, formats)
@@ -91,6 +96,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli.RunnerGroups = runner_groups.New(transport, formats)
 	cli.Sandboxes = sandboxes.New(transport, formats)
 	cli.Secrets = secrets.New(transport, formats)
+	cli.ServiceAccounts = service_accounts.New(transport, formats)
 	cli.TestExecutions = test_executions.New(transport, formats)
 	cli.Tests = tests.New(transport, formats)
 	return cli
@@ -137,6 +143,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // SignadotAPI is a client for signadot API
 type SignadotAPI struct {
+	APIKeys api_keys.ClientService
+
 	Artifacts artifacts.ClientService
 
 	Auth auth.ClientService
@@ -144,6 +152,8 @@ type SignadotAPI struct {
 	Cluster cluster.ClientService
 
 	Devboxes devboxes.ClientService
+
+	Events events.ClientService
 
 	JobLogs job_logs.ClientService
 
@@ -175,6 +185,8 @@ type SignadotAPI struct {
 
 	Secrets secrets.ClientService
 
+	ServiceAccounts service_accounts.ClientService
+
 	TestExecutions test_executions.ClientService
 
 	Tests tests.ClientService
@@ -185,10 +197,12 @@ type SignadotAPI struct {
 // SetTransport changes the transport on the client and all its subresources
 func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
+	c.APIKeys.SetTransport(transport)
 	c.Artifacts.SetTransport(transport)
 	c.Auth.SetTransport(transport)
 	c.Cluster.SetTransport(transport)
 	c.Devboxes.SetTransport(transport)
+	c.Events.SetTransport(transport)
 	c.JobLogs.SetTransport(transport)
 	c.Jobs.SetTransport(transport)
 	c.Meta.SetTransport(transport)
@@ -204,6 +218,7 @@ func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.RunnerGroups.SetTransport(transport)
 	c.Sandboxes.SetTransport(transport)
 	c.Secrets.SetTransport(transport)
+	c.ServiceAccounts.SetTransport(transport)
 	c.TestExecutions.SetTransport(transport)
 	c.Tests.SetTransport(transport)
 }
