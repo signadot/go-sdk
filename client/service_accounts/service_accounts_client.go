@@ -115,7 +115,7 @@ func (a *Client) CreateServiceAccount(params *CreateServiceAccountParams, authIn
 /*
 DeleteServiceAccount deletes a service account
 
-Hard-delete a service account. No cascade: API keys, devboxes, and other rows bound to this principal are left intact for an admin to clean up.
+Hard-delete a service account. Refused with 409 if it still holds API keys (remove them first, so they aren't orphaned). Devboxes and other rows bound to this principal are left for an admin to clean up.
 */
 func (a *Client) DeleteServiceAccount(params *DeleteServiceAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteServiceAccountOK, error) {
 	// NOTE: parameters are not validated before sending
