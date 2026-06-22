@@ -29,6 +29,8 @@ import (
 	"github.com/signadot/go-sdk/client/sandboxes"
 	"github.com/signadot/go-sdk/client/secrets"
 	"github.com/signadot/go-sdk/client/service_accounts"
+	"github.com/signadot/go-sdk/client/service_status"
+	"github.com/signadot/go-sdk/client/settings"
 	"github.com/signadot/go-sdk/client/test_executions"
 	"github.com/signadot/go-sdk/client/tests"
 )
@@ -97,6 +99,8 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli.Sandboxes = sandboxes.New(transport, formats)
 	cli.Secrets = secrets.New(transport, formats)
 	cli.ServiceAccounts = service_accounts.New(transport, formats)
+	cli.ServiceStatus = service_status.New(transport, formats)
+	cli.Settings = settings.New(transport, formats)
 	cli.TestExecutions = test_executions.New(transport, formats)
 	cli.Tests = tests.New(transport, formats)
 	return cli
@@ -187,6 +191,10 @@ type SignadotAPI struct {
 
 	ServiceAccounts service_accounts.ClientService
 
+	ServiceStatus service_status.ClientService
+
+	Settings settings.ClientService
+
 	TestExecutions test_executions.ClientService
 
 	Tests tests.ClientService
@@ -219,6 +227,8 @@ func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Sandboxes.SetTransport(transport)
 	c.Secrets.SetTransport(transport)
 	c.ServiceAccounts.SetTransport(transport)
+	c.ServiceStatus.SetTransport(transport)
+	c.Settings.SetTransport(transport)
 	c.TestExecutions.SetTransport(transport)
 	c.Tests.SetTransport(transport)
 }

@@ -16,22 +16,29 @@ import (
 // swagger:model Devbox
 type Devbox struct {
 
-	// Deterministic ID: hash of user ID + metadata (for user-owned) or hash of metadata only (for API key-owned, org-scoped)
+	// Deterministic ID derived from the owning principal + metadata ("name"/"machine-id").
 	ID string `json:"id,omitempty"`
 
-	// Metadata (all key-value pairs). Only "name" and "machine-id" are used for ID generation.
+	// Only "name" and "machine-id" are used for ID generation.
 	Metadata map[string]string `json:"metadata,omitempty"`
+
+	// principal
+	Principal *DevboxPrincipal `json:"principal,omitempty"`
 
 	// status
 	Status *DevboxStatus `json:"status,omitempty"`
 
-	// User email attribute (for display/authorization). Empty string for API key-owned devboxes (org-scoped).
+	// DEPRECATED: owner email for User-owned devboxes, empty otherwise; use principal instead.
 	User string `json:"user,omitempty"`
 }
 
 // Validate validates this devbox
 func (m *Devbox) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validatePrincipal(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateStatus(formats); err != nil {
 		res = append(res, err)
@@ -40,6 +47,29 @@ func (m *Devbox) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Devbox) validatePrincipal(formats strfmt.Registry) error {
+	if swag.IsZero(m.Principal) { // not required
+		return nil
+	}
+
+	if m.Principal != nil {
+		if err := m.Principal.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("principal")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("principal")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -70,6 +100,10 @@ func (m *Devbox) validateStatus(formats strfmt.Registry) error {
 func (m *Devbox) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidatePrincipal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateStatus(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -77,6 +111,31 @@ func (m *Devbox) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Devbox) contextValidatePrincipal(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Principal != nil {
+
+		if swag.IsZero(m.Principal) { // not required
+			return nil
+		}
+
+		if err := m.Principal.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("principal")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("principal")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
