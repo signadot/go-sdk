@@ -132,16 +132,16 @@
     },
     "CreatedBy": {
       "properties": {
-        "actorType": {
-          "description": "ActorType is \"user\", \"api_key\", or \"system\".",
+        "kind": {
+          "description": "Kind is \"User\", \"ServiceAccount\", or \"System\".",
           "type": "string"
         },
-        "apiKeyMasked": {
-          "description": "APIKeyMasked is set when ActorType is \"api_key\".",
+        "name": {
+          "description": "Name is the user email or service-account name; empty for System.",
           "type": "string"
         },
-        "userEmail": {
-          "description": "UserEmail is set when ActorType is \"user\".",
+        "publicId": {
+          "description": "PublicID is the principal's public ID; empty for System.",
           "type": "string"
         }
       },
@@ -150,21 +150,46 @@
     "Devbox": {
       "properties": {
         "id": {
-          "description": "Deterministic ID: hash of user ID + metadata (for user-owned) or hash of metadata only (for API key-owned, org-scoped)",
+          "description": "Deterministic ID derived from the owning principal + metadata (\"name\"/\"machine-id\").",
           "type": "string"
         },
         "metadata": {
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Metadata (all key-value pairs). Only \"name\" and \"machine-id\" are used for ID generation.",
+          "description": "Only \"name\" and \"machine-id\" are used for ID generation.",
           "type": "object"
+        },
+        "principal": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/DevboxPrincipal"
+            }
+          ],
+          "description": "Owning principal."
         },
         "status": {
           "$ref": "#/definitions/DevboxStatus"
         },
         "user": {
-          "description": "User email attribute (for display/authorization). Empty string for API key-owned devboxes (org-scoped).",
+          "description": "DEPRECATED: owner email for User-owned devboxes, empty otherwise; use principal instead.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DevboxPrincipal": {
+      "properties": {
+        "kind": {
+          "description": "Principal kind: \"User\" or \"ServiceAccount\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "Display name: user email or service-account name.",
+          "type": "string"
+        },
+        "publicId": {
+          "description": "Principal public ID.",
           "type": "string"
         }
       },
@@ -2026,12 +2051,6 @@
         "SystemSpace"
       ]
     },
-    "auth.UserFlags": {
-      "additionalProperties": {
-        "type": "boolean"
-      },
-      "type": "object"
-    },
     "authdevices.Code": {
       "properties": {
         "deviceCode": {
@@ -2087,6 +2106,12 @@
         "deviceCode": {
           "type": "string"
         }
+      },
+      "type": "object"
+    },
+    "authtypes.UserFlags": {
+      "additionalProperties": {
+        "type": "boolean"
       },
       "type": "object"
     },
@@ -2963,7 +2988,7 @@
         "userFlags": {
           "allOf": [
             {
-              "$ref": "#/definitions/auth.UserFlags"
+              "$ref": "#/definitions/authtypes.UserFlags"
             }
           ],
           "description": "Flags of authenticated user, if any"
@@ -4305,6 +4330,87 @@
             }
           ],
           "description": "Status is the current machine-readable sandbox status."
+        }
+      },
+      "type": "object"
+    },
+    "servicestatus.Incident": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "resolvedAt": {
+          "description": "ResolvedAt is the incident resolution time (RFC3339); omitted while\nthe incident is unresolved.",
+          "type": "string"
+        },
+        "startsAt": {
+          "description": "StartsAt is the incident start time (RFC3339).",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "UpdatedAt is the time of the most recent update (RFC3339).",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "servicestatus.Maintenance": {
+      "properties": {
+        "endsAt": {
+          "description": "EndsAt is the scheduled end time (RFC3339); omitted if open-ended.",
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startsAt": {
+          "description": "StartsAt is the scheduled start time (RFC3339).",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "UpdatedAt is the time of the most recent update (RFC3339).",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "servicestatus.Response": {
+      "properties": {
+        "incidents": {
+          "items": {
+            "$ref": "#/definitions/servicestatus.Incident"
+          },
+          "type": "array"
+        },
+        "maintenances": {
+          "items": {
+            "$ref": "#/definitions/servicestatus.Maintenance"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -10113,7 +10219,7 @@
     },
     "/orgs/{orgName}/service-accounts/{serviceAccountName}": {
       "delete": {
-        "description": "Hard-delete a service account. No cascade: API keys, devboxes, and other rows bound to this principal are left intact for an admin to clean up.",
+        "description": "Hard-delete a service account. Refused with 409 if it still holds API keys (remove them first, so they aren't orphaned). Devboxes and other rows bound to this principal are left for an admin to clean up.",
         "operationId": "delete-service-account",
         "parameters": [
           {
@@ -10137,6 +10243,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
             }
@@ -11552,6 +11664,27 @@
           "ApiKeys"
         ]
       }
+    },
+    "/service-status": {
+      "get": {
+        "description": "Caching gateway over the public Status API: active and recently-resolved incidents plus in-progress and upcoming scheduled maintenance, normalized into a vendor-neutral shape and served from a short server-side cache. Always 200 (unconfigured or upstream failure yields empty arrays); unauthenticated.",
+        "operationId": "service-status",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Current incidents and maintenance",
+            "schema": {
+              "$ref": "#/definitions/servicestatus.Response"
+            }
+          }
+        },
+        "summary": "Service status (incidents + maintenance)",
+        "tags": [
+          "ServiceStatus"
+        ]
+      }
     }
   },
   "securityDefinitions": {
@@ -11625,6 +11758,9 @@
     },
     {
       "name": "ServiceAccounts"
+    },
+    {
+      "name": "ServiceStatus"
     },
     {
       "name": "TestExecutions"
