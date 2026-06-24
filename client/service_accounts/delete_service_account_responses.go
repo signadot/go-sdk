@@ -34,6 +34,12 @@ func (o *DeleteServiceAccountReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return nil, result
+	case 409:
+		result := NewDeleteServiceAccountConflict()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("[DELETE /orgs/{orgName}/service-accounts/{serviceAccountName}] delete-service-account", response, response.Code())
 	}
@@ -154,6 +160,76 @@ func (o *DeleteServiceAccountNotFound) GetPayload() *models.ErrorResponse {
 }
 
 func (o *DeleteServiceAccountNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteServiceAccountConflict creates a DeleteServiceAccountConflict with default headers values
+func NewDeleteServiceAccountConflict() *DeleteServiceAccountConflict {
+	return &DeleteServiceAccountConflict{}
+}
+
+/*
+DeleteServiceAccountConflict describes a response with status code 409, with default header values.
+
+Conflict
+*/
+type DeleteServiceAccountConflict struct {
+	Payload *models.ErrorResponse
+}
+
+// IsSuccess returns true when this delete service account conflict response has a 2xx status code
+func (o *DeleteServiceAccountConflict) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this delete service account conflict response has a 3xx status code
+func (o *DeleteServiceAccountConflict) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this delete service account conflict response has a 4xx status code
+func (o *DeleteServiceAccountConflict) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this delete service account conflict response has a 5xx status code
+func (o *DeleteServiceAccountConflict) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this delete service account conflict response a status code equal to that given
+func (o *DeleteServiceAccountConflict) IsCode(code int) bool {
+	return code == 409
+}
+
+// Code gets the status code for the delete service account conflict response
+func (o *DeleteServiceAccountConflict) Code() int {
+	return 409
+}
+
+func (o *DeleteServiceAccountConflict) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/service-accounts/{serviceAccountName}][%d] deleteServiceAccountConflict %s", 409, payload)
+}
+
+func (o *DeleteServiceAccountConflict) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /orgs/{orgName}/service-accounts/{serviceAccountName}][%d] deleteServiceAccountConflict %s", 409, payload)
+}
+
+func (o *DeleteServiceAccountConflict) GetPayload() *models.ErrorResponse {
+	return o.Payload
+}
+
+func (o *DeleteServiceAccountConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 
