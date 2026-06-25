@@ -18,7 +18,7 @@ import (
 type ListEventsResponse struct {
 
 	// events
-	Events []*Event `json:"events"`
+	Events []*EventQueryResult `json:"events"`
 }
 
 // Validate validates this list events response

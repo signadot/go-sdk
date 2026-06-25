@@ -65,6 +65,12 @@ type ListEventsParams struct {
 	*/
 	AuthMethod *string
 
+	/* Cursor.
+
+	   Opaque pagination cursor: pass the previous page's last event cursor to fetch the next (older) page. Keep the other query parameters (type/filters/principal/authMethod and the time window) stable across pages; the window is pinned to the cursor, and changing the other filters mid-pagination restarts the result set.
+	*/
+	Cursor *string
+
 	/* EndTime.
 
 	   Window end (RFC3339); defaults to now
@@ -177,6 +183,17 @@ func (o *ListEventsParams) SetAuthMethod(authMethod *string) {
 	o.AuthMethod = authMethod
 }
 
+// WithCursor adds the cursor to the list events params
+func (o *ListEventsParams) WithCursor(cursor *string) *ListEventsParams {
+	o.SetCursor(cursor)
+	return o
+}
+
+// SetCursor adds the cursor to the list events params
+func (o *ListEventsParams) SetCursor(cursor *string) {
+	o.Cursor = cursor
+}
+
 // WithEndTime adds the endTime to the list events params
 func (o *ListEventsParams) WithEndTime(endTime *string) *ListEventsParams {
 	o.SetEndTime(endTime)
@@ -285,6 +302,23 @@ func (o *ListEventsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		if qAuthMethod != "" {
 
 			if err := r.SetQueryParam("authMethod", qAuthMethod); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Cursor != nil {
+
+		// query param cursor
+		var qrCursor string
+
+		if o.Cursor != nil {
+			qrCursor = *o.Cursor
+		}
+		qCursor := qrCursor
+		if qCursor != "" {
+
+			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
