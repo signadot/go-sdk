@@ -132,16 +132,16 @@
     },
     "CreatedBy": {
       "properties": {
-        "actorType": {
-          "description": "ActorType is \"user\", \"api_key\", or \"system\".",
+        "kind": {
+          "description": "Kind is \"User\", \"ServiceAccount\", or \"System\".",
           "type": "string"
         },
-        "apiKeyMasked": {
-          "description": "APIKeyMasked is set when ActorType is \"api_key\".",
+        "name": {
+          "description": "Name is the user email or service-account name; empty for System.",
           "type": "string"
         },
-        "userEmail": {
-          "description": "UserEmail is set when ActorType is \"user\".",
+        "publicId": {
+          "description": "PublicID is the principal's public ID; empty for System.",
           "type": "string"
         }
       },
@@ -150,21 +150,46 @@
     "Devbox": {
       "properties": {
         "id": {
-          "description": "Deterministic ID: hash of user ID + metadata (for user-owned) or hash of metadata only (for API key-owned, org-scoped)",
+          "description": "Deterministic ID derived from the owning principal + metadata (\"name\"/\"machine-id\").",
           "type": "string"
         },
         "metadata": {
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Metadata (all key-value pairs). Only \"name\" and \"machine-id\" are used for ID generation.",
+          "description": "Only \"name\" and \"machine-id\" are used for ID generation.",
           "type": "object"
+        },
+        "principal": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/DevboxPrincipal"
+            }
+          ],
+          "description": "Owning principal."
         },
         "status": {
           "$ref": "#/definitions/DevboxStatus"
         },
         "user": {
-          "description": "User email attribute (for display/authorization). Empty string for API key-owned devboxes (org-scoped).",
+          "description": "DEPRECATED: owner email for User-owned devboxes, empty otherwise; use principal instead.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DevboxPrincipal": {
+      "properties": {
+        "kind": {
+          "description": "Principal kind: \"User\" or \"ServiceAccount\".",
+          "type": "string"
+        },
+        "name": {
+          "description": "Display name: user email or service-account name.",
+          "type": "string"
+        },
+        "publicId": {
+          "description": "Principal public ID.",
           "type": "string"
         }
       },
@@ -240,35 +265,6 @@
       },
       "type": "object"
     },
-    "Event": {
-      "properties": {
-        "auth": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/EventAuthContext"
-            }
-          ],
-          "description": "Auth is always present. Principal and OnBehalfOf are rendered as explicit\nnull (not omitted) when there is no principal — these are not omitempty so\nthe null is discoverable: principal is null for system actions and older\nevents whose user is gone; onBehalfOf is reserved (currently always null)."
-        },
-        "data": {},
-        "id": {
-          "type": "string"
-        },
-        "onBehalfOf": {
-          "$ref": "#/definitions/EventPrincipal"
-        },
-        "principal": {
-          "$ref": "#/definitions/EventPrincipal"
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "EventAuthContext": {
       "properties": {
         "apiKeyMasked": {
@@ -293,6 +289,38 @@
           "type": "string"
         },
         "publicId": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "EventQueryResult": {
+      "properties": {
+        "auth": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/EventAuthContext"
+            }
+          ],
+          "description": "Auth is always present. Principal and OnBehalfOf are rendered as explicit\nnull (not omitted) when there is no principal — these are not omitempty so\nthe null is discoverable: principal is null for system actions and older\nevents whose user is gone; onBehalfOf is reserved (currently always null)."
+        },
+        "cursor": {
+          "type": "string"
+        },
+        "data": {},
+        "id": {
+          "type": "string"
+        },
+        "onBehalfOf": {
+          "$ref": "#/definitions/EventPrincipal"
+        },
+        "principal": {
+          "$ref": "#/definitions/EventPrincipal"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "type": {
           "type": "string"
         }
       },
@@ -430,7 +458,7 @@
       "properties": {
         "events": {
           "items": {
-            "$ref": "#/definitions/Event"
+            "$ref": "#/definitions/EventQueryResult"
           },
           "type": "array"
         }
@@ -2026,12 +2054,6 @@
         "SystemSpace"
       ]
     },
-    "auth.UserFlags": {
-      "additionalProperties": {
-        "type": "boolean"
-      },
-      "type": "object"
-    },
     "authdevices.Code": {
       "properties": {
         "deviceCode": {
@@ -2087,6 +2109,12 @@
         "deviceCode": {
           "type": "string"
         }
+      },
+      "type": "object"
+    },
+    "authtypes.UserFlags": {
+      "additionalProperties": {
+        "type": "boolean"
       },
       "type": "object"
     },
@@ -2963,7 +2991,7 @@
         "userFlags": {
           "allOf": [
             {
-              "$ref": "#/definitions/auth.UserFlags"
+              "$ref": "#/definitions/authtypes.UserFlags"
             }
           ],
           "description": "Flags of authenticated user, if any"
@@ -4305,6 +4333,87 @@
             }
           ],
           "description": "Status is the current machine-readable sandbox status."
+        }
+      },
+      "type": "object"
+    },
+    "servicestatus.Incident": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "resolvedAt": {
+          "description": "ResolvedAt is the incident resolution time (RFC3339); omitted while\nthe incident is unresolved.",
+          "type": "string"
+        },
+        "startsAt": {
+          "description": "StartsAt is the incident start time (RFC3339).",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "UpdatedAt is the time of the most recent update (RFC3339).",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "servicestatus.Maintenance": {
+      "properties": {
+        "endsAt": {
+          "description": "EndsAt is the scheduled end time (RFC3339); omitted if open-ended.",
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startsAt": {
+          "description": "StartsAt is the scheduled start time (RFC3339).",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "UpdatedAt is the time of the most recent update (RFC3339).",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "servicestatus.Response": {
+      "properties": {
+        "incidents": {
+          "items": {
+            "$ref": "#/definitions/servicestatus.Incident"
+          },
+          "type": "array"
+        },
+        "maintenances": {
+          "items": {
+            "$ref": "#/definitions/servicestatus.Maintenance"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -6203,6 +6312,12 @@
             "type": "integer"
           },
           {
+            "description": "Opaque pagination cursor: pass the previous page's last event cursor to fetch the next (older) page. Keep the other query parameters (type/filters/principal/authMethod and the time window) stable across pages; the window is pinned to the cursor, and changing the other filters mid-pagination restarts the result set.",
+            "in": "query",
+            "name": "cursor",
+            "type": "string"
+          },
+          {
             "description": "Filter by principal kind (User|ServiceAccount|System). System selects events with no principal. Matches events that recorded a principal; older events are attributed best-effort in the response but are not matched by this filter.",
             "in": "query",
             "name": "principalKind",
@@ -6256,6 +6371,105 @@
           }
         ],
         "summary": "List audit events",
+        "tags": [
+          "Events"
+        ]
+      }
+    },
+    "/orgs/{orgName}/events/export": {
+      "get": {
+        "description": "Stream the org's audit events (same filters as the list endpoint) as a CSV attachment, newest first. The file is generated and streamed server-side with bounded memory, so the client need not page through every event; every event matching the filters is included.",
+        "operationId": "export-events",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Window start (RFC3339); defaults to endTime-24h",
+            "in": "query",
+            "name": "startTime",
+            "type": "string"
+          },
+          {
+            "description": "Window end (RFC3339); defaults to now",
+            "in": "query",
+            "name": "endTime",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "csv",
+            "description": "Event type filter; repeatable; defaults to all",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "type",
+            "type": "array"
+          },
+          {
+            "description": "event_data filter DSL (key=value\u0026...)",
+            "in": "query",
+            "name": "filters",
+            "type": "string"
+          },
+          {
+            "description": "Filter by principal kind (User|ServiceAccount|System)",
+            "in": "query",
+            "name": "principalKind",
+            "type": "string"
+          },
+          {
+            "description": "Filter by principal public ID (requires principalKind)",
+            "in": "query",
+            "name": "principalId",
+            "type": "string"
+          },
+          {
+            "description": "Filter by authentication method (jwt|api_key|system)",
+            "in": "query",
+            "name": "authMethod",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/csv"
+        ],
+        "responses": {
+          "200": {
+            "description": "CSV attachment",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Export audit events as CSV",
         "tags": [
           "Events"
         ]
@@ -10113,7 +10327,7 @@
     },
     "/orgs/{orgName}/service-accounts/{serviceAccountName}": {
       "delete": {
-        "description": "Hard-delete a service account. No cascade: API keys, devboxes, and other rows bound to this principal are left intact for an admin to clean up.",
+        "description": "Hard-delete a service account. Refused with 409 if it still holds API keys (remove them first, so they aren't orphaned). Devboxes and other rows bound to this principal are left for an admin to clean up.",
         "operationId": "delete-service-account",
         "parameters": [
           {
@@ -10137,6 +10351,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
             }
@@ -11384,172 +11604,24 @@
         ]
       }
     },
-    "/orgs/{orgName}/users/{userId}/api-keys": {
+    "/service-status": {
       "get": {
-        "description": "List the API keys bound to a user. Members may list only their own; admins any user's.",
-        "operationId": "list-user-api-keys",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "User public ID",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "description": "Caching gateway over the public Status API: active and recently-resolved incidents plus in-progress and upcoming scheduled maintenance, normalized into a vendor-neutral shape and served from a short server-side cache. Always 200 (unconfigured or upstream failure yields empty arrays); unauthenticated.",
+        "operationId": "service-status",
         "produces": [
           "application/json"
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Current incidents and maintenance",
             "schema": {
-              "$ref": "#/definitions/ListApiKeysResponse"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
+              "$ref": "#/definitions/servicestatus.Response"
             }
           }
         },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "List a user's API keys",
+        "summary": "Service status (incidents + maintenance)",
         "tags": [
-          "ApiKeys"
-        ]
-      },
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "description": "Create an API key bound to a user. Members may create keys only for themselves; admins for any user. The token is returned once.",
-        "operationId": "create-user-api-key",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "User public ID",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Optional description",
-            "in": "body",
-            "name": "data",
-            "schema": {
-              "$ref": "#/definitions/CreateApiKeyRequest"
-            }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ApiKey"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Create a user API key",
-        "tags": [
-          "ApiKeys"
-        ]
-      }
-    },
-    "/orgs/{orgName}/users/{userId}/api-keys/{apiKeyId}": {
-      "delete": {
-        "description": "Delete a user-bound API key. The key must belong to the user in the path.",
-        "operationId": "delete-user-api-key",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "User public ID",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "API key public ID",
-            "in": "path",
-            "name": "apiKeyId",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/EmptyResponse"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Delete a user API key",
-        "tags": [
-          "ApiKeys"
+          "ServiceStatus"
         ]
       }
     }
@@ -11625,6 +11697,9 @@
     },
     {
       "name": "ServiceAccounts"
+    },
+    {
+      "name": "ServiceStatus"
     },
     {
       "name": "TestExecutions"
