@@ -30,7 +30,7 @@ type OrgsGetOrgNameResponse struct {
 	User *OrgsUser `json:"user,omitempty"`
 
 	// user flags
-	UserFlags AuthUserFlags `json:"userFlags,omitempty"`
+	UserFlags AuthtypesUserFlags `json:"userFlags,omitempty"`
 }
 
 // Validate validates this orgs get org name response

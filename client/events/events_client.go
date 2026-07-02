@@ -51,11 +51,83 @@ type Client struct {
 // ClientOption may be used to customize the behavior of Client methods.
 type ClientOption func(*runtime.ClientOperation)
 
+// This client is generated with a few options you might find useful for your swagger spec.
+//
+// Feel free to add you own set of options.
+
+// WithAccept allows the client to force the Accept header
+// to negotiate a specific Producer from the server.
+//
+// You may use this option to set arbitrary extensions to your MIME media type.
+func WithAccept(mime string) ClientOption {
+	return func(r *runtime.ClientOperation) {
+		r.ProducesMediaTypes = []string{mime}
+	}
+}
+
+// WithAcceptApplicationJSON sets the Accept header to "application/json".
+func WithAcceptApplicationJSON(r *runtime.ClientOperation) {
+	r.ProducesMediaTypes = []string{"application/json"}
+}
+
+// WithAcceptTextCsv sets the Accept header to "text/csv".
+func WithAcceptTextCsv(r *runtime.ClientOperation) {
+	r.ProducesMediaTypes = []string{"text/csv"}
+}
+
 // ClientService is the interface for Client methods
 type ClientService interface {
+	ExportEvents(params *ExportEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportEventsOK, error)
+
 	ListEvents(params *ListEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEventsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+ExportEvents exports audit events as c s v
+
+Stream the org's audit events (same filters as the list endpoint) as a CSV attachment, newest first. The file is generated and streamed server-side with bounded memory, so the client need not page through every event; every event matching the filters is included.
+*/
+func (a *Client) ExportEvents(params *ExportEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportEventsOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewExportEventsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "export-events",
+		Method:             "GET",
+		PathPattern:        "/orgs/{orgName}/events/export",
+		ProducesMediaTypes: []string{"text/csv"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ExportEventsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*ExportEventsOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for export-events: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
