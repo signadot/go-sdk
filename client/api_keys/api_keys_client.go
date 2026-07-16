@@ -55,15 +55,9 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreateServiceAccountAPIKey(params *CreateServiceAccountAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateServiceAccountAPIKeyOK, error)
 
-	CreateUserAPIKey(params *CreateUserAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUserAPIKeyOK, error)
-
 	DeleteServiceAccountAPIKey(params *DeleteServiceAccountAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteServiceAccountAPIKeyOK, error)
 
-	DeleteUserAPIKey(params *DeleteUserAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteUserAPIKeyOK, error)
-
 	ListServiceAccountAPIKeys(params *ListServiceAccountAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListServiceAccountAPIKeysOK, error)
-
-	ListUserAPIKeys(params *ListUserAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListUserAPIKeysOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -115,52 +109,6 @@ func (a *Client) CreateServiceAccountAPIKey(params *CreateServiceAccountAPIKeyPa
 }
 
 /*
-CreateUserAPIKey creates a user API key
-
-Create an API key bound to a user. Members may create keys only for themselves; admins for any user. The token is returned once.
-*/
-func (a *Client) CreateUserAPIKey(params *CreateUserAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUserAPIKeyOK, error) {
-	// NOTE: parameters are not validated before sending
-	if params == nil {
-		params = NewCreateUserAPIKeyParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "create-user-api-key",
-		Method:             "POST",
-		PathPattern:        "/orgs/{orgName}/users/{userId}/api-keys",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &CreateUserAPIKeyReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-
-	// only one success response has to be checked
-	success, ok := result.(*CreateUserAPIKeyOK)
-	if ok {
-		return success, nil
-	}
-
-	// unexpected success response.
-
-	// no default response is defined.
-	//
-	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for create-user-api-key: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
 DeleteServiceAccountAPIKey deletes a service account API key
 
 Delete a service-account-bound API key (admin only). The key must belong to the SA in the path.
@@ -207,52 +155,6 @@ func (a *Client) DeleteServiceAccountAPIKey(params *DeleteServiceAccountAPIKeyPa
 }
 
 /*
-DeleteUserAPIKey deletes a user API key
-
-Delete a user-bound API key. The key must belong to the user in the path.
-*/
-func (a *Client) DeleteUserAPIKey(params *DeleteUserAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteUserAPIKeyOK, error) {
-	// NOTE: parameters are not validated before sending
-	if params == nil {
-		params = NewDeleteUserAPIKeyParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "delete-user-api-key",
-		Method:             "DELETE",
-		PathPattern:        "/orgs/{orgName}/users/{userId}/api-keys/{apiKeyId}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &DeleteUserAPIKeyReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-
-	// only one success response has to be checked
-	success, ok := result.(*DeleteUserAPIKeyOK)
-	if ok {
-		return success, nil
-	}
-
-	// unexpected success response.
-
-	// no default response is defined.
-	//
-	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for delete-user-api-key: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
 ListServiceAccountAPIKeys lists a service account s API keys
 
 List the API keys bound to a service account (admin only).
@@ -295,52 +197,6 @@ func (a *Client) ListServiceAccountAPIKeys(params *ListServiceAccountAPIKeysPara
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-service-account-api-keys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-ListUserAPIKeys lists a user s API keys
-
-List the API keys bound to a user. Members may list only their own; admins any user's.
-*/
-func (a *Client) ListUserAPIKeys(params *ListUserAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListUserAPIKeysOK, error) {
-	// NOTE: parameters are not validated before sending
-	if params == nil {
-		params = NewListUserAPIKeysParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "list-user-api-keys",
-		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/users/{userId}/api-keys",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListUserAPIKeysReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-
-	// only one success response has to be checked
-	success, ok := result.(*ListUserAPIKeysOK)
-	if ok {
-		return success, nil
-	}
-
-	// unexpected success response.
-
-	// no default response is defined.
-	//
-	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for list-user-api-keys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -14,14 +14,14 @@ import (
 // swagger:model CreatedBy
 type CreatedBy struct {
 
-	// ActorType is "user", "api_key", or "system".
-	ActorType string `json:"actorType,omitempty"`
+	// Kind is "User", "ServiceAccount", or "System".
+	Kind string `json:"kind,omitempty"`
 
-	// APIKeyMasked is set when ActorType is "api_key".
-	APIKeyMasked string `json:"apiKeyMasked,omitempty"`
+	// Name is the user email or service-account name; empty for System.
+	Name string `json:"name,omitempty"`
 
-	// UserEmail is set when ActorType is "user".
-	UserEmail string `json:"userEmail,omitempty"`
+	// PublicID is the principal's public ID; empty for System.
+	PublicID string `json:"publicId,omitempty"`
 }
 
 // Validate validates this created by
