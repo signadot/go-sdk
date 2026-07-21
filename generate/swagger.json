@@ -248,7 +248,7 @@
               "$ref": "#/definitions/EventAuthContext"
             }
           ],
-          "description": "Auth is always present. Principal and OnBehalfOf are rendered as explicit\nnull (not omitted) when there is no principal — these are not omitempty so\nthe null is discoverable: principal is null for system actions and older\nevents whose user is gone; onBehalfOf is reserved (currently always null)."
+          "description": "Auth is always present. Principal and OnBehalfOf are rendered as explicit\nnull (not omitted) when there is no principal \u2014 these are not omitempty so\nthe null is discoverable: principal is null for system actions and older\nevents whose user is gone; onBehalfOf is reserved (currently always null)."
         },
         "data": {},
         "id": {
@@ -594,7 +594,7 @@
     "PlanClusterAffinity": {
       "properties": {
         "fromAnyTarget": {
-          "description": "FromAnyTarget names a plan param whose value is a RoutingTarget.\nThe cluster is inferred from the variant provided at execution time\n(sandbox → sandbox cluster, routeGroup → RG cluster).",
+          "description": "FromAnyTarget names a plan param whose value is a RoutingTarget.\nThe cluster is inferred from the variant provided at execution time\n(sandbox \u2192 sandbox cluster, routeGroup \u2192 RG cluster).",
           "type": "string"
         },
         "fromCluster": {
@@ -822,14 +822,14 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Env carries env entries with literal values (KEY -\u003e literal).\nApplies in both paths. Reserved runner-set keys (SIGNADOT_*, HOME,\nTMPDIR, PATH) silently lose to the runner's values on collision.",
+          "description": "Env carries env entries with literal values (KEY -> literal).\nApplies in both paths. Reserved runner-set keys (SIGNADOT_*, HOME,\nTMPDIR, PATH) silently lose to the runner's values on collision.",
           "type": "object"
         },
         "envFromInput": {
           "additionalProperties": {
             "type": "string"
           },
-          "description": "EnvFromInput carries env entries whose values resolve from a\ndeclared input at run time (KEY -\u003e input name). Applies in both\npaths. Same reserved-key filtering as Env. The same KEY may not\nappear in both Env and EnvFromInput.",
+          "description": "EnvFromInput carries env entries whose values resolve from a\ndeclared input at run time (KEY -> input name). Applies in both\npaths. Same reserved-key filtering as Env. The same KEY may not\nappear in both Env and EnvFromInput.",
           "type": "object"
         },
         "inputName": {
@@ -917,7 +917,7 @@
           "description": "Artifact holds a reference to the S3-stored output."
         },
         "drill": {
-          "description": "Drill is the path of segments to walk inside the source step\noutput's parsed JSON to extract the actual plan output value. Set\nonly for drill plan outputs (e.g. [\"response\", \"statusCode\"] for\n\"steps.send.outputs.capture.response.statusCode\"). The drill is\napplied at download time by the apiserver — the runner records\nit but does not materialize the drilled value, so the source\nstep's existing artifact (or inline Value) is reused without any\nextra upload.",
+          "description": "Drill is the path of segments to walk inside the source step\noutput's parsed JSON to extract the actual plan output value. Set\nonly for drill plan outputs (e.g. [\"response\", \"statusCode\"] for\n\"steps.send.outputs.capture.response.statusCode\"). The drill is\napplied at download time by the apiserver \u2014 the runner records\nit but does not materialize the drilled value, so the source\nstep's existing artifact (or inline Value) is reused without any\nextra upload.",
           "items": {
             "type": "string"
           },
@@ -1114,7 +1114,7 @@
           "type": "array"
         },
         "extraOutputs": {
-          "description": "ExtraOutputs declares additional named outputs for this step beyond\nthe action's declared outputs. The action writes these to ./outputs/\u003cname\u003e\nand the runner reads them back according to their schema declarations.\nNames must not shadow the action's declared outputs.",
+          "description": "ExtraOutputs declares additional named outputs for this step beyond\nthe action's declared outputs. The action writes these to ./outputs/<name>\nand the runner reads them back according to their schema declarations.\nNames must not shadow the action's declared outputs.",
           "items": {
             "$ref": "#/definitions/PlanField"
           },
@@ -1162,7 +1162,7 @@
           "description": "Image, if set, declares that the action's shell fenced block runs\ninside an OCI image via actionbox run-image. Either Literal or\nInputName is set; never both."
         },
         "name": {
-          "description": "Name is the action's name at the time the snapshot was taken.\nDisplay label, not the canonical identifier — ActionID is. At\ncreate time the snapshot must round-trip the registry (an\nexplicitly supplied Name that doesn't match is rejected); at\nexecute time the snapshot is honored as-is so renames in the\nregistry don't break stored plans. Filled from the registry when\nomitted on input; otherwise preserved as supplied.",
+          "description": "Name is the action's name at the time the snapshot was taken.\nDisplay label, not the canonical identifier \u2014 ActionID is. At\ncreate time the snapshot must round-trip the registry (an\nexplicitly supplied Name that doesn't match is rejected); at\nexecute time the snapshot is honored as-is so renames in the\nregistry don't break stored plans. Filled from the registry when\nomitted on input; otherwise preserved as supplied.",
           "type": "string"
         },
         "outputs": {
@@ -1180,7 +1180,7 @@
           "type": "array"
         },
         "revision": {
-          "description": "Revision is the registered action revision the snapshot was taken\nfrom. Optional on input — set to pin the step to a historical\nrevision; otherwise the action's current revision is recorded.",
+          "description": "Revision is the registered action revision the snapshot was taken\nfrom. Optional on input \u2014 set to pin the step to a historical\nrevision; otherwise the action's current revision is recorded.",
           "type": "integer"
         },
         "timeout": {
@@ -1485,7 +1485,7 @@
     "RoutingTargetRef": {
       "properties": {
         "anyRef": {
-          "description": "AnyRef is a reference to a plan param whose value is a RoutingTarget\n(polymorphic — the caller decides sandbox, routeGroup, or routingKey).",
+          "description": "AnyRef is a reference to a plan param whose value is a RoutingTarget\n(polymorphic \u2014 the caller decides sandbox, routeGroup, or routingKey).",
           "type": "string"
         },
         "routeGroupRef": {
@@ -4509,6 +4509,31 @@
         "namespace"
       ],
       "type": "object"
+    },
+    "logs.ContainerLogs": {
+      "properties": {
+        "container": {
+          "type": "string"
+        },
+        "logs": {
+          "items": {
+            "$ref": "#/definitions/logs.LogItem"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "logs.LogItem": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        }
+      },
+      "type": "object"
     }
   },
   "host": "api.signadot.com",
@@ -6191,7 +6216,7 @@
             "type": "array"
           },
           {
-            "description": "event_data filter DSL (key=value\u0026...)",
+            "description": "event_data filter DSL (key=value&...)",
             "in": "query",
             "name": "filters",
             "type": "string"
@@ -7156,7 +7181,7 @@
             }
           },
           "304": {
-            "description": "Not Modified — desired set unchanged since the client's ETag"
+            "description": "Not Modified \u2014 desired set unchanged since the client's ETag"
           },
           "404": {
             "description": "Not Found",
@@ -7435,7 +7460,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Create a plan from a raw spec. Each step's action may be supplied either fully embedded (body, params, outputs, etc. inline) or by reference — set only `action.actionID` and the server hydrates the contents from the registered action.",
+        "description": "Create a plan from a raw spec. Each step's action may be supplied either fully embedded (body, params, outputs, etc. inline) or by reference \u2014 set only `action.actionID` and the server hydrates the contents from the registered action.",
         "operationId": "create-plan",
         "parameters": [
           {
@@ -11550,6 +11575,110 @@
         "summary": "Delete a user API key",
         "tags": [
           "ApiKeys"
+        ]
+      }
+    },
+    "/orgs/{orgName}/sandboxes/{sandboxName}/logs": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).",
+        "operationId": "get-sandbox-logs",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Sandbox Name",
+            "in": "path",
+            "name": "sandboxName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-sandbox"
+          },
+          {
+            "description": "Sandboxed workload (fork) name from the sandbox spec",
+            "in": "query",
+            "name": "workload",
+            "type": "string"
+          },
+          {
+            "description": "Sandbox resource name from the sandbox spec",
+            "in": "query",
+            "name": "resource",
+            "type": "string"
+          },
+          {
+            "description": "Resource plugin step name; only valid with resource (defaults to all create steps)",
+            "in": "query",
+            "name": "step",
+            "type": "string"
+          },
+          {
+            "description": "Container name; defaults to all containers",
+            "in": "query",
+            "name": "container",
+            "type": "string"
+          },
+          {
+            "description": "Only return logs after this RFC3339 timestamp",
+            "in": "query",
+            "name": "sinceTime",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/logs.ContainerLogs"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get sandbox workload logs",
+        "tags": [
+          "Sandboxes"
         ]
       }
     }
