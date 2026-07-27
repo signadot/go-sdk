@@ -9,6 +9,10 @@
         "description": {
           "type": "string"
         },
+        "expiresAt": {
+          "description": "ExpiresAt is the key's expiration time (RFC3339), or nil if it never expires.",
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
@@ -125,6 +129,10 @@
       "properties": {
         "description": {
           "description": "Description is an optional human-readable description.",
+          "type": "string"
+        },
+        "expiresAt": {
+          "description": "ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the\nfield, or sending an explicit JSON null, both mean the key never\nexpires \u2014 so callers that predate this field keep their old behavior\nwith no changes required.",
           "type": "string"
         }
       },
