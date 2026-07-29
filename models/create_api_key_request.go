@@ -16,6 +16,12 @@ type CreateAPIKeyRequest struct {
 
 	// Description is an optional human-readable description.
 	Description string `json:"description,omitempty"`
+
+	// ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the
+	// field, or sending an explicit JSON null, both mean the key never
+	// expires — so callers that predate this field keep their old behavior
+	// with no changes required.
+	ExpiresAt string `json:"expiresAt,omitempty"`
 }
 
 // Validate validates this create Api key request

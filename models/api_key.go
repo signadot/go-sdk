@@ -20,6 +20,9 @@ type APIKey struct {
 	// description
 	Description string `json:"description,omitempty"`
 
+	// ExpiresAt is the key's expiration time (RFC3339), or nil if it never expires.
+	ExpiresAt string `json:"expiresAt,omitempty"`
+
 	// id
 	ID string `json:"id,omitempty"`
 
