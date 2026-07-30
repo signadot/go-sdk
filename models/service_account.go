@@ -23,8 +23,9 @@ type ServiceAccount struct {
 	// Name is the unique identifier within the org.
 	Name string `json:"name,omitempty"`
 
-	// Role is the authorization role for the service account: "admin" or
-	// "member".
+	// Role is the authorization role for the service account, in the legacy short
+	// form: "admin", "member", or "viewer" (not the "signadot:"-prefixed system
+	// name used when assigning a role — see ServiceAccountRoleAssignment).
 	Role string `json:"role,omitempty"`
 
 	// UpdatedAt is when the service account was last updated. Read-only.
