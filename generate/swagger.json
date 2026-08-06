@@ -132,7 +132,7 @@
           "type": "string"
         },
         "expiresAt": {
-          "description": "ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the\nfield, or sending an explicit JSON null, both mean the key never\nexpires \u2014 so callers that predate this field keep their old behavior\nwith no changes required.",
+          "description": "ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the\nfield, or sending an explicit JSON null, both mean the key never\nexpires — so callers that predate this field keep their old behavior\nwith no changes required.",
           "type": "string"
         }
       },
@@ -467,6 +467,25 @@
         "events": {
           "items": {
             "$ref": "#/definitions/EventQueryResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "PermissionMatrix": {
+      "properties": {
+        "permissions": {
+          "description": "Permissions is every concrete permission in the catalog, sorted.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "roles": {
+          "description": "Roles is each role with its granted subset of Permissions.",
+          "items": {
+            "$ref": "#/definitions/RolePermissions"
           },
           "type": "array"
         }
@@ -1468,6 +1487,41 @@
       },
       "type": "object"
     },
+    "Role": {
+      "properties": {
+        "description": {
+          "description": "Description explains what the role grants.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "DisplayName is a human-friendly label for the role (e.g. \"Viewer\").",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name is the stable, system-qualified identifier used when assigning the\nrole (e.g. \"signadot:viewer\").",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RolePermissions": {
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "permissions": {
+          "description": "Permissions is the expanded set of concrete permissions this role grants\n(wildcards resolved against the catalog).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "RouteGroup": {
       "properties": {
         "createdAt": {
@@ -1631,11 +1685,20 @@
           "type": "string"
         },
         "role": {
-          "description": "Role is the authorization role for the service account: \"admin\" or\n\"member\".",
+          "description": "Role is the authorization role for the service account, in the legacy short\nform: \"admin\", \"member\", or \"viewer\" (not the \"signadot:\"-prefixed system\nname used when assigning a role — see ServiceAccountRoleAssignment).",
           "type": "string"
         },
         "updatedAt": {
           "description": "UpdatedAt is when the service account was last updated. Read-only.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServiceAccountRoleAssignment": {
+      "properties": {
+        "role": {
+          "description": "Role is the system role name to assign: \"signadot:admin\",\n\"signadot:member\", or \"signadot:viewer\".",
           "type": "string"
         }
       },
@@ -2051,6 +2114,32 @@
       },
       "type": "object"
     },
+    "User": {
+      "properties": {
+        "email": {
+          "description": "Email is the user's email address.",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID is the user's public id.",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role is the user's tier role in the org, in the legacy short form:\n\"admin\", \"member\", or \"viewer\" (not the \"signadot:\"-prefixed system name\nused when assigning a role — see UserRoleAssignment).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserRoleAssignment": {
+      "properties": {
+        "role": {
+          "description": "Role is the system role name to assign: \"signadot:admin\",\n\"signadot:member\", or \"signadot:viewer\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "artifacts.JobArtifactSpace": {
       "enum": [
         "user",
@@ -2272,6 +2361,9 @@
         "controlPlane": {
           "$ref": "#/definitions/config.ControlPlaneConfig"
         },
+        "preview": {
+          "$ref": "#/definitions/config.PreviewConfig"
+        },
         "routing": {
           "$ref": "#/definitions/config.RoutingConfig"
         },
@@ -2386,6 +2478,19 @@
             "type": "string"
           },
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "config.PreviewConfig": {
+      "properties": {
+        "customPreviewDomain": {
+          "description": "CustomPreviewDomain is the base domain the preview server expects on\nthe leading label of an inbound Host, e.g. \"preview.signadot.com\".",
+          "type": "string"
+        },
+        "mode": {
+          "description": "Mode is \"control-plane\", \"in-cluster\", or \"both\" -- which front doors\npreview traffic is expected to arrive through. It is a control-plane\nrouting input, not an operator one: the preview server serves every\nvantage on one port and does not read this. Closing the in-cluster\ndoor means not pointing an ingress at that port.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -3631,6 +3736,7 @@
           "type": "string"
         },
         "url": {
+          "description": "URL is absent when the endpoint's cluster reports no address -- previews\ndisabled with no customer domain to fall back to.",
           "type": "string"
         }
       },
@@ -6924,6 +7030,47 @@
         ]
       }
     },
+    "/orgs/{orgName}/permissions": {
+      "get": {
+        "description": "Return the full permission catalog and, for each role, which permissions it grants. Intended for a read-only role-by-permission table so users can see what each role can do.",
+        "operationId": "list-permissions",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PermissionMatrix"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Role/permission matrix",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
     "/orgs/{orgName}/plan-actions": {
       "get": {
         "consumes": [
@@ -9119,6 +9266,50 @@
         ]
       }
     },
+    "/orgs/{orgName}/roles": {
+      "get": {
+        "description": "List the tier roles that can be assigned to users and service accounts in the org (e.g. for a role dropdown). Returns the system roles; org-specific custom roles are included once they exist.",
+        "operationId": "list-roles",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Role"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List assignable roles",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
     "/orgs/{orgName}/routegroups": {
       "get": {
         "consumes": [
@@ -10795,6 +10986,84 @@
         ]
       }
     },
+    "/orgs/{orgName}/service-accounts/{serviceAccountName}/role": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Replace a service account's tier role in the org. Admin-only. Body: {\"role\": \"signadot:admin\"|\"signadot:member\"|\"signadot:viewer\"}. signadot:viewer is rejected with 409 until the org is cut over to the new authorization evaluator.",
+        "operationId": "put-service-account-role",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Service Account Name",
+            "in": "path",
+            "name": "serviceAccountName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Role to assign",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ServiceAccountRoleAssignment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ServiceAccount"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Assign a service account's role",
+        "tags": [
+          "ServiceAccounts"
+        ]
+      }
+    },
     "/orgs/{orgName}/tests": {
       "get": {
         "consumes": [
@@ -11741,6 +12010,84 @@
         ]
       }
     },
+    "/orgs/{orgName}/users/{userId}/role": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Replace a user's tier role in the org. Admin-only. Body: {\"role\": \"signadot:admin\"|\"signadot:member\"|\"signadot:viewer\"}. signadot:viewer is rejected with 409 until the org is cut over to the new authorization evaluator.",
+        "operationId": "put-user-role",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "User public ID",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Role to assign",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRoleAssignment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Assign a user's role",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/service-status": {
       "get": {
         "description": "Caching gateway over the public Status API: active and recently-resolved incidents plus in-progress and upcoming scheduled maintenance, normalized into a vendor-neutral shape and served from a short server-side cache. Always 200 (unconfigured or upstream failure yields empty arrays); unauthenticated.",
@@ -11821,6 +12168,9 @@
       "name": "ResourcePlugins"
     },
     {
+      "name": "Roles"
+    },
+    {
       "name": "RouteGroups"
     },
     {
@@ -11843,6 +12193,9 @@
     },
     {
       "name": "Tests"
+    },
+    {
+      "name": "Users"
     },
     {
       "name": "Meta"
