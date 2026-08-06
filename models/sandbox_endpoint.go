@@ -35,7 +35,8 @@ type SandboxEndpoint struct {
 	// target
 	Target string `json:"target,omitempty"`
 
-	// url
+	// URL is absent when the endpoint's cluster reports no address -- previews
+	// disabled with no customer domain to fall back to.
 	URL string `json:"url,omitempty"`
 }
 
