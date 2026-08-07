@@ -25,4 +25,20 @@ See the Makefile there.
 
 To file an issue, please use our [community issue tracker](https://github.com/signadot/community/issues).
 
+## Note
+At this time, we have marked two properties related to Local with swaggerignore in Sandbox spec
+so that these properties don't show up in the public API Reference.
 
+```
+Local []Local `json:"local,omitempty" swaggerignore:"true"`
+LocalMachineID *string `json:"localMachineID,omitempty" validate:"optional" swaggerignore:"true"`
+```
+
+However, they are needed by the CLI. Hence, here's the step to get the swagger accounting for that.
+
+```
+1. remove the swaggerignore for the 2 local related properties mentioned above in the Signadot repo
+2. generate swagger: `make swagger-control`
+3. copy the generated swagger to the go-sdk swagger.json
+4. run `make` in the generate directory in the go-sdk
+```
