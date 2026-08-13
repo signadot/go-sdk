@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewListJobsParams creates a new ListJobsParams object,
@@ -58,11 +59,29 @@ ListJobsParams contains all the parameters to send to the API endpoint
 */
 type ListJobsParams struct {
 
+	/* Cursor.
+
+	   Opaque pagination cursor from a previous response's nextCursor
+	*/
+	Cursor *string
+
 	/* OrgName.
 
 	   Signadot Org Name
 	*/
 	OrgName string
+
+	/* PageSize.
+
+	   Max jobs to return (default 50, max 500)
+	*/
+	PageSize *int64
+
+	/* SignadotAPIOptIn.
+
+	   Include 'jobs-pagination' (comma-separated with other opt-in flags if needed) to opt into the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
+	*/
+	SignadotAPIOptIn *string
 
 	/* TargetSandbox.
 
@@ -123,6 +142,17 @@ func (o *ListJobsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCursor adds the cursor to the list jobs params
+func (o *ListJobsParams) WithCursor(cursor *string) *ListJobsParams {
+	o.SetCursor(cursor)
+	return o
+}
+
+// SetCursor adds the cursor to the list jobs params
+func (o *ListJobsParams) SetCursor(cursor *string) {
+	o.Cursor = cursor
+}
+
 // WithOrgName adds the orgName to the list jobs params
 func (o *ListJobsParams) WithOrgName(orgName string) *ListJobsParams {
 	o.SetOrgName(orgName)
@@ -132,6 +162,28 @@ func (o *ListJobsParams) WithOrgName(orgName string) *ListJobsParams {
 // SetOrgName adds the orgName to the list jobs params
 func (o *ListJobsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
+}
+
+// WithPageSize adds the pageSize to the list jobs params
+func (o *ListJobsParams) WithPageSize(pageSize *int64) *ListJobsParams {
+	o.SetPageSize(pageSize)
+	return o
+}
+
+// SetPageSize adds the pageSize to the list jobs params
+func (o *ListJobsParams) SetPageSize(pageSize *int64) {
+	o.PageSize = pageSize
+}
+
+// WithSignadotAPIOptIn adds the signadotAPIOptIn to the list jobs params
+func (o *ListJobsParams) WithSignadotAPIOptIn(signadotAPIOptIn *string) *ListJobsParams {
+	o.SetSignadotAPIOptIn(signadotAPIOptIn)
+	return o
+}
+
+// SetSignadotAPIOptIn adds the signadotApiOptIn to the list jobs params
+func (o *ListJobsParams) SetSignadotAPIOptIn(signadotAPIOptIn *string) {
+	o.SignadotAPIOptIn = signadotAPIOptIn
 }
 
 // WithTargetSandbox adds the targetSandbox to the list jobs params
@@ -153,9 +205,51 @@ func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 	}
 	var res []error
 
+	if o.Cursor != nil {
+
+		// query param cursor
+		var qrCursor string
+
+		if o.Cursor != nil {
+			qrCursor = *o.Cursor
+		}
+		qCursor := qrCursor
+		if qCursor != "" {
+
+			if err := r.SetQueryParam("cursor", qCursor); err != nil {
+				return err
+			}
+		}
+	}
+
 	// path param orgName
 	if err := r.SetPathParam("orgName", o.OrgName); err != nil {
 		return err
+	}
+
+	if o.PageSize != nil {
+
+		// query param pageSize
+		var qrPageSize int64
+
+		if o.PageSize != nil {
+			qrPageSize = *o.PageSize
+		}
+		qPageSize := swag.FormatInt64(qrPageSize)
+		if qPageSize != "" {
+
+			if err := r.SetQueryParam("pageSize", qPageSize); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.SignadotAPIOptIn != nil {
+
+		// header param signadot-api-opt-in
+		if err := r.SetHeaderParam("signadot-api-opt-in", *o.SignadotAPIOptIn); err != nil {
+			return err
+		}
 	}
 
 	if o.TargetSandbox != nil {

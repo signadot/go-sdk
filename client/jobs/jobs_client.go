@@ -253,7 +253,7 @@ func (a *Client) GetJob(params *GetJobParams, authInfo runtime.ClientAuthInfoWri
 /*
 ListJobs lists jobs
 
-List Jobs
+List Jobs, paginated newest-first via cursor.
 */
 func (a *Client) ListJobs(params *ListJobsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobsOK, error) {
 	// NOTE: parameters are not validated before sending
