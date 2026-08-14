@@ -6672,10 +6672,14 @@
             "type": "string"
           },
           {
-            "description": "Include 'jobs-pagination' (comma-separated with other opt-in flags if needed) to opt into the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
+            "collectionFormat": "csv",
+            "description": "Opt-in flags; include 'jobs-pagination' to enable the paginated {items,...} envelope below. Omit (or omit this flag) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
             "in": "header",
+            "items": {
+              "type": "string"
+            },
             "name": "signadot-api-opt-in",
-            "type": "string"
+            "type": "array"
           }
         ],
         "produces": [

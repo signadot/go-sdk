@@ -79,9 +79,9 @@ type ListJobsParams struct {
 
 	/* SignadotAPIOptIn.
 
-	   Include 'jobs-pagination' (comma-separated with other opt-in flags if needed) to opt into the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
+	   Opt-in flags; include 'jobs-pagination' to enable the paginated {items,...} envelope below. Omit (or omit this flag) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
 	*/
-	SignadotAPIOptIn *string
+	SignadotAPIOptIn []string
 
 	/* TargetSandbox.
 
@@ -176,13 +176,13 @@ func (o *ListJobsParams) SetPageSize(pageSize *int64) {
 }
 
 // WithSignadotAPIOptIn adds the signadotAPIOptIn to the list jobs params
-func (o *ListJobsParams) WithSignadotAPIOptIn(signadotAPIOptIn *string) *ListJobsParams {
+func (o *ListJobsParams) WithSignadotAPIOptIn(signadotAPIOptIn []string) *ListJobsParams {
 	o.SetSignadotAPIOptIn(signadotAPIOptIn)
 	return o
 }
 
 // SetSignadotAPIOptIn adds the signadotApiOptIn to the list jobs params
-func (o *ListJobsParams) SetSignadotAPIOptIn(signadotAPIOptIn *string) {
+func (o *ListJobsParams) SetSignadotAPIOptIn(signadotAPIOptIn []string) {
 	o.SignadotAPIOptIn = signadotAPIOptIn
 }
 
@@ -246,9 +246,14 @@ func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 
 	if o.SignadotAPIOptIn != nil {
 
-		// header param signadot-api-opt-in
-		if err := r.SetHeaderParam("signadot-api-opt-in", *o.SignadotAPIOptIn); err != nil {
-			return err
+		// binding items for signadot-api-opt-in
+		joinedSignadotAPIOptIn := o.bindParamSignadotAPIOptIn(reg)
+
+		// header array param signadot-api-opt-in
+		if len(joinedSignadotAPIOptIn) > 0 {
+			if err := r.SetHeaderParam("signadot-api-opt-in", joinedSignadotAPIOptIn[0]); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -273,4 +278,21 @@ func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamListJobs binds the parameter signadot-api-opt-in
+func (o *ListJobsParams) bindParamSignadotAPIOptIn(formats strfmt.Registry) []string {
+	signadotAPIOptInIR := o.SignadotAPIOptIn
+
+	var signadotAPIOptInIC []string
+	for _, signadotAPIOptInIIR := range signadotAPIOptInIR { // explode []string
+
+		signadotAPIOptInIIV := signadotAPIOptInIIR // string as string
+		signadotAPIOptInIC = append(signadotAPIOptInIC, signadotAPIOptInIIV)
+	}
+
+	// items.CollectionFormat: "csv"
+	signadotAPIOptInIS := swag.JoinByFormat(signadotAPIOptInIC, "csv")
+
+	return signadotAPIOptInIS
 }
