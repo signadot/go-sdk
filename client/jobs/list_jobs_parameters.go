@@ -77,11 +77,11 @@ type ListJobsParams struct {
 	*/
 	PageSize *int64
 
-	/* SignadotAPIOptIn.
+	/* SignadotAPIVersion.
 
-	   Opt-in flags; include 'jobs-pagination' to enable the paginated {items,...} envelope below. Omit (or omit this flag) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
+	   Dated API version (YYYY-MM-DD). Pin to 2026-08-18 or later to get the paginated {items,...} envelope below. Omit (or pin earlier) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
 	*/
-	SignadotAPIOptIn []string
+	SignadotAPIVersion *string
 
 	/* TargetSandbox.
 
@@ -175,15 +175,15 @@ func (o *ListJobsParams) SetPageSize(pageSize *int64) {
 	o.PageSize = pageSize
 }
 
-// WithSignadotAPIOptIn adds the signadotAPIOptIn to the list jobs params
-func (o *ListJobsParams) WithSignadotAPIOptIn(signadotAPIOptIn []string) *ListJobsParams {
-	o.SetSignadotAPIOptIn(signadotAPIOptIn)
+// WithSignadotAPIVersion adds the signadotAPIVersion to the list jobs params
+func (o *ListJobsParams) WithSignadotAPIVersion(signadotAPIVersion *string) *ListJobsParams {
+	o.SetSignadotAPIVersion(signadotAPIVersion)
 	return o
 }
 
-// SetSignadotAPIOptIn adds the signadotApiOptIn to the list jobs params
-func (o *ListJobsParams) SetSignadotAPIOptIn(signadotAPIOptIn []string) {
-	o.SignadotAPIOptIn = signadotAPIOptIn
+// SetSignadotAPIVersion adds the signadotApiVersion to the list jobs params
+func (o *ListJobsParams) SetSignadotAPIVersion(signadotAPIVersion *string) {
+	o.SignadotAPIVersion = signadotAPIVersion
 }
 
 // WithTargetSandbox adds the targetSandbox to the list jobs params
@@ -244,16 +244,11 @@ func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		}
 	}
 
-	if o.SignadotAPIOptIn != nil {
+	if o.SignadotAPIVersion != nil {
 
-		// binding items for signadot-api-opt-in
-		joinedSignadotAPIOptIn := o.bindParamSignadotAPIOptIn(reg)
-
-		// header array param signadot-api-opt-in
-		if len(joinedSignadotAPIOptIn) > 0 {
-			if err := r.SetHeaderParam("signadot-api-opt-in", joinedSignadotAPIOptIn[0]); err != nil {
-				return err
-			}
+		// header param signadot-api-version
+		if err := r.SetHeaderParam("signadot-api-version", *o.SignadotAPIVersion); err != nil {
+			return err
 		}
 	}
 
@@ -278,21 +273,4 @@ func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
-}
-
-// bindParamListJobs binds the parameter signadot-api-opt-in
-func (o *ListJobsParams) bindParamSignadotAPIOptIn(formats strfmt.Registry) []string {
-	signadotAPIOptInIR := o.SignadotAPIOptIn
-
-	var signadotAPIOptInIC []string
-	for _, signadotAPIOptInIIR := range signadotAPIOptInIR { // explode []string
-
-		signadotAPIOptInIIV := signadotAPIOptInIIR // string as string
-		signadotAPIOptInIC = append(signadotAPIOptInIC, signadotAPIOptInIIV)
-	}
-
-	// items.CollectionFormat: "csv"
-	signadotAPIOptInIS := swag.JoinByFormat(signadotAPIOptInIC, "csv")
-
-	return signadotAPIOptInIS
 }

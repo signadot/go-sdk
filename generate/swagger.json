@@ -538,7 +538,7 @@
           "type": "integer"
         },
         "waiting": {
-          "description": "Waiting is the number of steps waiting for routing context readiness.",
+          "description": "Waiting is the number of steps that have been launched but have not\nbegun executing — waiting for a routing context to become ready, for a\nconcurrency slot on the pod, or both. Every step now transits through\nthis: StepRunning is set after the slot is acquired, so that a step\nqueued behind the semaphore is not reported as having run. See\nStepWaiting.",
           "type": "integer"
         }
       },
@@ -823,6 +823,10 @@
           ],
           "description": "Phase is the overall execution state."
         },
+        "possibleReruns": {
+          "description": "PossibleReruns is how many times this execution was placed on a runner\nagain without being able to rule out that an earlier placement had\nalready run the plan.\n\nPlan execution is at-least-once. Under normal operation an execution\nruns exactly once; a pod rescheduled onto another node, or one whose\nmemory of a finished run aged out before the control plane read it,\nloses the only record of whether the plan ran, and it is re-placed. A\nnon-zero value here means the plan's side effects may have happened\nmore than once, which matters if the plan is not idempotent and is the\nsignal to check before assuming a single run.\n\nZero for the overwhelming majority of executions. It counts only\nre-placements where an earlier run could not be ruled out: a runner\nrefusing the dispatch, asking for redispatch before running anything, or\nnever having been sent the execution at all all leave it at zero.\n\nControl plane to client only. It is read from the plan_executions row by\nRowToExecution; a runner neither sets it nor sees it, so it is always\nabsent on the runner's own status responses. See StepsStarted, which\ntravels the other way.",
+          "type": "integer"
+        },
         "runnerHost": {
           "description": "RunnerHost is the hostname of the runner executing the plan.",
           "type": "string"
@@ -841,6 +845,10 @@
             "$ref": "#/definitions/PlanStepStatus"
           },
           "type": "array"
+        },
+        "stepsStarted": {
+          "description": "StepsStarted reports, for an execution the runner is handing back with\nExecutionRedispatchNeeded, whether any of its steps had begun.\n\nThe runner is the only party that can answer it. Once the execution is\noff the pod the control plane cannot tell a plan that got halfway from\none that never started, and the answer decides not whether to re-place\n— at-least-once means it is always re-placed — but whether that\nre-placement counts a possible rerun.\n\nA pointer because absent and false are different answers and only one of\nthem is safe to act on. A runner from before this field existed sends\nnothing, and the only hand-back such a runner emits is the\nErrImageNotReady one from its results loop — which fires with a step\nalready executing and earlier steps in the DAG completed. So absence\nmeans work probably was repeated, and reading it as false would decline\nto count precisely the case that most needs counting. Nil is the unknown\nthat counts; false is the runner saying nothing ran, and is believed.\n\nRunner to control plane only, despite appearing in this type's published\nschema. It is consumed in the same pass that reads it, deciding what\nPossibleReruns is incremented by, and is never persisted — there is no\ncolumn, and RowToExecution does not set it. So it is always absent on a\ncontrol-plane API response, and a client must not read anything into\nthat. Present here rather than on a runner-only type because\nExecutionStatus is what the runner returns over\nGET /api/v1/plans/{executionID}.",
+          "type": "boolean"
         },
         "updatedAt": {
           "description": "UpdatedAt is when the execution status was last updated. Serialized as RFC3339.",
@@ -6672,14 +6680,11 @@
             "type": "string"
           },
           {
-            "collectionFormat": "csv",
-            "description": "Opt-in flags; include 'jobs-pagination' to enable the paginated {items,...} envelope below. Omit (or omit this flag) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
+            "description": "Dated API version (YYYY-MM-DD). Pin to 2026-08-18 or later to get the paginated {items,...} envelope below. Omit (or pin earlier) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
             "in": "header",
-            "items": {
-              "type": "string"
-            },
-            "name": "signadot-api-opt-in",
-            "type": "array"
+            "name": "signadot-api-version",
+            "type": "string",
+            "x-example": "2026-08-18"
           }
         ],
         "produces": [
