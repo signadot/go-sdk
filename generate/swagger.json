@@ -6680,11 +6680,11 @@
             "type": "string"
           },
           {
-            "description": "Dated API version (YYYY-MM-DD). Pin to 2026-08-18 or later to get the paginated {items,...} envelope below. Omit (or pin earlier) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
+            "description": "Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
             "in": "header",
-            "name": "signadot-api-version",
+            "name": "signadot-api-opt-in",
             "type": "string",
-            "x-example": "2026-08-18"
+            "x-example": "pagination"
           }
         ],
         "produces": [

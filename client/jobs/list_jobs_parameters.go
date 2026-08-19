@@ -77,11 +77,11 @@ type ListJobsParams struct {
 	*/
 	PageSize *int64
 
-	/* SignadotAPIVersion.
+	/* SignadotAPIOptIn.
 
-	   Dated API version (YYYY-MM-DD). Pin to 2026-08-18 or later to get the paginated {items,...} envelope below. Omit (or pin earlier) to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
+	   Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
 	*/
-	SignadotAPIVersion *string
+	SignadotAPIOptIn *string
 
 	/* TargetSandbox.
 
@@ -175,15 +175,15 @@ func (o *ListJobsParams) SetPageSize(pageSize *int64) {
 	o.PageSize = pageSize
 }
 
-// WithSignadotAPIVersion adds the signadotAPIVersion to the list jobs params
-func (o *ListJobsParams) WithSignadotAPIVersion(signadotAPIVersion *string) *ListJobsParams {
-	o.SetSignadotAPIVersion(signadotAPIVersion)
+// WithSignadotAPIOptIn adds the signadotAPIOptIn to the list jobs params
+func (o *ListJobsParams) WithSignadotAPIOptIn(signadotAPIOptIn *string) *ListJobsParams {
+	o.SetSignadotAPIOptIn(signadotAPIOptIn)
 	return o
 }
 
-// SetSignadotAPIVersion adds the signadotApiVersion to the list jobs params
-func (o *ListJobsParams) SetSignadotAPIVersion(signadotAPIVersion *string) {
-	o.SignadotAPIVersion = signadotAPIVersion
+// SetSignadotAPIOptIn adds the signadotApiOptIn to the list jobs params
+func (o *ListJobsParams) SetSignadotAPIOptIn(signadotAPIOptIn *string) {
+	o.SignadotAPIOptIn = signadotAPIOptIn
 }
 
 // WithTargetSandbox adds the targetSandbox to the list jobs params
@@ -244,10 +244,10 @@ func (o *ListJobsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		}
 	}
 
-	if o.SignadotAPIVersion != nil {
+	if o.SignadotAPIOptIn != nil {
 
-		// header param signadot-api-version
-		if err := r.SetHeaderParam("signadot-api-version", *o.SignadotAPIVersion); err != nil {
+		// header param signadot-api-opt-in
+		if err := r.SetHeaderParam("signadot-api-opt-in", *o.SignadotAPIOptIn); err != nil {
 			return err
 		}
 	}
