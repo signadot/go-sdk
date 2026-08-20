@@ -6650,7 +6650,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List Jobs, paginated newest-first via cursor.",
+        "description": "List Jobs, paginated newest-first via cursor. The schema below (ListJobsResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Job array instead (deprecated, see that header's own docs).",
         "operationId": "list-jobs",
         "parameters": [
           {
@@ -6662,7 +6662,7 @@
             "x-example": "my-company"
           },
           {
-            "description": "Filter jobs by target sandbox name",
+            "description": "Filter jobs by target sandbox name. Not paginated: returns every matching job in one response, and cannot be combined with cursor",
             "in": "query",
             "name": "targetSandbox",
             "type": "string"
@@ -6674,12 +6674,13 @@
             "type": "integer"
           },
           {
-            "description": "Opaque pagination cursor from a previous response's nextCursor",
+            "description": "Opaque pagination cursor from a previous response's nextCursor. Not supported together with targetSandbox",
             "in": "query",
             "name": "cursor",
             "type": "string"
           },
           {
+            "default": "pagination",
             "description": "Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
             "in": "header",
             "name": "signadot-api-opt-in",

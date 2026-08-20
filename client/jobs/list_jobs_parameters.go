@@ -61,7 +61,7 @@ type ListJobsParams struct {
 
 	/* Cursor.
 
-	   Opaque pagination cursor from a previous response's nextCursor
+	   Opaque pagination cursor from a previous response's nextCursor. Not supported together with targetSandbox
 	*/
 	Cursor *string
 
@@ -80,12 +80,14 @@ type ListJobsParams struct {
 	/* SignadotAPIOptIn.
 
 	   Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
+
+	   Default: "pagination"
 	*/
 	SignadotAPIOptIn *string
 
 	/* TargetSandbox.
 
-	   Filter jobs by target sandbox name
+	   Filter jobs by target sandbox name. Not paginated: returns every matching job in one response, and cannot be combined with cursor
 	*/
 	TargetSandbox *string
 
@@ -106,7 +108,18 @@ func (o *ListJobsParams) WithDefaults() *ListJobsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ListJobsParams) SetDefaults() {
-	// no default values defined for this parameter
+	var (
+		signadotAPIOptInDefault = string("pagination")
+	)
+
+	val := ListJobsParams{
+		SignadotAPIOptIn: &signadotAPIOptInDefault,
+	}
+
+	val.timeout = o.timeout
+	val.Context = o.Context
+	val.HTTPClient = o.HTTPClient
+	*o = val
 }
 
 // WithTimeout adds the timeout to the list jobs params
