@@ -253,7 +253,7 @@ func (a *Client) GetJob(params *GetJobParams, authInfo runtime.ClientAuthInfoWri
 /*
 ListJobs lists jobs
 
-List Jobs
+List Jobs, paginated newest-first via cursor. The schema below (ListJobsResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Job array instead (deprecated, see that header's own docs).
 */
 func (a *Client) ListJobs(params *ListJobsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListJobsOK, error) {
 	// NOTE: parameters are not validated before sending
