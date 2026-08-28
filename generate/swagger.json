@@ -132,7 +132,7 @@
           "type": "string"
         },
         "expiresAt": {
-          "description": "ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the\nfield, or sending an explicit JSON null, both mean the key never\nexpires \u2014 so callers that predate this field keep their old behavior\nwith no changes required.",
+          "description": "ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the\nfield, or sending an explicit JSON null, both mean the key never\nexpires — so callers that predate this field keep their old behavior\nwith no changes required.",
           "type": "string"
         }
       },
@@ -473,6 +473,49 @@
       },
       "type": "object"
     },
+    "ListJobsResponse": {
+      "properties": {
+        "hasMore": {
+          "type": "boolean"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/Job"
+          },
+          "type": "array"
+        },
+        "nextCursor": {
+          "type": "string"
+        },
+        "totalCount": {
+          "description": "TotalCount/TotalPages are omitted (not a literal 0) when not computed\nfor this response: page one of a paginated walk always has them, but\nsubsequent cursor pages don't recompute them (the client already has\nthe total from page one), and neither does the legacy shape. A\nliteral 0 here would be indistinguishable from an org that genuinely\nhas zero jobs.",
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "PermissionMatrix": {
+      "properties": {
+        "permissions": {
+          "description": "Permissions is every concrete permission in the catalog, sorted.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "roles": {
+          "description": "Roles is each role with its granted subset of Permissions.",
+          "items": {
+            "$ref": "#/definitions/RolePermissions"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "PhaseCounts": {
       "properties": {
         "completed": {
@@ -496,7 +539,7 @@
           "type": "integer"
         },
         "waiting": {
-          "description": "Waiting is the number of steps waiting for routing context readiness.",
+          "description": "Waiting is the number of steps that have been launched but have not\nbegun executing — waiting for a routing context to become ready, for a\nconcurrency slot on the pod, or both. Every step now transits through\nthis: StepRunning is set after the slot is acquired, so that a step\nqueued behind the semaphore is not reported as having run. See\nStepWaiting.",
           "type": "integer"
         }
       },
@@ -781,6 +824,10 @@
           ],
           "description": "Phase is the overall execution state."
         },
+        "possibleReruns": {
+          "description": "PossibleReruns is how many times this execution was placed on a runner\nagain without being able to rule out that an earlier placement had\nalready run the plan.\n\nPlan execution is at-least-once. Under normal operation an execution\nruns exactly once; a pod rescheduled onto another node, or one whose\nmemory of a finished run aged out before the control plane read it,\nloses the only record of whether the plan ran, and it is re-placed. A\nnon-zero value here means the plan's side effects may have happened\nmore than once, which matters if the plan is not idempotent and is the\nsignal to check before assuming a single run.\n\nZero for the overwhelming majority of executions. It counts only\nre-placements where an earlier run could not be ruled out: a runner\nrefusing the dispatch, asking for redispatch before running anything, or\nnever having been sent the execution at all all leave it at zero.\n\nControl plane to client only. It is read from the plan_executions row by\nRowToExecution; a runner neither sets it nor sees it, so it is always\nabsent on the runner's own status responses. See StepsStarted, which\ntravels the other way.",
+          "type": "integer"
+        },
         "runnerHost": {
           "description": "RunnerHost is the hostname of the runner executing the plan.",
           "type": "string"
@@ -799,6 +846,10 @@
             "$ref": "#/definitions/PlanStepStatus"
           },
           "type": "array"
+        },
+        "stepsStarted": {
+          "description": "StepsStarted reports, for an execution the runner is handing back with\nExecutionRedispatchNeeded, whether any of its steps had begun.\n\nThe runner is the only party that can answer it. Once the execution is\noff the pod the control plane cannot tell a plan that got halfway from\none that never started, and the answer decides not whether to re-place\n— at-least-once means it is always re-placed — but whether that\nre-placement counts a possible rerun.\n\nA pointer because absent and false are different answers and only one of\nthem is safe to act on. A runner from before this field existed sends\nnothing, and the only hand-back such a runner emits is the\nErrImageNotReady one from its results loop — which fires with a step\nalready executing and earlier steps in the DAG completed. So absence\nmeans work probably was repeated, and reading it as false would decline\nto count precisely the case that most needs counting. Nil is the unknown\nthat counts; false is the runner saying nothing ran, and is believed.\n\nRunner to control plane only, despite appearing in this type's published\nschema. It is consumed in the same pass that reads it, deciding what\nPossibleReruns is incremented by, and is never persisted — there is no\ncolumn, and RowToExecution does not set it. So it is always absent on a\ncontrol-plane API response, and a client must not read anything into\nthat. Present here rather than on a runner-only type because\nExecutionStatus is what the runner returns over\nGET /api/v1/plans/{executionID}.",
+          "type": "boolean"
         },
         "updatedAt": {
           "description": "UpdatedAt is when the execution status was last updated. Serialized as RFC3339.",
@@ -1468,6 +1519,41 @@
       },
       "type": "object"
     },
+    "Role": {
+      "properties": {
+        "description": {
+          "description": "Description explains what the role grants.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "DisplayName is a human-friendly label for the role (e.g. \"Viewer\").",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name is the stable, system-qualified identifier used when assigning the\nrole (e.g. \"signadot:viewer\").",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RolePermissions": {
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "permissions": {
+          "description": "Permissions is the expanded set of concrete permissions this role grants\n(wildcards resolved against the catalog).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "RouteGroup": {
       "properties": {
         "createdAt": {
@@ -1631,11 +1717,20 @@
           "type": "string"
         },
         "role": {
-          "description": "Role is the authorization role for the service account: \"admin\" or\n\"member\".",
+          "description": "Role is the authorization role for the service account, in the legacy short\nform: \"admin\", \"member\", or \"viewer\" (not the \"signadot:\"-prefixed system\nname used when assigning a role — see ServiceAccountRoleAssignment).",
           "type": "string"
         },
         "updatedAt": {
           "description": "UpdatedAt is when the service account was last updated. Read-only.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServiceAccountRoleAssignment": {
+      "properties": {
+        "role": {
+          "description": "Role is the system role name to assign: \"signadot:admin\",\n\"signadot:member\", or \"signadot:viewer\".",
           "type": "string"
         }
       },
@@ -2051,6 +2146,32 @@
       },
       "type": "object"
     },
+    "User": {
+      "properties": {
+        "email": {
+          "description": "Email is the user's email address.",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID is the user's public id.",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role is the user's tier role in the org, in the legacy short form:\n\"admin\", \"member\", or \"viewer\" (not the \"signadot:\"-prefixed system name\nused when assigning a role — see UserRoleAssignment).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserRoleAssignment": {
+      "properties": {
+        "role": {
+          "description": "Role is the system role name to assign: \"signadot:admin\",\n\"signadot:member\", or \"signadot:viewer\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "artifacts.JobArtifactSpace": {
       "enum": [
         "user",
@@ -2272,6 +2393,9 @@
         "controlPlane": {
           "$ref": "#/definitions/config.ControlPlaneConfig"
         },
+        "previewServer": {
+          "$ref": "#/definitions/config.PreviewServerConfig"
+        },
         "routing": {
           "$ref": "#/definitions/config.RoutingConfig"
         },
@@ -2298,6 +2422,14 @@
           "description": "control plane can be disabled",
           "type": "boolean"
         },
+        "podLogAccess": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/config.PodLogAccessConfig"
+            }
+          ],
+          "description": "pod log access can be turned off for this cluster"
+        },
         "proxy": {
           "description": "control plane proxy can be \"enabled\" or \"disabled\"",
           "type": "string"
@@ -2321,6 +2453,15 @@
         "DefaultHeaderBaggage",
         "DefaultHeaderTraceState"
       ]
+    },
+    "config.DevMeshConfig": {
+      "properties": {
+        "enabled": {
+          "description": "Enabled reports whether DevMesh sidecar injection is installed on this\ncluster. Absent means enabled.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
     },
     "config.GatewayAPIConfig": {
       "properties": {
@@ -2390,6 +2531,27 @@
       },
       "type": "object"
     },
+    "config.PodLogAccessConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.PreviewServerConfig": {
+      "properties": {
+        "customDomain": {
+          "description": "CustomDomain is the base domain the preview server expects on the\nleading label of an inbound Host, e.g. \"preview.signadot.com\". Empty\nmeans none is configured, and preview URLs are reported on Signadot's\nown domain.",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Enabled is whether previews are served for this cluster: the control\nplane forwards preview requests to the preview server when true and\nrefuses them when false.\n\nA pointer so an absent stanza is distinguishable from an explicit\nfalse. Absent means an operator or a chart predating this field, which\nkeeps the behavior it has always had -- see PreviewServerEnabled.\n\nAn explicit value, either way, is only renderable by a chart that ships\npreviewserver, so a false describes a cluster that has a preview server\nto turn off. The control plane relies on that but does not assume it: it\nconsults this stanza only for operators new enough to have written it,\nwhich is also what makes a hand-edited ConfigMap on an older cluster\ninert. The implication runs one way only -- v1.4.0 itself renders\nnothing here -- so presence cannot be derived from the agent version and\nabsence has to be read as its own state.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "config.QueryParamRoutingConfig": {
       "properties": {
         "enabled": {
@@ -2414,6 +2576,9 @@
             "$ref": "#/definitions/config.DefaultHeaderClass"
           },
           "type": "array"
+        },
+        "devMesh": {
+          "$ref": "#/definitions/config.DevMeshConfig"
         },
         "gatewayAPI": {
           "$ref": "#/definitions/config.GatewayAPIConfig"
@@ -3631,6 +3796,7 @@
           "type": "string"
         },
         "url": {
+          "description": "URL is absent when the endpoint's cluster reports no address -- previews\ndisabled with no customer domain to fall back to.",
           "type": "string"
         }
       },
@@ -6513,7 +6679,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List Jobs",
+        "description": "List Jobs, paginated newest-first via cursor. The schema below (ListJobsResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Job array instead (deprecated, see that header's own docs).",
         "operationId": "list-jobs",
         "parameters": [
           {
@@ -6525,10 +6691,30 @@
             "x-example": "my-company"
           },
           {
-            "description": "Filter jobs by target sandbox name",
+            "description": "Filter jobs by target sandbox name. Not paginated: returns every matching job in one response, and cannot be combined with cursor",
             "in": "query",
             "name": "targetSandbox",
             "type": "string"
+          },
+          {
+            "description": "Max jobs to return (default 50, max 500)",
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque pagination cursor from a previous response's nextCursor. Not supported together with targetSandbox",
+            "in": "query",
+            "name": "cursor",
+            "type": "string"
+          },
+          {
+            "default": "pagination",
+            "description": "Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
+            "in": "header",
+            "name": "signadot-api-opt-in",
+            "type": "string",
+            "x-example": "pagination"
           }
         ],
         "produces": [
@@ -6538,10 +6724,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "items": {
-                "$ref": "#/definitions/Job"
-              },
-              "type": "array"
+              "$ref": "#/definitions/ListJobsResponse"
             }
           },
           "400": {
@@ -6921,6 +7104,47 @@
         "summary": "Cancel a job",
         "tags": [
           "Jobs"
+        ]
+      }
+    },
+    "/orgs/{orgName}/permissions": {
+      "get": {
+        "description": "Return the full permission catalog and, for each role, which permissions it grants. Intended for a read-only role-by-permission table so users can see what each role can do.",
+        "operationId": "list-permissions",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PermissionMatrix"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Role/permission matrix",
+        "tags": [
+          "Roles"
         ]
       }
     },
@@ -9119,6 +9343,50 @@
         ]
       }
     },
+    "/orgs/{orgName}/roles": {
+      "get": {
+        "description": "List the tier roles that can be assigned to users and service accounts in the org (e.g. for a role dropdown). Returns the system roles; org-specific custom roles are included once they exist.",
+        "operationId": "list-roles",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Role"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List assignable roles",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
     "/orgs/{orgName}/routegroups": {
       "get": {
         "consumes": [
@@ -9910,7 +10178,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).",
+        "description": "Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).\nReturns 403 when the cluster's Signadot operator is installed with controlPlane.podLogAccess.enabled=false, which withholds pod log access from Signadot.",
         "operationId": "get-sandbox-logs",
         "parameters": [
           {
@@ -9981,6 +10249,12 @@
           },
           "401": {
             "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
             }
@@ -10792,6 +11066,84 @@
         "summary": "Delete a service-account API key",
         "tags": [
           "ApiKeys"
+        ]
+      }
+    },
+    "/orgs/{orgName}/service-accounts/{serviceAccountName}/role": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Replace a service account's tier role in the org. Admin-only. Body: {\"role\": \"signadot:admin\"|\"signadot:member\"|\"signadot:viewer\"}. signadot:viewer is rejected with 409 until the org is cut over to the new authorization evaluator.",
+        "operationId": "put-service-account-role",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Service Account Name",
+            "in": "path",
+            "name": "serviceAccountName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Role to assign",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ServiceAccountRoleAssignment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ServiceAccount"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Assign a service account's role",
+        "tags": [
+          "ServiceAccounts"
         ]
       }
     },
@@ -11741,6 +12093,84 @@
         ]
       }
     },
+    "/orgs/{orgName}/users/{userId}/role": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Replace a user's tier role in the org. Admin-only. Body: {\"role\": \"signadot:admin\"|\"signadot:member\"|\"signadot:viewer\"}. signadot:viewer is rejected with 409 until the org is cut over to the new authorization evaluator.",
+        "operationId": "put-user-role",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "User public ID",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Role to assign",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRoleAssignment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Assign a user's role",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/service-status": {
       "get": {
         "description": "Caching gateway over the public Status API: active and recently-resolved incidents plus in-progress and upcoming scheduled maintenance, normalized into a vendor-neutral shape and served from a short server-side cache. Always 200 (unconfigured or upstream failure yields empty arrays); unauthenticated.",
@@ -11821,6 +12251,9 @@
       "name": "ResourcePlugins"
     },
     {
+      "name": "Roles"
+    },
+    {
       "name": "RouteGroups"
     },
     {
@@ -11843,6 +12276,9 @@
     },
     {
       "name": "Tests"
+    },
+    {
+      "name": "Users"
     },
     {
       "name": "Meta"
