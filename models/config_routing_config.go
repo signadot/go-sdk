@@ -23,6 +23,9 @@ type ConfigRoutingConfig struct {
 	// default headers
 	DefaultHeaders []ConfigDefaultHeaderClass `json:"defaultHeaders"`
 
+	// dev mesh
+	DevMesh *ConfigDevMeshConfig `json:"devMesh,omitempty"`
+
 	// gateway API
 	GatewayAPI *ConfigGatewayAPIConfig `json:"gatewayAPI,omitempty"`
 
@@ -44,6 +47,10 @@ func (m *ConfigRoutingConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateDefaultHeaders(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDevMesh(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -89,6 +96,29 @@ func (m *ConfigRoutingConfig) validateDefaultHeaders(formats strfmt.Registry) er
 			return err
 		}
 
+	}
+
+	return nil
+}
+
+func (m *ConfigRoutingConfig) validateDevMesh(formats strfmt.Registry) error {
+	if swag.IsZero(m.DevMesh) { // not required
+		return nil
+	}
+
+	if m.DevMesh != nil {
+		if err := m.DevMesh.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("devMesh")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("devMesh")
+			}
+
+			return err
+		}
 	}
 
 	return nil
@@ -194,6 +224,10 @@ func (m *ConfigRoutingConfig) ContextValidate(ctx context.Context, formats strfm
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDevMesh(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateGatewayAPI(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -237,6 +271,31 @@ func (m *ConfigRoutingConfig) contextValidateDefaultHeaders(ctx context.Context,
 			return err
 		}
 
+	}
+
+	return nil
+}
+
+func (m *ConfigRoutingConfig) contextValidateDevMesh(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DevMesh != nil {
+
+		if swag.IsZero(m.DevMesh) { // not required
+			return nil
+		}
+
+		if err := m.DevMesh.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("devMesh")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("devMesh")
+			}
+
+			return err
+		}
 	}
 
 	return nil

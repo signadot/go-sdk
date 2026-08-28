@@ -253,9 +253,11 @@ func (a *Client) GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAut
 }
 
 /*
-GetSandboxLogs gets sandbox workload logs
+	GetSandboxLogs gets sandbox workload logs
 
-Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).
+	Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).
+
+Returns 403 when the cluster's Signadot operator is installed with controlPlane.podLogAccess.enabled=false, which withholds pod log access from Signadot.
 */
 func (a *Client) GetSandboxLogs(params *GetSandboxLogsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxLogsOK, error) {
 	// NOTE: parameters are not validated before sending
