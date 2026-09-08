@@ -79,7 +79,7 @@ type ListJobsParams struct {
 
 	/* SignadotAPIOptIn.
 
-	   Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.
+	   Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.
 
 	   Default: "pagination"
 	*/

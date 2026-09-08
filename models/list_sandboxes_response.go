@@ -12,16 +12,16 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ListJobsResponse list jobs response
+// ListSandboxesResponse list sandboxes response
 //
-// swagger:model ListJobsResponse
-type ListJobsResponse struct {
+// swagger:model ListSandboxesResponse
+type ListSandboxesResponse struct {
 
 	// has more
 	HasMore bool `json:"hasMore,omitempty"`
 
 	// items
-	Items []*Job `json:"items"`
+	Items []*Sandbox `json:"items"`
 
 	// next cursor
 	NextCursor string `json:"nextCursor,omitempty"`
@@ -31,15 +31,15 @@ type ListJobsResponse struct {
 	// subsequent cursor pages don't recompute them (the client already has
 	// the total from page one), and neither does the legacy shape. A
 	// literal 0 here would be indistinguishable from an org that genuinely
-	// has zero jobs.
+	// has zero sandboxes.
 	TotalCount int64 `json:"totalCount,omitempty"`
 
 	// total pages
 	TotalPages int64 `json:"totalPages,omitempty"`
 }
 
-// Validate validates this list jobs response
-func (m *ListJobsResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this list sandboxes response
+func (m *ListSandboxesResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateItems(formats); err != nil {
@@ -52,7 +52,7 @@ func (m *ListJobsResponse) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ListJobsResponse) validateItems(formats strfmt.Registry) error {
+func (m *ListSandboxesResponse) validateItems(formats strfmt.Registry) error {
 	if swag.IsZero(m.Items) { // not required
 		return nil
 	}
@@ -82,8 +82,8 @@ func (m *ListJobsResponse) validateItems(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this list jobs response based on the context it is used
-func (m *ListJobsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this list sandboxes response based on the context it is used
+func (m *ListSandboxesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateItems(ctx, formats); err != nil {
@@ -96,7 +96,7 @@ func (m *ListJobsResponse) ContextValidate(ctx context.Context, formats strfmt.R
 	return nil
 }
 
-func (m *ListJobsResponse) contextValidateItems(ctx context.Context, formats strfmt.Registry) error {
+func (m *ListSandboxesResponse) contextValidateItems(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Items); i++ {
 
@@ -126,7 +126,7 @@ func (m *ListJobsResponse) contextValidateItems(ctx context.Context, formats str
 }
 
 // MarshalBinary interface implementation
-func (m *ListJobsResponse) MarshalBinary() ([]byte, error) {
+func (m *ListSandboxesResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -134,8 +134,8 @@ func (m *ListJobsResponse) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ListJobsResponse) UnmarshalBinary(b []byte) error {
-	var res ListJobsResponse
+func (m *ListSandboxesResponse) UnmarshalBinary(b []byte) error {
+	var res ListSandboxesResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
