@@ -301,7 +301,7 @@ func (a *Client) GetSandboxLogs(params *GetSandboxLogsParams, authInfo runtime.C
 /*
 ListSandboxes lists sandboxes
 
-List all sandboxes under the specified Signadot org.
+List the sandboxes under the specified Signadot org. The paginated response is ordered by immutable creation time (createdAt descending, with id descending as a tie-breaker), which intentionally differs from the legacy array's most-recently-updated ordering. The schema below (ListSandboxesResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Sandbox array instead (deprecated, see that header's own docs).
 */
 func (a *Client) ListSandboxes(params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error) {
 	// NOTE: parameters are not validated before sending

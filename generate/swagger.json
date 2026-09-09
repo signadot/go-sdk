@@ -488,6 +488,31 @@
           "type": "string"
         },
         "totalCount": {
+          "description": "TotalCount/TotalPages are omitted (not a literal 0) when not computed\nfor this response: page one of a paginated walk always has them, but\nsubsequent cursor pages don't recompute them (the client already has\nthe total from page one), and neither does the legacy shape. A\nliteral 0 here would be indistinguishable from an org that genuinely\nhas zero jobs.",
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ListSandboxesResponse": {
+      "properties": {
+        "hasMore": {
+          "type": "boolean"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/Sandbox"
+          },
+          "type": "array"
+        },
+        "nextCursor": {
+          "type": "string"
+        },
+        "totalCount": {
+          "description": "TotalCount/TotalPages are omitted (not a literal 0) when not computed\nfor this response: page one of a paginated walk always has them, but\nsubsequent cursor pages don't recompute them (the client already has\nthe total from page one), and neither does the legacy shape. A\nliteral 0 here would be indistinguishable from an org that genuinely\nhas zero sandboxes.",
           "type": "integer"
         },
         "totalPages": {
@@ -6681,7 +6706,7 @@
           },
           {
             "default": "pagination",
-            "description": "Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows) until it's sunset — see the Deprecation/Sunset response headers on legacy responses.",
+            "description": "Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
             "in": "header",
             "name": "signadot-api-opt-in",
             "type": "string",
@@ -9883,7 +9908,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List all sandboxes under the specified Signadot org.",
+        "description": "List the sandboxes under the specified Signadot org. The paginated response is ordered by immutable creation time (createdAt descending, with id descending as a tie-breaker), which intentionally differs from the legacy array's most-recently-updated ordering. The schema below (ListSandboxesResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Sandbox array instead (deprecated, see that header's own docs).",
         "operationId": "list-sandboxes",
         "parameters": [
           {
@@ -9893,6 +9918,26 @@
             "required": true,
             "type": "string",
             "x-example": "my-company"
+          },
+          {
+            "description": "Max sandboxes to return (default 50, max 500)",
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque pagination cursor from a previous response's nextCursor",
+            "in": "query",
+            "name": "cursor",
+            "type": "string"
+          },
+          {
+            "default": "pagination",
+            "description": "Set to 'pagination' to get the paginated {items,...} envelope ordered by createdAt descending. Omit to keep receiving the legacy bare []Sandbox array (every sandbox in the org, unpaginated and ordered by updatedAt descending), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
+            "in": "header",
+            "name": "signadot-api-opt-in",
+            "type": "string",
+            "x-example": "pagination"
           }
         ],
         "produces": [
@@ -9902,10 +9947,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "items": {
-                "$ref": "#/definitions/Sandbox"
-              },
-              "type": "array"
+              "$ref": "#/definitions/ListSandboxesResponse"
             }
           },
           "400": {
