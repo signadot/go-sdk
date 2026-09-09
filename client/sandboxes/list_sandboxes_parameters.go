@@ -79,7 +79,7 @@ type ListSandboxesParams struct {
 
 	/* SignadotAPIOptIn.
 
-	   Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Sandbox array (every sandbox in the org, unpaginated), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.
+	   Set to 'pagination' to get the paginated {items,...} envelope ordered by createdAt descending. Omit to keep receiving the legacy bare []Sandbox array (every sandbox in the org, unpaginated and ordered by updatedAt descending), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.
 
 	   Default: "pagination"
 	*/

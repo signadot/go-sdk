@@ -9908,7 +9908,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List the sandboxes under the specified Signadot org, paginated newest-first via cursor. The schema below (ListSandboxesResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Sandbox array instead (deprecated, see that header's own docs).",
+        "description": "List the sandboxes under the specified Signadot org. The paginated response is ordered by immutable creation time (createdAt descending, with id descending as a tie-breaker), which intentionally differs from the legacy array's most-recently-updated ordering. The schema below (ListSandboxesResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Sandbox array instead (deprecated, see that header's own docs).",
         "operationId": "list-sandboxes",
         "parameters": [
           {
@@ -9933,7 +9933,7 @@
           },
           {
             "default": "pagination",
-            "description": "Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Sandbox array (every sandbox in the org, unpaginated), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
+            "description": "Set to 'pagination' to get the paginated {items,...} envelope ordered by createdAt descending. Omit to keep receiving the legacy bare []Sandbox array (every sandbox in the org, unpaginated and ordered by updatedAt descending), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
             "in": "header",
             "name": "signadot-api-opt-in",
             "type": "string",
