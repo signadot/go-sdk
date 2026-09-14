@@ -25,6 +25,9 @@ type ConfigClusterConfig struct {
 	// control plane
 	ControlPlane *ConfigControlPlaneConfig `json:"controlPlane,omitempty"`
 
+	// preview
+	Preview *ConfigPreviewConfig `json:"preview,omitempty"`
+
 	// routing
 	Routing *ConfigRoutingConfig `json:"routing,omitempty"`
 
@@ -43,6 +46,10 @@ func (m *ConfigClusterConfig) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateControlPlane(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePreview(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -82,6 +89,29 @@ func (m *ConfigClusterConfig) validateControlPlane(formats strfmt.Registry) erro
 			ce := new(errors.CompositeError)
 			if stderrors.As(err, &ce) {
 				return ce.ValidateName("controlPlane")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigClusterConfig) validatePreview(formats strfmt.Registry) error {
+	if swag.IsZero(m.Preview) { // not required
+		return nil
+	}
+
+	if m.Preview != nil {
+		if err := m.Preview.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("preview")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("preview")
 			}
 
 			return err
@@ -191,6 +221,10 @@ func (m *ConfigClusterConfig) ContextValidate(ctx context.Context, formats strfm
 		res = append(res, err)
 	}
 
+	if err := m.contextValidatePreview(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateRouting(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -229,6 +263,31 @@ func (m *ConfigClusterConfig) contextValidateControlPlane(ctx context.Context, f
 			ce := new(errors.CompositeError)
 			if stderrors.As(err, &ce) {
 				return ce.ValidateName("controlPlane")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ConfigClusterConfig) contextValidatePreview(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Preview != nil {
+
+		if swag.IsZero(m.Preview) { // not required
+			return nil
+		}
+
+		if err := m.Preview.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("preview")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("preview")
 			}
 
 			return err
