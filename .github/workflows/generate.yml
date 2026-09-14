@@ -13,7 +13,7 @@ on:
     - 'generate/**'
 
 env:
-  GO_VERSION: "1.25"
+  GO_VERSION: "1.27"
 
 jobs:
   release-go-sdk:
