@@ -4,7 +4,9 @@ package models
 
 import (
 	"context"
+	stderrors "errors"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -16,6 +18,9 @@ type ConfigControlPlaneConfig struct {
 
 	// control plane can be disabled
 	Disabled bool `json:"disabled,omitempty"`
+
+	// pod log access
+	PodLogAccess *ConfigPodLogAccessConfig `json:"podLogAccess,omitempty"`
 
 	// control plane proxy can be "enabled" or "disabled"
 	Proxy string `json:"proxy,omitempty"`
@@ -29,11 +34,77 @@ type ConfigControlPlaneConfig struct {
 
 // Validate validates this config control plane config
 func (m *ConfigControlPlaneConfig) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validatePodLogAccess(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this config control plane config based on context it is used
+func (m *ConfigControlPlaneConfig) validatePodLogAccess(formats strfmt.Registry) error {
+	if swag.IsZero(m.PodLogAccess) { // not required
+		return nil
+	}
+
+	if m.PodLogAccess != nil {
+		if err := m.PodLogAccess.Validate(formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("podLogAccess")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("podLogAccess")
+			}
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this config control plane config based on the context it is used
 func (m *ConfigControlPlaneConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePodLogAccess(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ConfigControlPlaneConfig) contextValidatePodLogAccess(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PodLogAccess != nil {
+
+		if swag.IsZero(m.PodLogAccess) { // not required
+			return nil
+		}
+
+		if err := m.PodLogAccess.ContextValidate(ctx, formats); err != nil {
+			ve := new(errors.Validation)
+			if stderrors.As(err, &ve) {
+				return ve.ValidateName("podLogAccess")
+			}
+			ce := new(errors.CompositeError)
+			if stderrors.As(err, &ce) {
+				return ce.ValidateName("podLogAccess")
+			}
+
+			return err
+		}
+	}
+
 	return nil
 }
 
