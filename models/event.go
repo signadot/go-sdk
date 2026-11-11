@@ -11,21 +11,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// EventQueryResult event query result
+// Event event
 //
-// swagger:model EventQueryResult
-type EventQueryResult struct {
+// swagger:model Event
+type Event struct {
 
 	// auth
 	Auth *EventAuthContext `json:"auth,omitempty"`
 
-	// cursor
-	Cursor string `json:"cursor,omitempty"`
-
-	// data
+	// Data holds details specific to the event type, such as the sandbox name
+	// or the user's email. Its fields vary by type and may be added, renamed
+	// or removed, so treat it as unstable.
 	Data any `json:"data,omitempty"`
 
-	// id
+	// ID uniquely identifies the event.
 	ID string `json:"id,omitempty"`
 
 	// on behalf of
@@ -34,15 +33,16 @@ type EventQueryResult struct {
 	// principal
 	Principal *EventPrincipal `json:"principal,omitempty"`
 
-	// timestamp
+	// Timestamp is when the event was recorded (RFC3339).
 	Timestamp string `json:"timestamp,omitempty"`
 
-	// type
+	// Type is the event type, such as create-sandbox or add-user. New types
+	// may be added, so clients should tolerate types they don't recognize.
 	Type string `json:"type,omitempty"`
 }
 
-// Validate validates this event query result
-func (m *EventQueryResult) Validate(formats strfmt.Registry) error {
+// Validate validates this event
+func (m *Event) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAuth(formats); err != nil {
@@ -63,7 +63,7 @@ func (m *EventQueryResult) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EventQueryResult) validateAuth(formats strfmt.Registry) error {
+func (m *Event) validateAuth(formats strfmt.Registry) error {
 	if swag.IsZero(m.Auth) { // not required
 		return nil
 	}
@@ -86,7 +86,7 @@ func (m *EventQueryResult) validateAuth(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EventQueryResult) validateOnBehalfOf(formats strfmt.Registry) error {
+func (m *Event) validateOnBehalfOf(formats strfmt.Registry) error {
 	if swag.IsZero(m.OnBehalfOf) { // not required
 		return nil
 	}
@@ -109,7 +109,7 @@ func (m *EventQueryResult) validateOnBehalfOf(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EventQueryResult) validatePrincipal(formats strfmt.Registry) error {
+func (m *Event) validatePrincipal(formats strfmt.Registry) error {
 	if swag.IsZero(m.Principal) { // not required
 		return nil
 	}
@@ -132,8 +132,8 @@ func (m *EventQueryResult) validatePrincipal(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this event query result based on the context it is used
-func (m *EventQueryResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this event based on the context it is used
+func (m *Event) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAuth(ctx, formats); err != nil {
@@ -154,7 +154,7 @@ func (m *EventQueryResult) ContextValidate(ctx context.Context, formats strfmt.R
 	return nil
 }
 
-func (m *EventQueryResult) contextValidateAuth(ctx context.Context, formats strfmt.Registry) error {
+func (m *Event) contextValidateAuth(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Auth != nil {
 
@@ -179,7 +179,7 @@ func (m *EventQueryResult) contextValidateAuth(ctx context.Context, formats strf
 	return nil
 }
 
-func (m *EventQueryResult) contextValidateOnBehalfOf(ctx context.Context, formats strfmt.Registry) error {
+func (m *Event) contextValidateOnBehalfOf(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OnBehalfOf != nil {
 
@@ -204,7 +204,7 @@ func (m *EventQueryResult) contextValidateOnBehalfOf(ctx context.Context, format
 	return nil
 }
 
-func (m *EventQueryResult) contextValidatePrincipal(ctx context.Context, formats strfmt.Registry) error {
+func (m *Event) contextValidatePrincipal(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Principal != nil {
 
@@ -230,7 +230,7 @@ func (m *EventQueryResult) contextValidatePrincipal(ctx context.Context, formats
 }
 
 // MarshalBinary interface implementation
-func (m *EventQueryResult) MarshalBinary() ([]byte, error) {
+func (m *Event) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -238,8 +238,8 @@ func (m *EventQueryResult) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *EventQueryResult) UnmarshalBinary(b []byte) error {
-	var res EventQueryResult
+func (m *Event) UnmarshalBinary(b []byte) error {
+	var res Event
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

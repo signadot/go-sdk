@@ -253,9 +253,11 @@ func (a *Client) GetSandbox(params *GetSandboxParams, authInfo runtime.ClientAut
 }
 
 /*
-GetSandboxLogs gets sandbox workload logs
+	GetSandboxLogs gets sandbox workload logs
 
-Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).
+	Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).
+
+Returns 403 when the cluster's Signadot operator is installed with controlPlane.podLogAccess.enabled=false, which withholds pod log access from Signadot.
 */
 func (a *Client) GetSandboxLogs(params *GetSandboxLogsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSandboxLogsOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -301,7 +303,7 @@ func (a *Client) GetSandboxLogs(params *GetSandboxLogsParams, authInfo runtime.C
 /*
 ListSandboxes lists sandboxes
 
-List all sandboxes under the specified Signadot org.
+List the sandboxes under the specified Signadot org. The paginated response is ordered by immutable creation time (createdAt descending, with id descending as a tie-breaker), which intentionally differs from the legacy array's most-recently-updated ordering. The schema below (ListSandboxesResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Sandbox array instead (deprecated, see that header's own docs).
 */
 func (a *Client) ListSandboxes(params *ListSandboxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSandboxesOK, error) {
 	// NOTE: parameters are not validated before sending

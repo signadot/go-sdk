@@ -61,6 +61,8 @@ type ClientService interface {
 
 	ListServiceAccounts(params *ListServiceAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListServiceAccountsOK, error)
 
+	PutServiceAccountRole(params *PutServiceAccountRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutServiceAccountRoleOK, error)
+
 	UpdateServiceAccount(params *UpdateServiceAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateServiceAccountOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -247,6 +249,52 @@ func (a *Client) ListServiceAccounts(params *ListServiceAccountsParams, authInfo
 	//
 	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for list-service-accounts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+PutServiceAccountRole assigns a service account s role
+
+Replace a service account's tier role in the org. Admin-only. Body: {"role": "signadot:admin"|"signadot:member"|"signadot:viewer"}. signadot:viewer is rejected with 409 until the org is cut over to the new authorization evaluator.
+*/
+func (a *Client) PutServiceAccountRole(params *PutServiceAccountRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutServiceAccountRoleOK, error) {
+	// NOTE: parameters are not validated before sending
+	if params == nil {
+		params = NewPutServiceAccountRoleParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "put-service-account-role",
+		Method:             "PUT",
+		PathPattern:        "/orgs/{orgName}/service-accounts/{serviceAccountName}/role",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PutServiceAccountRoleReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+
+	// only one success response has to be checked
+	success, ok := result.(*PutServiceAccountRoleOK)
+	if ok {
+		return success, nil
+	}
+
+	// unexpected success response.
+
+	// no default response is defined.
+	//
+	// safeguard: normally, in the absence of a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for put-service-account-role: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

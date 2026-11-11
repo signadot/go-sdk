@@ -29,7 +29,12 @@ type PhaseCounts struct {
 	// Skipped is the number of steps that were not executed.
 	Skipped int64 `json:"skipped,omitempty"`
 
-	// Waiting is the number of steps waiting for routing context readiness.
+	// Waiting is the number of steps that have been launched but have not
+	// begun executing — waiting for a routing context to become ready, for a
+	// concurrency slot on the pod, or both. Every step now transits through
+	// this: StepRunning is set after the slot is acquired, so that a step
+	// queued behind the semaphore is not reported as having run. See
+	// StepWaiting.
 	Waiting int64 `json:"waiting,omitempty"`
 }
 
