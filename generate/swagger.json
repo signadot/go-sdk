@@ -132,7 +132,7 @@
           "type": "string"
         },
         "expiresAt": {
-          "description": "ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the\nfield, or sending an explicit JSON null, both mean the key never\nexpires \u2014 so callers that predate this field keep their old behavior\nwith no changes required.",
+          "description": "ExpiresAt is the key's expiration time (RFC3339 timestamp). Omitting the\nfield, or sending an explicit JSON null, both mean the key never\nexpires — so callers that predate this field keep their old behavior\nwith no changes required.",
           "type": "string"
         }
       },
@@ -273,14 +273,58 @@
       },
       "type": "object"
     },
+    "Event": {
+      "properties": {
+        "auth": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/EventAuthContext"
+            }
+          ],
+          "description": "Auth describes how the request that caused the event authenticated. It\nis always present."
+        },
+        "data": {
+          "description": "Data holds details specific to the event type, such as the sandbox name\nor the user's email. Its fields vary by type and may be added, renamed\nor removed, so treat it as unstable."
+        },
+        "id": {
+          "description": "ID uniquely identifies the event.",
+          "type": "string"
+        },
+        "onBehalfOf": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/EventPrincipal"
+            }
+          ],
+          "description": "OnBehalfOf is reserved and currently always null."
+        },
+        "principal": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/EventPrincipal"
+            }
+          ],
+          "description": "Principal identifies who acted. It is null for system actions, and for\nolder events whose user no longer exists."
+        },
+        "timestamp": {
+          "description": "Timestamp is when the event was recorded (RFC3339).",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type is the event type, such as create-sandbox or add-user. New types\nmay be added, so clients should tolerate types they don't recognize.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "EventAuthContext": {
       "properties": {
         "apiKeyMasked": {
-          "description": "present when method == \"api_key\"",
+          "description": "APIKeyMasked is the masked API key used. Present when method is api_key.",
           "type": "string"
         },
         "method": {
-          "description": "\"jwt\" | \"api_key\" | \"system\"",
+          "description": "Method is one of jwt (a signed-in user), api_key or system.",
           "type": "string"
         }
       },
@@ -289,46 +333,15 @@
     "EventPrincipal": {
       "properties": {
         "kind": {
-          "description": "\"User\" | \"ServiceAccount\"",
+          "description": "Kind is User or ServiceAccount.",
           "type": "string"
         },
         "name": {
-          "description": "user email or SA name (display)",
+          "description": "Name is the user's email or the service account's name.",
           "type": "string"
         },
         "publicId": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "EventQueryResult": {
-      "properties": {
-        "auth": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/EventAuthContext"
-            }
-          ],
-          "description": "Auth is always present. Principal and OnBehalfOf are rendered as explicit\nnull (not omitted) when there is no principal — these are not omitempty so\nthe null is discoverable: principal is null for system actions and older\nevents whose user is gone; onBehalfOf is reserved (currently always null)."
-        },
-        "cursor": {
-          "type": "string"
-        },
-        "data": {},
-        "id": {
-          "type": "string"
-        },
-        "onBehalfOf": {
-          "$ref": "#/definitions/EventPrincipal"
-        },
-        "principal": {
-          "$ref": "#/definitions/EventPrincipal"
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "type": {
+          "description": "PublicID is the principal's ID. Pass it as principalId (with\nprincipalKind) to filter events by this principal.",
           "type": "string"
         }
       },
@@ -464,9 +477,105 @@
     },
     "ListEventsResponse": {
       "properties": {
-        "events": {
+        "hasMore": {
+          "description": "HasMore reports whether more events in the window follow this page.",
+          "type": "boolean"
+        },
+        "items": {
+          "description": "Items are the events on this page, newest first.",
           "items": {
-            "$ref": "#/definitions/EventQueryResult"
+            "$ref": "#/definitions/Event"
+          },
+          "type": "array"
+        },
+        "nextCursor": {
+          "description": "NextCursor is an opaque cursor for the next (older) page. Present only\nwhen hasMore is true.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ListJobsResponse": {
+      "properties": {
+        "hasMore": {
+          "type": "boolean"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/Job"
+          },
+          "type": "array"
+        },
+        "nextCursor": {
+          "type": "string"
+        },
+        "totalCount": {
+          "description": "TotalCount/TotalPages are omitted (not a literal 0) when not computed\nfor this response: page one of a paginated walk always has them, but\nsubsequent cursor pages don't recompute them (the client already has\nthe total from page one), and neither does the legacy shape. A\nliteral 0 here would be indistinguishable from an org that genuinely\nhas zero jobs.",
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ListSandboxesResponse": {
+      "properties": {
+        "hasMore": {
+          "type": "boolean"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/Sandbox"
+          },
+          "type": "array"
+        },
+        "nextCursor": {
+          "type": "string"
+        },
+        "totalCount": {
+          "description": "TotalCount/TotalPages are omitted (not a literal 0) when not computed\nfor this response: page one of a paginated walk always has them, but\nsubsequent cursor pages don't recompute them (the client already has\nthe total from page one), and neither does the legacy shape. A\nliteral 0 here would be indistinguishable from an org that genuinely\nhas zero sandboxes.",
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ListUsersResponse": {
+      "properties": {
+        "hasMore": {
+          "description": "HasMore reports whether more users follow this page.",
+          "type": "boolean"
+        },
+        "items": {
+          "description": "Items are the users on this page, newest first.",
+          "items": {
+            "$ref": "#/definitions/User"
+          },
+          "type": "array"
+        },
+        "nextCursor": {
+          "description": "NextCursor is an opaque cursor for the next page. Pass it as the\n`cursor` query param. Present only when hasMore is true.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PermissionMatrix": {
+      "properties": {
+        "permissions": {
+          "description": "Permissions is every concrete permission in the catalog, sorted.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "roles": {
+          "description": "Roles is each role with its granted subset of Permissions.",
+          "items": {
+            "$ref": "#/definitions/RolePermissions"
           },
           "type": "array"
         }
@@ -496,7 +605,7 @@
           "type": "integer"
         },
         "waiting": {
-          "description": "Waiting is the number of steps waiting for routing context readiness.",
+          "description": "Waiting is the number of steps that have been launched but have not\nbegun executing — waiting for a routing context to become ready, for a\nconcurrency slot on the pod, or both. Every step now transits through\nthis: StepRunning is set after the slot is acquired, so that a step\nqueued behind the semaphore is not reported as having run. See\nStepWaiting.",
           "type": "integer"
         }
       },
@@ -781,6 +890,10 @@
           ],
           "description": "Phase is the overall execution state."
         },
+        "possibleReruns": {
+          "description": "PossibleReruns is how many times this execution was placed on a runner\nagain without being able to rule out that an earlier placement had\nalready run the plan.\n\nPlan execution is at-least-once. Under normal operation an execution\nruns exactly once; a pod rescheduled onto another node, or one whose\nmemory of a finished run aged out before the control plane read it,\nloses the only record of whether the plan ran, and it is re-placed. A\nnon-zero value here means the plan's side effects may have happened\nmore than once, which matters if the plan is not idempotent and is the\nsignal to check before assuming a single run.\n\nZero for the overwhelming majority of executions. It counts only\nre-placements where an earlier run could not be ruled out: a runner\nrefusing the dispatch, asking for redispatch before running anything, or\nnever having been sent the execution at all all leave it at zero.\n\nControl plane to client only. It is read from the plan_executions row by\nRowToExecution; a runner neither sets it nor sees it, so it is always\nabsent on the runner's own status responses. See StepsStarted, which\ntravels the other way.",
+          "type": "integer"
+        },
         "runnerHost": {
           "description": "RunnerHost is the hostname of the runner executing the plan.",
           "type": "string"
@@ -799,6 +912,10 @@
             "$ref": "#/definitions/PlanStepStatus"
           },
           "type": "array"
+        },
+        "stepsStarted": {
+          "description": "StepsStarted reports, for an execution the runner is handing back with\nExecutionRedispatchNeeded, whether any of its steps had begun.\n\nThe runner is the only party that can answer it. Once the execution is\noff the pod the control plane cannot tell a plan that got halfway from\none that never started, and the answer decides not whether to re-place\n— at-least-once means it is always re-placed — but whether that\nre-placement counts a possible rerun.\n\nA pointer because absent and false are different answers and only one of\nthem is safe to act on. A runner from before this field existed sends\nnothing, and the only hand-back such a runner emits is the\nErrImageNotReady one from its results loop — which fires with a step\nalready executing and earlier steps in the DAG completed. So absence\nmeans work probably was repeated, and reading it as false would decline\nto count precisely the case that most needs counting. Nil is the unknown\nthat counts; false is the runner saying nothing ran, and is believed.\n\nRunner to control plane only, despite appearing in this type's published\nschema. It is consumed in the same pass that reads it, deciding what\nPossibleReruns is incremented by, and is never persisted — there is no\ncolumn, and RowToExecution does not set it. So it is always absent on a\ncontrol-plane API response, and a client must not read anything into\nthat. Present here rather than on a runner-only type because\nExecutionStatus is what the runner returns over\nGET /api/v1/plans/{executionID}.",
+          "type": "boolean"
         },
         "updatedAt": {
           "description": "UpdatedAt is when the execution status was last updated. Serialized as RFC3339.",
@@ -1468,6 +1585,41 @@
       },
       "type": "object"
     },
+    "Role": {
+      "properties": {
+        "description": {
+          "description": "Description explains what the role grants.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "DisplayName is a human-friendly label for the role (e.g. \"Viewer\").",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name is the stable, system-qualified identifier used when assigning the\nrole (e.g. \"signadot:viewer\").",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RolePermissions": {
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "permissions": {
+          "description": "Permissions is the expanded set of concrete permissions this role grants\n(wildcards resolved against the catalog).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "RouteGroup": {
       "properties": {
         "createdAt": {
@@ -1631,11 +1783,20 @@
           "type": "string"
         },
         "role": {
-          "description": "Role is the authorization role for the service account: \"admin\" or\n\"member\".",
+          "description": "Role is the authorization role for the service account, in the legacy short\nform: \"admin\", \"member\", or \"viewer\" (not the \"signadot:\"-prefixed system\nname used when assigning a role — see ServiceAccountRoleAssignment).",
           "type": "string"
         },
         "updatedAt": {
           "description": "UpdatedAt is when the service account was last updated. Read-only.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServiceAccountRoleAssignment": {
+      "properties": {
+        "role": {
+          "description": "Role is the system role name to assign: \"signadot:admin\",\n\"signadot:member\", or \"signadot:viewer\".",
           "type": "string"
         }
       },
@@ -2051,6 +2212,59 @@
       },
       "type": "object"
     },
+    "User": {
+      "properties": {
+        "createdAt": {
+          "description": "CreatedAt is when the user's Signadot account was created (RFC 3339).",
+          "type": "string"
+        },
+        "directoryAttributes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "DirectoryAttributes are the attributes the directory stated about this\nuser (costCenter, department, division). Omitted when it stated none.",
+          "type": "object"
+        },
+        "directoryManaged": {
+          "description": "DirectoryManaged reports that an identity provider maintains this\nuser's membership, so removing them in Signadot is undone by its next\nsync.",
+          "type": "boolean"
+        },
+        "email": {
+          "description": "Email is the user's email address.",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "FirstName is the user's first name from their identity provider.\nOmitted when it did not supply one.",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID is the user's public id.",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "LastName is the user's last name from their identity provider. Omitted\nwhen it did not supply one.",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role is the user's tier role in the org, in the short form: \"admin\",\n\"member\", or \"viewer\". Assigning a role takes the \"signadot:\"-prefixed\nname instead, e.g. \"signadot:viewer\".",
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "UpdatedAt is when the user's account was last updated (RFC 3339).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserRoleAssignment": {
+      "properties": {
+        "role": {
+          "description": "Role is the system role name to assign: \"signadot:admin\",\n\"signadot:member\", or \"signadot:viewer\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "artifacts.JobArtifactSpace": {
       "enum": [
         "user",
@@ -2272,6 +2486,9 @@
         "controlPlane": {
           "$ref": "#/definitions/config.ControlPlaneConfig"
         },
+        "previewServer": {
+          "$ref": "#/definitions/config.PreviewServerConfig"
+        },
         "routing": {
           "$ref": "#/definitions/config.RoutingConfig"
         },
@@ -2298,6 +2515,14 @@
           "description": "control plane can be disabled",
           "type": "boolean"
         },
+        "podLogAccess": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/config.PodLogAccessConfig"
+            }
+          ],
+          "description": "pod log access can be turned off for this cluster"
+        },
         "proxy": {
           "description": "control plane proxy can be \"enabled\" or \"disabled\"",
           "type": "string"
@@ -2321,6 +2546,15 @@
         "DefaultHeaderBaggage",
         "DefaultHeaderTraceState"
       ]
+    },
+    "config.DevMeshConfig": {
+      "properties": {
+        "enabled": {
+          "description": "Enabled reports whether DevMesh sidecar injection is installed on this\ncluster. Absent means enabled.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
     },
     "config.GatewayAPIConfig": {
       "properties": {
@@ -2390,6 +2624,27 @@
       },
       "type": "object"
     },
+    "config.PodLogAccessConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "config.PreviewServerConfig": {
+      "properties": {
+        "customDomain": {
+          "description": "CustomDomain is the base domain the preview server expects on the\nleading label of an inbound Host, e.g. \"preview.signadot.com\". Empty\nmeans none is configured, and preview URLs are reported on Signadot's\nown domain.",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Enabled is whether previews are served for this cluster: the control\nplane forwards preview requests to the preview server when true and\nrefuses them when false.\n\nA pointer so an absent stanza is distinguishable from an explicit\nfalse. Absent means an operator or a chart predating this field, which\nkeeps the behavior it has always had -- see PreviewServerEnabled.\n\nAn explicit value, either way, is only renderable by a chart that ships\npreviewserver, so a false describes a cluster that has a preview server\nto turn off. The control plane relies on that but does not assume it: it\nconsults this stanza only for operators new enough to have written it,\nwhich is also what makes a hand-edited ConfigMap on an older cluster\ninert. The implication runs one way only -- v1.4.0 itself renders\nnothing here -- so presence cannot be derived from the agent version and\nabsence has to be read as its own state.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "config.QueryParamRoutingConfig": {
       "properties": {
         "enabled": {
@@ -2414,6 +2669,9 @@
             "$ref": "#/definitions/config.DefaultHeaderClass"
           },
           "type": "array"
+        },
+        "devMesh": {
+          "$ref": "#/definitions/config.DevMeshConfig"
         },
         "gatewayAPI": {
           "$ref": "#/definitions/config.GatewayAPIConfig"
@@ -3631,6 +3889,7 @@
           "type": "string"
         },
         "url": {
+          "description": "URL is absent when the endpoint's cluster reports no address -- previews\ndisabled with no customer domain to fall back to.",
           "type": "string"
         }
       },
@@ -6300,7 +6559,7 @@
     },
     "/orgs/{orgName}/events": {
       "get": {
-        "description": "List audit events for the org, newest first. Each event carries the authentication method (auth) and, when resolvable, the principal who acted. Time window defaults to the last 24h; event types default to all.",
+        "description": "List audit events for the org, newest first. Each event carries the authentication method (auth) and, when resolvable, the principal who acted. Time window defaults to the last 24h; event types default to all. With the signadot-api-opt-in header set to 'pagination' the response is the {items, nextCursor, hasMore} envelope below: pass nextCursor back as cursor, keeping the other parameters, until hasMore is false. Without the header the endpoint returns the legacy {\"events\": [...]} shape, where each event carries its own cursor (deprecated, see the Deprecation response header).",
         "operationId": "list-events",
         "parameters": [
           {
@@ -6323,8 +6582,8 @@
             "type": "string"
           },
           {
-            "collectionFormat": "csv",
-            "description": "Event type filter; repeatable; defaults to all",
+            "collectionFormat": "multi",
+            "description": "Event type filter; repeat to match any of several (type=add-user\u0026type=remove-user); defaults to all. One of: create-sandbox, update-sandbox, delete-sandbox, submit-job, cancel-job, submit-smart-test-invocation, cancel-smart-test-invocation, create-hosted-test, update-hosted-test, delete-hosted-test, create-api-key, delete-api-key, create-service-account, update-service-account, delete-service-account, add-user, remove-user, invite-user, delete-user-invite, set-role, create-runner-group, update-runner-group, delete-runner-group, create-cluster-connection, delete-cluster-connection, create-resource-plugin, delete-resource-plugin, create-routegroup, update-routegroup, delete-routegroup, update-subscription, cancel-subscription, access-customer-portal, update-settings. New types may be added.",
             "in": "query",
             "items": {
               "type": "string"
@@ -6333,19 +6592,25 @@
             "type": "array"
           },
           {
-            "description": "event_data filter DSL (key=value\u0026...)",
+            "description": "Filters on the event data, as key=value pairs joined by \u0026 and sent URL-encoded as a single parameter, e.g. filters=userEmail%3Dalice%40example.com. All pairs must match. Each key names a top-level string field of data and matches its value exactly; labels.\u003ckey\u003e matches a label on events that carry labels. Keys may use letters, digits, _, ., / and -.",
             "in": "query",
             "name": "filters",
             "type": "string"
           },
           {
-            "description": "Max events (1..1000); defaults to 200",
+            "description": "Max events per page (default 200, max 1000; 0 means the default). Requires the pagination opt-in.",
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer"
+          },
+          {
+            "description": "Legacy page size (1..1000); defaults to 200. Prefer pageSize with the pagination opt-in; limit stays accepted as its alias, and pageSize wins when both are set.",
             "in": "query",
             "name": "limit",
             "type": "integer"
           },
           {
-            "description": "Opaque pagination cursor: pass the previous page's last event cursor to fetch the next (older) page. Keep the other query parameters (type/filters/principal/authMethod and the time window) stable across pages; the window is pinned to the cursor, and changing the other filters mid-pagination restarts the result set.",
+            "description": "Opaque pagination cursor: the previous page's nextCursor (or, in the legacy shape, the last event's cursor). Keep the other query parameters (type/filters/principal/authMethod and the time window) stable across pages; the window is pinned to the cursor, and changing the other filters mid-pagination restarts the result set.",
             "in": "query",
             "name": "cursor",
             "type": "string"
@@ -6367,6 +6632,14 @@
             "in": "query",
             "name": "authMethod",
             "type": "string"
+          },
+          {
+            "default": "pagination",
+            "description": "Set to 'pagination' to get the {items, nextCursor, hasMore} envelope. Omit to keep receiving the legacy events shape (each event with its own cursor), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
+            "in": "header",
+            "name": "signadot-api-opt-in",
+            "type": "string",
+            "x-example": "pagination"
           }
         ],
         "produces": [
@@ -6391,6 +6664,12 @@
               "$ref": "#/definitions/ErrorResponse"
             }
           },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
           "404": {
             "description": "Not Found",
             "schema": {
@@ -6411,7 +6690,7 @@
     },
     "/orgs/{orgName}/events/export": {
       "get": {
-        "description": "Stream the org's audit events (same filters as the list endpoint) as a CSV attachment, newest first. The file is generated and streamed server-side with bounded memory, so the client need not page through every event; every event matching the filters is included.",
+        "description": "Stream the org's audit events (same filters as the list endpoint) as a CSV attachment, newest first. The file is generated and streamed server-side with bounded memory, so the client need not page through every event. Invalid parameters are rejected with a 400 before the download starts. If an error interrupts the download after it has started, the file ends early and the response stays 200. Columns: timestamp, type, principal_kind, principal_name, auth_method, api_key_masked, data (the event data as JSON). Pass startTime for anything older than the last 24h.",
         "operationId": "export-events",
         "parameters": [
           {
@@ -6434,8 +6713,8 @@
             "type": "string"
           },
           {
-            "collectionFormat": "csv",
-            "description": "Event type filter; repeatable; defaults to all",
+            "collectionFormat": "multi",
+            "description": "Event type filter; repeat to match any of several (type=add-user\u0026type=remove-user); defaults to all. One of: create-sandbox, update-sandbox, delete-sandbox, submit-job, cancel-job, submit-smart-test-invocation, cancel-smart-test-invocation, create-hosted-test, update-hosted-test, delete-hosted-test, create-api-key, delete-api-key, create-service-account, update-service-account, delete-service-account, add-user, remove-user, invite-user, delete-user-invite, set-role, create-runner-group, update-runner-group, delete-runner-group, create-cluster-connection, delete-cluster-connection, create-resource-plugin, delete-resource-plugin, create-routegroup, update-routegroup, delete-routegroup, update-subscription, cancel-subscription, access-customer-portal, update-settings. New types may be added.",
             "in": "query",
             "items": {
               "type": "string"
@@ -6444,19 +6723,19 @@
             "type": "array"
           },
           {
-            "description": "event_data filter DSL (key=value\u0026...)",
+            "description": "Filters on the event data, as key=value pairs joined by \u0026 and sent URL-encoded as a single parameter, e.g. filters=userEmail%3Dalice%40example.com. All pairs must match. Each key names a top-level string field of data and matches its value exactly; labels.\u003ckey\u003e matches a label on events that carry labels. Keys may use letters, digits, _, ., / and -.",
             "in": "query",
             "name": "filters",
             "type": "string"
           },
           {
-            "description": "Filter by principal kind (User|ServiceAccount|System)",
+            "description": "Filter by principal kind (User|ServiceAccount|System). System selects events with no principal. Matches events that recorded a principal; older events are attributed best-effort in the export but are not matched by this filter.",
             "in": "query",
             "name": "principalKind",
             "type": "string"
           },
           {
-            "description": "Filter by principal public ID (requires principalKind)",
+            "description": "Filter by principal public ID (requires principalKind). Matches events that recorded this principal; older events attributed to it best-effort are not matched.",
             "in": "query",
             "name": "principalId",
             "type": "string"
@@ -6490,6 +6769,12 @@
               "$ref": "#/definitions/ErrorResponse"
             }
           },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
           "404": {
             "description": "Not Found",
             "schema": {
@@ -6513,7 +6798,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List Jobs",
+        "description": "List Jobs, paginated newest-first via cursor. The schema below (ListJobsResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Job array instead (deprecated, see that header's own docs).",
         "operationId": "list-jobs",
         "parameters": [
           {
@@ -6525,10 +6810,30 @@
             "x-example": "my-company"
           },
           {
-            "description": "Filter jobs by target sandbox name",
+            "description": "Filter jobs by target sandbox name. Not paginated: returns every matching job in one response, and cannot be combined with cursor",
             "in": "query",
             "name": "targetSandbox",
             "type": "string"
+          },
+          {
+            "description": "Max jobs to return (default 50, max 500)",
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque pagination cursor from a previous response's nextCursor. Not supported together with targetSandbox",
+            "in": "query",
+            "name": "cursor",
+            "type": "string"
+          },
+          {
+            "default": "pagination",
+            "description": "Set to 'pagination' to get the paginated {items,...} envelope below. Omit to keep receiving the legacy bare []Job array (capped at 500 rows), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
+            "in": "header",
+            "name": "signadot-api-opt-in",
+            "type": "string",
+            "x-example": "pagination"
           }
         ],
         "produces": [
@@ -6538,10 +6843,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "items": {
-                "$ref": "#/definitions/Job"
-              },
-              "type": "array"
+              "$ref": "#/definitions/ListJobsResponse"
             }
           },
           "400": {
@@ -6921,6 +7223,47 @@
         "summary": "Cancel a job",
         "tags": [
           "Jobs"
+        ]
+      }
+    },
+    "/orgs/{orgName}/permissions": {
+      "get": {
+        "description": "Return the full permission catalog and, for each role, which permissions it grants. Intended for a read-only role-by-permission table so users can see what each role can do.",
+        "operationId": "list-permissions",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PermissionMatrix"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Role/permission matrix",
+        "tags": [
+          "Roles"
         ]
       }
     },
@@ -9119,6 +9462,50 @@
         ]
       }
     },
+    "/orgs/{orgName}/roles": {
+      "get": {
+        "description": "List the tier roles that can be assigned to users and service accounts in the org (e.g. for a role dropdown). Returns the system roles; org-specific custom roles are included once they exist.",
+        "operationId": "list-roles",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Role"
+              },
+              "type": "array"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List assignable roles",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
     "/orgs/{orgName}/routegroups": {
       "get": {
         "consumes": [
@@ -9644,7 +10031,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List all sandboxes under the specified Signadot org.",
+        "description": "List the sandboxes under the specified Signadot org. The paginated response is ordered by immutable creation time (createdAt descending, with id descending as a tie-breaker), which intentionally differs from the legacy array's most-recently-updated ordering. The schema below (ListSandboxesResponse) is only returned when the signadot-api-opt-in header is set to 'pagination'; without it this endpoint returns a bare []Sandbox array instead (deprecated, see that header's own docs).",
         "operationId": "list-sandboxes",
         "parameters": [
           {
@@ -9654,6 +10041,26 @@
             "required": true,
             "type": "string",
             "x-example": "my-company"
+          },
+          {
+            "description": "Max sandboxes to return (default 50, max 500)",
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque pagination cursor from a previous response's nextCursor",
+            "in": "query",
+            "name": "cursor",
+            "type": "string"
+          },
+          {
+            "default": "pagination",
+            "description": "Set to 'pagination' to get the paginated {items,...} envelope ordered by createdAt descending. Omit to keep receiving the legacy bare []Sandbox array (every sandbox in the org, unpaginated and ordered by updatedAt descending), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.",
+            "in": "header",
+            "name": "signadot-api-opt-in",
+            "type": "string",
+            "x-example": "pagination"
           }
         ],
         "produces": [
@@ -9663,10 +10070,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "items": {
-                "$ref": "#/definitions/Sandbox"
-              },
-              "type": "array"
+              "$ref": "#/definitions/ListSandboxesResponse"
             }
           },
           "400": {
@@ -9910,7 +10314,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).",
+        "description": "Fetch logs for a forked workload in a sandbox. The server resolves the sandbox and workload to the underlying Kubernetes object, so only sandbox-model names are required (no cluster/kind/namespace).\nReturns 403 when the cluster's Signadot operator is installed with controlPlane.podLogAccess.enabled=false, which withholds pod log access from Signadot.",
         "operationId": "get-sandbox-logs",
         "parameters": [
           {
@@ -9981,6 +10385,12 @@
           },
           "401": {
             "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
             }
@@ -10792,6 +11202,84 @@
         "summary": "Delete a service-account API key",
         "tags": [
           "ApiKeys"
+        ]
+      }
+    },
+    "/orgs/{orgName}/service-accounts/{serviceAccountName}/role": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Replace a service account's tier role in the org. Admin-only. Body: {\"role\": \"signadot:admin\"|\"signadot:member\"|\"signadot:viewer\"}. signadot:viewer is rejected with 409 until the org is cut over to the new authorization evaluator.",
+        "operationId": "put-service-account-role",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Service Account Name",
+            "in": "path",
+            "name": "serviceAccountName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Role to assign",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ServiceAccountRoleAssignment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ServiceAccount"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Assign a service account's role",
+        "tags": [
+          "ServiceAccounts"
         ]
       }
     },
@@ -11741,6 +12229,156 @@
         ]
       }
     },
+    "/orgs/{orgName}/users": {
+      "get": {
+        "description": "List the users in the org, newest first (createdAt descending, with id descending as a tie-breaker). Without pageSize or cursor the response holds every user and hasMore is false. Pass pageSize to page through the list, then pass each response's nextCursor as cursor until hasMore is false.",
+        "operationId": "list-users",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string",
+            "x-example": "my-company"
+          },
+          {
+            "description": "Max users per page (default 50, max 500). Omit, together with cursor, to get every user in one response",
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque pagination cursor from a previous response's nextCursor",
+            "in": "query",
+            "name": "cursor",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ListUsersResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "List users",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/orgs/{orgName}/users/{userId}/role": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Replace a user's tier role in the org. Admin-only. Body: {\"role\": \"signadot:admin\"|\"signadot:member\"|\"signadot:viewer\"}. signadot:viewer is rejected with 409 until the org is cut over to the new authorization evaluator.",
+        "operationId": "put-user-role",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "User public ID",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Role to assign",
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRoleAssignment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Assign a user's role",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/service-status": {
       "get": {
         "description": "Caching gateway over the public Status API: active and recently-resolved incidents plus in-progress and upcoming scheduled maintenance, normalized into a vendor-neutral shape and served from a short server-side cache. Always 200 (unconfigured or upstream failure yields empty arrays); unauthenticated.",
@@ -11821,6 +12459,9 @@
       "name": "ResourcePlugins"
     },
     {
+      "name": "Roles"
+    },
+    {
       "name": "RouteGroups"
     },
     {
@@ -11843,6 +12484,9 @@
     },
     {
       "name": "Tests"
+    },
+    {
+      "name": "Users"
     },
     {
       "name": "Meta"
