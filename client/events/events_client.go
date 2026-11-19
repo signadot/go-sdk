@@ -87,7 +87,7 @@ type ClientService interface {
 /*
 ExportEvents exports audit events as c s v
 
-Stream the org's audit events (same filters as the list endpoint) as a CSV attachment, newest first. The file is generated and streamed server-side with bounded memory, so the client need not page through every event; every event matching the filters is included.
+Stream the org's audit events (same filters as the list endpoint) as a CSV attachment, newest first. The file is generated and streamed server-side with bounded memory, so the client need not page through every event. Invalid parameters are rejected with a 400 before the download starts. If an error interrupts the download after it has started, the file ends early and the response stays 200. Columns: timestamp, type, principal_kind, principal_name, auth_method, api_key_masked, data (the event data as JSON). Pass startTime for anything older than the last 24h.
 */
 func (a *Client) ExportEvents(params *ExportEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportEventsOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -133,7 +133,7 @@ func (a *Client) ExportEvents(params *ExportEventsParams, authInfo runtime.Clien
 /*
 ListEvents lists audit events
 
-List audit events for the org, newest first. Each event carries the authentication method (auth) and, when resolvable, the principal who acted. Time window defaults to the last 24h; event types default to all.
+List audit events for the org, newest first. Each event carries the authentication method (auth) and, when resolvable, the principal who acted. Time window defaults to the last 24h; event types default to all. With the signadot-api-opt-in header set to 'pagination' the response is the {items, nextCursor, hasMore} envelope below: pass nextCursor back as cursor, keeping the other parameters, until hasMore is false. Without the header the endpoint returns the legacy {"events": [...]} shape, where each event carries its own cursor (deprecated, see the Deprecation response header).
 */
 func (a *Client) ListEvents(params *ListEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEventsOK, error) {
 	// NOTE: parameters are not validated before sending

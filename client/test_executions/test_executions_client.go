@@ -305,7 +305,7 @@ func (a *Client) ListTestExecutions(params *ListTestExecutionsParams, authInfo r
 /*
 QueryTestExecutions queries test executions
 
-Query test executions based on different criteria
+Query test executions based on different criteria, ordered by creation (orderDir, ascending by default). With the signadot-api-opt-in header set to 'pagination' the response is the {items, nextCursor, hasMore} envelope below: pass nextCursor back as cursor, keeping the other parameters, until hasMore is false. Without the header the endpoint returns the legacy bare array of {execution, cursor} rows (deprecated, see the Deprecation response header).
 */
 func (a *Client) QueryTestExecutions(params *QueryTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*QueryTestExecutionsOK, error) {
 	// NOTE: parameters are not validated before sending

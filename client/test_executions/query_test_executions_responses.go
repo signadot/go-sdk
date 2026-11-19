@@ -62,7 +62,7 @@ QueryTestExecutionsOK describes a response with status code 200, with default he
 OK
 */
 type QueryTestExecutionsOK struct {
-	Payload []*models.TestexecutionsQueryResult
+	Payload *models.QueryTestExecutionsResponse
 }
 
 // IsSuccess returns true when this query test executions o k response has a 2xx status code
@@ -105,14 +105,16 @@ func (o *QueryTestExecutionsOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/][%d] queryTestExecutionsOK %s", 200, payload)
 }
 
-func (o *QueryTestExecutionsOK) GetPayload() []*models.TestexecutionsQueryResult {
+func (o *QueryTestExecutionsOK) GetPayload() *models.QueryTestExecutionsResponse {
 	return o.Payload
 }
 
 func (o *QueryTestExecutionsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.QueryTestExecutionsResponse)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 

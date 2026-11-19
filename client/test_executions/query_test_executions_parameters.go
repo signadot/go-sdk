@@ -67,7 +67,7 @@ type QueryTestExecutionsParams struct {
 
 	/* Cursor.
 
-	   Start sending results from this cursor
+	   Opaque pagination cursor: the previous page's nextCursor (or, in the legacy shape, the last row's cursor). Keep the other query parameters stable across pages; with the pagination opt-in the from/to window is pinned to the cursor, so a duration such as 24h is not re-resolved on later pages.
 	*/
 	Cursor *string
 
@@ -109,7 +109,7 @@ type QueryTestExecutionsParams struct {
 
 	/* PageSize.
 
-	   Number of rows to be included in the response
+	   Max test executions per page (default 50, max 500). With the pagination opt-in, 0 means the default; without it, 0 returns no rows.
 	*/
 	PageSize *int64
 
@@ -148,6 +148,14 @@ type QueryTestExecutionsParams struct {
 	   CLI run identifier
 	*/
 	RunID *string
+
+	/* SignadotAPIOptIn.
+
+	   Set to 'pagination' to get the {items, nextCursor, hasMore} envelope. Omit to keep receiving the legacy bare [{execution, cursor}] array, which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.
+
+	   Default: "pagination"
+	*/
+	SignadotAPIOptIn *string
 
 	/* SkipDeletedTests.
 
@@ -226,7 +234,18 @@ func (o *QueryTestExecutionsParams) WithDefaults() *QueryTestExecutionsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *QueryTestExecutionsParams) SetDefaults() {
-	// no default values defined for this parameter
+	var (
+		signadotAPIOptInDefault = string("pagination")
+	)
+
+	val := QueryTestExecutionsParams{
+		SignadotAPIOptIn: &signadotAPIOptInDefault,
+	}
+
+	val.timeout = o.timeout
+	val.Context = o.Context
+	val.HTTPClient = o.HTTPClient
+	*o = val
 }
 
 // WithTimeout adds the timeout to the query test executions params
@@ -425,6 +444,17 @@ func (o *QueryTestExecutionsParams) WithRunID(runID *string) *QueryTestExecution
 // SetRunID adds the runId to the query test executions params
 func (o *QueryTestExecutionsParams) SetRunID(runID *string) {
 	o.RunID = runID
+}
+
+// WithSignadotAPIOptIn adds the signadotAPIOptIn to the query test executions params
+func (o *QueryTestExecutionsParams) WithSignadotAPIOptIn(signadotAPIOptIn *string) *QueryTestExecutionsParams {
+	o.SetSignadotAPIOptIn(signadotAPIOptIn)
+	return o
+}
+
+// SetSignadotAPIOptIn adds the signadotApiOptIn to the query test executions params
+func (o *QueryTestExecutionsParams) SetSignadotAPIOptIn(signadotAPIOptIn *string) {
+	o.SignadotAPIOptIn = signadotAPIOptIn
 }
 
 // WithSkipDeletedTests adds the skipDeletedTests to the query test executions params
@@ -779,6 +809,14 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 			if err := r.SetQueryParam("runID", qRunID); err != nil {
 				return err
 			}
+		}
+	}
+
+	if o.SignadotAPIOptIn != nil {
+
+		// header param signadot-api-opt-in
+		if err := r.SetHeaderParam("signadot-api-opt-in", *o.SignadotAPIOptIn); err != nil {
+			return err
 		}
 	}
 
