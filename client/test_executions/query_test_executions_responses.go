@@ -40,6 +40,12 @@ func (o *QueryTestExecutionsReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return nil, result
+	case 403:
+		result := NewQueryTestExecutionsForbidden()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 502:
 		result := NewQueryTestExecutionsBadGateway()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -62,7 +68,7 @@ QueryTestExecutionsOK describes a response with status code 200, with default he
 OK
 */
 type QueryTestExecutionsOK struct {
-	Payload []*models.TestexecutionsQueryResult
+	Payload *models.QueryTestExecutionsResponse
 }
 
 // IsSuccess returns true when this query test executions o k response has a 2xx status code
@@ -105,14 +111,16 @@ func (o *QueryTestExecutionsOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/][%d] queryTestExecutionsOK %s", 200, payload)
 }
 
-func (o *QueryTestExecutionsOK) GetPayload() []*models.TestexecutionsQueryResult {
+func (o *QueryTestExecutionsOK) GetPayload() *models.QueryTestExecutionsResponse {
 	return o.Payload
 }
 
 func (o *QueryTestExecutionsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.QueryTestExecutionsResponse)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
@@ -248,6 +256,76 @@ func (o *QueryTestExecutionsUnauthorized) GetPayload() *models.ErrorResponse {
 }
 
 func (o *QueryTestExecutionsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewQueryTestExecutionsForbidden creates a QueryTestExecutionsForbidden with default headers values
+func NewQueryTestExecutionsForbidden() *QueryTestExecutionsForbidden {
+	return &QueryTestExecutionsForbidden{}
+}
+
+/*
+QueryTestExecutionsForbidden describes a response with status code 403, with default header values.
+
+Forbidden
+*/
+type QueryTestExecutionsForbidden struct {
+	Payload *models.ErrorResponse
+}
+
+// IsSuccess returns true when this query test executions forbidden response has a 2xx status code
+func (o *QueryTestExecutionsForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this query test executions forbidden response has a 3xx status code
+func (o *QueryTestExecutionsForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this query test executions forbidden response has a 4xx status code
+func (o *QueryTestExecutionsForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this query test executions forbidden response has a 5xx status code
+func (o *QueryTestExecutionsForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this query test executions forbidden response a status code equal to that given
+func (o *QueryTestExecutionsForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
+// Code gets the status code for the query test executions forbidden response
+func (o *QueryTestExecutionsForbidden) Code() int {
+	return 403
+}
+
+func (o *QueryTestExecutionsForbidden) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/][%d] queryTestExecutionsForbidden %s", 403, payload)
+}
+
+func (o *QueryTestExecutionsForbidden) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/tests/executions/][%d] queryTestExecutionsForbidden %s", 403, payload)
+}
+
+func (o *QueryTestExecutionsForbidden) GetPayload() *models.ErrorResponse {
+	return o.Payload
+}
+
+func (o *QueryTestExecutionsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 

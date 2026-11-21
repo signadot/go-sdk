@@ -14,7 +14,7 @@ import (
 // swagger:model TestExecutionFailedState
 type TestExecutionFailedState struct {
 
-	// message
+	// Message says why the execution failed.
 	Message string `json:"message,omitempty"`
 }
 

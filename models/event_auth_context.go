@@ -14,10 +14,10 @@ import (
 // swagger:model EventAuthContext
 type EventAuthContext struct {
 
-	// present when method == "api_key"
+	// APIKeyMasked is the masked API key used. Present when method is api_key.
 	APIKeyMasked string `json:"apiKeyMasked,omitempty"`
 
-	// "jwt" | "api_key" | "system"
+	// Method is one of jwt (a signed-in user), api_key or system.
 	Method string `json:"method,omitempty"`
 }
 

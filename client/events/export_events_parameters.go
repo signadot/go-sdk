@@ -73,7 +73,7 @@ type ExportEventsParams struct {
 
 	/* Filters.
 
-	   event_data filter DSL (key=value&...)
+	   Filters on the event data, as key=value pairs joined by & and sent URL-encoded as a single parameter, e.g. filters=userEmail%3Dalice%40example.com. All pairs must match. Each key names a top-level string field of data and matches its value exactly; labels.<key> matches a label on events that carry labels. Keys may use letters, digits, _, ., / and -.
 	*/
 	Filters *string
 
@@ -85,13 +85,13 @@ type ExportEventsParams struct {
 
 	/* PrincipalID.
 
-	   Filter by principal public ID (requires principalKind)
+	   Filter by principal public ID (requires principalKind). Matches events that recorded this principal; older events attributed to it best-effort are not matched.
 	*/
 	PrincipalID *string
 
 	/* PrincipalKind.
 
-	   Filter by principal kind (User|ServiceAccount|System)
+	   Filter by principal kind (User|ServiceAccount|System). System selects events with no principal. Matches events that recorded a principal; older events are attributed best-effort in the export but are not matched by this filter.
 	*/
 	PrincipalKind *string
 
@@ -103,7 +103,7 @@ type ExportEventsParams struct {
 
 	/* Type.
 
-	   Event type filter; repeatable; defaults to all
+	   Event type filter; repeat to match any of several (type=add-user&type=remove-user); defaults to all. One of: create-sandbox, update-sandbox, delete-sandbox, submit-job, cancel-job, submit-smart-test-invocation, cancel-smart-test-invocation, create-hosted-test, update-hosted-test, delete-hosted-test, create-api-key, delete-api-key, create-service-account, update-service-account, delete-service-account, add-user, remove-user, invite-user, delete-user-invite, set-role, create-runner-group, update-runner-group, delete-runner-group, create-cluster-connection, delete-cluster-connection, create-resource-plugin, delete-resource-plugin, create-routegroup, update-routegroup, delete-routegroup, update-subscription, cancel-subscription, access-customer-portal, update-settings. New types may be added.
 	*/
 	Type []string
 
@@ -391,8 +391,8 @@ func (o *ExportEventsParams) bindParamType(formats strfmt.Registry) []string {
 		typeIC = append(typeIC, typeIIV)
 	}
 
-	// items.CollectionFormat: "csv"
-	typeIS := swag.JoinByFormat(typeIC, "csv")
+	// items.CollectionFormat: "multi"
+	typeIS := swag.JoinByFormat(typeIC, "multi")
 
 	return typeIS
 }

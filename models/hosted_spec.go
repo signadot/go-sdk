@@ -14,7 +14,7 @@ import (
 // swagger:model HostedSpec
 type HostedSpec struct {
 
-	// test name
+	// TestName is the name of the saved test.
 	TestName string `json:"testName,omitempty"`
 }
 

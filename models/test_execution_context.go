@@ -19,28 +19,27 @@ type TestExecutionContext struct {
 	// auto diff
 	AutoDiff *TestExecutionAutoDiff `json:"autoDiff,omitempty"`
 
-	// cluster
+	// Cluster is the name of the cluster the test runs in.
 	Cluster string `json:"cluster,omitempty"`
 
-	// Publish represents whether the test execution will show up by default
-	// in the UI, i.e. to filter out ad-hoc and test the test usage.
+	// Publish reports whether the execution is shown by default in the
+	// Signadot dashboard. Unpublished executions (for example ad hoc runs
+	// while writing a test) are still returned by the API; the list endpoint
+	// can filter on this with published.
 	Publish bool `json:"publish,omitempty"`
 
 	// routing
 	Routing *JobRoutingContext `json:"routing,omitempty"`
 
-	// run ID
+	// RunID groups executions started together, for example by one CLI
+	// invocation. The list endpoint can filter on it with runID.
 	RunID string `json:"runID,omitempty"`
 
-	// Timeout represents an optional timeout for the test execution.
-	// If not supplied, it defaults to the DefaultTimeout of the associated
-	// test, if that is present.  If that is not present, it defaults to "5m".
-	// It should be a string representing an unsigned integer not exceeding 32 bits followed by
-	// a units character, which can be one of the following.
-	//   - 'm' for minutes
-	//   - 'h' for hours
-	//   - 'd' for days
-	//   - 'w' for weeks
+	// Timeout is the maximum duration of the execution. If not supplied, it
+	// defaults to the hosted test's default timeout when there is one, and
+	// to "5m" otherwise. It is an unsigned integer (up to 32 bits) followed
+	// by a unit: 'm' for minutes, 'h' for hours, 'd' for days or 'w' for
+	// weeks.
 	Timeout string `json:"timeout,omitempty"`
 }
 

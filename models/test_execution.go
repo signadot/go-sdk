@@ -16,10 +16,10 @@ import (
 // swagger:model TestExecution
 type TestExecution struct {
 
-	// created at
+	// CreatedAt is when the execution was created (RFC3339).
 	CreatedAt string `json:"createdAt,omitempty"`
 
-	// id
+	// ID uniquely identifies the test execution.
 	ID string `json:"id,omitempty"`
 
 	// results

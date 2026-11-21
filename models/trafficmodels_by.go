@@ -22,10 +22,10 @@ type TrafficmodelsBy struct {
 	// kind
 	Kind TrafficmodelsKind `json:"kind,omitempty"`
 
-	// name
+	// Name is the workload's name.
 	Name string `json:"name,omitempty"`
 
-	// namespace
+	// Namespace is the workload's namespace.
 	Namespace string `json:"namespace,omitempty"`
 }
 

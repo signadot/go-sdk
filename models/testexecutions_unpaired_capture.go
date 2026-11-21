@@ -14,10 +14,12 @@ import (
 // swagger:model testexecutions.UnpairedCapture
 type TestexecutionsUnpairedCapture struct {
 
-	// baseline capture ID
+	// BaselineCaptureID identifies the capture in the baseline run. Absent
+	// when the request was seen only in the target run.
 	BaselineCaptureID string `json:"baselineCaptureID,omitempty"`
 
-	// target capture ID
+	// TargetCaptureID identifies the capture in the target run. Absent when
+	// the request was seen only in the baseline run.
 	TargetCaptureID string `json:"targetCaptureID,omitempty"`
 }
 

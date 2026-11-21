@@ -213,7 +213,7 @@ func (a *Client) CreateHostedTestExecution(params *CreateHostedTestExecutionPara
 /*
 GetTestExecution gets a test execution
 
-Fetch the details about a given test execution.
+Get one test execution by ID: what ran (spec), its phase and outcome (status), and its check results and traffic diff summary (results).
 */
 func (a *Client) GetTestExecution(params *GetTestExecutionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTestExecutionOK, error) {
 	// NOTE: parameters are not validated before sending
@@ -305,7 +305,7 @@ func (a *Client) ListTestExecutions(params *ListTestExecutionsParams, authInfo r
 /*
 QueryTestExecutions queries test executions
 
-Query test executions based on different criteria
+List the org's test executions, filtered by the query parameters below (all optional, combined with AND), in creation order: oldest first by default, newest first with orderDir=desc. With the signadot-api-opt-in header set to 'pagination' the response is the {items, nextCursor, hasMore} envelope below: pass nextCursor back as cursor, keeping the other parameters, until hasMore is false. Without the header the endpoint returns the legacy bare array of {execution, cursor} rows, at most pageSize of them (deprecated, see the Deprecation response header).
 */
 func (a *Client) QueryTestExecutions(params *QueryTestExecutionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*QueryTestExecutionsOK, error) {
 	// NOTE: parameters are not validated before sending

@@ -14,7 +14,9 @@ import (
 // swagger:model TestExecutionAutoDiff
 type TestExecutionAutoDiff struct {
 
-	// Enabled = true, requires the definition of a valid routing context
+	// Enabled runs the test against the baseline as well as the routing
+	// target and diffs the captured traffic. It has effect only when routing
+	// is set; with routing set and autoDiff absent, it is on.
 	Enabled bool `json:"enabled,omitempty"`
 }
 

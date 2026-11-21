@@ -25,7 +25,8 @@ type TestExecutionSpec struct {
 	// hosted
 	Hosted *HostedSpec `json:"hosted,omitempty"`
 
-	// Labels
+	// Labels are the key/value labels attached to the execution. The list
+	// endpoint can filter on them with label=key:value.
 	Labels map[string]string `json:"labels,omitempty"`
 }
 

@@ -61,43 +61,43 @@ type QueryTestExecutionsParams struct {
 
 	/* Cluster.
 
-	   Cluster name
+	   Only executions in this cluster
 	*/
 	Cluster *string
 
 	/* Cursor.
 
-	   Start sending results from this cursor
+	   Opaque pagination cursor: the previous page's nextCursor (or, in the legacy shape, the last row's cursor). Keep the other query parameters stable across pages; with the pagination opt-in the from/to window is pinned to the cursor, so a duration such as 24h is not re-resolved on later pages.
 	*/
 	Cursor *string
 
 	/* ExecutionPhase.
 
-	   Test execution phase
+	   Only executions in this phase
 	*/
 	ExecutionPhase *string
 
 	/* From.
 
-	   Filter results starting from this time
+	   Only executions created at or after this time: RFC3339, or a duration such as 24h meaning that long ago
 	*/
 	From *string
 
 	/* IsAutoDiff.
 
-	   Only include auto diff executions
+	   true for only executions with auto diff (a routing target, and autoDiff not disabled); false for only the others
 	*/
 	IsAutoDiff *string
 
 	/* Label.
 
-	   Label constraint key:value (may be specified multiple times)
+	   Only executions with this label, as key:value. Repeat to require several labels.
 	*/
 	Label []string
 
 	/* OrderDir.
 
-	   Sorting direction
+	   Creation order: asc (oldest first, the default) or desc (newest first)
 	*/
 	OrderDir *string
 
@@ -109,103 +109,111 @@ type QueryTestExecutionsParams struct {
 
 	/* PageSize.
 
-	   Number of rows to be included in the response
+	   Max test executions per page (default 50, max 500). With the pagination opt-in, 0 means the default; without it, 0 returns no rows.
 	*/
 	PageSize *int64
 
 	/* Published.
 
-	   Whether the test is published to the UI by default
+	   Only executions with this publish setting (spec.executionContext.publish)
 	*/
 	Published *bool
 
 	/* Repo.
 
-	   Repository name
+	   Only external executions from this repository
 	*/
 	Repo *string
 
 	/* RepoBranch.
 
-	   Repository path
+	   Only external executions from this repository branch
 	*/
 	RepoBranch *string
 
 	/* RepoCommitSHA.
 
-	   Repository commit SHA
+	   Only external executions from this repository commit
 	*/
 	RepoCommitSHA *string
 
 	/* RepoPath.
 
-	   Repository path
+	   Only external executions from this path in the repository
 	*/
 	RepoPath *string
 
 	/* RunID.
 
-	   CLI run identifier
+	   Only executions with this run ID (spec.executionContext.runID)
 	*/
 	RunID *string
 
+	/* SignadotAPIOptIn.
+
+	   Set to 'pagination' to get the {items, nextCursor, hasMore} envelope. Omit to keep receiving the legacy bare [{execution, cursor}] array, which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.
+
+	   Default: "pagination"
+	*/
+	SignadotAPIOptIn *string
+
 	/* SkipDeletedTests.
 
-	   Do not include executions from deleted tests
+	   true to leave out executions of hosted tests that have since been deleted
 	*/
 	SkipDeletedTests *string
 
 	/* Source.
 
-	   Test source external or saas
+	   external for only executions submitted with their own script (spec.external); synthetic for only executions of hosted tests (spec.hosted)
 	*/
 	Source *string
 
 	/* TargetRevision.
 
-	   Revision of the target routing context
+	   Only executions that targeted this revision (an integer) of the sandbox or routegroup
 	*/
 	TargetRevision *string
 
 	/* TargetRouteGroup.
 
-	   Target route group name
+	   Only executions targeting this routegroup
 	*/
 	TargetRouteGroup *string
 
 	/* TargetRoutingKey.
 
-	   Target routing key
+	   Only executions targeting this routing key (of a sandbox or routegroup)
 	*/
 	TargetRoutingKey *string
 
 	/* TargetSandbox.
 
-	   Target sandbox name
+	   Only executions targeting this sandbox
 	*/
 	TargetSandbox *string
 
 	/* TestName.
 
-	   Test name
+	   Only executions of this test: the hosted test name or the external test name
 	*/
 	TestName *string
 
 	/* To.
 
-	   Filter results until this time
+	   Only executions created before this time: RFC3339, or a duration such as 1h meaning that long ago
 	*/
 	To *string
 
 	/* TriggerID.
 
-	   Trigger name
+	   Only executions started by this test trigger (status.triggeredBy.trigger.id)
 	*/
 	TriggerID *string
 
 	/* TriggerWorkload.
 
-	   Trigger workload in JSON format
+	   Only executions started by a trigger on this workload, given as a JSON object with kind (Deployment or Rollout), namespace and name
 	*/
 	TriggerWorkload *string
 
@@ -226,7 +234,18 @@ func (o *QueryTestExecutionsParams) WithDefaults() *QueryTestExecutionsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *QueryTestExecutionsParams) SetDefaults() {
-	// no default values defined for this parameter
+	var (
+		signadotAPIOptInDefault = string("pagination")
+	)
+
+	val := QueryTestExecutionsParams{
+		SignadotAPIOptIn: &signadotAPIOptInDefault,
+	}
+
+	val.timeout = o.timeout
+	val.Context = o.Context
+	val.HTTPClient = o.HTTPClient
+	*o = val
 }
 
 // WithTimeout adds the timeout to the query test executions params
@@ -425,6 +444,17 @@ func (o *QueryTestExecutionsParams) WithRunID(runID *string) *QueryTestExecution
 // SetRunID adds the runId to the query test executions params
 func (o *QueryTestExecutionsParams) SetRunID(runID *string) {
 	o.RunID = runID
+}
+
+// WithSignadotAPIOptIn adds the signadotAPIOptIn to the query test executions params
+func (o *QueryTestExecutionsParams) WithSignadotAPIOptIn(signadotAPIOptIn *string) *QueryTestExecutionsParams {
+	o.SetSignadotAPIOptIn(signadotAPIOptIn)
+	return o
+}
+
+// SetSignadotAPIOptIn adds the signadotApiOptIn to the query test executions params
+func (o *QueryTestExecutionsParams) SetSignadotAPIOptIn(signadotAPIOptIn *string) {
+	o.SignadotAPIOptIn = signadotAPIOptIn
 }
 
 // WithSkipDeletedTests adds the skipDeletedTests to the query test executions params
@@ -779,6 +809,14 @@ func (o *QueryTestExecutionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 			if err := r.SetQueryParam("runID", qRunID); err != nil {
 				return err
 			}
+		}
+	}
+
+	if o.SignadotAPIOptIn != nil {
+
+		// header param signadot-api-opt-in
+		if err := r.SetHeaderParam("signadot-api-opt-in", *o.SignadotAPIOptIn); err != nil {
+			return err
 		}
 	}
 

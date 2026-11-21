@@ -38,6 +38,29 @@ type PlanExecutionStatus struct {
 	// phase
 	Phase PlansExecutionPhase `json:"phase,omitempty"`
 
+	// PossibleReruns is how many times this execution was placed on a runner
+	// again without being able to rule out that an earlier placement had
+	// already run the plan.
+	//
+	// Plan execution is at-least-once. Under normal operation an execution
+	// runs exactly once; a pod rescheduled onto another node, or one whose
+	// memory of a finished run aged out before the control plane read it,
+	// loses the only record of whether the plan ran, and it is re-placed. A
+	// non-zero value here means the plan's side effects may have happened
+	// more than once, which matters if the plan is not idempotent and is the
+	// signal to check before assuming a single run.
+	//
+	// Zero for the overwhelming majority of executions. It counts only
+	// re-placements where an earlier run could not be ruled out: a runner
+	// refusing the dispatch, asking for redispatch before running anything, or
+	// never having been sent the execution at all all leave it at zero.
+	//
+	// Control plane to client only. It is read from the plan_executions row by
+	// RowToExecution; a runner neither sets it nor sees it, so it is always
+	// absent on the runner's own status responses. See StepsStarted, which
+	// travels the other way.
+	PossibleReruns int64 `json:"possibleReruns,omitempty"`
+
 	// RunnerHost is the hostname of the runner executing the plan.
 	RunnerHost string `json:"runnerHost,omitempty"`
 
@@ -46,6 +69,34 @@ type PlanExecutionStatus struct {
 
 	// Steps contains the per-step runtime status.
 	Steps []*PlanStepStatus `json:"steps"`
+
+	// StepsStarted reports, for an execution the runner is handing back with
+	// ExecutionRedispatchNeeded, whether any of its steps had begun.
+	//
+	// The runner is the only party that can answer it. Once the execution is
+	// off the pod the control plane cannot tell a plan that got halfway from
+	// one that never started, and the answer decides not whether to re-place
+	// — at-least-once means it is always re-placed — but whether that
+	// re-placement counts a possible rerun.
+	//
+	// A pointer because absent and false are different answers and only one of
+	// them is safe to act on. A runner from before this field existed sends
+	// nothing, and the only hand-back such a runner emits is the
+	// ErrImageNotReady one from its results loop — which fires with a step
+	// already executing and earlier steps in the DAG completed. So absence
+	// means work probably was repeated, and reading it as false would decline
+	// to count precisely the case that most needs counting. Nil is the unknown
+	// that counts; false is the runner saying nothing ran, and is believed.
+	//
+	// Runner to control plane only, despite appearing in this type's published
+	// schema. It is consumed in the same pass that reads it, deciding what
+	// PossibleReruns is incremented by, and is never persisted — there is no
+	// column, and RowToExecution does not set it. So it is always absent on a
+	// control-plane API response, and a client must not read anything into
+	// that. Present here rather than on a runner-only type because
+	// ExecutionStatus is what the runner returns over
+	// GET /api/v1/plans/{executionID}.
+	StepsStarted bool `json:"stepsStarted,omitempty"`
 
 	// UpdatedAt is when the execution status was last updated. Serialized as RFC3339.
 	UpdatedAt string `json:"updatedAt,omitempty"`
