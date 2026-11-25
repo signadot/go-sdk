@@ -40,6 +40,12 @@ func (o *ListEventsReader) ReadResponse(response runtime.ClientResponse, consume
 			return nil, err
 		}
 		return nil, result
+	case 403:
+		result := NewListEventsForbidden()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewListEventsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -250,6 +256,76 @@ func (o *ListEventsUnauthorized) GetPayload() *models.ErrorResponse {
 }
 
 func (o *ListEventsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewListEventsForbidden creates a ListEventsForbidden with default headers values
+func NewListEventsForbidden() *ListEventsForbidden {
+	return &ListEventsForbidden{}
+}
+
+/*
+ListEventsForbidden describes a response with status code 403, with default header values.
+
+Forbidden
+*/
+type ListEventsForbidden struct {
+	Payload *models.ErrorResponse
+}
+
+// IsSuccess returns true when this list events forbidden response has a 2xx status code
+func (o *ListEventsForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this list events forbidden response has a 3xx status code
+func (o *ListEventsForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list events forbidden response has a 4xx status code
+func (o *ListEventsForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this list events forbidden response has a 5xx status code
+func (o *ListEventsForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list events forbidden response a status code equal to that given
+func (o *ListEventsForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
+// Code gets the status code for the list events forbidden response
+func (o *ListEventsForbidden) Code() int {
+	return 403
+}
+
+func (o *ListEventsForbidden) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/events][%d] listEventsForbidden %s", 403, payload)
+}
+
+func (o *ListEventsForbidden) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/events][%d] listEventsForbidden %s", 403, payload)
+}
+
+func (o *ListEventsForbidden) GetPayload() *models.ErrorResponse {
+	return o.Payload
+}
+
+func (o *ListEventsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 

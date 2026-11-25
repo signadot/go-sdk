@@ -14,10 +14,10 @@ import (
 // swagger:model job.RoutingContext
 type JobRoutingContext struct {
 
-	// routegroup
+	// RouteGroup is the name of the target routegroup.
 	Routegroup string `json:"routegroup,omitempty"`
 
-	// sandbox
+	// Sandbox is the name of the target sandbox.
 	Sandbox string `json:"sandbox,omitempty"`
 }
 

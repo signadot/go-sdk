@@ -16,13 +16,13 @@ import (
 // swagger:model TestExecutionCanceledState
 type TestExecutionCanceledState struct {
 
-	// canceled at
+	// CanceledAt is when the execution was canceled (RFC3339).
 	CanceledAt string `json:"canceledAt,omitempty"`
 
 	// canceled by
 	CanceledBy JobsCanceledBy `json:"canceledBy,omitempty"`
 
-	// message
+	// Message gives more detail, when available.
 	Message string `json:"message,omitempty"`
 }
 

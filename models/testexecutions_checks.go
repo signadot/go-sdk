@@ -17,10 +17,12 @@ import (
 // swagger:model testexecutions.Checks
 type TestexecutionsChecks struct {
 
-	// baseline
+	// Baseline are the checks of the baseline run, when auto diff is
+	// enabled.
 	Baseline []*TestexecutionsCheck `json:"baseline"`
 
-	// sandbox
+	// Sandbox are the checks of the run against the routing target (or the
+	// only run, when there is no routing target).
 	Sandbox []*TestexecutionsCheck `json:"sandbox"`
 }
 

@@ -17,15 +17,22 @@ import (
 // swagger:model ListEventsResponse
 type ListEventsResponse struct {
 
-	// events
-	Events []*EventQueryResult `json:"events"`
+	// HasMore reports whether more events in the window follow this page.
+	HasMore bool `json:"hasMore,omitempty"`
+
+	// Items are the events on this page, newest first.
+	Items []*Event `json:"items"`
+
+	// NextCursor is an opaque cursor for the next (older) page. Present only
+	// when hasMore is true.
+	NextCursor string `json:"nextCursor,omitempty"`
 }
 
 // Validate validates this list events response
 func (m *ListEventsResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateEvents(formats); err != nil {
+	if err := m.validateItems(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -35,25 +42,25 @@ func (m *ListEventsResponse) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ListEventsResponse) validateEvents(formats strfmt.Registry) error {
-	if swag.IsZero(m.Events) { // not required
+func (m *ListEventsResponse) validateItems(formats strfmt.Registry) error {
+	if swag.IsZero(m.Items) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.Events); i++ {
-		if swag.IsZero(m.Events[i]) { // not required
+	for i := 0; i < len(m.Items); i++ {
+		if swag.IsZero(m.Items[i]) { // not required
 			continue
 		}
 
-		if m.Events[i] != nil {
-			if err := m.Events[i].Validate(formats); err != nil {
+		if m.Items[i] != nil {
+			if err := m.Items[i].Validate(formats); err != nil {
 				ve := new(errors.Validation)
 				if stderrors.As(err, &ve) {
-					return ve.ValidateName("events" + "." + strconv.Itoa(i))
+					return ve.ValidateName("items" + "." + strconv.Itoa(i))
 				}
 				ce := new(errors.CompositeError)
 				if stderrors.As(err, &ce) {
-					return ce.ValidateName("events" + "." + strconv.Itoa(i))
+					return ce.ValidateName("items" + "." + strconv.Itoa(i))
 				}
 
 				return err
@@ -69,7 +76,7 @@ func (m *ListEventsResponse) validateEvents(formats strfmt.Registry) error {
 func (m *ListEventsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateEvents(ctx, formats); err != nil {
+	if err := m.contextValidateItems(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -79,24 +86,24 @@ func (m *ListEventsResponse) ContextValidate(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *ListEventsResponse) contextValidateEvents(ctx context.Context, formats strfmt.Registry) error {
+func (m *ListEventsResponse) contextValidateItems(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Events); i++ {
+	for i := 0; i < len(m.Items); i++ {
 
-		if m.Events[i] != nil {
+		if m.Items[i] != nil {
 
-			if swag.IsZero(m.Events[i]) { // not required
+			if swag.IsZero(m.Items[i]) { // not required
 				return nil
 			}
 
-			if err := m.Events[i].ContextValidate(ctx, formats); err != nil {
+			if err := m.Items[i].ContextValidate(ctx, formats); err != nil {
 				ve := new(errors.Validation)
 				if stderrors.As(err, &ve) {
-					return ve.ValidateName("events" + "." + strconv.Itoa(i))
+					return ve.ValidateName("items" + "." + strconv.Itoa(i))
 				}
 				ce := new(errors.CompositeError)
 				if stderrors.As(err, &ce) {
-					return ce.ValidateName("events" + "." + strconv.Itoa(i))
+					return ce.ValidateName("items" + "." + strconv.Itoa(i))
 				}
 
 				return err

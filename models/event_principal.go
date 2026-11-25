@@ -14,13 +14,14 @@ import (
 // swagger:model EventPrincipal
 type EventPrincipal struct {
 
-	// "User" | "ServiceAccount"
+	// Kind is User or ServiceAccount.
 	Kind string `json:"kind,omitempty"`
 
-	// user email or SA name (display)
+	// Name is the user's email or the service account's name.
 	Name string `json:"name,omitempty"`
 
-	// public Id
+	// PublicID is the principal's ID. Pass it as principalId (with
+	// principalKind) to filter events by this principal.
 	PublicID string `json:"publicId,omitempty"`
 }
 

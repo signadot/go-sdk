@@ -16,25 +16,33 @@ import (
 // swagger:model TestExecutionStatus
 type TestExecutionStatus struct {
 
-	// baseline job
+	// BaselineJob is the name of the job that ran the test against the
+	// baseline, when auto diff is enabled.
+	//
+	// Out of the public reference for the same reason as TargetJob.
 	BaselineJob string `json:"baselineJob,omitempty"`
 
 	// final state
 	FinalState *TestExecutionState `json:"finalState,omitempty"`
 
-	// finished at
+	// FinishedAt is when the execution reached a final phase (RFC3339).
 	FinishedAt string `json:"finishedAt,omitempty"`
 
 	// phase
 	Phase TestexecutionsPhase `json:"phase,omitempty"`
 
-	// started at
+	// StartedAt is when the execution started running (RFC3339).
 	StartedAt string `json:"startedAt,omitempty"`
 
-	// target job
+	// TargetJob is the name of the job that ran the test against the
+	// routing target (or the only run, when there is no routing target).
+	//
+	// Out of the public reference: it names a job, and the jobs API is not
+	// documented, so the value has nothing a reader could do with it yet.
 	TargetJob string `json:"targetJob,omitempty"`
 
-	// test deleted at
+	// TestDeletedAt is when the hosted test this execution ran was deleted
+	// (RFC3339). Absent while the test exists, and for external executions.
 	TestDeletedAt string `json:"testDeletedAt,omitempty"`
 
 	// triggered by

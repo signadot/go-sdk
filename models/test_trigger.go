@@ -19,7 +19,7 @@ type TestTrigger struct {
 	// execution template
 	ExecutionTemplate *TestExecutionTemplate `json:"executionTemplate,omitempty"`
 
-	// id
+	// ID uniquely identifies the trigger.
 	ID string `json:"id,omitempty"`
 
 	// sandbox of

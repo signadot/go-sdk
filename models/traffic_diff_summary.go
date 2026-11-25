@@ -14,19 +14,22 @@ import (
 // swagger:model TrafficDiffSummary
 type TrafficDiffSummary struct {
 
-	// additions
+	// Additions is the number of fields present only in the target run.
 	Additions int64 `json:"additions,omitempty"`
 
-	// captures
+	// Captures is the number of captured requests: at the top level every
+	// request including unpaired ones, in a band those with at least one diff
+	// in that band.
 	Captures int64 `json:"captures,omitempty"`
 
-	// max relevance
+	// MaxRelevance is the highest relevance of any diff, from 0 (likely
+	// noise) to 1.
 	MaxRelevance float64 `json:"maxRelevance,omitempty"`
 
-	// removals
+	// Removals is the number of fields present only in the baseline run.
 	Removals int64 `json:"removals,omitempty"`
 
-	// replacements
+	// Replacements is the number of fields whose value differs.
 	Replacements int64 `json:"replacements,omitempty"`
 }
 

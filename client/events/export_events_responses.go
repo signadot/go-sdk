@@ -40,6 +40,12 @@ func (o *ExportEventsReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return nil, result
+	case 403:
+		result := NewExportEventsForbidden()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewExportEventsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -248,6 +254,76 @@ func (o *ExportEventsUnauthorized) GetPayload() *models.ErrorResponse {
 }
 
 func (o *ExportEventsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+		return err
+	}
+
+	return nil
+}
+
+// NewExportEventsForbidden creates a ExportEventsForbidden with default headers values
+func NewExportEventsForbidden() *ExportEventsForbidden {
+	return &ExportEventsForbidden{}
+}
+
+/*
+ExportEventsForbidden describes a response with status code 403, with default header values.
+
+Forbidden
+*/
+type ExportEventsForbidden struct {
+	Payload *models.ErrorResponse
+}
+
+// IsSuccess returns true when this export events forbidden response has a 2xx status code
+func (o *ExportEventsForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this export events forbidden response has a 3xx status code
+func (o *ExportEventsForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this export events forbidden response has a 4xx status code
+func (o *ExportEventsForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this export events forbidden response has a 5xx status code
+func (o *ExportEventsForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this export events forbidden response a status code equal to that given
+func (o *ExportEventsForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
+// Code gets the status code for the export events forbidden response
+func (o *ExportEventsForbidden) Code() int {
+	return 403
+}
+
+func (o *ExportEventsForbidden) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/events/export][%d] exportEventsForbidden %s", 403, payload)
+}
+
+func (o *ExportEventsForbidden) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/events/export][%d] exportEventsForbidden %s", 403, payload)
+}
+
+func (o *ExportEventsForbidden) GetPayload() *models.ErrorResponse {
+	return o.Payload
+}
+
+func (o *ExportEventsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ErrorResponse)
 

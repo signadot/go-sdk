@@ -67,7 +67,7 @@ type ListEventsParams struct {
 
 	/* Cursor.
 
-	   Opaque pagination cursor: pass the previous page's last event cursor to fetch the next (older) page. Keep the other query parameters (type/filters/principal/authMethod and the time window) stable across pages; the window is pinned to the cursor, and changing the other filters mid-pagination restarts the result set.
+	   Opaque pagination cursor: the previous page's nextCursor (or, in the legacy shape, the last event's cursor). Keep the other query parameters (type/filters/principal/authMethod and the time window) stable across pages; the window is pinned to the cursor, and changing the other filters mid-pagination restarts the result set.
 	*/
 	Cursor *string
 
@@ -79,13 +79,13 @@ type ListEventsParams struct {
 
 	/* Filters.
 
-	   event_data filter DSL (key=value&...)
+	   Filters on the event data, as key=value pairs joined by & and sent URL-encoded as a single parameter, e.g. filters=userEmail%3Dalice%40example.com. All pairs must match. Each key names a top-level string field of data and matches its value exactly; labels.<key> matches a label on events that carry labels. Keys may use letters, digits, _, ., / and -.
 	*/
 	Filters *string
 
 	/* Limit.
 
-	   Max events (1..1000); defaults to 200
+	   Legacy page size (1..1000); defaults to 200. Prefer pageSize with the pagination opt-in; limit stays accepted as its alias, and pageSize wins when both are set.
 	*/
 	Limit *int64
 
@@ -94,6 +94,12 @@ type ListEventsParams struct {
 	   Signadot Org Name
 	*/
 	OrgName string
+
+	/* PageSize.
+
+	   Max events per page (default 200, max 1000; 0 means the default). Requires the pagination opt-in.
+	*/
+	PageSize *int64
 
 	/* PrincipalID.
 
@@ -107,6 +113,14 @@ type ListEventsParams struct {
 	*/
 	PrincipalKind *string
 
+	/* SignadotAPIOptIn.
+
+	   Set to 'pagination' to get the {items, nextCursor, hasMore} envelope. Omit to keep receiving the legacy events shape (each event with its own cursor), which is deprecated (see the Deprecation response header on legacy responses) but not yet on a fixed removal date.
+
+	   Default: "pagination"
+	*/
+	SignadotAPIOptIn *string
+
 	/* StartTime.
 
 	   Window start (RFC3339); defaults to endTime-24h
@@ -115,7 +129,7 @@ type ListEventsParams struct {
 
 	/* Type.
 
-	   Event type filter; repeatable; defaults to all
+	   Event type filter; repeat to match any of several (type=add-user&type=remove-user); defaults to all. One of: create-sandbox, update-sandbox, delete-sandbox, submit-job, cancel-job, submit-smart-test-invocation, cancel-smart-test-invocation, create-hosted-test, update-hosted-test, delete-hosted-test, create-api-key, delete-api-key, create-service-account, update-service-account, delete-service-account, add-user, remove-user, invite-user, delete-user-invite, set-role, create-runner-group, update-runner-group, delete-runner-group, create-cluster-connection, delete-cluster-connection, create-resource-plugin, delete-resource-plugin, create-routegroup, update-routegroup, delete-routegroup, update-subscription, cancel-subscription, access-customer-portal, update-settings. New types may be added.
 	*/
 	Type []string
 
@@ -136,7 +150,18 @@ func (o *ListEventsParams) WithDefaults() *ListEventsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ListEventsParams) SetDefaults() {
-	// no default values defined for this parameter
+	var (
+		signadotAPIOptInDefault = string("pagination")
+	)
+
+	val := ListEventsParams{
+		SignadotAPIOptIn: &signadotAPIOptInDefault,
+	}
+
+	val.timeout = o.timeout
+	val.Context = o.Context
+	val.HTTPClient = o.HTTPClient
+	*o = val
 }
 
 // WithTimeout adds the timeout to the list events params
@@ -238,6 +263,17 @@ func (o *ListEventsParams) SetOrgName(orgName string) {
 	o.OrgName = orgName
 }
 
+// WithPageSize adds the pageSize to the list events params
+func (o *ListEventsParams) WithPageSize(pageSize *int64) *ListEventsParams {
+	o.SetPageSize(pageSize)
+	return o
+}
+
+// SetPageSize adds the pageSize to the list events params
+func (o *ListEventsParams) SetPageSize(pageSize *int64) {
+	o.PageSize = pageSize
+}
+
 // WithPrincipalID adds the principalID to the list events params
 func (o *ListEventsParams) WithPrincipalID(principalID *string) *ListEventsParams {
 	o.SetPrincipalID(principalID)
@@ -258,6 +294,17 @@ func (o *ListEventsParams) WithPrincipalKind(principalKind *string) *ListEventsP
 // SetPrincipalKind adds the principalKind to the list events params
 func (o *ListEventsParams) SetPrincipalKind(principalKind *string) {
 	o.PrincipalKind = principalKind
+}
+
+// WithSignadotAPIOptIn adds the signadotAPIOptIn to the list events params
+func (o *ListEventsParams) WithSignadotAPIOptIn(signadotAPIOptIn *string) *ListEventsParams {
+	o.SetSignadotAPIOptIn(signadotAPIOptIn)
+	return o
+}
+
+// SetSignadotAPIOptIn adds the signadotApiOptIn to the list events params
+func (o *ListEventsParams) SetSignadotAPIOptIn(signadotAPIOptIn *string) {
+	o.SignadotAPIOptIn = signadotAPIOptIn
 }
 
 // WithStartTime adds the startTime to the list events params
@@ -380,6 +427,23 @@ func (o *ListEventsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 
+	if o.PageSize != nil {
+
+		// query param pageSize
+		var qrPageSize int64
+
+		if o.PageSize != nil {
+			qrPageSize = *o.PageSize
+		}
+		qPageSize := swag.FormatInt64(qrPageSize)
+		if qPageSize != "" {
+
+			if err := r.SetQueryParam("pageSize", qPageSize); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.PrincipalID != nil {
 
 		// query param principalId
@@ -411,6 +475,14 @@ func (o *ListEventsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 			if err := r.SetQueryParam("principalKind", qPrincipalKind); err != nil {
 				return err
 			}
+		}
+	}
+
+	if o.SignadotAPIOptIn != nil {
+
+		// header param signadot-api-opt-in
+		if err := r.SetHeaderParam("signadot-api-opt-in", *o.SignadotAPIOptIn); err != nil {
+			return err
 		}
 	}
 
@@ -459,8 +531,8 @@ func (o *ListEventsParams) bindParamType(formats strfmt.Registry) []string {
 		typeIC = append(typeIC, typeIIV)
 	}
 
-	// items.CollectionFormat: "csv"
-	typeIS := swag.JoinByFormat(typeIC, "csv")
+	// items.CollectionFormat: "multi"
+	typeIS := swag.JoinByFormat(typeIC, "multi")
 
 	return typeIS
 }

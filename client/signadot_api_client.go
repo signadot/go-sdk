@@ -24,14 +24,18 @@ import (
 	"github.com/signadot/go-sdk/client/plan_tags"
 	"github.com/signadot/go-sdk/client/plans"
 	"github.com/signadot/go-sdk/client/resource_plugins"
+	"github.com/signadot/go-sdk/client/roles"
 	"github.com/signadot/go-sdk/client/route_groups"
 	"github.com/signadot/go-sdk/client/runner_groups"
 	"github.com/signadot/go-sdk/client/sandboxes"
 	"github.com/signadot/go-sdk/client/secrets"
 	"github.com/signadot/go-sdk/client/service_accounts"
 	"github.com/signadot/go-sdk/client/service_status"
+	"github.com/signadot/go-sdk/client/subscription"
 	"github.com/signadot/go-sdk/client/test_executions"
 	"github.com/signadot/go-sdk/client/tests"
+	"github.com/signadot/go-sdk/client/usage"
+	"github.com/signadot/go-sdk/client/users"
 )
 
 // Default signadot API HTTP client.
@@ -93,14 +97,18 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SignadotAP
 	cli.PlanTags = plan_tags.New(transport, formats)
 	cli.Plans = plans.New(transport, formats)
 	cli.ResourcePlugins = resource_plugins.New(transport, formats)
+	cli.Roles = roles.New(transport, formats)
 	cli.RouteGroups = route_groups.New(transport, formats)
 	cli.RunnerGroups = runner_groups.New(transport, formats)
 	cli.Sandboxes = sandboxes.New(transport, formats)
 	cli.Secrets = secrets.New(transport, formats)
 	cli.ServiceAccounts = service_accounts.New(transport, formats)
 	cli.ServiceStatus = service_status.New(transport, formats)
+	cli.Subscription = subscription.New(transport, formats)
 	cli.TestExecutions = test_executions.New(transport, formats)
 	cli.Tests = tests.New(transport, formats)
+	cli.Usage = usage.New(transport, formats)
+	cli.Users = users.New(transport, formats)
 	return cli
 }
 
@@ -179,6 +187,8 @@ type SignadotAPI struct {
 
 	ResourcePlugins resource_plugins.ClientService
 
+	Roles roles.ClientService
+
 	RouteGroups route_groups.ClientService
 
 	RunnerGroups runner_groups.ClientService
@@ -191,9 +201,15 @@ type SignadotAPI struct {
 
 	ServiceStatus service_status.ClientService
 
+	Subscription subscription.ClientService
+
 	TestExecutions test_executions.ClientService
 
 	Tests tests.ClientService
+
+	Usage usage.ClientService
+
+	Users users.ClientService
 
 	Transport runtime.ClientTransport
 }
@@ -218,12 +234,16 @@ func (c *SignadotAPI) SetTransport(transport runtime.ClientTransport) {
 	c.PlanTags.SetTransport(transport)
 	c.Plans.SetTransport(transport)
 	c.ResourcePlugins.SetTransport(transport)
+	c.Roles.SetTransport(transport)
 	c.RouteGroups.SetTransport(transport)
 	c.RunnerGroups.SetTransport(transport)
 	c.Sandboxes.SetTransport(transport)
 	c.Secrets.SetTransport(transport)
 	c.ServiceAccounts.SetTransport(transport)
 	c.ServiceStatus.SetTransport(transport)
+	c.Subscription.SetTransport(transport)
 	c.TestExecutions.SetTransport(transport)
 	c.Tests.SetTransport(transport)
+	c.Usage.SetTransport(transport)
+	c.Users.SetTransport(transport)
 }

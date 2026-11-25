@@ -17,37 +17,41 @@ import (
 // swagger:model TrafficDiff
 type TrafficDiff struct {
 
-	// additions
+	// Additions is the number of fields present only in the target run.
 	Additions int64 `json:"additions,omitempty"`
 
-	// baseline session
+	// BaselineSession identifies the capture session of the baseline run.
 	BaselineSession string `json:"baselineSession,omitempty"`
 
-	// capture points
+	// CapturePoints are the workloads and directions where traffic was
+	// captured.
 	CapturePoints []*TrafficmodelsBy `json:"capturePoints"`
 
-	// captures
+	// Captures is the number of captured requests: at the top level every
+	// request including unpaired ones, in a band those with at least one diff
+	// in that band.
 	Captures int64 `json:"captures,omitempty"`
 
 	// green
 	Green *TrafficDiffSummary `json:"green,omitempty"`
 
-	// max relevance
+	// MaxRelevance is the highest relevance of any diff, from 0 (likely
+	// noise) to 1.
 	MaxRelevance float64 `json:"maxRelevance,omitempty"`
 
 	// red
 	Red *TrafficDiffSummary `json:"red,omitempty"`
 
-	// removals
+	// Removals is the number of fields present only in the baseline run.
 	Removals int64 `json:"removals,omitempty"`
 
-	// replacements
+	// Replacements is the number of fields whose value differs.
 	Replacements int64 `json:"replacements,omitempty"`
 
-	// target session
+	// TargetSession identifies the capture session of the target run.
 	TargetSession string `json:"targetSession,omitempty"`
 
-	// unpaired captures
+	// UnpairedCaptures are the requests seen in only one run.
 	UnpairedCaptures []*TestexecutionsUnpairedCapture `json:"unpairedCaptures"`
 
 	// yellow

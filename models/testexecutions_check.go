@@ -17,10 +17,10 @@ import (
 // swagger:model testexecutions.Check
 type TestexecutionsCheck struct {
 
-	// errors
+	// Errors are the check's failures. Absent when it passed.
 	Errors []*TestexecutionsCheckError `json:"errors"`
 
-	// name
+	// Name is the check's name as given in the script.
 	Name string `json:"name,omitempty"`
 }
 

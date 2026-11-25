@@ -14,22 +14,23 @@ import (
 // swagger:model ExternalSpec
 type ExternalSpec struct {
 
-	// branch
+	// Branch is the repository branch the test came from, when known.
 	Branch string `json:"branch,omitempty"`
 
-	// commit s h a
+	// CommitSHA is the repository commit the test came from, when known.
 	CommitSHA string `json:"commitSHA,omitempty"`
 
-	// path
+	// Path is the test's path within the repository, when known.
 	Path string `json:"path,omitempty"`
 
-	// repo
+	// Repo is the repository the test came from, when known.
 	Repo string `json:"repo,omitempty"`
 
-	// script
+	// Script is the full source of the test script that was run.
 	Script string `json:"script,omitempty"`
 
-	// test name
+	// TestName is the name the test was submitted under, typically its file
+	// path.
 	TestName string `json:"testName,omitempty"`
 }
 

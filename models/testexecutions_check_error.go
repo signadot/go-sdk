@@ -16,14 +16,15 @@ import (
 // swagger:model testexecutions.CheckError
 type TestexecutionsCheckError struct {
 
-	// attrs
+	// Attrs holds extra key/value details the script attached to the
+	// failure.
 	Attrs map[string]any `json:"attrs,omitempty"`
 
-	// message
+	// Message describes the failure.
 	Message string `json:"message,omitempty"`
 
 	// source position
-	SourcePosition *SyntaxPosition `json:"sourcePosition,omitempty"`
+	SourcePosition *TestExecutionSourcePosition `json:"sourcePosition,omitempty"`
 }
 
 // Validate validates this testexecutions check error

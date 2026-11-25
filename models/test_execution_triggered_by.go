@@ -16,7 +16,7 @@ import (
 // swagger:model TestExecutionTriggeredBy
 type TestExecutionTriggeredBy struct {
 
-	// sandbox
+	// Sandbox is the name of the sandbox whose creation or update fired it.
 	Sandbox string `json:"sandbox,omitempty"`
 
 	// trigger

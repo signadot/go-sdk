@@ -62,7 +62,7 @@ ListSandboxesOK describes a response with status code 200, with default header v
 OK
 */
 type ListSandboxesOK struct {
-	Payload []*models.Sandbox
+	Payload *models.ListSandboxesResponse
 }
 
 // IsSuccess returns true when this list sandboxes o k response has a 2xx status code
@@ -105,14 +105,16 @@ func (o *ListSandboxesOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/sandboxes][%d] listSandboxesOK %s", 200, payload)
 }
 
-func (o *ListSandboxesOK) GetPayload() []*models.Sandbox {
+func (o *ListSandboxesOK) GetPayload() *models.ListSandboxesResponse {
 	return o.Payload
 }
 
 func (o *ListSandboxesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.ListSandboxesResponse)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 

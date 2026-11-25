@@ -62,7 +62,7 @@ ListJobsOK describes a response with status code 200, with default header values
 OK
 */
 type ListJobsOK struct {
-	Payload []*models.Job
+	Payload *models.ListJobsResponse
 }
 
 // IsSuccess returns true when this list jobs o k response has a 2xx status code
@@ -105,14 +105,16 @@ func (o *ListJobsOK) String() string {
 	return fmt.Sprintf("[GET /orgs/{orgName}/jobs][%d] listJobsOK %s", 200, payload)
 }
 
-func (o *ListJobsOK) GetPayload() []*models.Job {
+func (o *ListJobsOK) GetPayload() *models.ListJobsResponse {
 	return o.Payload
 }
 
 func (o *ListJobsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.ListJobsResponse)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && !stderrors.Is(err, io.EOF) {
 		return err
 	}
 
