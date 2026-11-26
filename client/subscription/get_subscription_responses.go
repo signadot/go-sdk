@@ -47,7 +47,7 @@ func (o *GetSubscriptionReader) ReadResponse(response runtime.ClientResponse, co
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/subscription] get-subscription", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /orgs/{orgName}/billing/subscription] get-subscription", response, response.Code())
 	}
 }
 
@@ -97,12 +97,12 @@ func (o *GetSubscriptionOK) Code() int {
 
 func (o *GetSubscriptionOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionOK %s", 200, payload)
 }
 
 func (o *GetSubscriptionOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionOK %s", 200, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionOK %s", 200, payload)
 }
 
 func (o *GetSubscriptionOK) GetPayload() *models.BillingSubscription {
@@ -167,12 +167,12 @@ func (o *GetSubscriptionUnauthorized) Code() int {
 
 func (o *GetSubscriptionUnauthorized) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionUnauthorized %s", 401, payload)
 }
 
 func (o *GetSubscriptionUnauthorized) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionUnauthorized %s", 401, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionUnauthorized %s", 401, payload)
 }
 
 func (o *GetSubscriptionUnauthorized) GetPayload() *models.ErrorResponse {
@@ -237,12 +237,12 @@ func (o *GetSubscriptionForbidden) Code() int {
 
 func (o *GetSubscriptionForbidden) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionForbidden %s", 403, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionForbidden %s", 403, payload)
 }
 
 func (o *GetSubscriptionForbidden) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionForbidden %s", 403, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionForbidden %s", 403, payload)
 }
 
 func (o *GetSubscriptionForbidden) GetPayload() *models.ErrorResponse {
@@ -307,12 +307,12 @@ func (o *GetSubscriptionNotFound) Code() int {
 
 func (o *GetSubscriptionNotFound) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionNotFound %s", 404, payload)
 }
 
 func (o *GetSubscriptionNotFound) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /orgs/{orgName}/subscription][%d] getSubscriptionNotFound %s", 404, payload)
+	return fmt.Sprintf("[GET /orgs/{orgName}/billing/subscription][%d] getSubscriptionNotFound %s", 404, payload)
 }
 
 func (o *GetSubscriptionNotFound) GetPayload() *models.ErrorResponse {

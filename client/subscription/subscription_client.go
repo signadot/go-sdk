@@ -71,7 +71,7 @@ func (a *Client) GetSubscription(params *GetSubscriptionParams, authInfo runtime
 	op := &runtime.ClientOperation{
 		ID:                 "get-subscription",
 		Method:             "GET",
-		PathPattern:        "/orgs/{orgName}/subscription",
+		PathPattern:        "/orgs/{orgName}/billing/subscription",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

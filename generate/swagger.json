@@ -6223,6 +6223,59 @@
         ]
       }
     },
+    "/orgs/{orgName}/billing/subscription": {
+      "get": {
+        "description": "The org's current subscription: the plan and the version in force (which may differ from the latest plan version), the quotas and limits it sets, enabled features, add-ons, and trial and billing details. This is the same data the dashboard Billing page reads. For just how much of each quota and limit has been used, see GET /orgs/{orgName}/usage.",
+        "operationId": "get-subscription",
+        "parameters": [
+          {
+            "description": "Signadot Org Name",
+            "in": "path",
+            "name": "orgName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/billing.Subscription"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Get the org's subscription",
+        "tags": [
+          "Subscription"
+        ]
+      }
+    },
     "/orgs/{orgName}/clusters/": {
       "get": {
         "consumes": [
@@ -11919,59 +11972,6 @@
         "summary": "Assign a service account's role",
         "tags": [
           "ServiceAccounts"
-        ]
-      }
-    },
-    "/orgs/{orgName}/subscription": {
-      "get": {
-        "description": "The org's current subscription: the plan and the version in force (which may differ from the latest plan version), the quotas and limits it sets, enabled features, add-ons, and trial and billing details. This is the same data the dashboard Billing page reads. For just how much of each quota and limit has been used, see GET /orgs/{orgName}/usage.",
-        "operationId": "get-subscription",
-        "parameters": [
-          {
-            "description": "Signadot Org Name",
-            "in": "path",
-            "name": "orgName",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/billing.Subscription"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "summary": "Get the org's subscription",
-        "tags": [
-          "Subscription"
         ]
       }
     },
